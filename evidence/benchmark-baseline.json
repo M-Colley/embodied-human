@@ -1,0 +1,457 @@
+{
+  "package": "embodied-human 0.1.0",
+  "python": "3.12.13",
+  "seed": 0,
+  "config": {
+    "eyes": {
+      "name": "main_sequence",
+      "params": {}
+    },
+    "vision": {
+      "name": "foveated",
+      "params": {}
+    },
+    "objects": {
+      "name": "eccentricity_noise",
+      "params": {}
+    },
+    "attention": {
+      "name": "uncertainty_sampler",
+      "params": {}
+    },
+    "memory": {
+      "name": "act_r",
+      "params": {}
+    },
+    "proprioception": {
+      "name": "spindle",
+      "params": {}
+    },
+    "motor": {
+      "name": "ffitts_min_jerk",
+      "params": {}
+    },
+    "estimator": {
+      "name": "lane_kalman",
+      "params": {}
+    }
+  },
+  "parameter_sources": {
+    "measured": 8,
+    "assumed": 10,
+    "fitted": 11,
+    "standard": 3,
+    "derived": 1
+  },
+  "wall_seconds": 92.38,
+  "results": [
+    {
+      "name": "eyes.main_sequence",
+      "categories": [
+        "eyes"
+      ],
+      "passed": true,
+      "score": 1.0,
+      "skipped": null,
+      "metrics": {
+        "eyes.duration_slope": 2.200000000000001,
+        "eyes.duration_intercept": 20.999999999999996
+      },
+      "scores": {
+        "eyes.duration_slope": 1.0,
+        "eyes.duration_intercept": 1.0
+      },
+      "references": {
+        "eyes.duration_slope": {
+          "value": 2.2,
+          "range": [
+            2.0,
+            3.7
+          ],
+          "unit": "ms/deg",
+          "citation": "Carpenter (1988) 2.2; Baloh et al. (1975) 2.7; other fits up to 3.66",
+          "doi": "https://doi.org/10.1212/wnl.25.11.1065"
+        },
+        "eyes.duration_intercept": {
+          "value": 21.0,
+          "range": [
+            13.0,
+            37.0
+          ],
+          "unit": "ms",
+          "citation": "Carpenter (1988) 21 ms; other fits 14 ms",
+          "doi": null
+        }
+      },
+      "details": {
+        "peak_velocity_deg_s": {
+          "1": 80.81896551724138,
+          "2": 147.63779527559055,
+          "5": 292.96875,
+          "10": 436.04651162790697,
+          "15": 520.8333333333331,
+          "20": 576.9230769230769,
+          "30": 646.551724137931,
+          "40": 688.0733944954128
+        },
+        "gangemi_1991_peak_velocity_deg_s": {
+          "1": 24.18049747858731,
+          "2": 47.349409389160876,
+          "5": 111.20104815865594,
+          "10": 201.008198200385,
+          "15": 273.537408420692,
+          "20": 332.11277054650486,
+          "30": 417.6237548941375,
+          "40": 473.3970075980696
+        }
+      }
+    },
+    {
+      "name": "eyes.latency",
+      "categories": [
+        "eyes"
+      ],
+      "passed": true,
+      "score": 1.0,
+      "skipped": null,
+      "metrics": {
+        "eyes.latency_median": 201.45303584142837
+      },
+      "scores": {
+        "eyes.latency_median": 1.0
+      },
+      "references": {
+        "eyes.latency_median": {
+          "value": 200.0,
+          "range": [
+            150.0,
+            250.0
+          ],
+          "unit": "ms",
+          "citation": "Saslow (1967)",
+          "doi": "https://doi.org/10.1364/JOSA.57.001024"
+        }
+      },
+      "details": {
+        "latency_percentiles_ms": {
+          "5": 133.356034414782,
+          "25": 171.00335811113433,
+          "50": 201.45303584142837,
+          "75": 235.37742175518162,
+          "95": 296.7658905095639
+        }
+      }
+    },
+    {
+      "name": "objects.peripheral_acuity",
+      "categories": [
+        "objects"
+      ],
+      "passed": true,
+      "score": 1.0,
+      "skipped": null,
+      "metrics": {
+        "objects.e2": 1.975508096950541
+      },
+      "scores": {
+        "objects.e2": 1.0
+      },
+      "references": {
+        "objects.e2": {
+          "value": 2.0,
+          "range": [
+            1.0,
+            2.6
+          ],
+          "unit": "deg",
+          "citation": "Strasburger, Rentschler & J\u00fcttner (2011), Table 4",
+          "doi": "https://doi.org/10.1167/11.5.13"
+        }
+      },
+      "details": {
+        "sd_by_eccentricity": {
+          "0.0": 0.9836985372665115,
+          "2.5": 2.2641396238337896,
+          "5.0": 3.474757552393329,
+          "10.0": 5.918948777194555,
+          "20.0": 10.959973497350243
+        }
+      }
+    },
+    {
+      "name": "vision.foveation",
+      "categories": [
+        "vision"
+      ],
+      "passed": true,
+      "score": 1.0,
+      "skipped": null,
+      "metrics": {
+        "vision.e2": 2.3000000000000003
+      },
+      "scores": {
+        "vision.e2": 1.0
+      },
+      "references": {
+        "vision.e2": {
+          "value": 2.3,
+          "range": [
+            1.0,
+            3.0
+          ],
+          "unit": "deg",
+          "citation": "Strasburger et al. (2011), Table 4; Geisler & Perry (1998) 2.3",
+          "doi": "https://doi.org/10.1167/11.5.13"
+        }
+      },
+      "details": {
+        "cutoff_cycles_per_deg": {
+          "0": 39.23474606943086,
+          "2": 20.986026967369995,
+          "5": 12.36163232324534,
+          "10": 7.3365785333082085,
+          "20": 4.046633002676725,
+          "40": 2.1333313465647987
+        }
+      }
+    },
+    {
+      "name": "memory.span",
+      "categories": [
+        "memory"
+      ],
+      "passed": true,
+      "score": 1.0,
+      "skipped": null,
+      "metrics": {
+        "memory.span": 4.0
+      },
+      "scores": {
+        "memory.span": 1.0
+      },
+      "references": {
+        "memory.span": {
+          "value": 4.0,
+          "range": [
+            3.0,
+            5.0
+          ],
+          "unit": "items",
+          "citation": "Cowan (2001)",
+          "doi": "https://doi.org/10.1017/S0140525X01003922"
+        }
+      },
+      "details": {
+        "perfect_recall_rate": {
+          "1": 1.0,
+          "2": 1.0,
+          "3": 1.0,
+          "4": 1.0,
+          "5": 0.055,
+          "6": 0.0,
+          "7": 0.0,
+          "8": 0.0,
+          "9": 0.0
+        }
+      }
+    },
+    {
+      "name": "motor.touch_tapping",
+      "categories": [
+        "motor",
+        "eyes"
+      ],
+      "passed": true,
+      "score": 1.0,
+      "skipped": null,
+      "metrics": {
+        "motor.touch_throughput": 6.28071372668809,
+        "motor.touch_slope": 104.48043847975646
+      },
+      "scores": {
+        "motor.touch_throughput": 1.0,
+        "motor.touch_slope": 1.0
+      },
+      "references": {
+        "motor.touch_throughput": {
+          "value": 6.95,
+          "range": [
+            5.5,
+            8.5
+          ],
+          "unit": "bits/s",
+          "citation": "MacKenzie (2015)",
+          "doi": "https://doi.org/10.1007/978-3-319-20916-6_23"
+        },
+        "motor.touch_slope": {
+          "value": 105.0,
+          "range": [
+            75.0,
+            135.0
+          ],
+          "unit": "ms/bit",
+          "citation": "Bi, Li & Zhai (2013), FFitts 2-D fit",
+          "doi": "https://doi.org/10.1145/2470654.2466180"
+        }
+      },
+      "details": {
+        "conditions": [
+          {
+            "movement_time": 0.39464000000000565,
+            "effective_width": 0.013061554093330851,
+            "effective_amplitude": 0.04156752850434575,
+            "effective_id": 2.0643426334100474,
+            "throughput": 5.230951331365341,
+            "error_rate": 0.12,
+            "nominal_id": 2.321928094887362
+          },
+          {
+            "movement_time": 0.4806400000000354,
+            "effective_width": 0.009913934419696336,
+            "effective_amplitude": 0.07989325795827985,
+            "effective_id": 3.1793013699611885,
+            "throughput": 6.614724887568564,
+            "error_rate": 0.08,
+            "nominal_id": 3.169925001442312
+          },
+          {
+            "movement_time": 0.5764800000000687,
+            "effective_width": 0.006735612763968832,
+            "effective_amplitude": 0.07915788616027934,
+            "effective_id": 3.6726678371686563,
+            "throughput": 6.370850397530216,
+            "error_rate": 0.2,
+            "nominal_id": 4.087462841250339
+          },
+          {
+            "movement_time": 0.5759200000000686,
+            "effective_width": 0.011114838442309741,
+            "effective_amplitude": 0.1565946446553375,
+            "effective_id": 3.9154053844966104,
+            "throughput": 6.798523031838005,
+            "error_rate": 0.24,
+            "nominal_id": 4.087462841250339
+          },
+          {
+            "movement_time": 0.48088000000003567,
+            "effective_width": 0.02145963998853577,
+            "effective_amplitude": 0.15901658395363852,
+            "effective_id": 3.0721110095735438,
+            "throughput": 6.3885189851383215,
+            "error_rate": 0.2,
+            "nominal_id": 3.169925001442312
+          }
+        ],
+        "mean_throughput": 6.28071372668809,
+        "regression_intercept_s": 0.16938421050828525,
+        "regression_slope_s_per_bit": 0.10448043847975645
+      }
+    },
+    {
+      "name": "driving.surt_glances",
+      "categories": [
+        "eyes",
+        "objects",
+        "attention",
+        "estimator",
+        "memory",
+        "motor"
+      ],
+      "passed": true,
+      "score": 1.0,
+      "skipped": null,
+      "metrics": {
+        "driving.mean_offroad_glance": 1.4452941176471485,
+        "driving.long_glance_share": 0.0
+      },
+      "scores": {
+        "driving.mean_offroad_glance": 1.0,
+        "driving.long_glance_share": 1.0
+      },
+      "references": {
+        "driving.mean_offroad_glance": {
+          "value": 2.0,
+          "range": [
+            0.0,
+            2.0
+          ],
+          "unit": "s",
+          "citation": "NHTSA (2013) guideline criterion (b)",
+          "doi": "https://www.federalregister.gov/documents/2013/04/26/2013-09883"
+        },
+        "driving.long_glance_share": {
+          "value": 0.15,
+          "range": [
+            0.0,
+            0.15
+          ],
+          "unit": "fraction",
+          "citation": "NHTSA (2013) guideline criterion (a)",
+          "doi": "https://www.federalregister.gov/documents/2013/04/26/2013-09883"
+        }
+      },
+      "details": {
+        "glances": 34.0,
+        "mean_offroad_glance_s": 1.4452941176471485,
+        "p85_offroad_glance_s": 1.5199999999999811,
+        "long_glance_share": 0.0,
+        "mean_eyes_off_road_per_screen_s": 3.470000000000212,
+        "attend_minimum_s": 0.0,
+        "lane_offset_sd_m": 0.21056233381043393,
+        "lane_offset_max_m": 0.48363265720570475,
+        "terminated": false,
+        "surt": {
+          "screens": 14.0,
+          "accuracy": 0.8571428571428571,
+          "mean_screen_time_s": 4.191428571428827
+        },
+        "simulated_seconds": 60.0
+      }
+    },
+    {
+      "name": "driving.takeover",
+      "categories": [
+        "eyes",
+        "attention",
+        "estimator",
+        "motor"
+      ],
+      "passed": true,
+      "score": 1.0,
+      "skipped": null,
+      "metrics": {
+        "driving.takeover_time": 1.6649999999998402
+      },
+      "scores": {
+        "driving.takeover_time": 1.0
+      },
+      "references": {
+        "driving.takeover_time": {
+          "value": 2.72,
+          "range": [
+            1.27,
+            4.17
+          ],
+          "unit": "s",
+          "citation": "Zhang, de Winter, Varotto, Happee & Martens (2019)",
+          "doi": "https://doi.org/10.1016/j.trf.2019.04.020"
+        }
+      },
+      "details": {
+        "takeover_times_s": [
+          1.9599999999998339,
+          1.6199999999998411,
+          1.7599999999998381,
+          1.8399999999998364,
+          1.479999999999844,
+          1.5599999999998424,
+          1.6799999999998398,
+          1.4199999999998454
+        ],
+        "sd_s": 0.18291293791621585,
+        "missed": 0,
+        "scenario": "myosuite-carla takeover_request: automation at 12 m/s, request at 10 s, 7 s budget"
+      }
+    }
+  ]
+}

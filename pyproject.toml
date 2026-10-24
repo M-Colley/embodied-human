@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "embodied-human"
+version = "0.1.0"
+description = "A modular simulated human (vision, eyes, attention, memory, proprioception, motor) with cited baselines and a benchmark"
+authors = [{ name = "Mark Colley" }]
+readme = "README.md"
+requires-python = ">=3.10"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+dependencies = ["numpy>=1.24", "scipy>=1.10"]
+keywords = ["simulated users", "computational rationality", "driver model", "eye movements", "mujoco", "myosuite", "benchmark"]
+
+[project.urls]
+Homepage = "https://github.com/M-Colley/embodied-human"
+Repository = "https://github.com/M-Colley/embodied-human"
+
+[project.optional-dependencies]
+# Physical devices and engines for tasks (touchscreens, buttons).
+ui = ["embodied-ui>=0.1", "mujoco>=3.7"]
+# Driving with the MyoSuite full-body driver.
+driving = ["myosuite-carla>=0.1", "embodied-ui>=0.1"]
+test = ["pytest>=8", "build>=1", "mujoco>=3.7"]
+lint = ["mypy>=1.15", "ruff>=0.11"]
+
+[project.scripts]
+embodied-human-bench = "embodied_human.bench.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+embodied_human = ["py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["embodied_human"]
