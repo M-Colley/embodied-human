@@ -95,3 +95,107 @@ stayed at 1.68 s.
 - **What was not validated:** pixel-level vision in the driving loop, a
   musculoskeletal reaching controller, and comparison with individual-level
   human data.
+
+## 2026-10-24, evening: simulated participants, inference and studies
+
+Same PC and versions, with embodied-ui at commit `5ce2df5`. These changes
+follow the requirements for computational user models discussed at
+Dagstuhl Seminar 26432 ([mapping](docs/seminar-requirements.md)).
+
+### Tests
+
+The suite passes 43 tests ([JUnit](evidence/tests.xml)), up from 30. New
+tests cover:
+- recovery of a known parameter by ABC;
+- priors and distances;
+- populations: reproducibility, spreads, profiles, and variations applied
+  only to modules that have them;
+- bootstrap intervals, Kendall's tau and elasticity;
+- reasons for gaze returns, belief growth off the road, and shorter
+  glances at higher speed;
+- CSV traces;
+- the take-over components;
+- the glance and key-size studies.
+
+### Calibration
+
+```bash
+python examples/calibrate_glances.py --workers 6 --out evidence/glance-calibration.json
+```
+
+**Setup.**
+- **Fitted:** the attention module's return threshold (`return_sd`) and its
+  glance-to-glance spread (`threshold_spread`).
+- **Targets:** two summaries of Kujala and Saariluoma (2011, Table 2), the
+  mean in-vehicle glance (1.12 s) and the mean within-person SD (0.57 s).
+- **Simulation:** at 50 km/h on `StraightRoad`, with two 300 s runs per
+  parameter set.
+- **Method:** rejection ABC with 512 scrambled Sobol draws, keeping the
+  closest 5% (26).
+- **Wall time:** about 3.5 minutes on six processes, alongside other jobs.
+
+**First attempt, rejected.** Narrower priors (`return_sd` 0.1–0.6 m,
+`threshold_spread` 0–1, one run per draw) gave posteriors pressed against
+both prior bounds. Checks on a fresh random stream also fell short of the
+fitted SD (0.44 against 0.57 s): the rejection had selected draws whose
+single run happened to match. Wider priors (0.03–0.6 m, 0–2) and two pooled
+runs fixed both problems.
+
+| Parameter | Posterior median | 90% interval | Default now |
+| --- | --- | --- | --- |
+| `return_sd` | 0.110 m | 0.060–0.181 m | 0.11 m (was 0.4, assumed) |
+| `threshold_spread` | 1.01 | 0.64–1.34 | 1.0 (was 0, assumed) |
+
+**Posterior predictive checks** (fresh random streams; 5th, 50th and 95th
+percentiles over the accepted parameter sets):
+
+| Quantity | Predicted | Human | |
+| --- | --- | --- | --- |
+| Mean glance | 1.01, 1.10, 1.23 s | 1.06–1.20 s | fitted |
+| Within-person SD | 0.45, 0.60, 0.70 s | 0.48–0.66 s | fitted |
+| Share over 2 s | 4.1, 7.5, 10.5% | 5.7–10% | held out: agrees |
+| Longest glance | 3.75, 4.15, 4.28 s | 2.42–3.70 s | held out: too long |
+
+### Benchmark
+
+```bash
+python -m embodied_human.bench --out evidence/benchmark-baseline.json
+```
+
+The run took about 2 minutes ([report](evidence/benchmark-baseline.json)); 9 of 11
+benchmarks pass. Module parameters by source: 8 measured, 13 fitted,
+2 standard, 1 derived and 10 assumed. The 4 s maximum glance is now
+labelled assumed: it is a bound chosen above the measured longest glances.
+The six module benchmarks are unchanged. The new and changed integrated
+results:
+
+| Benchmark | Result | Human reference | Kind |
+| --- | --- | --- | --- |
+| driving.surt_glances (MyoSuite full body, 72 km/h, 60 s) | mean 0.93 s, SD 0.47 s, 2.2% over 2 s; lane-offset SD 0.18 m; 13 SuRT screens at 85% | 0.8–1.2 s: pass; 3–13% over 2 s: just below (score 0.98); NHTSA criteria: pass | held out |
+| driving.takeover | 1.61 s mean, SD 0.27 s; median response 0.30 s, eyes on road 0.60 s, hand on wheel 0.71 s, driving 1.42 s | 1.27–4.17 s | emergent |
+| driving.glance_population (20 participants, 50 km/h) | mean 1.13 s (95% CI 1.08–1.19), within-person SD 0.58 s (0.54–0.64), between-person SD of means 0.12 s, 7.9% over 2 s, longest 4.2 s | 1.06–1.20 s; 0.48–0.66 s; 5.7–10% | fitted (mean, SD) and held out (share) |
+| driving.glance_speed (40–120 km/h) | elasticity −0.45; 1.22 s at 40 km/h, 0.74 s at 120 km/h | occlusion −0.72 to −0.53; in-car search 0 ± 0.15: both fail | counterfactual |
+| design.touch_key_size (30 participants, 7.5–27.5 mm) | errors 18.5, 13.5, 10.9, 12.4 and 12.1%; only 7.5 mm differs from 27.5 mm (p < 0.05), so gains stop at 12.5 mm | 17.5 mm (12.5–22.5) | application |
+
+With the uncalibrated defaults (`return_sd` 0.4, no spread), the same
+studies gave the following, all failing the human data:
+- a mean glance of 1.76 s;
+- a within-person SD of 0.06 s;
+- 17% of glances over 2 s.
+
+### Interpretation and limits
+
+- **Consistency checks.** Mean and SD in `driving.glance_population` were
+  fitted, so they only check consistency.
+- **Held-out results.**
+  - The long-glance share and the full-body drive at a different speed
+    are genuine out-of-sample results.
+  - The longest glance and the speed effect miss the human data. The
+    threshold's log-normal tail is too heavy.
+  - Road uncertainty alone cannot reproduce both voluntary occlusion
+    (shorter glances at speed) and in-car search (no speed effect).
+- **Key size.** The simulated participants tapped without driving, so
+  Kim et al.'s speed conditions were not reproduced. The test statistics
+  depend on the simulated sample size, as they do in the study.
+- **Still not validated:** individual-level comparison with human data,
+  and between-person spreads other than joint position sense.

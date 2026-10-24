@@ -125,14 +125,36 @@ def test_lane_uncertainty_grows_faster_at_higher_speed():
 
 
 def test_uncertainty_sampler_switches_on_thresholds():
-    sampler = UncertaintySampler()
+    sampler = UncertaintySampler(return_sd=0.4, threshold_spread=0.0)
     demands = {"display": 1.0}
     assert sampler.select(0.0, ROAD, demands, 0.1) == ROAD  # minimum road dwell
     assert sampler.select(0.4, ROAD, demands, 0.1) == "display"
+    assert sampler.reason == "certain" and sampler.threshold == 0.4
     assert sampler.select(0.5, "display", demands, 0.2) == "display"
     assert sampler.select(0.9, "display", demands, 0.45) == ROAD
-    assert sampler.select(3.0, "display", demands, 0.1) == ROAD  # maximum glance
-    assert sampler.select(5.0, ROAD, {}, 0.0) == ROAD
+    assert sampler.reason == "uncertainty"
+    assert sampler.select(3.0, "display", demands, 0.1) == "display"
+    assert sampler.select(4.6, "display", demands, 0.1) == ROAD
+    assert sampler.reason == "maximum_glance"
+    assert sampler.select(5.0, ROAD, demands, 0.1) == ROAD
+    assert sampler.select(5.4, ROAD, demands, 0.1) == "display"
+    assert sampler.select(5.5, "display", {}, 0.1) == ROAD
+    assert sampler.reason == "task_done"
+    assert sampler.select(6.0, ROAD, {}, 0.0) == ROAD
+
+
+def test_threshold_spread_varies_glances_within_a_person():
+    sampler = UncertaintySampler(return_sd=0.3, threshold_spread=0.5)
+    sampler.reset(np.random.default_rng(0))
+    thresholds = []
+    for k in range(200):
+        sampler.select(2.0 * k, ROAD, {"display": 1.0}, 0.0)
+        sampler.select(2.0 * k + 0.5, ROAD, {"display": 1.0}, 0.0)
+        thresholds.append(sampler.threshold)
+        sampler.select(2.0 * k + 1.0, "display", {"display": 1.0}, 10.0)
+    logs = np.log(thresholds)
+    assert np.median(thresholds) == pytest.approx(0.3, rel=0.15)
+    assert np.std(logs) == pytest.approx(0.5, rel=0.15)
 
 
 def test_seev_probabilities_follow_value_and_effort():

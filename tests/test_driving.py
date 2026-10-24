@@ -72,6 +72,9 @@ def test_takeover_time_emerges_from_the_modules():
     takeover = [e for e in events if e["type"] == "driver_takeover"]
     assert takeover and 0.8 < takeover[0]["reaction_time"] < 4.0
     assert agent.log.engaged_at is not None and agent.log.request_at is not None
+    parts = agent.log.takeover_components()
+    assert 0 < parts["response_s"] < parts["hand_s"]
+    assert parts["eyes_s"] <= parts["engaged_s"]
 
 
 def test_glance_log_metrics():

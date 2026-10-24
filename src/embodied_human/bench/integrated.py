@@ -89,7 +89,11 @@ def surt_glances(human: Human, seconds: float = 60.0, speed: float = 20.0) -> Re
 @benchmark("driving.takeover")
 def takeover(human: Human, runs: int = 8) -> Result:
     """Take-over requests while doing SuRT during automation: the time to
-    the first steering or pedal input, compared with Zhang et al. (2019)."""
+    the first steering or pedal input, compared with Zhang et al. (2019).
+
+    The details split each take-over into the mechanisms that produced it:
+    the response latency, the hand's return to the wheel, the eyes' return
+    to the road and the situation assessment before driving."""
     result = Result("driving.takeover", ("eyes", "attention", "estimator", "motor"))
     if not _available(result):
         return result
@@ -100,6 +104,7 @@ def takeover(human: Human, runs: int = 8) -> Result:
 
     env = _driving_env(takeover_request())
     times = []
+    components: list[dict[str, float]] = []
     for seed in range(runs):
         agent = AttentiveDriver(human, env, SuRTTask(rng=np.random.default_rng(seed)))
         env.reset(seed=seed)
@@ -110,6 +115,7 @@ def takeover(human: Human, runs: int = 8) -> Result:
             events += info["events"]
             if terminated or truncated:
                 break
+        components.append(agent.log.takeover_components())
         takeovers = [e for e in events if e["type"] == "driver_takeover"]
         times.append(float(takeovers[0]["reaction_time"]) if takeovers else math.nan)
     valid = np.array([t for t in times if math.isfinite(t)])
@@ -120,6 +126,10 @@ def takeover(human: Human, runs: int = 8) -> Result:
         "takeover_times_s": times,
         "sd_s": float(valid.std(ddof=1)) if len(valid) > 1 else math.nan,
         "missed": int(len(times) - len(valid)),
+        "median_components_s": {
+            key: float(np.nanmedian([c.get(key, math.nan) for c in components]))
+            for key in ("response_s", "hand_s", "eyes_s", "engaged_s")
+        },
         "scenario": "myosuite-carla takeover_request: automation "
         "at 12 m/s, request at 10 s, 7 s budget",
     }

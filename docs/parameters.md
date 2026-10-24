@@ -18,10 +18,11 @@ choice to fit or replace).
 | vision | `FoveationParameters.levels` | 7 | assumed | implementation choice |  |
 | objects | `ObjectParameters.e2` | 2.0 | measured | [Strasburger, Rentschler & Jüttner (2011), Table 4](https://doi.org/10.1167/11.5.13) | letter and Landolt-C acuity E2 1.0-2.6 deg; vernier 0.7; gratings 2.6-3.0 |
 | objects | `ObjectParameters.field_of_view` | 90.0 | assumed | model choice | monocular temporal field is wider |
-| attention | `SamplerParameters.return_sd` | 0.4 | assumed | model choice | half the 0.85 m lateral margin of a 1.8 m car in a 3.5 m lane |
+| attention | `SamplerParameters.return_sd` | 0.11 | fitted | [Kujala & Saariluoma (2011), Table 2; fitted here by ABC](https://doi.org/10.1080/00140139.2011.592601) | posterior median, 90% interval 0.06-0.18 m, from the mean glance and within-person SD at 50 km/h (evidence/glance-calibration.json) |
+| attention | `SamplerParameters.threshold_spread` | 1.0 | fitted | [Kujala & Saariluoma (2011), Table 2; fitted here by ABC](https://doi.org/10.1080/00140139.2011.592601) | posterior median, 90% interval 0.64-1.34 |
 | attention | `SamplerParameters.leave_sd` | 0.15 | assumed | model choice |  |
 | attention | `SamplerParameters.minimum_road_dwell` | 0.3 | assumed | model choice |  |
-| attention | `SamplerParameters.maximum_glance` | 2.0 | standard | [NHTSA (2013) guideline criterion; Wierwille (1993) sampling limit ~1.6 s](https://www.federalregister.gov/documents/2013/04/26/2013-09883) |  |
+| attention | `SamplerParameters.maximum_glance` | 4.0 | assumed | [model choice](https://doi.org/10.1080/00140139.2011.592601) | a bound above the longest in-vehicle glances measured in simulator search tasks, 2.42-3.70 s (Kujala & Saariluoma, 2011, Table 2) |
 | memory | `MemoryParameters.capacity` | 4 | measured | [Cowan (2001)](https://doi.org/10.1017/S0140525X01003922) | about 4 chunks (3-5) when rehearsal and chunking are prevented |
 | memory | `MemoryParameters.decay` | 0.5 | fitted | [Anderson et al. (2004)](https://doi.org/10.1037/0033-295X.111.4.1036) | conventional base-level decay |
 | memory | `MemoryParameters.threshold` | 0.0 | standard | ACT-R default (:rt 0) |  |
@@ -58,4 +59,4 @@ choice to fit or replace).
 | agents.driver | `DriverAgentParameters.road_field` | 20.0 | assumed | model choice | peripheral lane keeping degrades with display eccentricity; fit to glance data |
 | agents.driver | `DriverAgentParameters.perception_interval` | 0.1 | assumed | model choice | about the temporal integration of vision |
 
-Counts: assumed 25, derived 1, fitted 11, measured 10, standard 3
+Counts: assumed 25, derived 1, fitted 13, measured 10, standard 2

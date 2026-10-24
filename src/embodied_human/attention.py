@@ -33,31 +33,45 @@ class SamplerParameters(Parameters):
     """Uncertainty-threshold sampling.
 
     Args:
-        return_sd: Believed lateral SD (m) that sends gaze back to the road.
+        return_sd: Median believed lateral SD (m) that sends gaze back to the
+            road.
+        threshold_spread: SD of the log threshold, drawn anew for every
+            off-road glance; people do not return at a fixed uncertainty,
+            and glance durations vary within a person.
         leave_sd: Lateral SD (m) below which gaze may leave the road again.
         minimum_road_dwell: Shortest road glance, s.
-        maximum_glance: Longest off-road glance, s; a soft cap that also
-            covers other uncertainty than lateral position.
+        maximum_glance: Longest off-road glance, s; a safety bound above
+            the longest glances humans make in these tasks.
     """
 
-    return_sd: float = 0.4
+    return_sd: float = 0.11
+    threshold_spread: float = 1.0
     leave_sd: float = 0.15
     minimum_road_dwell: float = 0.3
-    maximum_glance: float = 2.0
+    maximum_glance: float = 4.0
 
     SOURCES: ClassVar = {
         "return_sd": Source(
-            "model choice",
-            None,
-            "assumed",
-            "half the 0.85 m lateral margin of a 1.8 m car in a 3.5 m lane",
+            "Kujala & Saariluoma (2011), Table 2; fitted here by ABC",
+            "https://doi.org/10.1080/00140139.2011.592601",
+            "fitted",
+            "posterior median, 90% interval 0.06-0.18 m, from the mean glance "
+            "and within-person SD at 50 km/h (evidence/glance-calibration.json)",
+        ),
+        "threshold_spread": Source(
+            "Kujala & Saariluoma (2011), Table 2; fitted here by ABC",
+            "https://doi.org/10.1080/00140139.2011.592601",
+            "fitted",
+            "posterior median, 90% interval 0.64-1.34",
         ),
         "leave_sd": Source("model choice", None, "assumed"),
         "minimum_road_dwell": Source("model choice", None, "assumed"),
         "maximum_glance": Source(
-            "NHTSA (2013) guideline criterion; Wierwille (1993) sampling limit ~1.6 s",
-            "https://www.federalregister.gov/documents/2013/04/26/2013-09883",
-            "standard",
+            "model choice",
+            "https://doi.org/10.1080/00140139.2011.592601",
+            "assumed",
+            "a bound above the longest in-vehicle glances measured in simulator "
+            "search tasks, 2.42-3.70 s (Kujala & Saariluoma, 2011, Table 2)",
         ),
     }
 
@@ -88,7 +102,13 @@ class Attention(Module):
 
 @register("attention", "uncertainty_sampler")
 class UncertaintySampler(Attention):
-    """Return to the road on high uncertainty; leave it once it is low."""
+    """Return to the road on high uncertainty; leave it once it is low.
+
+    ``reason`` names the mechanism behind the last switch, so predictions
+    can be explained: ``uncertainty`` (the belief became too uncertain),
+    ``maximum_glance``, ``task_done`` (no demand left) or ``certain``
+    (the road belief was certain enough to look away).
+    """
 
     def __init__(self, **params: float) -> None:
         super().__init__()
@@ -99,6 +119,8 @@ class UncertaintySampler(Attention):
         super().reset(rng)
         self._since = 0.0
         self._current = ROAD
+        self.threshold = self.params.return_sd
+        self.reason = ""
 
     def select(
         self,
@@ -113,14 +135,20 @@ class UncertaintySampler(Attention):
             self._since = time
         dwell = time - self._since
         if current != ROAD:
-            if (
-                uncertainty >= p.return_sd
-                or dwell >= p.maximum_glance
-                or current not in demands
-            ):
-                return ROAD
-            return current
+            if uncertainty >= self.threshold:
+                self.reason = "uncertainty"
+            elif dwell >= p.maximum_glance:
+                self.reason = "maximum_glance"
+            elif current not in demands:
+                self.reason = "task_done"
+            else:
+                return current
+            return ROAD
         if demands and uncertainty <= p.leave_sd and dwell >= p.minimum_road_dwell:
+            self.reason = "certain"
+            # Each glance away has its own tolerance for uncertainty.
+            spread = p.threshold_spread * float(self.rng.standard_normal())
+            self.threshold = p.return_sd * float(np.exp(spread))
             return max(demands, key=lambda name: demands[name])
         return ROAD
 

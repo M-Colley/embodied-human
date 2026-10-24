@@ -24,6 +24,10 @@ driver) as optional dependencies; keep it importable without them.
   - After changing defaults, regenerate `docs/parameters.md` with
     `python examples/parameter_table.py`, and rerun
     `python -m embodied_human.bench --out evidence/benchmark-baseline.json`.
+  - After changing the attention, estimator or eye modules, refit the
+    glance sampler with `python examples/calibrate_glances.py --out
+    evidence/glance-calibration.json`. Report fitted and held-out results
+    separately.
 - **Records.** Record what was run, with versions, in VALIDATION.md.
 - Keep commit authorship with the human owner. Do not add AI co-author
   trailers.

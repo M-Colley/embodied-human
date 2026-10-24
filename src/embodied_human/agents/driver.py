@@ -25,8 +25,10 @@ therefore not uncertain. This approximation is documented and testable.
 
 from __future__ import annotations
 
+import csv
 import math
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any, ClassVar
 
 import numpy as np
@@ -159,14 +161,28 @@ class _Search:
 
 @dataclass
 class DrivingLog:
-    """Gaze areas, AttenD and task outcomes over a run."""
+    """A generative trace of one run: gaze, belief, truth, decisions.
+
+    Besides summary metrics, the log keeps every step so simulated
+    behaviour can be compared with human time series, and the reasons
+    behind attention switches and the components of a take-over, so a
+    prediction can be explained by the mechanisms that produced it.
+    """
 
     times: list[float] = field(default_factory=list)
     areas: list[str] = field(default_factory=list)
     attend: list[float] = field(default_factory=list)
+    gaze: list[tuple[float, float]] = field(default_factory=list)
+    belief: list[tuple[float, float]] = field(default_factory=list)
+    belief_sd: list[float] = field(default_factory=list)
+    truth: list[tuple[float, float]] = field(default_factory=list)
+    returns: list[tuple[float, str]] = field(default_factory=list)
     screen_times: list[tuple[float, float]] = field(default_factory=list)
     engaged_at: float | None = None
     request_at: float | None = None
+    reacted_at: float | None = None
+    hand_back_at: float | None = None
+    road_at: float | None = None
 
     def glances(self) -> list[tuple[float, float]]:
         """Off-road glances as (start, end): gaze leaving the road area
@@ -181,10 +197,13 @@ class DrivingLog:
                 start = None
         return result
 
-    def glance_metrics(self) -> dict[str, float]:
+    def glance_metrics(self) -> dict[str, Any]:
         """Mean and long-glance share of off-road glances, and eyes-off-road
         time per completed SuRT screen (NHTSA, 2013)."""
         durations = np.array([end - start for start, end in self.glances()])
+        reasons: dict[str, int] = {}
+        for _, reason in self.returns:
+            reasons[reason] = reasons.get(reason, 0) + 1
         per_screen = []
         for start, end in self.screen_times:
             off = sum(max(0.0, min(e, end) - max(s, start)) for s, e in self.glances())
@@ -193,6 +212,9 @@ class DrivingLog:
             "glances": float(len(durations)),
             "mean_offroad_glance_s": float(durations.mean())
             if len(durations)
+            else math.nan,
+            "sd_offroad_glance_s": float(durations.std(ddof=1))
+            if len(durations) > 1
             else math.nan,
             "p85_offroad_glance_s": float(np.percentile(durations, 85))
             if len(durations)
@@ -204,7 +226,63 @@ class DrivingLog:
             if per_screen
             else math.nan,
             "attend_minimum_s": float(min(self.attend)) if self.attend else math.nan,
+            "returns_by_reason": reasons,
         }
+
+    def glance_durations(self) -> list[float]:
+        """Every off-road glance duration, s."""
+        return [end - start for start, end in self.glances()]
+
+    def takeover_components(self) -> dict[str, float]:
+        """How long each step of a take-over took, from the request.
+
+        ``response`` until the first action, ``hand`` until the hand was
+        back on the wheel, ``eyes`` until gaze was on the road and
+        ``engaged`` until the driver drove (situation assessed, belief
+        certain). Empty without a request.
+        """
+        if self.request_at is None:
+            return {}
+
+        def since(time: float | None) -> float:
+            return time - self.request_at if time is not None else math.nan  # type: ignore[operator]
+
+        return {
+            "response_s": since(self.reacted_at),
+            "hand_s": since(self.hand_back_at),
+            "eyes_s": since(self.road_at),
+            "engaged_s": since(self.engaged_at),
+        }
+
+    def trace(self) -> dict[str, np.ndarray]:
+        """Per-step columns: time, area, gaze, belief and truth."""
+        gaze = np.array(self.gaze, dtype=float).reshape(-1, 2)
+        belief = np.array(self.belief, dtype=float).reshape(-1, 2)
+        truth = np.array(self.truth, dtype=float).reshape(-1, 2)
+        return {
+            "time_s": np.array(self.times),
+            "area": np.array(self.areas),
+            "gaze_azimuth_deg": gaze[:, 0],
+            "gaze_elevation_deg": gaze[:, 1],
+            "belief_offset_m": belief[:, 0],
+            "belief_heading_rad": belief[:, 1],
+            "belief_offset_sd_m": np.array(self.belief_sd),
+            "true_offset_m": truth[:, 0],
+            "true_heading_rad": truth[:, 1],
+            "attend_buffer_s": np.array(self.attend),
+        }
+
+    def write_csv(self, path: str | Path) -> Path:
+        """Write :meth:`trace` as CSV, one row per step, for comparison with
+        human gaze and driving logs in any analysis tool."""
+        columns = self.trace()
+        path = Path(path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with path.open("w", newline="", encoding="utf-8") as handle:
+            writer = csv.writer(handle)
+            writer.writerow(columns)
+            writer.writerows(zip(*(column.tolist() for column in columns.values())))
+        return path
 
 
 class AttentiveDriver:
@@ -212,7 +290,9 @@ class AttentiveDriver:
 
     Args:
         human: Uses eyes, objects, estimator, attention, memory and motor.
-        env: A myosuite-carla ``FullBodyDrivingEnv``.
+        env: A myosuite-carla ``FullBodyDrivingEnv``, or any object with
+            the same ``dt``, ``state`` and ``task`` (see
+            :mod:`embodied_human.agents.road`).
         task: SuRT task shown on the in-vehicle display, or ``None``.
         params: Geometry and task parameters.
         reflex: Steering and speed controller; myosuite-carla's
@@ -228,16 +308,16 @@ class AttentiveDriver:
         params: DriverAgentParameters = DriverAgentParameters(),
         reflex: Any = None,
     ) -> None:
-        from myosuite_carla.driver_models import ReflexDriver, ReflexDriverConfig
-
         self.human = human
         self.env = env
         self.task = task
         self.params = params
         self.dt = float(env.dt)
-        self.reflex = reflex or ReflexDriver(
-            self.dt, ReflexDriverConfig(perception_delay=self.dt)
-        )
+        if reflex is None:
+            from myosuite_carla.driver_models import ReflexDriver, ReflexDriverConfig
+
+            reflex = ReflexDriver(self.dt, ReflexDriverConfig(perception_delay=self.dt))
+        self.reflex = reflex
 
     # Episode ------------------------------------------------------------------
 
@@ -313,8 +393,6 @@ class AttentiveDriver:
 
     def act(self) -> Any:
         """Return the next ``DriverIntent`` after perceiving and attending."""
-        from myosuite_carla.fullbody import DriverIntent
-
         human, p = self.human, self.params
         self.time += self.dt
         t = self.time
@@ -349,6 +427,13 @@ class AttentiveDriver:
                 np.array([observed["offset"].value, observed["heading"].value]),
                 np.array([observed["offset"].sd, observed["heading"].sd]),
             )
+        self.log.gaze.append(eye.gaze)
+        mean = estimator.mean  # type: ignore[attr-defined]
+        self.log.belief.append((float(mean[0]), float(mean[1])))
+        self.log.belief_sd.append(estimator.lateral_sd)  # type: ignore[attr-defined]
+        self.log.truth.append((state["lane_offset_m"], state["heading_error_rad"]))
+        if self._reacted and area == ROAD and self.log.road_at is None:
+            self.log.road_at = t
         if self._reacted and area == ROAD:
             self._road_since = self._road_since if self._road_since is not None else t
         elif area != ROAD:
@@ -382,10 +467,12 @@ class AttentiveDriver:
             and t >= self.log.request_at + self._latency
         ):
             self._reacted = True
+            self.log.reacted_at = t
             movement = human.motor.plan(  # type: ignore[attr-defined]
                 np.zeros(3), np.array([p.display_distance, 0.0, 0.0]), p.wheel_width, t
             )
             self._hand_back = movement.finish
+            self.log.hand_back_at = movement.finish
         task_active = self.task is not None and not self._reacted
         demands = {DISPLAY: 1.0} if task_active else {}
 
@@ -393,6 +480,9 @@ class AttentiveDriver:
         uncertainty = estimator.lateral_sd  # type: ignore[attr-defined]
         target = human.attention.select(t, self._destination, demands, uncertainty)  # type: ignore[attr-defined]
         if target != self._destination:
+            if target == ROAD:
+                reason = getattr(human.attention, "reason", "")
+                self.log.returns.append((t, reason or "unspecified"))
             self._destination = target
             if target == ROAD:
                 human.eyes.command((0.0, 0.0), t)  # type: ignore[attr-defined]
@@ -404,6 +494,8 @@ class AttentiveDriver:
 
         # Driving from belief.
         if automation and not self._engaged_now(t, uncertainty):
+            from myosuite_carla.fullbody import DriverIntent
+
             return DriverIntent()
         believed = self._believed(state)
         return self.reflex.act(believed)

@@ -174,6 +174,52 @@ REFERENCES: dict[str, Reference] = {
             "phone tasks median 3.4%, mean 12.8%",
         ),
         Reference(
+            "driving.human_glance_sd",
+            0.57,
+            0.48,
+            0.66,
+            "s",
+            "Kujala & Saariluoma (2011), Table 2",
+            "https://doi.org/10.1080/00140139.2011.592601",
+            "mean within-person SD of in-vehicle glance durations over four "
+            "interfaces, simulator at 40-60 km/h, n = 10 per interface",
+        ),
+        Reference(
+            "driving.occlusion_speed_elasticity",
+            -0.64,
+            -0.72,
+            -0.53,
+            "1",
+            "Senders et al. (1967), Table 5 (elasticities derived here)",
+            "https://onlinepubs.trb.org/Onlinepubs/hrr/1967/195/195-002.pdf",
+            "voluntary occlusion on a freeway at 22-60 mph, three drivers; "
+            "log-log slope of occlusion time on speed per driver",
+        ),
+        Reference(
+            "driving.incar_glance_speed_elasticity",
+            0.0,
+            -0.15,
+            0.15,
+            "1",
+            "Jokinen, Kujala & Oulasvirta (2021), Appendix B, Table 6",
+            "https://doi.org/10.1177/0018720820927687",
+            "in-car search glances at 60 vs 120 km/h: speed coefficient -0.0 s "
+            "(n.s.) at a 1.0 s intercept, 12 drivers; the range (+-0.1 s per "
+            "doubling of speed) is an assumed tolerance",
+        ),
+        Reference(
+            "design.touch_key_asymptote",
+            17.5,
+            12.5,
+            22.5,
+            "mm",
+            "Kim, Kwon, Heo, Lee & Chung (2014)",
+            "https://doi.org/10.1016/j.apergo.2013.05.006",
+            "5-digit entry on in-vehicle touch keys of 7.5-27.5 mm in 5 mm "
+            "steps, 30 drivers; usability and safety stopped improving at "
+            "17.5 mm; the range spans the neighbouring sizes",
+        ),
+        Reference(
             "driving.takeover_time",
             2.72,
             1.27,
