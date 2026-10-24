@@ -151,6 +151,29 @@ REFERENCES: dict[str, Reference] = {
             "share of off-road glances longer than 2 s",
         ),
         Reference(
+            "driving.human_mean_glance",
+            1.1,
+            0.8,
+            1.2,
+            "s",
+            "Kujala & Saariluoma (2011), Table 2; Jokinen, Kujala & Oulasvirta "
+            "(2021), Appendix B",
+            "https://doi.org/10.1080/00140139.2011.592601",
+            "simulator, in-vehicle visual search; means 1.06-1.20 s over four "
+            "interfaces (transitions included) and 1.0 +- 0.2 s by condition",
+        ),
+        Reference(
+            "driving.human_long_glance_share",
+            0.08,
+            0.03,
+            0.13,
+            "fraction",
+            "Kujala & Saariluoma (2011); Tivesten & Dozza (2014)",
+            "https://doi.org/10.1016/j.trf.2014.08.004",
+            "glances over 2 s: 5.7-10% in simulator search tasks; naturalistic "
+            "phone tasks median 3.4%, mean 12.8%",
+        ),
+        Reference(
             "driving.takeover_time",
             2.72,
             1.27,

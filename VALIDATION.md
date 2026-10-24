@@ -39,8 +39,8 @@ Modules are checked against their equations:
 python -m embodied_human.bench --out evidence/benchmark-baseline.json
 ```
 
-The full run (seed 0) took 92 s; see the [report](evidence/benchmark-baseline.json).
-All 8 benchmarks pass. Module parameters by source: 8 measured, 11 fitted,
+The full run (seed 0) took about 90 s; see the
+[report](evidence/benchmark-baseline.json). Seven of 8 benchmarks pass. Module parameters by source: 8 measured, 11 fitted,
 3 standard, 1 derived and 10 assumed. The driver agent adds 15 assumed and
 2 measured ([docs/parameters.md](docs/parameters.md)).
 
@@ -52,7 +52,7 @@ All 8 benchmarks pass. Module parameters by source: 8 measured, 11 fitted,
 | vision.foveation | E2 2.30° | 1.0–3.0° | consistency |
 | memory.span | 4 | 3–5 | consistency |
 | motor.touch_tapping | 6.28 bits/s; 104 ms/bit | 5.5–8.5 bits/s; 75–135 ms/bit | physical contact on an embodied-ui touch surface |
-| driving.surt_glances | mean off-road glance 1.45 s (85th percentile 1.52 s); 0 of 34 glances over 2 s | NHTSA criteria: ≤ 2 s; ≤ 15% | emergent |
+| driving.surt_glances | mean off-road glance 1.45 s (85th percentile 1.52 s); 0 of 34 glances over 2 s | NHTSA criteria ≤ 2 s and ≤ 15%: pass. Human data, mean 0.8–1.2 s and 3–13% over 2 s: fail (score 0.77) | emergent |
 | driving.takeover | 1.66 s mean (SD 0.18 s, 8 runs) | 2.72 s, mean ± 1 SD across 520 conditions | emergent |
 
 Further measurements from the same runs:
@@ -75,8 +75,18 @@ rose to 2.25 s and every glance exceeded 2 s. `driving.surt_glances` failed
 - **What the passes show.** Five benchmarks only confirm that the modules
   implement their cited parameters. The tapping, glance and take-over
   results arise from interacting modules.
-- **Glances.** Meeting the NHTSA criteria shows plausibility, not a fit to
-  human glance distributions.
+- **Glances.** Meeting the NHTSA design criteria shows plausibility only.
+  Against human in-vehicle search glances, the baseline's glances are too
+  long and too regular:
+  - simulator means are 1.06–1.20 s with 5.7–10% over 2 s (Kujala and
+    Saariluoma, 2011);
+  - about 1.0 s per in-car glance in Jokinen, Kujala and Oulasvirta's
+    (2021) human data;
+  - naturalistic phone tasks have a median of 3.4% over 2 s and a mean of
+    12.8% (Tivesten and Dozza, 2014).
+
+  Their tasks and speeds differ from SuRT at 72 km/h. Jokinen et al. found
+  no significant effect of speed on glance duration.
 - **Take-over.** The baseline is faster and far less variable than the
   meta-analysis. It models one simulated participant without
   inter-individual variation. Its take-over steps (response latency,

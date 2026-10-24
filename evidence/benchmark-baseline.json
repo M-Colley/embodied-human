@@ -43,7 +43,7 @@
     "standard": 3,
     "derived": 1
   },
-  "wall_seconds": 92.38,
+  "wall_seconds": 91.25,
   "results": [
     {
       "name": "eyes.main_sequence",
@@ -357,16 +357,20 @@
         "memory",
         "motor"
       ],
-      "passed": true,
-      "score": 1.0,
+      "passed": false,
+      "score": 0.7716911764705321,
       "skipped": null,
       "metrics": {
         "driving.mean_offroad_glance": 1.4452941176471485,
-        "driving.long_glance_share": 0.0
+        "driving.long_glance_share": 0.0,
+        "driving.human_mean_glance": 1.4452941176471485,
+        "driving.human_long_glance_share": 0.0
       },
       "scores": {
         "driving.mean_offroad_glance": 1.0,
-        "driving.long_glance_share": 1.0
+        "driving.long_glance_share": 1.0,
+        "driving.human_mean_glance": 0.3867647058821284,
+        "driving.human_long_glance_share": 0.7
       },
       "references": {
         "driving.mean_offroad_glance": {
@@ -388,6 +392,26 @@
           "unit": "fraction",
           "citation": "NHTSA (2013) guideline criterion (a)",
           "doi": "https://www.federalregister.gov/documents/2013/04/26/2013-09883"
+        },
+        "driving.human_mean_glance": {
+          "value": 1.1,
+          "range": [
+            0.8,
+            1.2
+          ],
+          "unit": "s",
+          "citation": "Kujala & Saariluoma (2011), Table 2; Jokinen, Kujala & Oulasvirta (2021), Appendix B",
+          "doi": "https://doi.org/10.1080/00140139.2011.592601"
+        },
+        "driving.human_long_glance_share": {
+          "value": 0.08,
+          "range": [
+            0.03,
+            0.13
+          ],
+          "unit": "fraction",
+          "citation": "Kujala & Saariluoma (2011); Tivesten & Dozza (2014)",
+          "doi": "https://doi.org/10.1016/j.trf.2014.08.004"
         }
       },
       "details": {

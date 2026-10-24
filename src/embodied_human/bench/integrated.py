@@ -34,8 +34,14 @@ def _available(result: Result) -> bool:
 
 @benchmark("driving.surt_glances")
 def surt_glances(human: Human, seconds: float = 60.0, speed: float = 20.0) -> Result:
-    """Drive a straight road at 20 m/s while doing SuRT; score off-road
-    glances against the NHTSA (2013) criteria."""
+    """Drive a straight road at 20 m/s while doing SuRT.
+
+    Off-road glances are scored against the NHTSA (2013) design criteria
+    and against human glance data from simulator studies of in-vehicle
+    visual search (Kujala and Saariluoma, 2011; Jokinen, Kujala and
+    Oulasvirta, 2021). Their tasks differ from SuRT and ran at 40-120 km/h;
+    Jokinen et al. found no significant effect of speed on glance duration.
+    """
     result = Result(
         "driving.surt_glances",
         ("eyes", "objects", "attention", "estimator", "memory", "motor"),
@@ -64,6 +70,10 @@ def surt_glances(human: Human, seconds: float = 60.0, speed: float = 20.0) -> Re
         "driving.mean_offroad_glance", metrics["mean_offroad_glance_s"]
     )
     result.score_against("driving.long_glance_share", metrics["long_glance_share"])
+    result.score_against("driving.human_mean_glance", metrics["mean_offroad_glance_s"])
+    result.score_against(
+        "driving.human_long_glance_share", metrics["long_glance_share"]
+    )
     assert agent.task is not None
     result.details = {
         **metrics,

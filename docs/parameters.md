@@ -12,9 +12,9 @@ choice to fit or replace).
 | eyes | `EyeParameters.latency_median` | 0.2 | measured | [Saslow (1967)](https://doi.org/10.1364/JOSA.57.001024) | step target with the fixation point extinguished; 150 ms (gap) to 250 ms (overlap) |
 | eyes | `EyeParameters.latency_spread` | 0.25 | assumed | model choice | right-skewed latency; fit to data |
 | eyes | `EyeParameters.minimum_amplitude` | 0.5 | assumed | model choice |  |
-| vision | `FoveationParameters.alpha` | 0.106 | fitted | Geisler & Perry (1998), SPIE 3299 | fit to contrast thresholds across eccentricity |
-| vision | `FoveationParameters.e2` | 2.3 | fitted | Geisler & Perry (1998) |  |
-| vision | `FoveationParameters.ct0` | 0.015625 | fitted | Geisler & Perry (1998) |  |
+| vision | `FoveationParameters.alpha` | 0.106 | fitted | [Geisler & Perry (1998), Proc. SPIE 3299](https://doi.org/10.1117/12.320120) | least-squares fit to Robson & Graham (1981) grating thresholds |
+| vision | `FoveationParameters.e2` | 2.3 | fitted | [Geisler & Perry (1998)](https://doi.org/10.1117/12.320120) |  |
+| vision | `FoveationParameters.ct0` | 0.015625 | fitted | [Geisler & Perry (1998)](https://doi.org/10.1117/12.320120) | 1/64 for Robson & Graham; 1/75 and 1/76 for two other datasets |
 | vision | `FoveationParameters.levels` | 7 | assumed | implementation choice |  |
 | objects | `ObjectParameters.e2` | 2.0 | measured | [Strasburger, Rentschler & Jüttner (2011), Table 4](https://doi.org/10.1167/11.5.13) | letter and Landolt-C acuity E2 1.0-2.6 deg; vernier 0.7; gratings 2.6-3.0 |
 | objects | `ObjectParameters.field_of_view` | 90.0 | assumed | model choice | monocular temporal field is wider |

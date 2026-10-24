@@ -46,13 +46,20 @@ class FoveationParameters(Parameters):
 
     SOURCES: ClassVar = {
         "alpha": Source(
-            "Geisler & Perry (1998), SPIE 3299",
-            None,
+            "Geisler & Perry (1998), Proc. SPIE 3299",
+            "https://doi.org/10.1117/12.320120",
             "fitted",
-            "fit to contrast thresholds across eccentricity",
+            "least-squares fit to Robson & Graham (1981) grating thresholds",
         ),
-        "e2": Source("Geisler & Perry (1998)", None, "fitted"),
-        "ct0": Source("Geisler & Perry (1998)", None, "fitted"),
+        "e2": Source(
+            "Geisler & Perry (1998)", "https://doi.org/10.1117/12.320120", "fitted"
+        ),
+        "ct0": Source(
+            "Geisler & Perry (1998)",
+            "https://doi.org/10.1117/12.320120",
+            "fitted",
+            "1/64 for Robson & Graham; 1/75 and 1/76 for two other datasets",
+        ),
         "levels": Source("implementation choice", None, "assumed"),
     }
 

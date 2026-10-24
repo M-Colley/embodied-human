@@ -112,7 +112,8 @@ python -m embodied_human.bench --out results.json
 python -m embodied_human.bench --replace attention=seev --out seev.json
 ```
 
-Results of the baseline (seed 0; [report](evidence/benchmark-baseline.json)):
+Results of the baseline (seed 0; [report](evidence/benchmark-baseline.json)).
+Seven of eight benchmarks pass:
 
 | Benchmark | Measured | Human reference (acceptance range) | Kind of check |
 | --- | --- | --- | --- |
@@ -122,7 +123,7 @@ Results of the baseline (seed 0; [report](evidence/benchmark-baseline.json)):
 | `vision.foveation` | E2 = 2.3° | 1.0–3.0° | consistency |
 | `memory.span` | 4 items | 3–5 chunks (Cowan, 2001) | consistency |
 | `motor.touch_tapping` | 6.28 bits/s; 104 ms/bit | 6.95 bits/s (5.5–8.5; MacKenzie, 2015); 105 ms/bit (75–135; Bi et al., 2013) | **through physical contact** |
-| `driving.surt_glances` | mean off-road glance 1.45 s; 0% over 2 s | NHTSA (2013) criteria: mean ≤ 2 s, ≤ 15% over 2 s | **emergent** |
+| `driving.surt_glances` | mean off-road glance 1.45 s; 0% over 2 s | NHTSA (2013) criteria (mean ≤ 2 s, ≤ 15% over 2 s): pass. Human in-vehicle search glances (mean 0.8–1.2 s, 3–13% over 2 s; Kujala & Saariluoma, 2011; Jokinen et al., 2021; Tivesten & Dozza, 2014): **fail** | **emergent** |
 | `driving.takeover` | mean 1.66 s (8 runs) | 2.72 ± 1.45 s across 520 conditions (Zhang et al., 2019) | **emergent** |
 
 **How to read these results.** A *consistency* check confirms that a module
@@ -130,8 +131,12 @@ behaves as its cited parameters say. It becomes informative when a module is
 replaced. *Emergent* results come from the interplay of modules and are the
 real test:
 
-- **Glances.** The baseline's off-road glances meet the NHTSA criteria.
-  Those are design criteria, not a fit to human glance distributions.
+- **Glances.** The baseline's off-road glances meet the NHTSA design
+  criteria. They do not match human glance data: they are about 0.3 s too
+  long and too regular. None exceeds 2 s, while 3–13% of human glances do.
+  Its uncertainty threshold is deterministic and its parameters are
+  assumed; this is the clearest invitation to a better attention or
+  estimation module.
 - **Take-over.** The take-over time lies within one SD of the meta-analytic
   mean, but it is shorter than that mean.
 
@@ -142,10 +147,12 @@ and are the first candidates for fitting.
 
 - **User-in-the-Box** (Ikkala et al., 2022) couples MuJoCo biomechanics,
   perception and RL for interaction tasks.
-- **Computational rationality** (Oulasvirta et al.) and Jokinen, Kujala &
-  Oulasvirta (2021) model in-car glances as optimal adaptation under
-  uncertainty. Their RL policy is a natural replacement for the
-  `uncertainty_sampler`.
+- **Computational rationality** (Oulasvirta et al.) underlies the model of
+  Jokinen, Kujala & Oulasvirta (2021). It keeps a belief over lane position
+  that spreads while the eyes are on an in-car display, and learns when to
+  switch with hierarchical reinforcement learning. Its human data (about
+  1.0 s per in-car glance) are part of this benchmark. Its supervisor is a
+  natural replacement for the `uncertainty_sampler`.
 - **atari-cr and SugaRL** add human-like active vision to RL agents.
   `FoveatedVision` with `MainSequenceEyes` provides that sensor for any
   image source, and embodied-ui's CARLA and Unity cameras supply driver
@@ -162,9 +169,15 @@ No code from these projects is included.
   Pixel-level vision in the loop (a CARLA or Unity camera through
   `FoveatedVision` into a learned perception module) is supported by the
   interfaces but not yet trained.
-- **Reference data:** human glance-duration distributions, DRT response
-  times and take-over decompositions are the next benchmarks. Their
-  references are being verified before inclusion.
+- **Next benchmarks:**
+  - Detection-response times for the DRT task, which runs but is not yet
+    scored. The references are verified: about 345 ms while driving with a
+    head-mounted DRT, plus about 290 ms under 2-back and 400 ms under SuRT
+    (Conti, Dlugosch & Bengler, 2014). Tactile on-road values are 526 ms for
+    young and 639 ms for older drivers (Cooper et al., 2020). This needs a
+    stimulus-response module.
+  - Occlusion distance on highways: mean 15.5 m (Kujala et al., 2016).
+  - Take-over times by time budget, which still need a verified source.
 
 ## Development
 

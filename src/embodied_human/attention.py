@@ -4,8 +4,11 @@ Baselines:
 
 - :class:`UncertaintySampler` looks back at the road when the believed
   lateral uncertainty exceeds a threshold, and away again once it has
-  fallen. This is the uncertainty account of Senders et al. (1967), which
-  Jokinen, Kujala and Oulasvirta (2021) extend to optimal adaptation.
+  fallen. This is the uncertainty account of Senders et al. (1967).
+  Jokinen, Kujala and Oulasvirta (2021,
+  https://doi.org/10.1177/0018720820927687) replace the threshold by a
+  supervisor policy learned with hierarchical reinforcement learning over
+  the same kind of belief; such a policy can replace this module.
 - :class:`SEEV` allocates dwell probability by salience, effort,
   expectancy and value (Wickens et al., 2003).
 - :class:`AttenD` is the 2-s attention buffer of Kircher and Ahlström
