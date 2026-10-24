@@ -68,7 +68,8 @@ Further measurements from the same runs:
 threshold (`--replace attention=uncertainty_sampler:return_sd=0.8,maximum_glance=4.0`,
 [report](evidence/benchmark-return-sd-0.8.json)), the mean off-road glance
 rose to 2.25 s and every glance exceeded 2 s. `driving.surt_glances` failed
-(score 0.44), while the take-over time stayed at 1.68 s.
+(score 0.22, against 0.77 for the baseline), while the take-over time
+stayed at 1.68 s.
 
 ### Interpretation and limits
 
