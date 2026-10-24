@@ -1,0 +1,158 @@
+{
+  "package": "embodied-human 0.1.0",
+  "python": "3.12.13",
+  "seed": 0,
+  "config": {
+    "eyes": {
+      "name": "main_sequence",
+      "params": {}
+    },
+    "vision": {
+      "name": "foveated",
+      "params": {}
+    },
+    "objects": {
+      "name": "eccentricity_noise",
+      "params": {}
+    },
+    "attention": {
+      "name": "uncertainty_sampler",
+      "params": {
+        "return_sd": 0.8,
+        "maximum_glance": 4.0
+      }
+    },
+    "memory": {
+      "name": "act_r",
+      "params": {}
+    },
+    "proprioception": {
+      "name": "spindle",
+      "params": {}
+    },
+    "motor": {
+      "name": "ffitts_min_jerk",
+      "params": {}
+    },
+    "estimator": {
+      "name": "lane_kalman",
+      "params": {}
+    }
+  },
+  "parameter_sources": {
+    "measured": 8,
+    "assumed": 10,
+    "fitted": 11,
+    "standard": 3,
+    "derived": 1
+  },
+  "wall_seconds": 91.21,
+  "results": [
+    {
+      "name": "driving.surt_glances",
+      "categories": [
+        "eyes",
+        "objects",
+        "attention",
+        "estimator",
+        "memory",
+        "motor"
+      ],
+      "passed": false,
+      "score": 0.4386956521738782,
+      "skipped": null,
+      "metrics": {
+        "driving.mean_offroad_glance": 2.2452173913044873,
+        "driving.long_glance_share": 1.0
+      },
+      "scores": {
+        "driving.mean_offroad_glance": 0.8773913043477564,
+        "driving.long_glance_share": 0.0
+      },
+      "references": {
+        "driving.mean_offroad_glance": {
+          "value": 2.0,
+          "range": [
+            0.0,
+            2.0
+          ],
+          "unit": "s",
+          "citation": "NHTSA (2013) guideline criterion (b)",
+          "doi": "https://www.federalregister.gov/documents/2013/04/26/2013-09883"
+        },
+        "driving.long_glance_share": {
+          "value": 0.15,
+          "range": [
+            0.0,
+            0.15
+          ],
+          "unit": "fraction",
+          "citation": "NHTSA (2013) guideline criterion (a)",
+          "doi": "https://www.federalregister.gov/documents/2013/04/26/2013-09883"
+        }
+      },
+      "details": {
+        "glances": 23.0,
+        "mean_offroad_glance_s": 2.2452173913044873,
+        "p85_offroad_glance_s": 2.3200000000003627,
+        "long_glance_share": 1.0,
+        "mean_eyes_off_road_per_screen_s": 2.998823529411947,
+        "attend_minimum_s": 0.0,
+        "lane_offset_sd_m": 0.28319149650598285,
+        "lane_offset_max_m": 0.6025587355250278,
+        "terminated": false,
+        "surt": {
+          "screens": 17.0,
+          "accuracy": 0.8823529411764706,
+          "mean_screen_time_s": 3.398823529411967
+        },
+        "simulated_seconds": 60.0
+      }
+    },
+    {
+      "name": "driving.takeover",
+      "categories": [
+        "eyes",
+        "attention",
+        "estimator",
+        "motor"
+      ],
+      "passed": true,
+      "score": 1.0,
+      "skipped": null,
+      "metrics": {
+        "driving.takeover_time": 1.6824999999998398
+      },
+      "scores": {
+        "driving.takeover_time": 1.0
+      },
+      "references": {
+        "driving.takeover_time": {
+          "value": 2.72,
+          "range": [
+            1.27,
+            4.17
+          ],
+          "unit": "s",
+          "citation": "Zhang, de Winter, Varotto, Happee & Martens (2019)",
+          "doi": "https://doi.org/10.1016/j.trf.2019.04.020"
+        }
+      },
+      "details": {
+        "takeover_times_s": [
+          1.9599999999998339,
+          1.6199999999998411,
+          1.7999999999998373,
+          1.8799999999998356,
+          1.5599999999998424,
+          1.5399999999998428,
+          1.719999999999839,
+          1.3799999999998462
+        ],
+        "sd_s": 0.19344619037713556,
+        "missed": 0,
+        "scenario": "myosuite-carla takeover_request: automation at 12 m/s, request at 10 s, 7 s budget"
+      }
+    }
+  ]
+}

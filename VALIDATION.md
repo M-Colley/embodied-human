@@ -64,6 +64,12 @@ Further measurements from the same runs:
   is classified as distracted at times.
 - **Take-over.** Every request was taken over, in 1.42–1.96 s.
 
+**The benchmark responds to module changes.** With a laxer attention
+threshold (`--replace attention=uncertainty_sampler:return_sd=0.8,maximum_glance=4.0`,
+[report](evidence/benchmark-return-sd-0.8.json)), the mean off-road glance
+rose to 2.25 s and every glance exceeded 2 s. `driving.surt_glances` failed
+(score 0.44), while the take-over time stayed at 1.68 s.
+
 ### Interpretation and limits
 
 - **What the passes show.** Five benchmarks only confirm that the modules

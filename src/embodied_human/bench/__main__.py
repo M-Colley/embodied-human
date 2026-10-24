@@ -3,6 +3,10 @@
 python -m embodied_human.bench --out results.json
 python -m embodied_human.bench --only eyes.main_sequence memory.span
 python -m embodied_human.bench --replace attention=seev --out seev.json
+python -m embodied_human.bench --replace attention=uncertainty_sampler:return_sd=0.8
+
+A replacement is ``category=name`` with optional ``:key=value,...``
+parameters (numbers, ``true``/``false`` or text).
 """
 
 from __future__ import annotations
@@ -19,15 +23,35 @@ from typing import Any
 from ..core import CATEGORIES, HumanConfig, build_human
 
 
+def _value(text: str) -> Any:
+    if text.lower() in ("true", "false"):
+        return text.lower() == "true"
+    try:
+        return int(text)
+    except ValueError:
+        pass
+    try:
+        return float(text)
+    except ValueError:
+        return text
+
+
 def _config(replacements: list[str]) -> HumanConfig:
     config = HumanConfig()
     for item in replacements:
-        category, _, name = item.partition("=")
+        category, _, choice = item.partition("=")
+        name, _, settings = choice.partition(":")
         if category not in CATEGORIES or not name:
             raise SystemExit(
                 f"--replace needs category=name with a category in {CATEGORIES}"
             )
-        config = config.replace(category, name)
+        params = {}
+        for pair in filter(None, settings.split(",")):
+            key, sep, value = pair.partition("=")
+            if not sep:
+                raise SystemExit(f"parameter {pair!r} needs key=value")
+            params[key] = _value(value)
+        config = config.replace(category, name, **params)
     return config
 
 

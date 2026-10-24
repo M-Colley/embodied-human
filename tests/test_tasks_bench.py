@@ -133,3 +133,14 @@ def test_unknown_benchmarks_are_rejected():
     with pytest.raises(ValueError):
         run(eh.build_human(seed=0), ["nope"])
     assert "driving.takeover" in BENCHMARKS or True
+
+
+def test_cli_replacements_accept_parameters():
+    from embodied_human.bench.__main__ import _config
+
+    config = _config(["attention=uncertainty_sampler:return_sd=0.8,maximum_glance=4"])
+    assert config.attention.params == {"return_sd": 0.8, "maximum_glance": 4}
+    with pytest.raises(SystemExit):
+        _config(["hands=x"])
+    with pytest.raises(SystemExit):
+        _config(["attention=seev:value"])
