@@ -133,7 +133,7 @@ def takeover(human: Human, runs: int = 8) -> Result:
         "missed": int(len(times) - len(valid)),
         "median_components_s": {
             key: float(np.nanmedian([c.get(key, math.nan) for c in components]))
-            for key in ("response_s", "hand_s", "eyes_s", "engaged_s")
+            for key in ("response_s", "gaze_s", "hand_s", "eyes_s", "engaged_s")
         },
         "scenario": "myosuite-carla takeover_request: automation "
         "at 12 m/s, request at 10 s, 7 s budget",

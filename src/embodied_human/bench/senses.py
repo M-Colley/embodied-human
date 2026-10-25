@@ -75,6 +75,48 @@ def modality_rt(human: Human) -> Result:
     return result
 
 
+#: Diederich & Colonius (2007), Table 8: observed mean saccadic RT (ms) to a
+#: light alone by eccentricity (deg), 3 participants.
+SACCADE_ECCENTRICITY = {10.0: 150.0, 50.0: 189.0, 70.0: 208.0}
+#: Their TWIN estimates of tactile peripheral time on the palm (Table 3), ms,
+#: with the light at 10 deg at 16 ms.
+PALM_VIBRATION = {"50 Hz, 0.6 V": 29.0, "5 Hz, 2.4 V": 111.0}
+
+
+@benchmark("response.eccentricity")
+def eccentricity(human: Human) -> Result:
+    """How much later a peripheral light is responded to.
+
+    The model's visual latency grows with eccentricity as in Osaka's (1976)
+    manual reaction times up to 50 deg and is extrapolated beyond. In TWIN
+    the peripheral stage does not depend on the response, so the increase
+    from 10 deg should carry over to Diederich and Colonius's (2007) eye
+    movements; 70 deg tests the extrapolation.
+    """
+    result = Result("response.eccentricity", ("response",))
+    response: Any = human.response
+    base = response.visual_latency(10.0)
+    model = {e: 1000.0 * (response.visual_latency(e) - base) for e in (50.0, 70.0)}
+    observed = {e: SACCADE_ECCENTRICITY[e] - SACCADE_ECCENTRICITY[10.0] for e in model}
+    errors = [model[e] - observed[e] for e in model]
+    result.score_against(
+        "response.eccentricity_rmse", math.sqrt(float(np.mean(np.square(errors))))
+    )
+    # Their vibration amplitudes are given in volts only, so the tactile
+    # times cannot test the latency curve; report what the model needs.
+    touch: Any = human.touch
+    result.details = {
+        "model_increase_ms": model,
+        "observed_increase_ms": observed,
+        "tactile_minus_light_10deg_ms": {
+            "observed": {k: v - 16.0 for k, v in PALM_VIBRATION.items()},
+            "model_30db": 1000.0 * (touch.latency(STRONG_VIBRATION_DB) - base),
+            "model_at_threshold": 1000.0 * (touch.latency(1e-9) - base),
+        },
+    }
+    return result
+
+
 def _drt(human: Human) -> tuple[float, float]:
     visual = [Signal("visual", 0.0, human.response.visual_latency(DRT_LIGHT_DEG))]  # type: ignore[attr-defined]
     tactile = [Signal("tactile", 0.0, human.touch.latency(DRT_VIBRATION_DB))]  # type: ignore[attr-defined]

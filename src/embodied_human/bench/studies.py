@@ -273,7 +273,7 @@ def takeover_modality(human: Human, runs: int = 12) -> Result:
             for seed in range(runs)
         ]
         medians["+".join(signals)] = {
-            key: float(np.median([p[key] for p in parts])) for key in parts[0]
+            key: float(np.nanmedian([p[key] for p in parts])) for key in parts[0]
         }
     visual = medians["visual"]["response_s"]
     agree = [medians[m]["response_s"] < visual for m in ("auditory", "tactile")]
@@ -282,4 +282,56 @@ def takeover_modality(human: Human, runs: int = 12) -> Result:
         "driving.takeover_hands_auditory", medians["auditory+visual"]["hand_s"]
     )
     result.details = {"median_components_s": medians, "runs": runs}
+    return result
+
+
+#: Gold et al. (2013), Fig. 3 and text: mean times (s) after the request
+#: with 5 and 7 s to collision; braking and steering with their SDs.
+GOLD = {
+    "5 s": {"gaze": 0.41, "road": 0.69, "hands": 1.45, "intervention": 2.10},
+    "7 s": {"gaze": 0.54, "road": 0.94, "hands": 1.79, "intervention": 2.89},
+}
+GOLD_INPUTS = {
+    "5 s": {"braking": (2.06, 0.34), "steering": (2.27, 0.66)},
+    "7 s": {"braking": (3.10, 0.66), "steering": (3.65, 1.33)},
+}
+
+
+@benchmark("driving.takeover_components")
+def takeover_components(human: Human, runs: int = 16) -> Result:
+    """The steps of a take-over against Gold et al. (2013).
+
+    A tone with an icon interrupts SuRT during automation at 120 km/h on the
+    straight road. Gold et al. timed the first saccade away from SuRT, the
+    first fixation on the road, the hands on the wheel and the first
+    braking or steering input; their means are compared with the model's
+    gaze, eyes, hand and engagement times. None of the model's parameters
+    was fitted to these data.
+    """
+    from ..agents.road import simulate_takeover
+
+    result = Result(
+        "driving.takeover_components",
+        ("hearing", "response", "eyes", "attention", "motor"),
+    )
+    parts = [
+        simulate_takeover(
+            build_human(human.config, seed=seed), speed=120 * KMH, seed=seed
+        ).takeover_components()
+        for seed in range(runs)
+    ]
+    keys = {"gaze": "gaze_s", "road": "eyes_s", "hands": "hand_s"}
+    keys["intervention"] = "engaged_s"
+    model = {name: np.array([p[key] for p in parts]) for name, key in keys.items()}
+    for name, values in model.items():
+        result.score_against(f"driving.takeover_{name}", float(np.nanmean(values)))
+    result.details = {
+        "model_mean_s": {k: float(np.nanmean(v)) for k, v in model.items()},
+        "model_ci95_s": {k: bootstrap_ci(v[np.isfinite(v)]) for k, v in model.items()},
+        "model_response_s": float(np.mean([p["response_s"] for p in parts])),
+        "runs": runs,
+        "runs_with_eyes_on_task": int(np.isfinite(model["gaze"]).sum()),
+        "gold_mean_s": GOLD,
+        "gold_inputs_mean_sd_s": GOLD_INPUTS,
+    }
     return result

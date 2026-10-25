@@ -75,7 +75,7 @@
     "standard": 3,
     "derived": 4
   },
-  "wall_seconds": 150.89,
+  "wall_seconds": 140.74,
   "results": [
     {
       "name": "eyes.main_sequence",
@@ -489,7 +489,7 @@
       "score": 1.0,
       "skipped": null,
       "metrics": {
-        "driving.takeover_time": 1.9399999999998343
+        "driving.takeover_time": 2.244999999999828
       },
       "scores": {
         "driving.takeover_time": 1.0
@@ -508,22 +508,23 @@
       },
       "details": {
         "takeover_times_s": [
-          1.6599999999998403,
-          1.9399999999998343,
-          1.9399999999998343,
+          1.5399999999998428,
+          2.099999999999831,
+          2.8599999999998147,
+          3.459999999999802,
           1.9199999999998347,
-          2.039999999999832,
-          1.9399999999998343,
-          1.9599999999998339,
-          2.1199999999998305
+          1.8199999999998369,
+          2.2599999999998275,
+          1.999999999999833
         ],
-        "sd_s": 0.1318007153676634,
+        "sd_s": 0.6232403801331833,
         "missed": 0,
         "median_components_s": {
-          "response_s": 0.21999999999987097,
-          "hand_s": 1.8459403199567603,
-          "eyes_s": 0.5199999999998646,
-          "engaged_s": 1.859999999999836
+          "response_s": 0.5099999999998648,
+          "gaze_s": 0.6072830881159526,
+          "hand_s": 1.955940319956758,
+          "eyes_s": 0.7499999999998597,
+          "engaged_s": 1.9699999999998337
         },
         "scenario": "myosuite-carla takeover_request: automation at 12 m/s, request at 10 s, 7 s budget"
       }
@@ -1096,6 +1097,51 @@
         },
         "redundant_av_ms": 223.42176328186227,
         "note": "the model's parameters come from other participants (Diederich & Colonius, 2015); only the order is compared"
+      }
+    },
+    {
+      "name": "response.eccentricity",
+      "categories": [
+        "response"
+      ],
+      "passed": true,
+      "score": 1.0,
+      "skipped": null,
+      "metrics": {
+        "response.eccentricity_rmse": 1.0000000000000036
+      },
+      "scores": {
+        "response.eccentricity_rmse": 1.0
+      },
+      "references": {
+        "response.eccentricity_rmse": {
+          "value": 0.0,
+          "range": [
+            0.0,
+            10.0
+          ],
+          "unit": "ms",
+          "citation": "Diederich & Colonius (2007), Table 8",
+          "doi": "https://doi.org/10.3758/BF03194453"
+        }
+      },
+      "details": {
+        "model_increase_ms": {
+          "50.0": 40.00000000000001,
+          "70.0": 59.0
+        },
+        "observed_increase_ms": {
+          "50.0": 39.0,
+          "70.0": 58.0
+        },
+        "tactile_minus_light_10deg_ms": {
+          "observed": {
+            "50 Hz, 0.6 V": 13.0,
+            "5 Hz, 2.4 V": 95.0
+          },
+          "model_30db": -8.499999999999993,
+          "model_at_threshold": 65.84432968755199
+        }
       }
     },
     {
@@ -2164,7 +2210,7 @@
       "skipped": null,
       "metrics": {
         "driving.takeover_modality_order": 1.0,
-        "driving.takeover_hands_auditory": 1.8459403199567603
+        "driving.takeover_hands_auditory": 1.86594031995676
       },
       "scores": {
         "driving.takeover_modality_order": 1.0,
@@ -2195,31 +2241,167 @@
       "details": {
         "median_components_s": {
           "visual": {
-            "response_s": 0.3299999999998686,
-            "hand_s": 1.9159403199567588,
-            "eyes_s": 0.5899999999998631,
-            "engaged_s": 1.9599999999998339
+            "response_s": 0.5199999999998646,
+            "gaze_s": 0.5210758374112086,
+            "hand_s": 1.8559403199567601,
+            "eyes_s": 0.6499999999998618,
+            "engaged_s": 2.049999999999832
           },
           "auditory": {
-            "response_s": 0.2699999999998699,
-            "hand_s": 1.86594031995676,
-            "eyes_s": 0.5399999999998641,
+            "response_s": 0.3499999999998682,
+            "gaze_s": 0.4950218323615099,
+            "hand_s": 1.8259403199567608,
+            "eyes_s": 0.6199999999998624,
             "engaged_s": 1.8899999999998354
           },
           "tactile": {
-            "response_s": 0.30999999999986905,
-            "hand_s": 1.905940319956759,
-            "eyes_s": 0.5799999999998633,
-            "engaged_s": 1.9399999999998343
+            "response_s": 0.499999999999865,
+            "gaze_s": 0.5112374509690936,
+            "hand_s": 1.8459403199567603,
+            "eyes_s": 0.639999999999862,
+            "engaged_s": 2.0299999999998324
           },
           "auditory+visual": {
-            "response_s": 0.23999999999987054,
-            "hand_s": 1.8459403199567603,
-            "eyes_s": 0.5199999999998646,
-            "engaged_s": 1.8699999999998358
+            "response_s": 0.44999999999986606,
+            "gaze_s": 0.5211734224491806,
+            "hand_s": 1.86594031995676,
+            "eyes_s": 0.6599999999998616,
+            "engaged_s": 1.8799999999998356
           }
         },
         "runs": 12
+      }
+    },
+    {
+      "name": "driving.takeover_components",
+      "categories": [
+        "hearing",
+        "response",
+        "eyes",
+        "attention",
+        "motor"
+      ],
+      "passed": false,
+      "score": 0.8570896753854284,
+      "skipped": null,
+      "metrics": {
+        "driving.takeover_gaze": 0.4845883479851344,
+        "driving.takeover_road": 0.7299999999998601,
+        "driving.takeover_hands": 1.9359403199567584,
+        "driving.takeover_intervention": 1.9874999999998333
+      },
+      "scores": {
+        "driving.takeover_gaze": 1.0,
+        "driving.takeover_road": 1.0,
+        "driving.takeover_hands": 0.5707637648330637,
+        "driving.takeover_intervention": 0.8575949367086496
+      },
+      "references": {
+        "driving.takeover_gaze": {
+          "value": 0.54,
+          "range": [
+            0.41,
+            0.54
+          ],
+          "unit": "s",
+          "citation": "Gold, Damb\u00f6ck, Lorenz & Bengler (2013), Fig. 3",
+          "doi": "https://doi.org/10.1177/1541931213571433"
+        },
+        "driving.takeover_road": {
+          "value": 0.94,
+          "range": [
+            0.69,
+            0.94
+          ],
+          "unit": "s",
+          "citation": "Gold, Damb\u00f6ck, Lorenz & Bengler (2013), Fig. 3",
+          "doi": "https://doi.org/10.1177/1541931213571433"
+        },
+        "driving.takeover_hands": {
+          "value": 1.79,
+          "range": [
+            1.45,
+            1.79
+          ],
+          "unit": "s",
+          "citation": "Gold, Damb\u00f6ck, Lorenz & Bengler (2013), Fig. 3",
+          "doi": "https://doi.org/10.1177/1541931213571433"
+        },
+        "driving.takeover_intervention": {
+          "value": 2.89,
+          "range": [
+            2.1,
+            2.89
+          ],
+          "unit": "s",
+          "citation": "Gold, Damb\u00f6ck, Lorenz & Bengler (2013), Fig. 3",
+          "doi": "https://doi.org/10.1177/1541931213571433"
+        }
+      },
+      "details": {
+        "model_mean_s": {
+          "gaze": 0.4845883479851344,
+          "road": 0.7299999999998601,
+          "hands": 1.9359403199567584,
+          "intervention": 1.9874999999998333
+        },
+        "model_ci95_s": {
+          "gaze": [
+            0.36261975957499637,
+            0.6527205785382163
+          ],
+          "road": [
+            0.546249999999864,
+            1.0251463712362439
+          ],
+          "hands": [
+            1.7521903199567623,
+            2.231086691193142
+          ],
+          "intervention": [
+            1.7837499999998374,
+            2.322772530732608
+          ]
+        },
+        "model_response_s": 0.5612499999998637,
+        "runs": 16,
+        "runs_with_eyes_on_task": 13,
+        "gold_mean_s": {
+          "5 s": {
+            "gaze": 0.41,
+            "road": 0.69,
+            "hands": 1.45,
+            "intervention": 2.1
+          },
+          "7 s": {
+            "gaze": 0.54,
+            "road": 0.94,
+            "hands": 1.79,
+            "intervention": 2.89
+          }
+        },
+        "gold_inputs_mean_sd_s": {
+          "5 s": {
+            "braking": [
+              2.06,
+              0.34
+            ],
+            "steering": [
+              2.27,
+              0.66
+            ]
+          },
+          "7 s": {
+            "braking": [
+              3.1,
+              0.66
+            ],
+            "steering": [
+              3.65,
+              1.33
+            ]
+          }
+        }
       }
     }
   ]

@@ -370,3 +370,96 @@ previous run:
 - **Trust.** The failure is structural. Gao and Lee's model has inertia in
   both of its updates, so it cannot show a sharp dip that recovers by the
   next event.
+
+## 2026-10-25 (evening): thresholds, saccades and take-over components from four papers
+
+Same PC and versions. Four papers were read in full:
+
+- Morioka and Griffin (2005, 2008), for vibration thresholds;
+- Diederich and Colonius (2007), for visual-tactile saccades;
+- Gold et al. (2013), for take-over components.
+
+Their numbers replace values that were read from figures or quoted from
+secondary sources.
+
+### Changes
+
+- **Touch.** The thresholds now come from two sources:
+  - Morioka and Griffin's (2008) Table 2: the hand on a handle, the seat
+    and the foot, each in three axes;
+  - their 2005 Fig. 2: fingertip, palm and grip, read from the PDF's
+    vector data.
+
+  They replace values read from figures in Brisben et al. (1999), Miwa
+  (1967) and Morioka and Griffin (2006). The seat's vertical threshold at
+  10 Hz rises from 0.0078 to 0.022 m/s² r.m.s.
+- **Take-over.** The take-over reaction now waits for the central stage
+  held by SuRT. This is the same threaded-cognition load as in
+  `response.drt_load`, with SuRT's chunk fitted to Conti et al. The driver
+  also logs Gold et al.'s gaze reaction: the onset of the first saccade
+  from the task display to anywhere else.
+
+### Tests
+
+`python -m pytest tests -q` passes 65 tests ([JUnit](evidence/tests.xml)).
+New tests check:
+
+- the threshold orderings both papers report: the seat is most sensitive
+  vertically at 8–80 Hz and the hand above 100 Hz; the fingertip is the
+  most sensitive site at 8 Hz and the least sensitive at 125 Hz;
+- the central-stage wait and the gaze reaction in take-overs;
+- the eccentricity benchmark.
+
+The fresh Python 3.10 environment without MyoSuite passed 59, skipped 2,
+and mypy found no issues.
+
+### Fit
+
+```bash
+python examples/fit_takeover.py --out evidence/takeover-fit.json
+```
+
+With the wait added, a decision time of 0.78 s (down from 0.91 s)
+reproduces Ko et al.'s median 1.87 s to the wheel (model 1.87 s, 12 runs,
+10 ms grid).
+
+### Benchmark
+
+```bash
+python -m embodied_human.bench --out evidence/benchmark-baseline.json
+```
+
+The run took 141 s; **16 of 23 benchmarks pass**. The previous section
+reported 13 of 21, but its report shows 15 of 21. Changes:
+
+| Benchmark | Before | Now | Human reference |
+| --- | --- | --- | --- |
+| response.eccentricity (new) | — | +40 and +59 ms at 50° and 70°: RMS 1 ms, pass | +39, +58 ms (Diederich & Colonius, 2007, Table 8), ≤ 10 ms |
+| driving.takeover_components (new) | — | gaze 0.48 s, road 0.73 s: pass; hands 1.94 s, input 1.99 s: **fail** | Gold et al. (2013) 5–7 s budgets: 0.41–0.54, 0.69–0.94, 1.45–1.79, 2.10–2.89 s |
+| driving.takeover (MyoSuite) | 1.94 s, SD 0.13 | 2.24 s, SD 0.62 | 2.72 ± 1.45 s |
+| driving.takeover_modality | hands 1.85 s | hands 1.87 s (refitted) | 1.87 s |
+
+The previous model, without the wait and with a decision time of 0.91 s,
+scores gaze 0.39 s, road 0.43 s, hands 1.76 s and input 1.80 s on
+`driving.takeover_components`. Only its hands-on time falls in Gold et
+al.'s range.
+
+### Interpretation
+
+- **Eccentricity.** Osaka's (1976) manual reaction times set the increase
+  up to 50°, and the model extrapolates beyond. The increase carries over
+  to saccades, as TWIN's response-independent first stage implies.
+- **Take-over.** Nothing in the model was fitted to Gold et al. Load
+  fitted on the DRT predicts when the eyes leave SuRT and reach the road.
+  The model then reaches for the wheel late and acts at once. Gold et
+  al.'s drivers held the wheel 0.65–1.10 s before choosing to brake or
+  swerve, and the straight road gives the model no hazard to choose for.
+  The model has no time budget, so it cannot reproduce faster reactions
+  with less time.
+- **Tactile latency.** Diederich and Colonius give their vibration in volts,
+  so their tactile estimates (29 ms at 50 Hz, 111 ms at 5 Hz, against
+  16 ms for a light at 10°) cannot calibrate the latency curve.
+  - At 50 Hz they agree with the model if the vibration was about 18 dB
+    above threshold.
+  - No felt vibration in the model is as slow as their 5 Hz one: the
+    model's slowest is 66 ms behind the light, theirs 95 ms.

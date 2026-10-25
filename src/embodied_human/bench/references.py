@@ -231,6 +231,18 @@ REFERENCES: dict[str, Reference] = {
             "strong vibration 177 ms; share of the three orderings reproduced",
         ),
         Reference(
+            "response.eccentricity_rmse",
+            0.0,
+            0.0,
+            10.0,
+            "ms",
+            "Diederich & Colonius (2007), Table 8",
+            "https://doi.org/10.3758/BF03194453",
+            "saccades to a light alone, 3 people: 39 and 58 ms slower at 50 "
+            "and 70 deg than at 10 deg; RMS error of the two increases, "
+            "tolerance a quarter of the 50 deg increase (assumed)",
+        ),
+        Reference(
             "response.drt_visual",
             344.0,
             326.0,
@@ -320,6 +332,27 @@ REFERENCES: dict[str, Reference] = {
             "time to grab the wheel after an auditory warning with a visual "
             "text, game on the centre console, laps 2-3, n = 21; range is "
             "+-1 between-person SD (0.51 s)",
+        ),
+        *(
+            Reference(
+                f"driving.takeover_{name}",
+                seven,
+                five,
+                seven,
+                "s",
+                "Gold, Damböck, Lorenz & Bengler (2013), Fig. 3",
+                "https://doi.org/10.1177/1541931213571433",
+                f"{what}; tone with an icon in the cluster, SuRT during "
+                "automation at 120 km/h; group means with 5 s (n = 15) and "
+                "7 s (n = 13) to collision; the model has no time budget, so "
+                "the range spans the two",
+            )
+            for name, what, five, seven in (
+                ("gaze", "first saccade away from SuRT", 0.41, 0.54),
+                ("road", "first fixation on the road scene", 0.69, 0.94),
+                ("hands", "hands on the wheel", 1.45, 1.79),
+                ("intervention", "first braking or steering input", 2.10, 2.89),
+            )
         ),
         Reference(
             "vestibular.vertical_msi_error",

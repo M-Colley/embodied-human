@@ -17,7 +17,8 @@ sees the road only through the human model.
 - A takeover request is a chime, a seat vibration and/or an icon. It is
   heard over the cabin noise, felt through the seat and seen at its
   eccentricity from the current gaze; the response module combines what
-  was sensed into the reaction. The driver then drops the task and looks
+  was sensed into the reaction, which waits for the central stage held by
+  the task (threaded cognition). The driver then drops the task and looks
   to the road, decides from the road scene to take over, moves the hand to
   the wheel, and drives once the situation is assessed and the belief is
   certain again; the take-over time emerges from these steps.
@@ -103,7 +104,7 @@ class DriverAgentParameters(Parameters):
     seat_site: str = "seat_vertical"
     icon_position: Gaze = (0.0, -12.0)
     request_capability: float = 0.8
-    decision_dwell: float = 0.91
+    decision_dwell: float = 0.78
     assessment_fixations: int = 3
     scene_fixation: float = 0.33
     display_distance: float = 0.45
@@ -154,12 +155,13 @@ class DriverAgentParameters(Parameters):
             "model choice", None, "assumed", "the instrument cluster below the road"
         ),
         "decision_dwell": Source(
-            "Ko, Sanghavi, Zhang & Jeon (2022), Fig. 4; fitted here",
+            "Ko, Sanghavi, Zhang & Jeon (2022), Fig. 4; examples/fit_takeover.py",
             "https://doi.org/10.1016/j.trf.2022.08.008",
             "fitted",
-            "hands on the wheel 1.87 s after a chime with a text; cognitive "
-            "processing rather than motor readiness sets take-over time "
-            "(Zeeb, Buchner & Schrauf, 2015)",
+            "median hands on the wheel 1.87 s after a chime with a text, "
+            "with SuRT holding the central stage; cognitive processing rather "
+            "than motor readiness sets take-over time (Zeeb, Buchner & "
+            "Schrauf, 2015)",
         ),
         "request_capability": Source(
             "Kraus, Scholz, Stiegemeier & Baumann (2020), Table 2; fitted here",
@@ -236,6 +238,7 @@ class DrivingLog:
     screen_times: list[tuple[float, float]] = field(default_factory=list)
     engaged_at: float | None = None
     request_at: float | None = None
+    gaze_left_at: float | None = None
     reacted_at: float | None = None
     hand_back_at: float | None = None
     road_at: float | None = None
@@ -300,7 +303,9 @@ class DrivingLog:
     def takeover_components(self) -> dict[str, float]:
         """How long each step of a take-over took, from the request.
 
-        ``response`` until the first action, ``hand`` until the hand was
+        ``response`` until the first action, ``gaze`` until the first
+        saccade away from the task display (Gold et al.'s gaze reaction;
+        NaN if the eyes were not on the task), ``hand`` until the hand was
         back on the wheel, ``eyes`` until gaze was on the road and
         ``engaged`` until the driver drove (situation assessed, belief
         certain). Empty without a request.
@@ -313,6 +318,7 @@ class DrivingLog:
 
         return {
             "response_s": since(self.reacted_at),
+            "gaze_s": since(self.gaze_left_at),
             "hand_s": since(self.hand_back_at),
             "eyes_s": since(self.road_at),
             "engaged_s": since(self.engaged_at),
@@ -547,6 +553,19 @@ class AttentiveDriver:
         requested = bool(state.get("takeover_requested", 0.0))
         if automation and requested and self.log.request_at is None:
             self.log.request_at = t - state.get("time_since_request_s", 0.0)
+        if (
+            self.log.request_at is not None
+            and self.log.gaze_left_at is None
+            and eye.in_saccade
+        ):
+            # The first saccade leaving the task display (Gold et al., 2013).
+            saccade = human.eyes.saccades[-1]  # type: ignore[attr-defined]
+            if (
+                saccade.onset >= self.log.request_at
+                and self.area(saccade.origin) == DISPLAY
+                and self.area(saccade.target) != DISPLAY
+            ):
+                self.log.gaze_left_at = saccade.onset
         if self.log.request_at is not None and self._latency is None:
             rng = human.attention.rng
             self._latency = self._react(state, eye.gaze)
@@ -631,6 +650,7 @@ class AttentiveDriver:
         what the senses picked up; records the mechanism in the log."""
         from ..hearing import cabin_noise_level
         from ..response import Signal
+        from ..tasks.load import surt
 
         human, p = self.human, self.params
         signals = []
@@ -661,9 +681,12 @@ class AttentiveDriver:
             latency = human.response.visual_latency(eccentricity)  # type: ignore[attr-defined]
             signals.append(Signal("visual", 0.0, latency))
             details["visual"] = {"eccentricity_deg": eccentricity, "latency_s": latency}
-        reaction = human.response.respond(signals)  # type: ignore[attr-defined]
+        # An ongoing task holds the central stage the reaction needs.
+        load = [surt()] if self.task is not None else []
+        reaction = human.response.respond(signals, load)  # type: ignore[attr-defined]
         details["first"] = reaction.first
         details["integrated"] = reaction.integrated
+        details["central_wait_s"] = reaction.waited
         self.log.reaction = details
         # The request also tells the driver the automation reached its limit.
         trust = human.trust

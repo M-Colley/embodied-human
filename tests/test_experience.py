@@ -27,6 +27,8 @@ from embodied_human.touch import VibrotactileTouch
 from embodied_human.trust import DecisionFieldTrust
 from embodied_human.vestibular import IsoDose, SubjectiveVertical, wf_weighting
 
+AXES = ("fore_aft", "lateral", "vertical")
+
 
 def test_hearing_thresholds_masking_and_latency():
     hearing = PsychoacousticHearing()
@@ -68,11 +70,21 @@ def test_loudness_with_mosqito():
 
 def test_vibration_needs_contact_and_follows_thresholds():
     touch = VibrotactileTouch()
-    assert touch.threshold(10, "seat_vertical") == pytest.approx(0.0078)
+    assert touch.threshold(10, "seat_vertical") == pytest.approx(0.022)
     assert touch.threshold(250, "seat_lateral") > touch.threshold(10, "seat_lateral")
     assert touch.sensation_level(1.0, 60, "seat_vertical", contact=False) == -math.inf
-    level = touch.sensation_level(0.0078 * 10, 10, "seat_vertical")
+    level = touch.sensation_level(0.022 * 10, 10, "seat_vertical")
     assert level == pytest.approx(20.0)
+    # Morioka & Griffin (2008): the seat is most sensitive vertically at
+    # 8-80 Hz, the hand vertically above 100 Hz.
+    axes = [f"{s}_{a}" for s in ("hand", "seat", "foot") for a in AXES]
+    assert min(axes, key=lambda s: touch.threshold(20, s)) == "seat_vertical"
+    assert min(axes, key=lambda s: touch.threshold(125, s)) == "hand_vertical"
+    # Morioka & Griffin (2005): the small fingertip contact is the most
+    # sensitive at 8 Hz but the least at 125 Hz (no Pacinian summation).
+    sites = ("fingertip", "palm", "grip")
+    assert min(sites, key=lambda s: touch.threshold(8, s)) == "fingertip"
+    assert max(sites, key=lambda s: touch.threshold(125, s)) == "fingertip"
     assert touch.latency(30) == pytest.approx(0.1166)
     with pytest.raises(ValueError):
         touch.threshold(10, "elbow")
@@ -285,6 +297,33 @@ def test_takeover_decision_waits_for_the_road():
     assert late["hand_s"] - fast["hand_s"] == pytest.approx(1.0, abs=0.05)
     # The hand starts only after the eyes are on the road.
     assert late["hand_s"] > late["eyes_s"] + 1.0
+
+
+def test_takeover_waits_for_surt_and_logs_the_gaze_reaction():
+    from embodied_human.agents.road import simulate_takeover
+
+    logs = [
+        simulate_takeover(eh.build_human(seed=s), speed=120 / 3.6, seed=s)
+        for s in range(8)
+    ]
+    waits = [log.reaction["central_wait_s"] for log in logs]
+    # SuRT holds the central stage 1.77 s of every 4.31 s: 0.36 s on average.
+    assert 0.0 < np.mean(waits) < 1.0
+    for log in logs:
+        parts = log.takeover_components()
+        if math.isfinite(parts["gaze_s"]):
+            # The eyes leave the task before they reach the road.
+            assert 0.0 <= parts["gaze_s"] < parts["eyes_s"]
+    assert any(math.isfinite(log.takeover_components()["gaze_s"]) for log in logs)
+
+
+def test_peripheral_increase_carries_over_to_saccades():
+    from embodied_human.bench.senses import eccentricity
+
+    result = eccentricity(eh.build_human(seed=0))
+    assert result.passed
+    observed = result.details["observed_increase_ms"]
+    assert observed == {50.0: 39.0, 70.0: 58.0}
 
 
 def test_lane_width_refit_predicts_the_other_widths():

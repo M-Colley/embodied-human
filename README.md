@@ -80,7 +80,7 @@ class InterferenceMemory(Memory):
 | `motor` | `ffitts_min_jerk` | MT = 147.7 + 105.0 log2(A/W + 1) ms; endpoint SD² = (W/4.133)² + σa², σa = 1.5 mm; minimum-jerk path | Bi, Li & Zhai (2013); Soukoreff & MacKenzie (2004); Flash & Hogan (1985) |
 | `estimator` | `lane_kalman` | Kalman filter on lateral offset and heading with known speed and yaw rate; heading process noise sets how fast uncertainty grows | Senders et al. (1967) account; parameters assumed |
 | `hearing` | `psychoacoustic` | Threshold in quiet (ISO 226); masking by noise in the critical band, K = 0.4; car cabin noise by speed; latency by Piéron's law (k = 7.31 ms, n = −0.33); ISO 7731 audibility; loudness of waveforms with MoSQITo | ISO 226:2003/2023; Zwicker & Terhardt (1980); Scharf (1970); Kohfeld et al. (1981) |
-| `touch` | `vibrotactile` | Vibration thresholds by frequency for gripping hands, hands on handles and plates, and seats; felt only through contact | Brisben et al. (1999); Morioka & Griffin (2006); Miwa (1967) |
+| `touch` | `vibrotactile` | Vibration thresholds by frequency for the hand on a handle, the seat and the foot in three axes, and for the fingertip, palm and grip; felt only through contact | Morioka & Griffin (2005, 2008) |
 | `vestibular` | `subjective_vertical` | 6-DOF subjective vertical conflict model: otoliths, canals and their internal model; conflict to motion sickness incidence. Alternative: `iso_2631` (Wf-weighted motion sickness dose) | Bos & Bles (1998); Wada, Fujisawa & Doi (2018); ISO 2631-1 |
 | `response` | `twin` | Time-window-of-integration model: channels race, signals within 359 ms integrate and save 20 ms; visual latency grows with eccentricity | Diederich & Colonius (2015); Osaka (1976) |
 | `fatigue` | `three_compartment` | Active, fatigued and resting motor units per joint; recovery 15-30× faster at rest; Consumed Endurance for comparison | Xia & Frey-Law (2008); Frey-Law et al. (2012); Looft et al. (2018); Hincapié-Ramos et al. (2014) |
@@ -115,9 +115,10 @@ to be fitted or replaced, and the benchmark tells you which matter.
   - A take-over request is a chime, a seat vibration and/or an icon. The
     chime is heard over the cabin noise at the current speed, the vibration
     felt through the seat, and the icon seen at its eccentricity from where
-    the driver is looking; the response module combines them. The driver
-    then drops the task, returns gaze and hand, and assesses the scene; the
-    request also lowers trust. The take-over time emerges from these steps.
+    the driver is looking; the response module combines them, once the
+    task frees the shared central stage. The driver then drops the task,
+    returns gaze and hand, and assesses the scene; the request also lowers
+    trust. The take-over time emerges from these steps.
   - The log keeps the vehicle's motion for the vestibular module, so the
     same run predicts motion sickness.
 
@@ -144,8 +145,8 @@ log.write_csv("trace.csv")                              # gaze, belief and truth
   It returns a posterior, not just a point estimate.
   `examples/calibrate_glances.py` fits the attention module.
 - **Explanations and traces.** The driver records why each glance ended,
-  splits take-overs into response, hand, eyes and situation assessment,
-  and exports its full trace.
+  splits take-overs into response, gaze, hand, eyes and situation
+  assessment, and exports its full trace.
 - **Fast glance studies.** `agents.road.StraightRoad` simulates glances
   without vehicle dynamics or MyoSuite, about 0.5 s per simulated
   minute. This is possible because the belief's uncertainty depends only
@@ -163,7 +164,7 @@ python -m embodied_human.bench --replace attention=seev --out seev.json
 ```
 
 Results of the baseline (seed 0; [report](evidence/benchmark-baseline.json)).
-Thirteen of twenty-one benchmarks pass:
+Sixteen of twenty-three benchmarks pass:
 
 | Benchmark | Measured | Human reference (acceptance range) | Kind of check |
 | --- | --- | --- | --- |
@@ -174,10 +175,12 @@ Thirteen of twenty-one benchmarks pass:
 | `memory.span` | 4 items | 3–5 chunks (Cowan, 2001) | consistency |
 | `motor.touch_tapping` | 6.28 bits/s; 104 ms/bit | 6.95 bits/s (5.5–8.5; MacKenzie, 2015); 105 ms/bit (75–135; Bi et al., 2013) | **through physical contact** |
 | `driving.surt_glances` | Full body at 72 km/h: mean off-road glance 0.93 s; 2.2% over 2 s | NHTSA (2013) criteria: pass. Human in-vehicle glances, mean 0.8–1.2 s: pass; 3–13% over 2 s: just below (score 0.98) | **held out** (fitted on a straight road at 50 km/h) |
-| `driving.takeover` | chime and icon: first input after 1.94 s, SD 0.13 s (8 runs); median response 0.22 s, eyes on the road 0.52 s, hand on the wheel 1.85 s, driving 1.86 s | 2.72 ± 1.45 s across 520 conditions (Zhang et al., 2019): pass; 2.10 s and 2.89 s at 5 and 7 s budgets (Gold et al., 2013, as reported by Liang et al., 2026) | **held out** |
-| `driving.takeover_modality` | median response: sound 0.27 s, vibration 0.31 s, light 0.33 s; hand on the wheel after chime and icon 1.85 s | sound and touch faster than light (Petermeijer et al., 2017): pass. Grabbing the wheel 1.87 s (Ko et al., 2022): the decision time is fitted to it | order emergent; hands fitted |
+| `driving.takeover` | chime and icon: first input after 2.24 s, SD 0.62 s (8 runs); median response 0.51 s, gaze leaves SuRT 0.61 s, eyes on the road 0.75 s, hand on the wheel 1.96 s, driving 1.97 s | 2.72 ± 1.45 s across 520 conditions (Zhang et al., 2019): pass | **held out** |
+| `driving.takeover_components` | at 120 km/h, means of 16 runs: gaze leaves SuRT 0.48 s, first road fixation 0.73 s, hands on 1.94 s, first input 1.99 s | Gold et al. (2013), between their 5 and 7 s budgets: 0.41–0.54 s and 0.69–0.94 s: pass; 1.45–1.79 s and 2.10–2.89 s: **fail** | **held out** |
+| `driving.takeover_modality` | median response: sound 0.35 s, vibration 0.50 s, light 0.52 s; hand on the wheel after chime and icon 1.87 s | sound and touch faster than light (Petermeijer et al., 2017): pass. Grabbing the wheel 1.87 s (Ko et al., 2022): the decision time is fitted to it | order emergent; hands fitted |
 | `response.drt_load` | DRT cost of driving +28 ms; of an auditory 2-back +284 ms; of SuRT +382 ms | +51 ms (31–70; Conti et al., 2014), predicted from threaded cognition: just below. Cooper et al. (2020) on the road: 2-back +234 ms (152–316): pass; SuRT +177 ms (104–250): **fail** | driving and Cooper held out; chunks fitted to Conti |
 | `response.modality_rt` | tone 252 ms < light 319 ms < vibration 335 ms | same order (Diederich & Colonius, 2004) | order only |
+| `response.eccentricity` | a light at 50° and 70° answered 40 and 59 ms later than at 10° | saccades 39 and 58 ms later (Diederich & Colonius, 2007), RMS error ≤ 10 ms: pass | **held out**; 70° extrapolated |
 | `response.drt` | visual DRT 349 ms; tactile 352 ms; older drivers 1.33× slower | visual 326–362 ms (Conti et al., 2014): pass; tactile 526 ms (482–570; Cooper et al., 2020): **fail**; ageing 1.07–1.36×: pass | **emergent** |
 | `vestibular.vertical_sickness` | RMS error 7.5 % points, r = 0.93 (19.7 with the published conflict scale) | 2 h vertical oscillation (O'Hanlon & McCauley, 1974): ≤ 10 | fitted (one parameter) |
 | `vestibular.sickness_time_course` | RMS error 14.8 % points, r = 0.76 over 43 points | sickness over time at nine other conditions (McCauley et al., 1976), ≤ 10: **fail**; their descriptive model: 6.3. `--replace vestibular=iso_2631`: 12.4 | **held out** |
@@ -208,11 +211,27 @@ real test:
 - **Take-over.** After noticing the request, the driver looks at the road
   and decides from the scene before reaching for the wheel; cognitive
   processing rather than motor readiness sets take-over time (Zeeb et al.,
-  2015). One decision time, fitted to Ko et al.'s hands-on time, moves the
-  full-body take-over from 1.51 s to 1.94 s, towards the meta-analytic
-  2.72 s and Gold et al.'s 2.10-2.89 s.
+  2015). The request finds the central stage busy with SuRT, whose chunk
+  was fitted to Conti et al.'s DRT data, so the reaction waits 0.36 s on
+  average. Without being fitted to Gold et al. (2013), this puts the first
+  saccade away from SuRT and the first road fixation between their means
+  for 5 and 7 s budgets; without the wait both came too early (0.39 and
+  0.43 s). The rest does not match: the hands arrive later than in Gold et
+  al. (1.94 s; the decision time is fitted to Ko et al.'s 1.87 s) and the
+  first input follows at once (1.99 s against 2.10-2.89 s). Gold et al.'s
+  drivers held the wheel 0.65-1.10 s before braking or steering, choosing a
+  manoeuvre around an obstacle that the straight road does not have. On
+  the full body the first input comes after 2.24 s, against the
+  meta-analytic 2.72 s.
 - **Senses and responses.** The visual DRT and the slowing of older
-  drivers match; the tactile DRT is too fast in absolute terms.
+  drivers match; the tactile DRT is too fast in absolute terms. Latency
+  grows with eccentricity as in Osaka's (1976) manual reactions, and
+  Diederich and Colonius's (2007) saccades grow by the same amounts at 50°
+  and 70° (within 1 ms), though 70° lies beyond Osaka's data. Their palm
+  vibrations are specified in volts, so they cannot calibrate tactile
+  latency: their 50 Hz vibration matches the model about 18 dB above
+  threshold, but no felt vibration in the model is as slow as their 5 Hz
+  one (95 ms behind the light, against at most 66 ms).
 - **Load.** Concurrent tasks share one central stage (threaded cognition).
   Driving's own cost, taken from threaded cognition's driver without
   fitting, comes out at 28 ms, just below Conti et al.'s 51 ms. With the
@@ -281,17 +300,17 @@ No code from these projects is included.
   position sense) is measured. The older-adult profile also slows the
   central response stage and widens the integration window (Diederich et
   al., 2008); other shifts are still missing.
-- **Senses:** touch has thresholds for vibration only, at five sites; full
+- **Senses:** touch has thresholds for vibration only, at twelve sites; full
   skin with receptor types (TouchSim, once licensed) or sensor density per
   body part (as in MIMo) would replace it. Hearing handles tones in
   broadband noise, not speech or spatial sound.
 - **Load:** chunks of concurrent tasks are fitted per task; deriving them
   from the task models (rules, retrievals, fixations) would make them
   predictions too. Hit rates under load are not modelled.
+- **Take-over:** the model has no time budget or hazard to act on, so it
+  cannot show that drivers react sooner with less time (Gold et al., 2013).
 - **Next benchmarks:**
   - Occlusion distance on highways: mean 15.5 m (Kujala et al., 2016).
-  - Take-over times by time budget (Gold et al., 2013), once their full
-    text is available.
 
 ## Development
 

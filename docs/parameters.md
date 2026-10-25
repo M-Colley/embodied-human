@@ -107,7 +107,7 @@ choice to fit or replace).
 | agents.driver | `DriverAgentParameters.seat_site` | seat_vertical | assumed | model choice |  |
 | agents.driver | `DriverAgentParameters.icon_position` | (0.0, -12.0) | assumed | model choice | the instrument cluster below the road |
 | agents.driver | `DriverAgentParameters.request_capability` | 0.8 | fitted | [Kraus, Scholz, Stiegemeier & Baumann (2020), Table 2; fitted here](https://doi.org/10.1177/0018720819853686) | a first request lowered trust from 5.51 to 5.21 on a 7-point scale; one EDFT step from full trust gives 1 - (1 - c) / 4 |
-| agents.driver | `DriverAgentParameters.decision_dwell` | 0.91 | fitted | [Ko, Sanghavi, Zhang & Jeon (2022), Fig. 4; fitted here](https://doi.org/10.1016/j.trf.2022.08.008) | hands on the wheel 1.87 s after a chime with a text; cognitive processing rather than motor readiness sets take-over time (Zeeb, Buchner & Schrauf, 2015) |
+| agents.driver | `DriverAgentParameters.decision_dwell` | 0.78 | fitted | [Ko, Sanghavi, Zhang & Jeon (2022), Fig. 4; examples/fit_takeover.py](https://doi.org/10.1016/j.trf.2022.08.008) | median hands on the wheel 1.87 s after a chime with a text, with SuRT holding the central stage; cognitive processing rather than motor readiness sets take-over time (Zeeb, Buchner & Schrauf, 2015) |
 | agents.driver | `DriverAgentParameters.assessment_fixations` | 3 | assumed | model choice | situation assessment before acting; fit to take-over data |
 | agents.driver | `DriverAgentParameters.scene_fixation` | 0.33 | measured | [Rayner (1998), Table 1](https://doi.org/10.1037/0033-2909.124.3.372) | mean fixation in scene perception |
 | agents.driver | `DriverAgentParameters.display_distance` | 0.45 | assumed | model choice |  |
