@@ -156,3 +156,94 @@ def vertical_sickness(human: Human, dt: float = 0.1) -> Result:
         "correlation": float(np.corrcoef(predicted, observed)[0, 1]),
     }
     return result
+
+
+#: McCauley et al. (1976), Appendix B: cumulative MSI over time at the nine
+#: vertical conditions not in O'Hanlon & McCauley's 2-hour set, as
+#: (frequency Hz, r.m.s. acceleration g, minutes, observed %, the authors'
+#: descriptive model %). Row 17 reads 23 in the scan (27 by its printed
+#: difference); 23 is used.
+SICKNESS_TIME_COURSE = (
+    (0.18, 0.170, 5, 8, 6),
+    (0.18, 0.170, 15, 23, 21),
+    (0.18, 0.170, 25, 40, 31),
+    (0.18, 0.170, 35, 47, 37),
+    (0.18, 0.170, 45, 55, 42),
+    (0.18, 0.170, 85, 60, 50),
+    (0.2, 0.234, 5, 11, 11),
+    (0.2, 0.234, 15, 37, 32),
+    (0.2, 0.234, 25, 43, 44),
+    (0.2, 0.234, 35, 57, 50),
+    (0.2, 0.234, 45, 60, 55),
+    (0.2, 0.234, 55, 69, 58),
+    (0.2, 0.234, 85, 71, 62),
+    (0.25, 0.111, 5, 3, 1),
+    (0.25, 0.111, 15, 7, 5),
+    (0.25, 0.111, 25, 17, 9),
+    (0.25, 0.111, 55, 24, 18),
+    (0.25, 0.111, 65, 28, 20),
+    (0.25, 0.111, 115, 31, 26),
+    (0.25, 0.222, 5, 6, 6),
+    (0.25, 0.222, 15, 17, 23),
+    (0.25, 0.222, 25, 32, 33),
+    (0.25, 0.222, 35, 39, 39),
+    (0.25, 0.222, 45, 41, 44),
+    (0.25, 0.222, 55, 54, 47),
+    (0.25, 0.222, 65, 56, 49),
+    (0.25, 0.222, 85, 57, 52),
+    (0.25, 0.222, 115, 63, 55),
+    (0.25, 0.333, 5, 2, 15),
+    (0.25, 0.333, 15, 40, 40),
+    (0.25, 0.333, 25, 51, 52),
+    (0.25, 0.333, 35, 56, 59),
+    (0.25, 0.333, 65, 58, 67),
+    (0.25, 0.333, 75, 67, 68),
+    (0.25, 0.333, 115, 69, 71),
+    (0.417, 0.444, 15, 20, 17),
+    (0.417, 0.444, 65, 33, 42),
+    (0.417, 0.444, 115, 40, 48),
+    (0.6, 0.444, 65, 4, 8),
+    (0.6, 0.444, 115, 8, 12),
+    (0.6, 0.555, 15, 9, 3),
+    (0.6, 0.555, 115, 18, 18),
+    (0.7, 0.555, 115, 4, 6),
+)
+
+
+def sickness_time_course(
+    vestibular: object, dt: float = 0.1
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Predicted, observed and McCauley-model MSI at the time-course points."""
+    conditions = sorted({(f, a) for f, a, *_ in SICKNESS_TIME_COURSE})
+    time = np.arange(0.0, 116 * 60.0, dt)
+    motion = np.zeros((len(conditions), len(time), 3))
+    for i, (frequency, rms_g) in enumerate(conditions):
+        peak = rms_g * math.sqrt(2) * 9.81
+        motion[i, :, 2] = peak * np.sin(2 * math.pi * frequency * time)
+    msi = vestibular.simulate(dt, motion)  # type: ignore[attr-defined]
+    predicted, observed, descriptive = [], [], []
+    for frequency, rms_g, minutes, seen, fitted in SICKNESS_TIME_COURSE:
+        row = conditions.index((frequency, rms_g))
+        step = min(int(round(minutes * 60.0 / dt)), len(time) - 1)
+        predicted.append(msi[row, step])
+        observed.append(seen)
+        descriptive.append(fitted)
+    return np.array(predicted), np.array(observed, float), np.array(descriptive, float)
+
+
+@benchmark("vestibular.sickness_time_course")
+def sickness_time_course_benchmark(human: Human, dt: float = 0.1) -> Result:
+    """Cumulative MSI over up to 115 minutes at nine vertical conditions
+    (0.18-0.7 Hz) that are not in the 2-hour set."""
+    result = Result("vestibular.sickness_time_course", ("vestibular",))
+    predicted, observed, descriptive = sickness_time_course(human.vestibular, dt)
+    error = float(np.sqrt(np.mean((predicted - observed) ** 2)))
+    result.score_against("vestibular.time_course_msi_error", error)
+    result.details = {
+        "points": len(observed),
+        "correlation": float(np.corrcoef(predicted, observed)[0, 1]),
+        "mccauley_model_error": float(np.sqrt(np.mean((descriptive - observed) ** 2))),
+        "predicted": predicted.tolist(),
+        "observed": observed.tolist(),
+    }
+    return result

@@ -278,3 +278,95 @@ The full run took 217 s ([report](evidence/benchmark-baseline.json)).
 - **Unreachable sources.** Petermeijer et al.'s per-modality times, tactile
   TWIN parameters, the steering-wheel and backrest vibration thresholds,
   and Kolekar et al.'s code (4TU timed out) were out of reach.
+
+## 2026-10-25 (later): load, take-over decisions, refits, trust, body sensing
+
+Same PC and versions. These changes address the failures listed above.
+
+### Tests
+
+`python -m pytest tests -q` passes 63 tests ([JUnit](evidence/tests.xml)).
+New tests check:
+
+- the shared central stage: a random arrival waits d²/2T, reproduced to
+  within 2 ms;
+- the DRT under driving and 2-back load;
+- the take-over decision stage: the hand starts only after the eyes have
+  been on the road for the decision time;
+- the lane-width refit and the trust event sequences;
+- the MyoSuite body's head motion and muscle fatigue (gravity felt as
+  9.81 m/s² along the head's z axis).
+
+A fresh Python 3.10 environment, installed as the CI workflow installs it,
+passed the suite without MyoSuite: 52 passed, 2 skipped.
+
+### Fits
+
+```bash
+python examples/fit_motion_sickness.py --out evidence/motion-sickness-fit.json
+python examples/fit_drt_load.py --out evidence/drt-load-fit.json
+```
+
+- **Motion sickness.**
+  - **Fit:** the conflict scale only, as Bos and Bles (1998) fitted one
+    gain, to the 14 two-hour conditions. It went from 0.5 to 0.196 m/s²
+    (SciPy bounded search, 9 evaluations, 229 s).
+  - **Fit set:** RMSE 19.7 → 7.5.
+  - **Held out:** 43 time-course points at nine other conditions. RMSE
+    28.6 → 14.8, r = 0.76; McCauley et al.'s own descriptive model scores
+    6.3 there.
+- **DRT load.**
+  - **Fit:** chunk lengths fitted to Conti et al.'s pooled visual DRT
+    increases. The 0-back takes 0.743 s per digit, the 2-back 1.115 s and
+    SuRT 1.771 s per screen.
+  - **SuRT gaze:** the attentive driver had its eyes on the display 56% of
+    the time during SuRT.
+- **Take-over decision.**
+  - **Fit:** a decision dwell of 0.91 s reproduces Ko et al.'s 1.87 s to
+    the wheel; each 0.1 s of dwell adds 0.1 s.
+- **Risk field.**
+  - **Fit:** threshold and width growth, by least squares on the 3.0 and
+    3.5 m lanes.
+  - **Result:** width growth 0.005 per metre, against 0.001 published.
+- **Trust.**
+  - **Fit:** capabilities revealed by an overtake, a request and a
+    malfunction, and the opacity, all on Study 1 (24 points). The best fit
+    gives the malfunction no dip (capability 0.89 against 0.82 for an
+    overtake).
+
+### Benchmark
+
+```bash
+python -m embodied_human.bench --out evidence/benchmark-baseline.json
+python -m embodied_human.bench --replace vestibular=iso_2631 --only vestibular.vertical_sickness vestibular.sickness_time_course --out evidence/benchmark-vestibular-iso2631.json
+```
+
+The run took 151 s; **13 of 21 benchmarks pass**. Changes from the
+previous run:
+
+| Benchmark | Before | Now | Human reference |
+| --- | --- | --- | --- |
+| driving.takeover (MyoSuite) | 1.51 s | 1.94 s, SD 0.13; hand 1.85 s | 2.72 ± 1.45 s; Gold et al. 2.10–2.89 s |
+| driving.takeover_modality | hands 0.65 s: fail | hands 1.85 s (fitted): pass | 1.87 s |
+| response.drt_load (new) | — | driving +28 ms; 2-back +284 ms; SuRT +382 ms | +51 ms (31–70); +234 ms (152–316): pass; +177 ms (104–250): **fail** |
+| vestibular.vertical_sickness | 19.7: fail | 7.5: pass (fitted) | ≤ 10 |
+| vestibular.sickness_time_course (new) | — | 14.8: **fail** (ISO swap 12.4) | ≤ 10 |
+| risk.lane_width | 12.3 km/h: fail | 2.1 km/h: pass | ≤ 9.4 |
+| trust.kraus_dynamics (new) | — | RMSE 0.29: pass; dip +0.20: **fail** | ≤ 0.3; −0.47 |
+
+**Body.** The full-body SuRT drive now reports what the body felt over
+60 s at 72 km/h:
+- motion sickness incidence 0.005%;
+- 1.3% of elbow motor units fatigued, 2–4% of hand motor units, and 0.2%
+  of ankle motor units.
+
+### Interpretation
+
+- **Driving cost.** It is a real prediction: threaded cognition's
+  published driver gives +28 ms against +51 ms measured.
+- **Cooper et al.** Their 2-back cost is predicted. Their SuRT cost is
+  not, but their SuRT, stimuli and scoring differ from Conti et al.'s (see
+  the README).
+- **Trust.** The failure is structural. Gao and Lee's model has inertia in
+  both of its updates, so it cannot show a sharp dip that recovers by the
+  next event.

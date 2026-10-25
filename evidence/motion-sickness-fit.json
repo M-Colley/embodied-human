@@ -1,0 +1,20 @@
+{
+  "fitted_conflict_scale_m_s2": 0.19623711700048255,
+  "evaluations": 9,
+  "published": {
+    "conflict_scale": 0.5,
+    "fit_set_rmse": 19.733532199640514,
+    "fit_set_r": 0.9226558682806917,
+    "held_out_rmse": 28.60426531704927,
+    "held_out_r": 0.7989246271033547
+  },
+  "fitted": {
+    "conflict_scale": 0.19623711700048255,
+    "fit_set_rmse": 7.462752727919087,
+    "fit_set_r": 0.9336070000660075,
+    "held_out_rmse": 14.75799281935846,
+    "held_out_r": 0.7614441451119183
+  },
+  "held_out_mccauley_model_rmse": 6.252441383636791,
+  "wall_seconds": 228.8
+}

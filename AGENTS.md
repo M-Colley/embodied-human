@@ -28,6 +28,11 @@ driver) as optional dependencies; keep it importable without them.
     glance sampler with `python examples/calibrate_glances.py --out
     evidence/glance-calibration.json`. Report fitted and held-out results
     separately.
+  - After changing the vestibular or response modules, rerun
+    `examples/fit_motion_sickness.py` and `examples/fit_drt_load.py` and
+    update the fitted constants they report.
+- **CI.** `.github/workflows/tests.yml` runs the offline suite, ruff, mypy
+  and the build on Python 3.10 and 3.12; MyoSuite tests are skipped there.
 - **Records.** Record what was run, with versions, in VALIDATION.md.
 - Keep commit authorship with the human owner. Do not add AI co-author
   trailers.

@@ -264,6 +264,40 @@ REFERENCES: dict[str, Reference] = {
             "from the two means' standard errors (derived)",
         ),
         Reference(
+            "response.drt_driving_cost",
+            50.7,
+            31.4,
+            70.0,
+            "ms",
+            "Conti, Dlugosch & Bengler (2014), Table 3",
+            "https://www.hfes-europe.org/wp-content/uploads/2014/06/Conti.pdf",
+            "head-mounted visual DRT while driving minus alone, pooled over "
+            "four groups (N = 71); range is a 95% CI from the SDs, treating "
+            "the conditions as independent (derived, conservative)",
+        ),
+        Reference(
+            "response.drt_2back_cost",
+            234.0,
+            152.5,
+            315.5,
+            "ms",
+            "Cooper et al. (2020), Table 4",
+            "https://doi.org/10.3389/fpsyg.2020.01154",
+            "DRT with an auditory 2-back minus driving only, drivers aged "
+            "21-36 on the road, tactile and light responses pooled; range is "
+            "a 95% CI from the SDs with n = 24 (derived)",
+        ),
+        Reference(
+            "response.drt_surt_cost",
+            177.0,
+            104.3,
+            249.7,
+            "ms",
+            "Cooper et al. (2020), Table 4",
+            "https://doi.org/10.3389/fpsyg.2020.01154",
+            "DRT with SuRT on an iPad minus driving only, as above",
+        ),
+        Reference(
             "driving.takeover_modality_order",
             1.0,
             1.0,
@@ -300,6 +334,18 @@ REFERENCES: dict[str, Reference] = {
             "descriptive fit of McCauley et al. 1976 reached 6.1)",
         ),
         Reference(
+            "vestibular.time_course_msi_error",
+            0.0,
+            0.0,
+            10.0,
+            "% points",
+            "McCauley, Royal, Wylie, O'Hanlon & Mackie (1976), Appendix B",
+            "https://archive.org/details/DTIC_ADA024709",
+            "cumulative MSI at 5-115 min, 43 points at nine vertical conditions "
+            "(0.18-0.7 Hz) outside the 2-hour set; the authors' own descriptive "
+            "fit has an RMS error of 6.1 over all 99 points; acceptance assumed",
+        ),
+        Reference(
             "fatigue.endurance_error",
             0.0,
             0.0,
@@ -320,6 +366,30 @@ REFERENCES: dict[str, Reference] = {
             "https://doi.org/10.3390/ijerph13101010",
             "simulator speeds at lane widths 2.85-3.75 m, n = 24; acceptance is "
             "the mean between-driver SD",
+        ),
+        Reference(
+            "trust.study2_rmse",
+            0.0,
+            0.0,
+            0.3,
+            "scale points",
+            "Kraus, Scholz, Stiegemeier & Baumann (2020), Table 7",
+            "https://doi.org/10.1177/0018720819853686",
+            "trust (1-7) at t0-t8 in the two low-transparency groups (n = 13, "
+            "11), predicted after fitting Study 1; acceptance is about one "
+            "standard error of a group mean (assumed)",
+        ),
+        Reference(
+            "trust.malfunction_dip",
+            -0.47,
+            -0.94,
+            -0.10,
+            "scale points",
+            "Kraus, Scholz, Stiegemeier & Baumann (2020), Table 7",
+            "https://doi.org/10.1177/0018720819853686",
+            "change in trust from t3 to t4 across the malfunction, low "
+            "transparency (n = 11); the dip recovered by t5. Range: a dip of "
+            "at least 0.1 and at most twice the observed one (assumed)",
         ),
         Reference(
             "affect.emotion_rmse",

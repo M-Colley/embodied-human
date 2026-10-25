@@ -56,7 +56,7 @@ def _config(replacements: list[str]) -> HumanConfig:
 
 
 def main(argv: list[str] | None = None) -> int:
-    from . import integrated, motivation, senses, studies  # noqa: F401
+    from . import integrated, load, motivation, senses, studies  # noqa: F401
     from .benchmarks import BENCHMARKS, run
 
     parser = argparse.ArgumentParser(

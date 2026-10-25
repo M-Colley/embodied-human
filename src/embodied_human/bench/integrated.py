@@ -82,6 +82,11 @@ def surt_glances(human: Human, seconds: float = 60.0, speed: float = 20.0) -> Re
         "terminated": bool(terminated),
         "surt": agent.task.result.summary(),
         "simulated_seconds": len(offsets) * env.dt,
+        # What the body felt: head motion and muscle effort over the run.
+        "motion_sickness_pct": float(
+            agent.log.motion_sickness(human.vestibular, env.dt)[-1]
+        ),
+        "fatigued_fraction": agent.log.fatigue[-1] if agent.log.fatigue else {},
     }
     return result
 

@@ -56,7 +56,7 @@ choice to fit or replace).
 | vestibular | `VerticalConflictParameters.vertical_lag` | 5.0 | measured | [Wada, Fujisawa & Doi (2018), p. 7; Bos & Bles (2002)](https://doi.org/10.1016/j.ergon.2016.11.003) | from vertical perception studies |
 | vestibular | `VerticalConflictParameters.canal_lag` | 7.0 | fitted | [Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1016/j.ergon.2016.11.003) |  |
 | vestibular | `VerticalConflictParameters.adaptation_lag` | 190.0 | fitted | [Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1016/j.ergon.2016.11.003) |  |
-| vestibular | `VerticalConflictParameters.conflict_scale` | 0.5 | fitted | [Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1016/j.ergon.2016.11.003) |  |
+| vestibular | `VerticalConflictParameters.conflict_scale` | 0.196 | fitted | [O'Hanlon & McCauley (1974), Tables 1-2; fitted here](https://archive.org/details/DTIC_AD0768215) | MSI after 2 h at 14 vertical conditions (examples/fit_motion_sickness.py); Wada et al. (2018) used 0.5 for car passengers, Bos & Bles (1998) fitted 0.7 in 1-D |
 | vestibular | `VerticalConflictParameters.sickness_lag` | 720.0 | fitted | [Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1016/j.ergon.2016.11.003) |  |
 | vestibular | `VerticalConflictParameters.max_incidence` | 85.0 | fitted | [Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1016/j.ergon.2016.11.003) |  |
 | response | `TwinParameters.central` | 0.2171 | fitted | [Diederich & Colonius (2015), Table 1](https://doi.org/10.1037/a0038696) | median over 11 participants |
@@ -107,6 +107,7 @@ choice to fit or replace).
 | agents.driver | `DriverAgentParameters.seat_site` | seat_vertical | assumed | model choice |  |
 | agents.driver | `DriverAgentParameters.icon_position` | (0.0, -12.0) | assumed | model choice | the instrument cluster below the road |
 | agents.driver | `DriverAgentParameters.request_capability` | 0.8 | fitted | [Kraus, Scholz, Stiegemeier & Baumann (2020), Table 2; fitted here](https://doi.org/10.1177/0018720819853686) | a first request lowered trust from 5.51 to 5.21 on a 7-point scale; one EDFT step from full trust gives 1 - (1 - c) / 4 |
+| agents.driver | `DriverAgentParameters.decision_dwell` | 0.91 | fitted | [Ko, Sanghavi, Zhang & Jeon (2022), Fig. 4; fitted here](https://doi.org/10.1016/j.trf.2022.08.008) | hands on the wheel 1.87 s after a chime with a text; cognitive processing rather than motor readiness sets take-over time (Zeeb, Buchner & Schrauf, 2015) |
 | agents.driver | `DriverAgentParameters.assessment_fixations` | 3 | assumed | model choice | situation assessment before acting; fit to take-over data |
 | agents.driver | `DriverAgentParameters.scene_fixation` | 0.33 | measured | [Rayner (1998), Table 1](https://doi.org/10.1037/0033-2909.124.3.372) | mean fixation in scene perception |
 | agents.driver | `DriverAgentParameters.display_distance` | 0.45 | assumed | model choice |  |
@@ -116,4 +117,4 @@ choice to fit or replace).
 | agents.driver | `DriverAgentParameters.road_field` | 20.0 | assumed | model choice | peripheral lane keeping degrades with display eccentricity; fit to glance data |
 | agents.driver | `DriverAgentParameters.perception_interval` | 0.1 | assumed | model choice | about the temporal integration of vision |
 
-Counts: assumed 36, derived 4, fitted 51, measured 12, standard 5
+Counts: assumed 36, derived 4, fitted 52, measured 12, standard 5

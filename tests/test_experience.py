@@ -231,7 +231,81 @@ def test_takeover_request_is_perceived_by_the_senses():
     assert 0.1 < parts["response_s"] < 1.0 < parts["engaged_s"]
     before, after = log.trust[0]
     assert after < before
-    acceleration, angular = log.head_motion(0.02)
-    assert acceleration.shape == angular.shape == (len(log.times), 3)
+    acceleration, angular, gravity = log.head_motion(0.02)
+    assert acceleration.shape == angular.shape == gravity.shape == (len(log.times), 3)
+    assert np.allclose(gravity[:, 2], 9.81)
+    msi = log.motion_sickness(SubjectiveVertical(), 0.02)
+    assert msi.shape == (len(log.times),) and msi.max() < 1.0
     silent = simulate_takeover(eh.build_human(seed=3), signals=(), seed=3)
     assert silent.reaction["first"] is None
+
+
+def test_central_stage_waits_for_concurrent_tasks():
+    from embodied_human.response import CentralTask, central_wait
+
+    rng = np.random.default_rng(0)
+    task = [CentralTask("chunk", 1.0, 0.2)]
+    waits = [central_wait(task, rng) for _ in range(20000)]
+    # A random arrival waits d^2 / (2 T) on average.
+    assert np.mean(waits) == pytest.approx(0.02, abs=0.002)
+    assert central_wait([], rng) == 0.0
+    with pytest.raises(ValueError):
+        CentralTask("bad", 1.0, 2.0)
+    response = TwinResponse()
+    response.reset(np.random.default_rng(1))
+    signal = [Signal("auditory", 0.0, 0.05)]
+    loaded = response.mean_reaction(signal, samples=8000, load=task)
+    assert loaded == pytest.approx(0.05 + 0.2171 + 0.02, abs=0.004)
+
+
+def test_drt_slows_with_driving_and_memory_load():
+    from embodied_human.bench.load import drt_rt
+    from embodied_human.tasks.load import DRIVING, n_back
+
+    human = eh.build_human(seed=0)
+    alone = drt_rt(human, ["head_light"], [], samples=4000)
+    driving = drt_rt(human, ["head_light"], [DRIVING], samples=4000)
+    two_back = drt_rt(human, ["head_light"], [DRIVING, n_back(2)], samples=4000)
+    # Threaded cognition's driver: 0.2 s of every 0.7 s, about 29 ms.
+    assert driving - alone == pytest.approx(28.6, abs=8)
+    assert two_back - driving == pytest.approx(292, abs=25)
+
+
+def test_takeover_decision_waits_for_the_road():
+    from dataclasses import replace
+
+    from embodied_human.agents.driver import DriverAgentParameters
+    from embodied_human.agents.road import simulate_takeover
+
+    quick = replace(DriverAgentParameters(), decision_dwell=0.0)
+    slow = replace(DriverAgentParameters(), decision_dwell=1.0)
+    fast_log = simulate_takeover(eh.build_human(seed=2), seed=2, params=quick)
+    slow_log = simulate_takeover(eh.build_human(seed=2), seed=2, params=slow)
+    fast, late = fast_log.takeover_components(), slow_log.takeover_components()
+    assert late["hand_s"] - fast["hand_s"] == pytest.approx(1.0, abs=0.05)
+    # The hand starts only after the eyes are on the road.
+    assert late["hand_s"] > late["eyes_s"] + 1.0
+
+
+def test_lane_width_refit_predicts_the_other_widths():
+    from embodied_human.bench.motivation import LANE_WIDTH_SPEED, fit_lane_widths
+    from embodied_human.core import ModuleChoice
+
+    tuned = fit_lane_widths(ModuleChoice("risk_field"))
+    for width in (3.0, 3.5):
+        assert 3.6 * tuned.preferred_speed(width) == pytest.approx(
+            LANE_WIDTH_SPEED[width], abs=0.1
+        )
+    assert 3.6 * tuned.preferred_speed(2.85) < 3.6 * tuned.preferred_speed(3.75)
+
+
+def test_trust_course_follows_events():
+    from embodied_human.bench.motivation import kraus_events, trust_course
+
+    events = kraus_events(1, "MF+")
+    assert len(events) == 11 and events[5] == ["malfunction"] and events[3] == ["tor"]
+    capability = {"ok": 0.9, "tor": 0.2, "malfunction": 0.1}
+    course = trust_course(4.6, events, capability)
+    assert len(course) == 12 and course[0] == 4.6
+    assert course[4] < course[3] and course[6] < course[5]  # request, malfunction
+    assert kraus_events(2, "MF-/LT") == [["ok"]] * 9

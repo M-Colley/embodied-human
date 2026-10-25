@@ -163,7 +163,7 @@ python -m embodied_human.bench --replace attention=seev --out seev.json
 ```
 
 Results of the baseline (seed 0; [report](evidence/benchmark-baseline.json)).
-Eleven of eighteen benchmarks pass:
+Thirteen of twenty-one benchmarks pass:
 
 | Benchmark | Measured | Human reference (acceptance range) | Kind of check |
 | --- | --- | --- | --- |
@@ -174,13 +174,16 @@ Eleven of eighteen benchmarks pass:
 | `memory.span` | 4 items | 3–5 chunks (Cowan, 2001) | consistency |
 | `motor.touch_tapping` | 6.28 bits/s; 104 ms/bit | 6.95 bits/s (5.5–8.5; MacKenzie, 2015); 105 ms/bit (75–135; Bi et al., 2013) | **through physical contact** |
 | `driving.surt_glances` | Full body at 72 km/h: mean off-road glance 0.93 s; 2.2% over 2 s | NHTSA (2013) criteria: pass. Human in-vehicle glances, mean 0.8–1.2 s: pass; 3–13% over 2 s: just below (score 0.98) | **held out** (fitted on a straight road at 50 km/h) |
-| `driving.takeover` | chime and icon: mean 1.51 s, SD 0.18 s (8 runs); median response 0.22 s, eyes 0.52 s, hand 0.63 s, driving 1.47 s | 2.72 ± 1.45 s across 520 conditions (Zhang et al., 2019) | **emergent** |
-| `driving.takeover_modality` | median response: sound 0.27 s, vibration 0.31 s, light 0.33 s; hand on the wheel after chime and icon 0.65 s | sound and touch faster than light (Petermeijer et al., 2017): pass. Grabbing the wheel 1.87 s (1.36–2.38; Ko et al., 2022): **fail** | **emergent** |
+| `driving.takeover` | chime and icon: first input after 1.94 s, SD 0.13 s (8 runs); median response 0.22 s, eyes on the road 0.52 s, hand on the wheel 1.85 s, driving 1.86 s | 2.72 ± 1.45 s across 520 conditions (Zhang et al., 2019): pass; 2.10 s and 2.89 s at 5 and 7 s budgets (Gold et al., 2013, as reported by Liang et al., 2026) | **held out** |
+| `driving.takeover_modality` | median response: sound 0.27 s, vibration 0.31 s, light 0.33 s; hand on the wheel after chime and icon 1.85 s | sound and touch faster than light (Petermeijer et al., 2017): pass. Grabbing the wheel 1.87 s (Ko et al., 2022): the decision time is fitted to it | order emergent; hands fitted |
+| `response.drt_load` | DRT cost of driving +28 ms; of an auditory 2-back +284 ms; of SuRT +382 ms | +51 ms (31–70; Conti et al., 2014), predicted from threaded cognition: just below. Cooper et al. (2020) on the road: 2-back +234 ms (152–316): pass; SuRT +177 ms (104–250): **fail** | driving and Cooper held out; chunks fitted to Conti |
 | `response.modality_rt` | tone 252 ms < light 319 ms < vibration 335 ms | same order (Diederich & Colonius, 2004) | order only |
 | `response.drt` | visual DRT 349 ms; tactile 352 ms; older drivers 1.33× slower | visual 326–362 ms (Conti et al., 2014): pass; tactile 526 ms (482–570; Cooper et al., 2020): **fail**; ageing 1.07–1.36×: pass | **emergent** |
-| `vestibular.vertical_sickness` | RMS error 19.7 % points; r = 0.92 over 14 conditions | 2 h vertical oscillation (O'Hanlon & McCauley, 1974): error ≤ 10: **fail**. With `--replace vestibular=iso_2631`: 6.1 (consistency) | held out |
+| `vestibular.vertical_sickness` | RMS error 7.5 % points, r = 0.93 (19.7 with the published conflict scale) | 2 h vertical oscillation (O'Hanlon & McCauley, 1974): ≤ 10 | fitted (one parameter) |
+| `vestibular.sickness_time_course` | RMS error 14.8 % points, r = 0.76 over 43 points | sickness over time at nine other conditions (McCauley et al., 1976), ≤ 10: **fail**; their descriptive model: 6.3. `--replace vestibular=iso_2631`: 12.4 | **held out** |
 | `fatigue.endurance` | median error 17% | endurance times per joint (Frey-Law & Avin, 2010) | consistency |
-| `risk.lane_width` | 41–97 km/h for 2.85–3.75 m lanes; order right (tau 1.0); mean error 12.3 km/h | 56–82 km/h (Liu et al., 2016), error ≤ 9.4: **fail** | threshold fitted on one lane, four held out |
+| `risk.lane_width` | 56.2, 68.7 and 85.1 km/h on 2.85, 3.25 and 3.75 m lanes; mean error 2.1 km/h | 56.2, 65.5 and 81.9 km/h (Liu et al., 2016), error ≤ 9.4: pass | threshold and width growth fitted on 3.0 and 3.5 m; three held out |
+| `trust.kraus_dynamics` | trust over a drive: RMS error 0.29 points; malfunction dip +0.20 | Kraus et al. (2020), Study 2 low transparency: error ≤ 0.3: pass; dip −0.47 (−0.94 to −0.10): **fail** | fitted on Study 1, Study 2 held out |
 | `affect.emotion_study` | RMSE 0.098, R² 0.84 | normalised emotion ratings in three tasks (Zhang et al., 2024); the original model: 0.13, 0.78 | **reproduction** |
 | `driving.glance_population` | 20 participants: mean 1.13 s (95% CI 1.08–1.19), within-person SD 0.58 s (0.54–0.64), 7.9% over 2 s | Kujala & Saariluoma (2011): 1.06–1.20 s, 0.48–0.66 s, 5.7–10% | fitted (mean, SD); held out (long glances) |
 | `driving.glance_speed` | elasticity of glance duration on speed −0.45 (40–120 km/h) | occlusion −0.72 to −0.53 (Senders et al., 1967); in-car search 0 (Jokinen et al., 2021): **fail both** | **counterfactual** |
@@ -202,24 +205,34 @@ real test:
     occlusion data nor in-car search, which looks unaffected by speed.
     [docs/seminar-requirements.md](docs/seminar-requirements.md) discusses
     what this implies for alternative attention modules.
-- **Take-over.** The take-over time lies within one SD of the meta-analytic
-  mean, but it is shorter than that mean. The order of the senses is right,
-  but the model grabs the wheel almost three times faster than Ko et al.'s
-  drivers. In the model the hand starts back as soon as the request is
-  noticed; people evidently first stop the game, look and decide.
+- **Take-over.** After noticing the request, the driver looks at the road
+  and decides from the scene before reaching for the wheel; cognitive
+  processing rather than motor readiness sets take-over time (Zeeb et al.,
+  2015). One decision time, fitted to Ko et al.'s hands-on time, moves the
+  full-body take-over from 1.51 s to 1.94 s, towards the meta-analytic
+  2.72 s and Gold et al.'s 2.10-2.89 s.
 - **Senses and responses.** The visual DRT and the slowing of older
-  drivers match. The tactile DRT is 170 ms too fast: the model has no cost
-  of driving itself on the central stage, which Conti et al. measured as
-  about 50 ms for the visual DRT.
-- **Motion sickness.** The subjective vertical conflict model, with
-  parameters fitted to car passengers, ranks the 14 vertical conditions
-  well (r = 0.92) but predicts a third of the observed incidence. The ISO
-  2631-1 dose was partly derived from these data, so its fit (6.1) is a
-  consistency check.
-- **Perceived risk.** The risk field orders the lane widths correctly but
-  reacts about twice as strongly as drivers. Its parameters were fitted to
-  one driver; the paper's threshold could not be used directly because it
-  depends on an unreported grid spacing.
+  drivers match; the tactile DRT is too fast in absolute terms.
+- **Load.** Concurrent tasks share one central stage (threaded cognition).
+  Driving's own cost, taken from threaded cognition's driver without
+  fitting, comes out at 28 ms, just below Conti et al.'s 51 ms. With the
+  n-back and SuRT chunks fitted to Conti et al.'s visual DRT, the model
+  predicts Cooper et al.'s 2-back cost on the road, but doubles their SuRT
+  cost: their touch-based SuRT paused at intersections, and their reaction
+  times pooled two stimulus types and counted only detected stimuli.
+- **Motion sickness.** One parameter (the conflict scale) refitted to the
+  2-hour data cuts the error from 19.7 to 7.5. On the held-out time courses
+  the error halves (28.6 to 14.8) but stays above the descriptive model of
+  McCauley et al. (6.3): the conflict model's onset is too slow. The ISO
+  dose was partly derived from these data.
+- **Perceived risk.** With its width growth refitted (0.005 instead of
+  0.001 per metre, from one driver in the original), the risk field
+  predicts the three held-out lane widths within 2.1 km/h.
+- **Trust.** Gao and Lee's model follows the slow growth of trust over a
+  drive but cannot produce the transient dip after a malfunction, which
+  people recover from by the next measurement: its belief and trust
+  updates both have inertia. A fast situational component on top of
+  learned trust is the missing piece.
 - **Emotion.** The reimplemented appraisal model reproduces the published
   appraisal profiles and fits the human ratings at least as well as the
   original.
@@ -272,14 +285,13 @@ No code from these projects is included.
   skin with receptor types (TouchSim, once licensed) or sensor density per
   body part (as in MIMo) would replace it. Hearing handles tones in
   broadband noise, not speech or spatial sound.
-- **Load:** the response module has no cost of driving or of a secondary
-  task, so DRT times under load are not yet predicted (Conti et al.: about
-  +290 ms under 2-back, +400 ms under SuRT).
+- **Load:** chunks of concurrent tasks are fitted per task; deriving them
+  from the task models (rules, retrievals, fixations) would make them
+  predictions too. Hit rates under load are not modelled.
 - **Next benchmarks:**
   - Occlusion distance on highways: mean 15.5 m (Kujala et al., 2016).
-  - Take-over times by time budget, which still need a verified source.
-  - Trust dynamics after take-overs and malfunctions (Kraus et al., 2020),
-    now that the trust module exists.
+  - Take-over times by time budget (Gold et al., 2013), once their full
+    text is available.
 
 ## Development
 
@@ -288,6 +300,11 @@ python -m pytest tests -q
 python -m ruff check src tests examples
 python -m mypy src/embodied_human --ignore-missing-imports
 python examples/calibrate_glances.py --out evidence/glance-calibration.json
+python examples/fit_motion_sickness.py --out evidence/motion-sickness-fit.json
+python examples/fit_drt_load.py --out evidence/drt-load-fit.json
 ```
+
+Continuous integration runs the tests (without MyoSuite), ruff, mypy and
+the build on Python 3.10 and 3.12.
 
 Apache-2.0.

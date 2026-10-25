@@ -17,9 +17,10 @@ sees the road only through the human model.
 - A takeover request is a chime, a seat vibration and/or an icon. It is
   heard over the cabin noise, felt through the seat and seen at its
   eccentricity from the current gaze; the response module combines what
-  was sensed into the reaction. The driver then looks to the road, moves
-  the hand to the wheel, and drives once the belief is certain again; the
-  take-over time emerges from these modules.
+  was sensed into the reaction. The driver then drops the task and looks
+  to the road, decides from the road scene to take over, moves the hand to
+  the wheel, and drives once the situation is assessed and the belief is
+  certain again; the take-over time emerges from these steps.
 
 Two-point steering uses the observed near- and far-point angles, corrected
 by the belief error in lateral offset and heading; curvature preview is
@@ -41,6 +42,7 @@ from ..core import Human, Parameters, Source
 from ..tasks.surt import SuRTTask
 from ..vision.eyes import Gaze
 from ..vision.objects import Item
+from .body import BodySensing
 
 DISPLAY = "display"
 
@@ -68,6 +70,9 @@ class DriverAgentParameters(Parameters):
         icon_position: Direction of the takeover icon, degrees.
         request_capability: Automation capability (0-1) a takeover request
             reveals to the trust module.
+        decision_dwell: Time looking at the road after a takeover request
+            before the hand starts back to the wheel, s: the decision to
+            take over is made from the road scene.
         assessment_fixations: Road fixations needed after a takeover request
             to rebuild the situation before driving.
         scene_fixation: Mean fixation duration in scene viewing, s.
@@ -98,6 +103,7 @@ class DriverAgentParameters(Parameters):
     seat_site: str = "seat_vertical"
     icon_position: Gaze = (0.0, -12.0)
     request_capability: float = 0.8
+    decision_dwell: float = 0.91
     assessment_fixations: int = 3
     scene_fixation: float = 0.33
     display_distance: float = 0.45
@@ -146,6 +152,14 @@ class DriverAgentParameters(Parameters):
         "seat_site": Source("model choice", None, "assumed"),
         "icon_position": Source(
             "model choice", None, "assumed", "the instrument cluster below the road"
+        ),
+        "decision_dwell": Source(
+            "Ko, Sanghavi, Zhang & Jeon (2022), Fig. 4; fitted here",
+            "https://doi.org/10.1016/j.trf.2022.08.008",
+            "fitted",
+            "hands on the wheel 1.87 s after a chime with a text; cognitive "
+            "processing rather than motor readiness sets take-over time "
+            "(Zeeb, Buchner & Schrauf, 2015)",
         ),
         "request_capability": Source(
             "Kraus, Scholz, Stiegemeier & Baumann (2020), Table 2; fitted here",
@@ -229,6 +243,10 @@ class DrivingLog:
     speed: list[float] = field(default_factory=list)
     yaw_rate: list[float] = field(default_factory=list)
     trust: list[tuple[float, float]] = field(default_factory=list)
+    head_acceleration: list[tuple[float, float, float]] = field(default_factory=list)
+    head_rate: list[tuple[float, float, float]] = field(default_factory=list)
+    head_gravity: list[tuple[float, float, float]] = field(default_factory=list)
+    fatigue: list[dict[str, float]] = field(default_factory=list)
 
     def glances(self) -> list[tuple[float, float]]:
         """Off-road glances as (start, end): gaze leaving the road area
@@ -300,17 +318,33 @@ class DrivingLog:
             "engaged_s": since(self.engaged_at),
         }
 
-    def head_motion(self, dt: float) -> tuple[np.ndarray, np.ndarray]:
-        """Approximate head acceleration and angular velocity, from the
-        vehicle's speed and yaw rate (the head assumed fixed to the car,
-        as in Wada et al., 2018), in the head frame x forward, y left,
-        z up; for the vestibular module."""
+    def head_motion(self, dt: float) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+        """Head acceleration, angular velocity and upward gravity in the head
+        frame (x forward, y left, z up), for the vestibular module.
+
+        With a MuJoCo body (myosuite-carla), these are the simulated head's
+        motion; otherwise they are approximated from the vehicle's speed and
+        yaw rate with the head fixed upright in the car, as Wada et al.
+        (2018) did with vehicle data.
+        """
+        if self.head_acceleration:
+            return (
+                np.asarray(self.head_acceleration),
+                np.asarray(self.head_rate),
+                np.asarray(self.head_gravity),
+            )
         speed = np.asarray(self.speed, dtype=float)
         yaw = np.asarray(self.yaw_rate, dtype=float)
         forward = np.gradient(speed, dt) if len(speed) > 1 else np.zeros_like(speed)
         acceleration = np.column_stack([forward, speed * yaw, np.zeros_like(speed)])
         angular = np.column_stack([np.zeros_like(yaw), np.zeros_like(yaw), yaw])
-        return acceleration, angular
+        gravity = np.tile([0.0, 0.0, 9.81], (len(speed), 1))
+        return acceleration, angular, gravity
+
+    def motion_sickness(self, vestibular: Any, dt: float) -> np.ndarray:
+        """Motion sickness incidence (%) over the run."""
+        acceleration, angular, gravity = self.head_motion(dt)
+        return np.asarray(vestibular.simulate(dt, acceleration, angular, gravity))
 
     def trace(self) -> dict[str, np.ndarray]:
         """Per-step columns: time, area, gaze, belief and truth."""
@@ -376,6 +410,10 @@ class AttentiveDriver:
 
             reflex = ReflexDriver(self.dt, ReflexDriverConfig(perception_delay=self.dt))
         self.reflex = reflex
+        # A MuJoCo body to feel: head motion and muscle effort.
+        self.body: BodySensing | None = None
+        if getattr(getattr(env, "driver", None), "model", None) is not None:
+            self.body = BodySensing(env)
 
     # Episode ------------------------------------------------------------------
 
@@ -385,6 +423,8 @@ class AttentiveDriver:
         self.reflex.reset()
         self.time = 0.0
         self.log = DrivingLog()
+        if self.body is not None:
+            self.body.reset()
         self._attend = AttenD()
         self._destination = ROAD
         self._engaged = True
@@ -524,6 +564,13 @@ class AttentiveDriver:
         ):
             self._reacted = True
             self.log.reacted_at = t
+        if (
+            self._reacted
+            and self._hand_back is None
+            and self._road_since is not None
+            and t - self._road_since >= p.decision_dwell
+        ):
+            # Decided from the road scene: the hand starts back to the wheel.
             movement = human.motor.plan(  # type: ignore[attr-defined]
                 np.zeros(3), np.array([p.display_distance, 0.0, 0.0]), p.wheel_width, t
             )
@@ -550,12 +597,26 @@ class AttentiveDriver:
 
         self.log.speed.append(float(state["speed_mps"]))
         self.log.yaw_rate.append(yaw_rate)
+        if self.body is not None:
+            self._feel(self.body)
 
         # Driving from belief.
         if automation and not self._engaged_now(t, uncertainty):
             return self._idle()
         believed = self._believed(state)
         return self.reflex.act(believed)
+
+    def _feel(self, body: BodySensing) -> None:
+        """Log the head's motion and update muscle fatigue."""
+        acceleration, rate, up = body.head_motion()
+        self.log.head_acceleration.append(tuple(acceleration))
+        self.log.head_rate.append(tuple(rate))
+        self.log.head_gravity.append(tuple(up))
+        fatigue = self.human.fatigue
+        fatigue.step(self.dt, body.loads())  # type: ignore[attr-defined]
+        self.log.fatigue.append(
+            {group: fatigue.fatigued(group) for group in body.groups}  # type: ignore[attr-defined]
+        )
 
     def _idle(self) -> Any:
         """No input while automation drives (myosuite-carla's empty intent)."""

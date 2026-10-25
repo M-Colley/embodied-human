@@ -14,6 +14,13 @@ shorter by ``Delta``:
 Visual latency grows with the signal's eccentricity from the line of
 gaze, following Osaka (1976). A signal outside the visual field is not
 seen until gaze moves to it.
+
+The central stage is a single bottleneck shared with concurrent tasks, as
+in threaded cognition (Salvucci and Taatgen, 2008): driving, a memory task
+or a visual search each occupy it for a while at their own pace
+(:class:`CentralTask`). A response that becomes ready while the stage is
+busy waits until it is free, which is how secondary tasks lengthen
+detection-response times.
 """
 
 from __future__ import annotations
@@ -68,6 +75,49 @@ class Reaction:
     time: float
     first: Modality | None
     integrated: bool
+    waited: float = 0.0
+
+
+@dataclass(frozen=True)
+class CentralTask:
+    """A concurrent task's demand on the central stage.
+
+    Every ``period`` seconds (at a random phase) the task occupies the
+    stage for ``duration`` seconds; ``period`` 0 means it never does.
+    """
+
+    name: str
+    period: float
+    duration: float
+
+    def __post_init__(self) -> None:
+        if self.period < 0 or self.duration < 0:
+            raise ValueError("period and duration must be non-negative")
+        if self.period and self.duration > self.period:
+            raise ValueError(f"{self.name}: busy longer than its period")
+
+
+def central_wait(tasks: Sequence[CentralTask], rng: np.random.Generator) -> float:
+    """Time a response arriving at a random moment waits for the shared
+    stage: the busy periods of all tasks, chained if they overlap."""
+    intervals = []
+    for task in tasks:
+        if task.period <= 0 or task.duration <= 0:
+            continue
+        # Busy windows around the arrival at time 0, at a random phase.
+        start = -float(rng.uniform(0.0, task.period))
+        while start < 10.0 * task.period:
+            if start + task.duration > 0:
+                intervals.append((start, start + task.duration))
+            start += task.period
+    free = 0.0
+    changed = True
+    while changed:
+        changed = False
+        for begin, end in intervals:
+            if begin <= free < end:
+                free, changed = end, True
+    return free
 
 
 @dataclass(frozen=True)
@@ -113,8 +163,11 @@ class Response(Module):
         """Mean peripheral time of a light at an eccentricity, s."""
         raise NotImplementedError
 
-    def respond(self, signals: Sequence[Signal]) -> Reaction:
-        """Sample a response to signals that call for the same action."""
+    def respond(
+        self, signals: Sequence[Signal], load: Sequence[CentralTask] = ()
+    ) -> Reaction:
+        """Sample a response to signals that call for the same action,
+        while concurrent tasks share the central stage."""
         raise NotImplementedError
 
 
@@ -140,7 +193,9 @@ class TwinResponse(Response):
             extra = times[-1] - times[0] + slope * (e - degrees[-1])
         return p.visual_latency + extra / 1000.0
 
-    def respond(self, signals: Sequence[Signal]) -> Reaction:
+    def respond(
+        self, signals: Sequence[Signal], load: Sequence[CentralTask] = ()
+    ) -> Reaction:
         p = self.params
         finished = sorted(
             (s.onset + self.rng.exponential(s.latency), s.modality)
@@ -152,9 +207,15 @@ class TwinResponse(Response):
         (first, modality), rest = finished[0], finished[1:]
         integrated = any(time - first < p.window for time, _ in rest)
         central = p.central - (p.facilitation if integrated else 0.0)
-        return Reaction(first + central, modality, integrated)
+        waited = central_wait(load, self.rng) if load else 0.0
+        return Reaction(first + waited + central, modality, integrated, waited)
 
-    def mean_reaction(self, signals: Sequence[Signal], samples: int = 20000) -> float:
+    def mean_reaction(
+        self,
+        signals: Sequence[Signal],
+        samples: int = 20000,
+        load: Sequence[CentralTask] = (),
+    ) -> float:
         """Mean response time by simulation, s."""
-        times = [self.respond(signals).time for _ in range(samples)]
+        times = [self.respond(signals, load).time for _ in range(samples)]
         return float(np.mean(times))

@@ -32,9 +32,10 @@ baseline model. The seminar distinguished three kinds of task:
 | **Standard formulations and libraries of forward models** | One interface per category; implementations registered by name and swapped with `HumanConfig.replace` or `--replace`; every parameter carries its source | `docs/parameters.md` |
 | **Embodiment** | MuJoCo and MyoSuite bodies; physical contact with embodied-ui devices; proprioception from muscle spindles; touch felt only through contact; muscle fatigue | `motor.touch_tapping` through contact |
 | **Multisensory perception** | Hearing over cabin noise, vibrotactile touch, visual eccentricity, and the TWIN model that integrates them; embodied-ui speakers and vibrotactors deliver the signals | `response.*`, `driving.takeover_modality` |
+| **Multitasking under load** | Concurrent tasks share one central stage (threaded cognition); DRT costs of driving, n-back and SuRT | `response.drt_load` |
 | **Closed loop with real-time systems** | embodied-ui's lockstep bridge to Unity and CARLA | Unity 6.6 and CARLA live tests in embodied-ui |
 | **Easy application** | `pip install`, a benchmark CLI, examples | README |
-| **Experience and motivation** | Emotion by appraisal of learned values; perceived risk that sets speed; trust that drives reliance; fatigue; motion sickness | `affect.emotion_study`, `risk.lane_width`, `fatigue.endurance`, `vestibular.vertical_sickness`; trust has no human benchmark yet |
+| **Experience and motivation** | Emotion by appraisal of learned values; perceived risk that sets speed; trust that drives reliance; fatigue; motion sickness | `affect.emotion_study`, `risk.lane_width`, `fatigue.endurance`, `vestibular.*`, `trust.kraus_dynamics` |
 
 ## Architecture
 

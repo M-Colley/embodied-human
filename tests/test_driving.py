@@ -91,3 +91,21 @@ def test_glance_log_metrics():
     assert metrics["long_glance_share"] == 0.0 and math.isnan(
         metrics["attend_minimum_s"]
     )
+
+
+def test_the_body_feels_head_motion_and_muscle_effort(highway):
+    agent = AttentiveDriver(
+        eh.build_human(seed=4), highway, SuRTTask(rng=np.random.default_rng(4))
+    )
+    highway.reset(seed=4)
+    agent.reset(seed=4)
+    for _ in range(100):
+        highway.step(agent.act())
+    acceleration, rate, gravity = agent.log.head_motion(highway.dt)
+    assert acceleration.shape == rate.shape == gravity.shape == (100, 3)
+    # The head stays upright: gravity is felt along its z axis.
+    assert np.allclose(np.linalg.norm(gravity, axis=1), 9.81, atol=0.01)
+    assert np.all(gravity[:, 2] > 9.5)
+    assert set(agent.log.fatigue[-1]) >= {"elbow_right", "hand_left", "ankle_right"}
+    assert all(0 <= v < 0.05 for v in agent.log.fatigue[-1].values())
+    assert agent.log.motion_sickness(agent.human.vestibular, highway.dt)[-1] >= 0

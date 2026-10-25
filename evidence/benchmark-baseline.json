@@ -75,7 +75,7 @@
     "standard": 3,
     "derived": 4
   },
-  "wall_seconds": 217.37,
+  "wall_seconds": 150.89,
   "results": [
     {
       "name": "eyes.main_sequence",
@@ -465,7 +465,16 @@
           "accuracy": 0.8461538461538461,
           "mean_screen_time_s": 4.310769230769474
         },
-        "simulated_seconds": 60.0
+        "simulated_seconds": 60.0,
+        "motion_sickness_pct": 0.004729680361003761,
+        "fatigued_fraction": {
+          "elbow_right": 0.012818206079345047,
+          "elbow_left": 0.01311040823491041,
+          "hand_right": 0.04315133171437508,
+          "hand_left": 0.02157566585718768,
+          "ankle_right": 0.002242938350560427,
+          "ankle_left": 0.001732754309089617
+        }
       }
     },
     {
@@ -480,7 +489,7 @@
       "score": 1.0,
       "skipped": null,
       "metrics": {
-        "driving.takeover_time": 1.5149999999998434
+        "driving.takeover_time": 1.9399999999998343
       },
       "scores": {
         "driving.takeover_time": 1.0
@@ -499,24 +508,118 @@
       },
       "details": {
         "takeover_times_s": [
-          1.339999999999847,
-          1.6399999999998407,
-          1.7799999999998377,
-          1.6399999999998407,
-          1.6199999999998411,
-          1.479999999999844,
-          1.2799999999998484,
-          1.339999999999847
+          1.6599999999998403,
+          1.9399999999998343,
+          1.9399999999998343,
+          1.9199999999998347,
+          2.039999999999832,
+          1.9399999999998343,
+          1.9599999999998339,
+          2.1199999999998305
         ],
-        "sd_s": 0.18134418735022328,
+        "sd_s": 0.1318007153676634,
         "missed": 0,
         "median_components_s": {
           "response_s": 0.21999999999987097,
-          "hand_s": 0.6259403199567863,
+          "hand_s": 1.8459403199567603,
           "eyes_s": 0.5199999999998646,
-          "engaged_s": 1.4699999999998443
+          "engaged_s": 1.859999999999836
         },
         "scenario": "myosuite-carla takeover_request: automation at 12 m/s, request at 10 s, 7 s budget"
+      }
+    },
+    {
+      "name": "response.drt_load",
+      "categories": [
+        "response",
+        "touch",
+        "attention"
+      ],
+      "passed": false,
+      "score": 0.6687448151221825,
+      "skipped": null,
+      "metrics": {
+        "response.drt_driving_cost": 28.29184473353098,
+        "response.drt_2back_cost": 283.93610860421256,
+        "response.drt_surt_cost": 382.48558999228953
+      },
+      "scores": {
+        "response.drt_driving_cost": 0.9194778428375902,
+        "response.drt_2back_cost": 1.0,
+        "response.drt_surt_cost": 0.08675660252895756
+      },
+      "references": {
+        "response.drt_driving_cost": {
+          "value": 50.7,
+          "range": [
+            31.4,
+            70.0
+          ],
+          "unit": "ms",
+          "citation": "Conti, Dlugosch & Bengler (2014), Table 3",
+          "doi": "https://www.hfes-europe.org/wp-content/uploads/2014/06/Conti.pdf"
+        },
+        "response.drt_2back_cost": {
+          "value": 234.0,
+          "range": [
+            152.5,
+            315.5
+          ],
+          "unit": "ms",
+          "citation": "Cooper et al. (2020), Table 4",
+          "doi": "https://doi.org/10.3389/fpsyg.2020.01154"
+        },
+        "response.drt_surt_cost": {
+          "value": 177.0,
+          "range": [
+            104.3,
+            249.7
+          ],
+          "unit": "ms",
+          "citation": "Cooper et al. (2020), Table 4",
+          "doi": "https://doi.org/10.3389/fpsyg.2020.01154"
+        }
+      },
+      "details": {
+        "display_share": 0.559,
+        "conti_model_ms": {
+          "alone": 356.8870626273706,
+          "driving": 385.1789073609016,
+          "0-back": 513.5935241185621,
+          "2-back": 676.6731698161831,
+          "surt": 774.6212612130953
+        },
+        "conti_human_ms": {
+          "alone": 293.4,
+          "driving": 344.1,
+          "0-back": 479.1,
+          "2-back": 636.6,
+          "surt": 729.2
+        },
+        "conti_fitted_costs_ms": {
+          "0-back": {
+            "model": 128.4146167576605,
+            "human": 135.0
+          },
+          "2-back": {
+            "model": 291.4942624552815,
+            "human": 292.5
+          },
+          "surt": {
+            "model": 389.4423538521937,
+            "human": 385.1
+          }
+        },
+        "cooper_model_ms": {
+          "driving": 371.51648389923696,
+          "2-back": 655.4525925034495,
+          "surt": 754.0020738915265
+        },
+        "cooper_human_ms": {
+          "driving": 526.0,
+          "2-back": 760.0,
+          "surt": 703.0
+        }
       }
     },
     {
@@ -682,14 +785,14 @@
       "categories": [
         "risk"
       ],
-      "passed": false,
-      "score": 0.6940186385600676,
+      "passed": true,
+      "score": 1.0,
       "skipped": null,
       "metrics": {
-        "risk.lane_width_speed_error": 12.276224797535365
+        "risk.lane_width_speed_error": 2.133471388106905
       },
       "scores": {
-        "risk.lane_width_speed_error": 0.6940186385600676
+        "risk.lane_width_speed_error": 1.0
       },
       "references": {
         "risk.lane_width_speed_error": {
@@ -704,26 +807,32 @@
         }
       },
       "details": {
-        "threshold": 453.3342967403525,
+        "fitted_to_m": [
+          3.0,
+          3.5
+        ],
+        "threshold": 3632.6809857293943,
+        "width_rate": 0.005020007707795354,
+        "published_width_rate": 0.001,
         "speed_kmh": {
           "2.85": {
-            "model": 41.01819121363983,
+            "model": 56.186433486587134,
             "human": 56.18
           },
           "3.0": {
-            "model": 47.319626205841786,
+            "model": 60.78,
             "human": 60.78
           },
           "3.25": {
-            "model": 60.300674194870034,
+            "model": 68.71403503141548,
             "human": 65.46
           },
           "3.5": {
-            "model": 76.85001962350469,
+            "model": 76.85,
             "human": 76.85
           },
           "3.75": {
-            "model": 97.24339080449312,
+            "model": 85.0599456463181,
             "human": 81.92
           }
         },
@@ -799,6 +908,154 @@
       }
     },
     {
+      "name": "trust.kraus_dynamics",
+      "categories": [
+        "trust"
+      ],
+      "passed": false,
+      "score": 0.8229823096325235,
+      "skipped": null,
+      "metrics": {
+        "trust.study2_rmse": 0.29000708635339256,
+        "trust.malfunction_dip": 0.19738971981736064
+      },
+      "scores": {
+        "trust.study2_rmse": 1.0,
+        "trust.malfunction_dip": 0.6459646192650469
+      },
+      "references": {
+        "trust.study2_rmse": {
+          "value": 0.0,
+          "range": [
+            0.0,
+            0.3
+          ],
+          "unit": "scale points",
+          "citation": "Kraus, Scholz, Stiegemeier & Baumann (2020), Table 7",
+          "doi": "https://doi.org/10.1177/0018720819853686"
+        },
+        "trust.malfunction_dip": {
+          "value": -0.47,
+          "range": [
+            -0.94,
+            -0.1
+          ],
+          "unit": "scale points",
+          "citation": "Kraus, Scholz, Stiegemeier & Baumann (2020), Table 7",
+          "doi": "https://doi.org/10.1177/0018720819853686"
+        }
+      },
+      "details": {
+        "fitted_on_study1": {
+          "ok": 0.823625106319068,
+          "tor": 0.4694864224151053,
+          "malfunction": 0.8870602781039675,
+          "opacity": 2.413044153787992,
+          "study1_rmse": 0.20774976266478415
+        },
+        "study2_model": {
+          "MF-/LT": [
+            5.03,
+            5.218921250463476,
+            5.424011458695037,
+            5.591339664789497,
+            5.712939826060745,
+            5.795954719967422,
+            5.850470843936006,
+            5.885346601177161,
+            5.907245293219303,
+            5.9208068277975485
+          ],
+          "MF+/LT": [
+            4.64,
+            4.909732038651452,
+            5.2025492830749185,
+            5.441451884254109,
+            5.615066336411148,
+            5.812456056228509,
+            5.897041116690593,
+            5.931071150113263,
+            5.943247766834099,
+            5.946502777341458
+          ],
+          "MF-/HT": [
+            4.47,
+            4.774957254015442,
+            5.106014488573841,
+            5.376116185046374,
+            5.572403533230554,
+            5.706406426108179,
+            5.7944065183383495,
+            5.85070307118182,
+            5.886052006123327,
+            5.907943076265363
+          ],
+          "MF+/HT": [
+            5.2,
+            5.353696035099485,
+            5.520546253196113,
+            5.6566753639972305,
+            5.755602629241338,
+            5.902004350087753,
+            5.953105442288251,
+            5.965714680108604,
+            5.964441053930075,
+            5.959366528873643
+          ]
+        },
+        "study2_human": {
+          "MF-/LT": [
+            5.03,
+            5.66,
+            5.72,
+            5.91,
+            5.98,
+            6.09,
+            6.11,
+            6.17,
+            6.22,
+            6.22
+          ],
+          "MF+/LT": [
+            4.64,
+            4.95,
+            5.27,
+            5.42,
+            5.6,
+            5.13,
+            5.55,
+            5.75,
+            5.84,
+            5.96
+          ],
+          "MF-/HT": [
+            4.47,
+            5.13,
+            5.6,
+            5.67,
+            5.73,
+            5.61,
+            5.93,
+            5.85,
+            6.04,
+            5.98
+          ],
+          "MF+/HT": [
+            5.2,
+            5.25,
+            5.53,
+            5.75,
+            5.75,
+            5.67,
+            5.83,
+            5.82,
+            5.9,
+            5.9
+          ]
+        }
+      }
+    },
+    {
       "name": "response.modality_rt",
       "categories": [
         "hearing",
@@ -828,16 +1085,16 @@
       },
       "details": {
         "model_ms": {
-          "auditory": 251.9177577685267,
-          "visual": 318.75007026222636,
-          "tactile": 335.3766732043175
+          "auditory": 253.69813076547865,
+          "visual": 316.7873188705843,
+          "tactile": 333.46613858622925
         },
         "human_ms": {
           "auditory": 132.0,
           "visual": 163.0,
           "tactile": 177.0
         },
-        "redundant_av_ms": 224.01206732212927,
+        "redundant_av_ms": 223.42176328186227,
         "note": "the model's parameters come from other participants (Diederich & Colonius, 2015); only the order is compared"
       }
     },
@@ -851,9 +1108,9 @@
       "score": 0.6666666666666666,
       "skipped": null,
       "metrics": {
-        "response.drt_visual": 349.2593766871013,
-        "response.drt_tactile": 351.57721861605444,
-        "response.older_slowing": 1.3283236582434037
+        "response.drt_visual": 349.81386273405985,
+        "response.drt_tactile": 347.57145771514706,
+        "response.older_slowing": 1.343632587834229
       },
       "scores": {
         "response.drt_visual": 1.0,
@@ -893,8 +1150,8 @@
         }
       },
       "details": {
-        "visual_ms": 349.2593766871013,
-        "tactile_ms": 351.57721861605444,
+        "visual_ms": 349.81386273405985,
+        "tactile_ms": 347.57145771514706,
         "tactile_older_ms": 467.00833718711834,
         "light_eccentricity_deg": 17.0,
         "vibration_sensation_db": 20.0
@@ -905,14 +1162,14 @@
       "categories": [
         "vestibular"
       ],
-      "passed": false,
-      "score": 0.02664678003594856,
+      "passed": true,
+      "score": 1.0,
       "skipped": null,
       "metrics": {
-        "vestibular.vertical_msi_error": 19.733532199640514
+        "vestibular.vertical_msi_error": 7.465817554347785
       },
       "scores": {
-        "vestibular.vertical_msi_error": 0.02664678003594856
+        "vestibular.vertical_msi_error": 1.0
       },
       "references": {
         "vestibular.vertical_msi_error": {
@@ -932,88 +1189,210 @@
             "frequency_hz": 0.083,
             "mean_accel_g": 0.025,
             "observed_pct": 0,
-            "predicted_pct": 0.23967362311262932
+            "predicted_pct": 1.524321944380467
           },
           {
             "frequency_hz": 0.083,
             "mean_accel_g": 0.05,
             "observed_pct": 5,
-            "predicted_pct": 0.9467041505518405
+            "predicted_pct": 5.647794844706093
           },
           {
             "frequency_hz": 0.167,
             "mean_accel_g": 0.025,
             "observed_pct": 0,
-            "predicted_pct": 0.5565287278681516
+            "predicted_pct": 3.437183370134719
           },
           {
             "frequency_hz": 0.167,
             "mean_accel_g": 0.05,
             "observed_pct": 10,
-            "predicted_pct": 2.162704312015427
+            "predicted_pct": 11.686112267316826
           },
           {
             "frequency_hz": 0.167,
             "mean_accel_g": 0.1,
             "observed_pct": 30,
-            "predicted_pct": 7.777582904798271
+            "predicted_pct": 29.860797847969124
           },
           {
             "frequency_hz": 0.167,
             "mean_accel_g": 0.2,
             "observed_pct": 60,
-            "predicted_pct": 22.441341651445605
+            "predicted_pct": 51.6617930133547
           },
           {
             "frequency_hz": 0.333,
             "mean_accel_g": 0.05,
             "observed_pct": 5,
-            "predicted_pct": 0.789742169000503
+            "predicted_pct": 4.776624193171955
           },
           {
             "frequency_hz": 0.333,
             "mean_accel_g": 0.1,
             "observed_pct": 15,
-            "predicted_pct": 3.033042700668538
+            "predicted_pct": 15.375661493752617
           },
           {
             "frequency_hz": 0.333,
             "mean_accel_g": 0.2,
             "observed_pct": 52,
-            "predicted_pct": 10.492337520061104
+            "predicted_pct": 35.60237950288476
           },
           {
             "frequency_hz": 0.333,
             "mean_accel_g": 0.3,
             "observed_pct": 52,
-            "predicted_pct": 19.386469076057168
+            "predicted_pct": 48.454417773732615
           },
           {
             "frequency_hz": 0.5,
             "mean_accel_g": 0.1,
             "observed_pct": 0,
-            "predicted_pct": 1.3328703059342786
+            "predicted_pct": 7.694417646873499
           },
           {
             "frequency_hz": 0.5,
             "mean_accel_g": 0.2,
             "observed_pct": 15,
-            "predicted_pct": 4.98390035331265
+            "predicted_pct": 22.262711670151113
           },
           {
             "frequency_hz": 0.5,
             "mean_accel_g": 0.3,
             "observed_pct": 25,
-            "predicted_pct": 10.132349899822533
+            "predicted_pct": 34.90899215759987
           },
           {
             "frequency_hz": 0.5,
             "mean_accel_g": 0.4,
             "observed_pct": 30,
-            "predicted_pct": 15.912584014121428
+            "predicted_pct": 44.1989180228606
           }
         ],
-        "correlation": 0.9226558682806917
+        "correlation": 0.9335876869688079
+      }
+    },
+    {
+      "name": "vestibular.sickness_time_course",
+      "categories": [
+        "vestibular"
+      ],
+      "passed": false,
+      "score": 0.5247670948058163,
+      "skipped": null,
+      "metrics": {
+        "vestibular.time_course_msi_error": 14.752329051941837
+      },
+      "scores": {
+        "vestibular.time_course_msi_error": 0.5247670948058163
+      },
+      "references": {
+        "vestibular.time_course_msi_error": {
+          "value": 0.0,
+          "range": [
+            0.0,
+            10.0
+          ],
+          "unit": "% points",
+          "citation": "McCauley, Royal, Wylie, O'Hanlon & Mackie (1976), Appendix B",
+          "doi": "https://archive.org/details/DTIC_ADA024709"
+        }
+      },
+      "details": {
+        "points": 43,
+        "correlation": 0.7613517084264773,
+        "mccauley_model_error": 6.252441383636791,
+        "predicted": [
+          2.828191816179083,
+          15.295497248718107,
+          26.544744339148004,
+          33.96777977492584,
+          38.295147253399584,
+          42.82576162287273,
+          3.3734082683688524,
+          18.211275548828365,
+          31.594350538797737,
+          40.4243602412905,
+          45.57163668034658,
+          48.37785751293534,
+          50.960394077488246,
+          1.4946333143509418,
+          8.058911518250392,
+          13.978037008804433,
+          21.4003289053881,
+          22.049036689220323,
+          22.679824194753905,
+          2.944159766090242,
+          15.868158134238584,
+          27.520974288795482,
+          35.20853235560544,
+          39.68959760691771,
+          42.132531303547374,
+          43.40955661896494,
+          44.38067223353208,
+          44.65129762708106,
+          3.7093793507348582,
+          19.984222841102543,
+          34.65702811710476,
+          44.336657015222315,
+          54.66262028374042,
+          55.4792352687733,
+          56.22608149276343,
+          17.774902780384664,
+          48.59275392015387,
+          49.98193053281493,
+          36.95963754660117,
+          38.01605269147472,
+          16.058964902681243,
+          45.150382472223136,
+          39.977811905476464
+        ],
+        "observed": [
+          8.0,
+          23.0,
+          40.0,
+          47.0,
+          55.0,
+          60.0,
+          11.0,
+          37.0,
+          43.0,
+          57.0,
+          60.0,
+          69.0,
+          71.0,
+          3.0,
+          7.0,
+          17.0,
+          24.0,
+          28.0,
+          31.0,
+          6.0,
+          17.0,
+          32.0,
+          39.0,
+          41.0,
+          54.0,
+          56.0,
+          57.0,
+          63.0,
+          2.0,
+          40.0,
+          51.0,
+          56.0,
+          58.0,
+          67.0,
+          69.0,
+          20.0,
+          33.0,
+          40.0,
+          4.0,
+          8.0,
+          9.0,
+          18.0,
+          4.0
+        ]
       }
     },
     {
@@ -1780,16 +2159,16 @@
         "eyes",
         "motor"
       ],
-      "passed": false,
-      "score": 0.6499707450768557,
+      "passed": true,
+      "score": 1.0,
       "skipped": null,
       "metrics": {
         "driving.takeover_modality_order": 1.0,
-        "driving.takeover_hands_auditory": 0.6459403199567859
+        "driving.takeover_hands_auditory": 1.8459403199567603
       },
       "scores": {
         "driving.takeover_modality_order": 1.0,
-        "driving.takeover_hands_auditory": 0.2999414901537114
+        "driving.takeover_hands_auditory": 1.0
       },
       "references": {
         "driving.takeover_modality_order": {
@@ -1817,27 +2196,27 @@
         "median_components_s": {
           "visual": {
             "response_s": 0.3299999999998686,
-            "hand_s": 0.735940319956784,
+            "hand_s": 1.9159403199567588,
             "eyes_s": 0.5899999999998631,
-            "engaged_s": 1.579999999999842
+            "engaged_s": 1.9599999999998339
           },
           "auditory": {
             "response_s": 0.2699999999998699,
-            "hand_s": 0.6759403199567853,
+            "hand_s": 1.86594031995676,
             "eyes_s": 0.5399999999998641,
-            "engaged_s": 1.5499999999998426
+            "engaged_s": 1.8899999999998354
           },
           "tactile": {
             "response_s": 0.30999999999986905,
-            "hand_s": 0.7159403199567844,
+            "hand_s": 1.905940319956759,
             "eyes_s": 0.5799999999998633,
-            "engaged_s": 1.5599999999998424
+            "engaged_s": 1.9399999999998343
           },
           "auditory+visual": {
             "response_s": 0.23999999999987054,
-            "hand_s": 0.6459403199567859,
+            "hand_s": 1.8459403199567603,
             "eyes_s": 0.5199999999998646,
-            "engaged_s": 1.489999999999844
+            "engaged_s": 1.8699999999998358
           }
         },
         "runs": 12

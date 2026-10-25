@@ -2,7 +2,8 @@
 
 Baseline :class:`SubjectiveVertical` is the 6-DOF subjective vertical
 conflict model (Bos and Bles, 1998; Kamiji et al., 2007; parameters of
-Wada, Fujisawa and Doi, 2018, Table 1). The vestibular organs sense the
+Wada, Fujisawa and Doi, 2018, Table 1, with the conflict scale refitted to
+vertical-motion data). The vestibular organs sense the
 gravito-inertial acceleration ``f = g + a`` (otoliths) and angular
 velocity (semicircular canals, a high-pass filter); the brain fuses them
 into a sensed vertical and runs an internal model of the same organs on
@@ -66,7 +67,7 @@ class VerticalConflictParameters(Parameters):
     vertical_lag: float = 5.0
     canal_lag: float = 7.0
     adaptation_lag: float = 190.0
-    conflict_scale: float = 0.5
+    conflict_scale: float = 0.196
     sickness_lag: float = 720.0
     max_incidence: float = 85.0
 
@@ -80,11 +81,18 @@ class VerticalConflictParameters(Parameters):
             "accel_feedback",
             "canal_lag",
             "adaptation_lag",
-            "conflict_scale",
             "sickness_lag",
             "max_incidence",
         )
     } | {
+        "conflict_scale": Source(
+            "O'Hanlon & McCauley (1974), Tables 1-2; fitted here",
+            "https://archive.org/details/DTIC_AD0768215",
+            "fitted",
+            "MSI after 2 h at 14 vertical conditions (examples/"
+            "fit_motion_sickness.py); Wada et al. (2018) used 0.5 for car "
+            "passengers, Bos & Bles (1998) fitted 0.7 in 1-D",
+        ),
         "vertical_lag": Source(
             "Wada, Fujisawa & Doi (2018), p. 7; Bos & Bles (2002)",
             "https://doi.org/10.1016/j.ergon.2016.11.003",

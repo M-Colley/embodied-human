@@ -131,8 +131,10 @@ class ThreeCompartment(Fatigue):
         self.state: dict[str, np.ndarray] = {}
 
     def _rates(self, joint: str) -> JointRates:
+        """Rates of a joint; ``elbow_left`` uses the ``elbow`` rates."""
+        joints = self.params.joints
         try:
-            return self.params.joints[joint]
+            return joints[joint] if joint in joints else joints[joint.split("_")[0]]
         except KeyError:
             known = ", ".join(sorted(self.params.joints))
             raise KeyError(f"no fatigue rates for {joint!r}; known: {known}") from None
@@ -150,7 +152,8 @@ class ThreeCompartment(Fatigue):
                 )
             else:
                 drive = p.relax * (target - ma)
-            rest = p.rest_multipliers.get(joint, p.rest_multiplier)
+            kind = joint if joint in p.rest_multipliers else joint.split("_")[0]
+            rest = p.rest_multipliers.get(kind, p.rest_multiplier)
             # Recovery speeds up at rest (Looft et al., 2018); it applies to
             # both the resting and fatigued pools so that units are conserved.
             recovery = rates.recovery * (rest if target == 0.0 else 1.0)
