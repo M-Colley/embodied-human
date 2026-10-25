@@ -41,6 +41,57 @@ choice to fit or replace).
 | estimator | `LaneParameters.heading_noise` | 0.0007 | assumed | model choice | puts lateral SD at 0.4 m after 1.2 s without vision at 20 m/s; fit with the glance benchmark |
 | estimator | `LaneParameters.lateral_noise` | 0.001 | assumed | model choice |  |
 | estimator | `LaneParameters.initial_sd` | (0.1, 0.02) | assumed | model choice |  |
+| hearing | `HearingParameters.masking_ratio` | 0.4 | measured | [Scharf (1970), as summarised by Yost & Shofner (2009)](https://doi.org/10.1121/1.3037232) | relative to the Zwicker critical band, tones in broadband noise |
+| hearing | `HearingParameters.latency_gain` | 0.00731 | fitted | [Kohfeld, Santee & Wallace (1981), Fig. 5b](https://doi.org/10.3758/BF03207370) | Chocholle (1940), 1 kHz, 10-100 dB SPL; k = 7.31 ms |
+| hearing | `HearingParameters.latency_exponent` | -0.33 | fitted | [Kohfeld, Santee & Wallace (1981), Fig. 5b](https://doi.org/10.3758/BF03207370) | -0.33 for Chocholle's data; -0.24 to -0.33 over six data sets |
+| hearing | `HearingParameters.reference_latency` | 0.0439 | fitted | [Diederich & Colonius (2015), Table 1](https://doi.org/10.1037/a0038696) | median 1/lambda_A of 11 participants (TWIN fit) |
+| touch | `TouchParameters.latency_gain` | 0.1175 | assumed | [Diederich & Colonius (2004), Table 2; fitted here](https://doi.org/10.3758/BF03195006) | tactile RT 218 vs 177 ms for their weakest and strongest vibration, assumed 10 and 30 dB above threshold |
+| touch | `TouchParameters.latency_exponent` | -0.29 | assumed | [Kohfeld, Santee & Wallace (1981)](https://doi.org/10.3758/BF03207370) | auditory exponent; no vibrotactile fit exists |
+| touch | `TouchParameters.reference_latency` | 0.1166 | derived | [Diederich & Colonius (2004, 2015); derived](https://doi.org/10.3758/BF03195006) | visual 1/lambda_V of 102.6 ms (2015) plus the 14 ms by which strong tactile RT exceeded visual RT (2004) |
+| vestibular | `VerticalConflictParameters.accel_gain` | 0.1 | fitted | [Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1016/j.ergon.2016.11.003) |  |
+| vestibular | `VerticalConflictParameters.rate_gain` | 0.8 | fitted | [Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1016/j.ergon.2016.11.003) |  |
+| vestibular | `VerticalConflictParameters.rate_feedback` | 5.0 | fitted | [Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1016/j.ergon.2016.11.003) |  |
+| vestibular | `VerticalConflictParameters.vertical_feedback` | 5.0 | fitted | [Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1016/j.ergon.2016.11.003) |  |
+| vestibular | `VerticalConflictParameters.accel_feedback` | 1.0 | fitted | [Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1016/j.ergon.2016.11.003) |  |
+| vestibular | `VerticalConflictParameters.vertical_lag` | 5.0 | measured | [Wada, Fujisawa & Doi (2018), p. 7; Bos & Bles (2002)](https://doi.org/10.1016/j.ergon.2016.11.003) | from vertical perception studies |
+| vestibular | `VerticalConflictParameters.canal_lag` | 7.0 | fitted | [Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1016/j.ergon.2016.11.003) |  |
+| vestibular | `VerticalConflictParameters.adaptation_lag` | 190.0 | fitted | [Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1016/j.ergon.2016.11.003) |  |
+| vestibular | `VerticalConflictParameters.conflict_scale` | 0.5 | fitted | [Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1016/j.ergon.2016.11.003) |  |
+| vestibular | `VerticalConflictParameters.sickness_lag` | 720.0 | fitted | [Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1016/j.ergon.2016.11.003) |  |
+| vestibular | `VerticalConflictParameters.max_incidence` | 85.0 | fitted | [Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1016/j.ergon.2016.11.003) |  |
+| response | `TwinParameters.central` | 0.2171 | fitted | [Diederich & Colonius (2015), Table 1](https://doi.org/10.1037/a0038696) | median over 11 participants |
+| response | `TwinParameters.facilitation` | 0.0204 | fitted | [Diederich & Colonius (2015), Table 1](https://doi.org/10.1037/a0038696) | median over 11 participants |
+| response | `TwinParameters.window` | 0.3588 | fitted | [Diederich & Colonius (2015), Table 1](https://doi.org/10.1037/a0038696) | median omega_RT |
+| response | `TwinParameters.visual_latency` | 0.1026 | fitted | [Diederich & Colonius (2015), Table 1](https://doi.org/10.1037/a0038696) | median 1/lambda_V |
+| response | `TwinParameters.visual_field` | 90.0 | assumed | model choice | the temporal visual field extends beyond 90 deg; peripheral warning lights are rarely noticed so far out |
+| fatigue | `FatigueParameters.joints` | {'ankle': JointRates(fatigue=0.00589, recovery=0.00058), 'knee': JointRates(fatigue=0.015, recovery=0.00149), 'trunk': JointRates(fatigue=0.00755, recovery=0.00075), 'shoulder': JointRates(fatigue=0.0182, recovery=0.00168), 'elbow': JointRates(fatigue=0.00912, recovery=0.00094), 'hand': JointRates(fatigue=0.0098, recovery=0.00064), 'general': JointRates(fatigue=0.0097, recovery=0.00091)} | fitted | [Frey-Law, Looft & Heitsman (2012), Table 1](https://doi.org/10.1016/j.jbiomech.2012.04.018) | per-second rates |
+| fatigue | `FatigueParameters.rest_multiplier` | 15.0 | fitted | [Looft, Herkert & Frey-Law (2018), Tables 2-4](https://doi.org/10.1016/j.jbiomech.2018.06.005) | 15 for ankle, knee, elbow and the general model; suggested for shoulder and trunk, which had no data |
+| fatigue | `FatigueParameters.rest_multipliers` | {'hand': 30.0} | fitted | [Looft, Herkert & Frey-Law (2018), Tables 2-4](https://doi.org/10.1016/j.jbiomech.2018.06.005) | 30 for hand/grip |
+| fatigue | `FatigueParameters.develop` | 10.0 | fitted | [Frey-Law, Looft & Heitsman (2012), Table 1](https://doi.org/10.1016/j.jbiomech.2012.04.018) | L = 10 from Xia & Frey-Law (2008) |
+| fatigue | `FatigueParameters.relax` | 10.0 | fitted | [Frey-Law, Looft & Heitsman (2012), Table 1](https://doi.org/10.1016/j.jbiomech.2012.04.018) |  |
+| affect | `AffectParameters.learning_rate` | 0.1 | fitted | [Zhang, Hilpert, Broekens & Jokinen (2024)](https://doi.org/10.1145/3613904.3641908) | released model settings |
+| affect | `AffectParameters.discount` | 0.9 | fitted | [Zhang, Hilpert, Broekens & Jokinen (2024)](https://doi.org/10.1145/3613904.3641908) |  |
+| affect | `AffectParameters.exploration` | 0.3 | fitted | [Zhang, Hilpert, Broekens & Jokinen (2024)](https://doi.org/10.1145/3613904.3641908) |  |
+| affect | `AffectParameters.penalty` | 0.0049 | fitted | [Zhang, Hilpert, Broekens & Jokinen (2024)](https://doi.org/10.1145/3613904.3641908) | chosen so that classifier precision matches human emotion recognition (mean 0.626) |
+| affect | `AffectParameters.penalty_sd` | 0.0002 | fitted | [Zhang, Hilpert, Broekens & Jokinen (2024)](https://doi.org/10.1145/3613904.3641908) | the text says variance 0.0004; the released model draws SD 0.0002 |
+| affect | `AffectParameters.training_vectors` | 400 | fitted | [Zhang, Hilpert, Broekens & Jokinen (2024)](https://doi.org/10.1145/3613904.3641908) |  |
+| affect | `AffectParameters.emotions` | ('happiness', 'boredom', 'irritation') | standard | [Zhang, Hilpert, Broekens & Jokinen (2024)](https://doi.org/10.1145/3613904.3641908) | Scherer (2001) modal emotions |
+| risk | `RiskFieldParameters.height_gain` | 0.0064 | fitted | [Kolekar, de Winter & Abbink (2020), Table 1](https://doi.org/10.1038/s41467-020-18353-4) | grid search on one driver |
+| risk | `RiskFieldParameters.preview` | 3.5 | fitted | [Kolekar, de Winter & Abbink (2020), Table 1](https://doi.org/10.1038/s41467-020-18353-4) |  |
+| risk | `RiskFieldParameters.width_rate` | 0.001 | fitted | [Kolekar, de Winter & Abbink (2020), Table 1](https://doi.org/10.1038/s41467-020-18353-4) |  |
+| risk | `RiskFieldParameters.inner_steer_rate` | 0.0 | fitted | [Kolekar, de Winter & Abbink (2020), Table 1](https://doi.org/10.1038/s41467-020-18353-4) |  |
+| risk | `RiskFieldParameters.outer_steer_rate` | 1.3823 | fitted | [Kolekar, de Winter & Abbink (2020), Table 1](https://doi.org/10.1038/s41467-020-18353-4) | unit not reported; radians assumed |
+| risk | `RiskFieldParameters.width_at_car` | 0.5 | derived | [Kolekar, de Winter & Abbink (2020), Table 1](https://doi.org/10.1038/s41467-020-18353-4) | car width 2 m / 4 |
+| risk | `RiskFieldParameters.outside_cost` | 500.0 | assumed | [Kolekar, de Winter & Abbink (2020), Table 3](https://doi.org/10.1038/s41467-020-18353-4) | C_env, assumed by the authors |
+| risk | `RiskFieldParameters.threshold` | 100000.0 | assumed | model choice | placeholder; fitted per study (the published 3000 is a grid sum) |
+| risk | `RiskFieldParameters.wheelbase` | 2.7 | assumed | model choice | not reported in the paper |
+| trust | `TrustParameters.opacity` | 2.0 | fitted | [Gao & Lee (2006), Table 1](https://doi.org/10.1109/TSMCA.2005.855783) | 2 with sound feedback, 10 with noise |
+| trust | `TrustParameters.prior_pull` | 50.0 | fitted | [Gao & Lee (2006), Table 1](https://doi.org/10.1109/TSMCA.2005.855783) |  |
+| trust | `TrustParameters.noise_sd` | 0.1 | derived | [Gao & Lee (2006), Table 1](https://doi.org/10.1109/TSMCA.2005.855783) | the text gives sigma^2 = 0.1, but its theta = 1.9 sqrt(2 sigma^2) = 0.27 holds only for sigma = 0.1 |
+| trust | `TrustParameters.inertia` | 0.5 | fitted | [Gao & Lee (2006), Table 1](https://doi.org/10.1109/TSMCA.2005.855783) | taken from Lee & Moray (1992) by Gao & Lee |
+| trust | `TrustParameters.threshold` | 0.27 | fitted | [Gao & Lee (2006), Table 1](https://doi.org/10.1109/TSMCA.2005.855783) | 1.9 sqrt(2 sigma^2) |
+| trust | `TrustParameters.automation_belief` | 1.0 | assumed | model choice | with manual_belief, gives Gao & Lee's initial bias T - SC = 0.3 |
+| trust | `TrustParameters.manual_belief` | 0.7 | assumed | model choice |  |
 | agents.driver | `DriverAgentParameters.display_position` | (20.0, -25.0) | assumed | model choice | a centre-stack touchscreen |
 | agents.driver | `DriverAgentParameters.display_size` | (16.0, 8.0) | assumed | model choice |  |
 | agents.driver | `DriverAgentParameters.road_half_extent` | (30.0, 12.0) | assumed | model choice |  |
@@ -48,8 +99,14 @@ choice to fit or replace).
 | agents.driver | `DriverAgentParameters.heading_sd` | 0.01 | assumed | model choice |  |
 | agents.driver | `DriverAgentParameters.search_fixation` | 0.275 | measured | [Rayner (1998), Table 1](https://doi.org/10.1037/0033-2909.124.3.372) | mean fixation in visual search |
 | agents.driver | `DriverAgentParameters.inspect_radius` | 3.0 | assumed | model choice | functional field for a size oddball |
-| agents.driver | `DriverAgentParameters.response_latency` | 0.3 | assumed | model choice |  |
-| agents.driver | `DriverAgentParameters.response_spread` | 0.3 | assumed | model choice |  |
+| agents.driver | `DriverAgentParameters.takeover_signals` | ('auditory', 'visual') | assumed | model choice | a chime with an icon, as is common |
+| agents.driver | `DriverAgentParameters.chime_level` | 75.0 | standard | ISO 7731:2003, 4.2.2 | at least 65 dB(A) and 15 dB above the cabin noise |
+| agents.driver | `DriverAgentParameters.chime_frequency` | 1000.0 | standard | ISO 7731:2003, 6.3 (as quoted by Pfannenberg, 2020) | danger signals should have components at 500-2500 Hz |
+| agents.driver | `DriverAgentParameters.seat_vibration` | 1.0 | assumed | model choice |  |
+| agents.driver | `DriverAgentParameters.seat_frequency` | 60.0 | assumed | model choice |  |
+| agents.driver | `DriverAgentParameters.seat_site` | seat_vertical | assumed | model choice |  |
+| agents.driver | `DriverAgentParameters.icon_position` | (0.0, -12.0) | assumed | model choice | the instrument cluster below the road |
+| agents.driver | `DriverAgentParameters.request_capability` | 0.8 | fitted | [Kraus, Scholz, Stiegemeier & Baumann (2020), Table 2; fitted here](https://doi.org/10.1177/0018720819853686) | a first request lowered trust from 5.51 to 5.21 on a 7-point scale; one EDFT step from full trust gives 1 - (1 - c) / 4 |
 | agents.driver | `DriverAgentParameters.assessment_fixations` | 3 | assumed | model choice | situation assessment before acting; fit to take-over data |
 | agents.driver | `DriverAgentParameters.scene_fixation` | 0.33 | measured | [Rayner (1998), Table 1](https://doi.org/10.1037/0033-2909.124.3.372) | mean fixation in scene perception |
 | agents.driver | `DriverAgentParameters.display_distance` | 0.45 | assumed | model choice |  |
@@ -59,4 +116,4 @@ choice to fit or replace).
 | agents.driver | `DriverAgentParameters.road_field` | 20.0 | assumed | model choice | peripheral lane keeping degrades with display eccentricity; fit to glance data |
 | agents.driver | `DriverAgentParameters.perception_interval` | 0.1 | assumed | model choice | about the temporal integration of vision |
 
-Counts: assumed 25, derived 1, fitted 13, measured 10, standard 2
+Counts: assumed 36, derived 4, fitted 51, measured 12, standard 5

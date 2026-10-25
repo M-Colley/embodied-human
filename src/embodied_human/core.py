@@ -1,10 +1,18 @@
 """Module categories, the registry and cited parameters.
 
 A simulated human is composed of one module per category. Each category
-has an abstract interface (``eyes``, ``vision``, ``objects``, ``attention``,
-``memory``, ``proprioception``, ``motor``, ``estimator``). Any implementation
-registered under that category can replace the baseline, and the benchmark
-scores implementations per category and in integrated tasks.
+has an abstract interface:
+
+- senses: ``eyes``, ``vision``, ``objects``, ``hearing``, ``touch``,
+  ``vestibular`` and ``proprioception``;
+- cognition: ``attention``, ``memory``, ``estimator`` and ``response``
+  (turning detected signals into responses);
+- action: ``motor`` and ``fatigue``;
+- experience and motivation: ``affect``, ``risk`` and ``trust``.
+
+Any implementation registered under a category can replace the baseline,
+and the benchmark scores implementations per category and in integrated
+tasks.
 
 Every default parameter carries a :class:`Source`, so reports can separate
 values measured in humans from values fitted or assumed by a model.
@@ -28,6 +36,14 @@ CATEGORIES = (
     "proprioception",
     "motor",
     "estimator",
+    "hearing",
+    "touch",
+    "vestibular",
+    "response",
+    "fatigue",
+    "affect",
+    "risk",
+    "trust",
 )
 
 Kind = Literal["measured", "standard", "fitted", "assumed", "derived"]
@@ -136,11 +152,19 @@ def available(category: str | None = None) -> dict[str, list[str]]:
 def _load_builtins() -> None:
     # Importing the baseline modules registers them.
     from . import (  # noqa: F401
+        affect,
         attention,
         estimation,
+        fatigue,
+        hearing,
         memory,
         motor,
         proprioception,
+        response,
+        risk,
+        touch,
+        trust,
+        vestibular,
     )
     from .vision import eyes, foveation, objects  # noqa: F401
 
@@ -169,6 +193,14 @@ class HumanConfig:
     proprioception: ModuleChoice = ModuleChoice("spindle")
     motor: ModuleChoice = ModuleChoice("ffitts_min_jerk")
     estimator: ModuleChoice = ModuleChoice("lane_kalman")
+    hearing: ModuleChoice = ModuleChoice("psychoacoustic")
+    touch: ModuleChoice = ModuleChoice("vibrotactile")
+    vestibular: ModuleChoice = ModuleChoice("subjective_vertical")
+    response: ModuleChoice = ModuleChoice("twin")
+    fatigue: ModuleChoice = ModuleChoice("three_compartment")
+    affect: ModuleChoice = ModuleChoice("appraisal")
+    risk: ModuleChoice = ModuleChoice("risk_field")
+    trust: ModuleChoice = ModuleChoice("decision_field")
 
     def replace(self, category: str, name: str, **params: Any) -> HumanConfig:
         """Return a copy with one category swapped."""

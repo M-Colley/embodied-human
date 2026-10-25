@@ -71,13 +71,30 @@ YOUNG_ADULTS = Profile("young_adults")
 #: Older adults (about 55-83 years) relative to younger adults (about 21-37).
 OLDER_ADULTS = Profile(
     "older_adults",
-    scale={("proprioception", "joint_noise_deg"): 3.6 / 3.0},
+    scale={
+        ("proprioception", "joint_noise_deg"): 3.6 / 3.0,
+        ("response", "central"): 200.0 / 131.0,
+        ("response", "window"): 450.0 / 275.0,
+    },
     sources={
         ("proprioception", "joint_noise_deg"): Source(
             "Talis & Levik (2016)",
             "https://doi.org/10.3389/fnins.2016.00520",
             "measured",
             "elbow matching error 3.6 deg (61-83 years) vs 3.0 deg (22-37 years)",
+        ),
+        ("response", "central"): Source(
+            "Diederich, Colonius & Schomburg (2008), Table 3",
+            "https://doi.org/10.1016/j.neuropsychologia.2008.03.026",
+            "fitted",
+            "TWIN central stage 200 ms (65-75 years) vs 131 ms (20-22 years), "
+            "saccadic responses",
+        ),
+        ("response", "window"): Source(
+            "Diederich, Colonius & Schomburg (2008), Table 3",
+            "https://doi.org/10.1016/j.neuropsychologia.2008.03.026",
+            "fitted",
+            "integration window 450 vs 275 ms",
         ),
     },
 )

@@ -1,0 +1,197 @@
+{
+  "package": "embodied-human 0.1.0",
+  "python": "3.12.13",
+  "seed": 0,
+  "config": {
+    "eyes": {
+      "name": "main_sequence",
+      "params": {}
+    },
+    "vision": {
+      "name": "foveated",
+      "params": {}
+    },
+    "objects": {
+      "name": "eccentricity_noise",
+      "params": {}
+    },
+    "attention": {
+      "name": "uncertainty_sampler",
+      "params": {}
+    },
+    "memory": {
+      "name": "act_r",
+      "params": {}
+    },
+    "proprioception": {
+      "name": "spindle",
+      "params": {}
+    },
+    "motor": {
+      "name": "ffitts_min_jerk",
+      "params": {}
+    },
+    "estimator": {
+      "name": "lane_kalman",
+      "params": {}
+    },
+    "hearing": {
+      "name": "psychoacoustic",
+      "params": {}
+    },
+    "touch": {
+      "name": "vibrotactile",
+      "params": {}
+    },
+    "vestibular": {
+      "name": "iso_2631",
+      "params": {}
+    },
+    "response": {
+      "name": "twin",
+      "params": {}
+    },
+    "fatigue": {
+      "name": "three_compartment",
+      "params": {}
+    },
+    "affect": {
+      "name": "appraisal",
+      "params": {}
+    },
+    "risk": {
+      "name": "risk_field",
+      "params": {}
+    },
+    "trust": {
+      "name": "decision_field",
+      "params": {}
+    }
+  },
+  "parameter_sources": {
+    "measured": 9,
+    "assumed": 18,
+    "fitted": 40,
+    "standard": 4,
+    "derived": 4
+  },
+  "wall_seconds": 0.06,
+  "results": [
+    {
+      "name": "vestibular.vertical_sickness",
+      "categories": [
+        "vestibular"
+      ],
+      "passed": true,
+      "score": 1.0,
+      "skipped": null,
+      "metrics": {
+        "vestibular.vertical_msi_error": 6.083825154794907
+      },
+      "scores": {
+        "vestibular.vertical_msi_error": 1.0
+      },
+      "references": {
+        "vestibular.vertical_msi_error": {
+          "value": 0.0,
+          "range": [
+            0.0,
+            10.0
+          ],
+          "unit": "% points",
+          "citation": "O'Hanlon & McCauley (1973/1974), Tables 1-2",
+          "doi": "https://archive.org/details/DTIC_AD0768215"
+        }
+      },
+      "details": {
+        "conditions": [
+          {
+            "frequency_hz": 0.083,
+            "mean_accel_g": 0.025,
+            "observed_pct": 0,
+            "predicted_pct": 3.833331580159525
+          },
+          {
+            "frequency_hz": 0.083,
+            "mean_accel_g": 0.05,
+            "observed_pct": 5,
+            "predicted_pct": 7.66666316031905
+          },
+          {
+            "frequency_hz": 0.167,
+            "mean_accel_g": 0.025,
+            "observed_pct": 0,
+            "predicted_pct": 7.792538443848362
+          },
+          {
+            "frequency_hz": 0.167,
+            "mean_accel_g": 0.05,
+            "observed_pct": 10,
+            "predicted_pct": 15.585076887696724
+          },
+          {
+            "frequency_hz": 0.167,
+            "mean_accel_g": 0.1,
+            "observed_pct": 30,
+            "predicted_pct": 31.170153775393448
+          },
+          {
+            "frequency_hz": 0.167,
+            "mean_accel_g": 0.2,
+            "observed_pct": 60,
+            "predicted_pct": 62.340307550786896
+          },
+          {
+            "frequency_hz": 0.333,
+            "mean_accel_g": 0.05,
+            "observed_pct": 5,
+            "predicted_pct": 8.627755259370716
+          },
+          {
+            "frequency_hz": 0.333,
+            "mean_accel_g": 0.1,
+            "observed_pct": 15,
+            "predicted_pct": 17.25551051874143
+          },
+          {
+            "frequency_hz": 0.333,
+            "mean_accel_g": 0.2,
+            "observed_pct": 52,
+            "predicted_pct": 34.51102103748286
+          },
+          {
+            "frequency_hz": 0.333,
+            "mean_accel_g": 0.3,
+            "observed_pct": 52,
+            "predicted_pct": 51.76653155622397
+          },
+          {
+            "frequency_hz": 0.5,
+            "mean_accel_g": 0.1,
+            "observed_pct": 0,
+            "predicted_pct": 6.895968856619113
+          },
+          {
+            "frequency_hz": 0.5,
+            "mean_accel_g": 0.2,
+            "observed_pct": 15,
+            "predicted_pct": 13.791937713238227
+          },
+          {
+            "frequency_hz": 0.5,
+            "mean_accel_g": 0.3,
+            "observed_pct": 25,
+            "predicted_pct": 20.687906569855716
+          },
+          {
+            "frequency_hz": 0.5,
+            "mean_accel_g": 0.4,
+            "observed_pct": 30,
+            "predicted_pct": 27.583875426476453
+          }
+        ],
+        "correlation": 0.960327792434553
+      }
+    }
+  ]
+}

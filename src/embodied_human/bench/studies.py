@@ -247,3 +247,39 @@ def touch_key_size(
         "gap_mm": gap_mm,
     }
     return result
+
+
+@benchmark("driving.takeover_modality")
+def takeover_modality(human: Human, runs: int = 12) -> Result:
+    """Take-over requests by sound, vibration, light, or sound with light,
+    during automation with SuRT on the straight road.
+
+    The order of the modalities is compared with Petermeijer, Doubek and
+    de Winter (2017) and the time to grab the wheel after a chime with an
+    icon with Ko et al. (2022), whose drivers played a game on the centre
+    console.
+    """
+    from ..agents.road import simulate_takeover
+
+    result = Result(
+        "driving.takeover_modality", ("hearing", "touch", "response", "eyes", "motor")
+    )
+    medians: dict[str, dict[str, float]] = {}
+    for signals in (("visual",), ("auditory",), ("tactile",), ("auditory", "visual")):
+        parts = [
+            simulate_takeover(
+                build_human(human.config, seed=seed), signals=signals, seed=seed
+            ).takeover_components()
+            for seed in range(runs)
+        ]
+        medians["+".join(signals)] = {
+            key: float(np.median([p[key] for p in parts])) for key in parts[0]
+        }
+    visual = medians["visual"]["response_s"]
+    agree = [medians[m]["response_s"] < visual for m in ("auditory", "tactile")]
+    result.score_against("driving.takeover_modality_order", float(np.mean(agree)))
+    result.score_against(
+        "driving.takeover_hands_auditory", medians["auditory+visual"]["hand_s"]
+    )
+    result.details = {"median_components_s": medians, "runs": runs}
+    return result

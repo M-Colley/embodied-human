@@ -30,10 +30,11 @@ baseline model. The seminar distinguished three kinds of task:
 | **Generative traces, not only summaries** | `DrivingLog.trace()` and `write_csv()`: gaze, belief, belief SD and true state per step; embodied-ui's `TraceRecorder` for device channels and engine outputs | Tests |
 | **Counterfactual prediction** | `driving.glance_speed` predicts how glances change with speed | Shows a conflict in the human data (below) |
 | **Standard formulations and libraries of forward models** | One interface per category; implementations registered by name and swapped with `HumanConfig.replace` or `--replace`; every parameter carries its source | `docs/parameters.md` |
-| **Embodiment** | MuJoCo and MyoSuite bodies; physical contact with embodied-ui devices; proprioception from muscle spindles | `motor.touch_tapping` through contact |
+| **Embodiment** | MuJoCo and MyoSuite bodies; physical contact with embodied-ui devices; proprioception from muscle spindles; touch felt only through contact; muscle fatigue | `motor.touch_tapping` through contact |
+| **Multisensory perception** | Hearing over cabin noise, vibrotactile touch, visual eccentricity, and the TWIN model that integrates them; embodied-ui speakers and vibrotactors deliver the signals | `response.*`, `driving.takeover_modality` |
 | **Closed loop with real-time systems** | embodied-ui's lockstep bridge to Unity and CARLA | Unity 6.6 and CARLA live tests in embodied-ui |
 | **Easy application** | `pip install`, a benchmark CLI, examples | README |
-| **Experience and motivation** | Not modelled | Gap |
+| **Experience and motivation** | Emotion by appraisal of learned values; perceived risk that sets speed; trust that drives reliance; fatigue; motion sickness | `affect.emotion_study`, `risk.lane_width`, `fatigue.endurance`, `vestibular.vertical_sickness`; trust has no human benchmark yet |
 
 ## Architecture
 
@@ -43,7 +44,7 @@ The modules map onto these as follows:
 
 | Concept | Module or component |
 | --- | --- |
-| Perception | `eyes`, `vision`, `objects`; embodied-ui signals for sound and vibration (no auditory or tactile module yet) |
+| Perception | `eyes`, `vision`, `objects`, `hearing`, `touch`, `vestibular`, `proprioception`; `response` integrates the senses |
 | Belief | `estimator` (lane Kalman filter) |
 | Mental model | The estimator's process model of the vehicle |
 | Memory | `memory` (a focus of four chunks over ACT-R memory) |
@@ -51,6 +52,8 @@ The modules map onto these as follows:
 | Control and action | `motor`, the agents in `agents`, and the MyoSuite full body |
 | Goals | The tasks (`tasks`): SuRT, DRT, n-back, tapping |
 | Traits and biases | `population`: variations and profiles |
+| Experience | `affect` (emotion), `fatigue` (effort), `vestibular` (sickness) |
+| Motivation | `risk` (perceived risk), `trust` (reliance) |
 
 ## Fitted and held-out results of the glance model
 

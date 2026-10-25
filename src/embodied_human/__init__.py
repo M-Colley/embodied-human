@@ -1,6 +1,7 @@
-"""A modular simulated human: vision, eyes, attention, memory,
-proprioception, motor control and state estimation, as replaceable modules
-with cited parameters, plus secondary tasks and a benchmark.
+"""A modular simulated human: senses (vision, eyes, hearing, touch, the
+vestibular sense, proprioception), attention, memory, state estimation,
+responses, motor control, fatigue, emotion, perceived risk and trust, as
+replaceable modules with cited parameters, plus tasks and a benchmark.
 """
 
 from .core import (

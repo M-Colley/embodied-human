@@ -199,3 +199,82 @@ studies gave the following, all failing the human data:
   depend on the simulated sample size, as they do in the study.
 - **Still not validated:** individual-level comparison with human data,
   and between-person spreads other than joint position sense.
+
+## 2026-10-25: senses, responses, fatigue, emotion, risk and trust
+
+Same PC; additionally scikit-learn 1.9.1 and MoSQITo 1.2.1. Eight module
+categories were added, each reimplementing a published model from its
+equations. Parameters and human reference data were collected from the
+primary sources where reachable (in a few cases from secondary sources,
+labelled so in `docs/parameters.md` and `bench/references.py`).
+
+### Tests
+
+`python -m pytest tests -q` passes 57 tests ([JUnit](evidence/tests.xml)).
+New tests check:
+
+- hearing thresholds, masking by cabin noise, Piéron latency, ISO 7731 and
+  MoSQITo loudness (60 dB at 1 kHz gives 4.0 sone);
+- vibration thresholds, which apply only with contact;
+- TWIN means (a single signal gives latency + 217 ms, redundant signals
+  less) and visual eccentricity;
+- the conflict model at rest, the Wf weighting (1.012 at 0.167 Hz, 0.224 at
+  0.5 Hz) and the ISO dose of a sinusoid;
+- fatigue endurance (shoulder 275, 58 and 14 s at 20, 50 and 80% MVC, as an
+  independent reimplementation found) and recovery at rest;
+- trust inertia, hysteresis and drift without information;
+- the risk field's closed form against grid integration (within 2%);
+- the appraisal formulas and the boredom profile (0, 0, 0.5, 0.526);
+- a take-over perceived by touch, with its trust drop and head motion.
+
+### Checks against independent reimplementations
+
+- **Emotion.** Retraining the three tasks of Zhang et al. (2024) gives
+  appraisal profiles within the run-to-run spread of the published values:
+  - happiness 0.20 / 0.74 / 0.87 / 0.82 (mean of 10 runs);
+  - boredom exactly 0 / 0 / 0.5 / 0.526;
+  - irritation 0.20 / 0.92 / 0.04 / 0.16.
+- **Motion sickness.** The conflict model's equations follow the
+  state-space form of Wada and Bos (2025) with the parameters of Wada et
+  al. (2018), and the ISO weighting matches a published table.
+
+### Benchmark
+
+```bash
+python -m embodied_human.bench --out evidence/benchmark-baseline.json
+python -m embodied_human.bench --replace vestibular=iso_2631 --only vestibular.vertical_sickness --out evidence/benchmark-vestibular-iso2631.json
+```
+
+The full run took 217 s ([report](evidence/benchmark-baseline.json)).
+**11 of 18 benchmarks pass.** Module parameters by source: 50 fitted,
+10 measured, 3 standard, 4 derived and 18 assumed. New results:
+
+| Benchmark | Result | Human reference | Kind |
+| --- | --- | --- | --- |
+| response.modality_rt | tone 252 < light 319 < vibration 335 ms | same order, 132 < 163 < 177 ms (Diederich & Colonius, 2004) | order only |
+| response.drt | visual 349 ms; tactile 352 ms; older 467 ms (1.33×) | 326–362 ms: pass; 526 ms (482–570): **fail**; 1.215× (1.07–1.36): pass | emergent |
+| driving.takeover_modality | median response 0.27 s sound, 0.31 s touch, 0.33 s light; wheel grabbed after 0.65 s | sound and touch faster than light: pass; 1.87 s (1.36–2.38): **fail** | emergent |
+| driving.takeover (MyoSuite) | 1.51 s, SD 0.18 s, 8 runs | 1.27–4.17 s: pass | emergent |
+| vestibular.vertical_sickness | RMS error 19.7 % points, r = 0.92 | 14 conditions of O'Hanlon & McCauley: ≤ 10: **fail** | held out |
+| vestibular.vertical_sickness, `iso_2631` | RMS error 6.1 | same | consistency (ISO derived partly from these data) |
+| fatigue.endurance | median absolute log ratio 0.16 | ≤ 0.25 | consistency (rates fitted to these curves) |
+| risk.lane_width | 41, 47, 60, 77 (fitted), 97 km/h at 2.85–3.75 m | 56, 61, 65, 77, 82 km/h; error ≤ 9.4: **fail** (12.3) | four held out |
+| affect.emotion_study | RMSE 0.098, R² 0.84 | ≤ 0.13 (the original model's RMSE) | reproduction |
+
+### Assumptions to know
+
+- **Tactile latency.** The mapping of the vibration intensities of
+  Diederich and Colonius (2004) to 10 and 30 dB above threshold is
+  assumed, as are the DRT light's eccentricity (17°) and the DRT
+  vibration's level (20 dB).
+- **Take-over request.** The chime level (75 dB SPL at 1 kHz) follows ISO
+  7731. The seat vibration (1 m/s² at 60 Hz) and the icon's position are
+  assumed.
+- **Trust.** A request lowers trust by the amount Kraus et al. (2020)
+  measured after a first request. This is one data point; trust dynamics
+  are not yet benchmarked.
+- **Risk field.** The wheelbase is assumed. The threshold is refitted
+  because the published value depends on an unreported grid spacing.
+- **Unreachable sources.** Petermeijer et al.'s per-modality times, tactile
+  TWIN parameters, the steering-wheel and backrest vibration thresholds,
+  and Kolekar et al.'s code (4TU timed out) were out of reach.

@@ -11,6 +11,7 @@ body for validation.
 
 from __future__ import annotations
 
+from dataclasses import replace
 from types import SimpleNamespace
 from typing import Any
 
@@ -25,20 +26,29 @@ class StraightRoad:
     """A vehicle cruising in its lane centre at a constant speed.
 
     Exposes the parts of myosuite-carla's ``FullBodyDrivingEnv`` that the
-    attentive driver reads: ``dt``, ``state`` and ``task``.
+    attentive driver reads: ``dt``, ``state`` and ``task``. With
+    ``request_at``, automation drives and requests a take-over at that
+    time.
     """
 
     def __init__(
-        self, speed: float = 20.0, dt: float = 0.02, duration: float = 60.0
+        self,
+        speed: float = 20.0,
+        dt: float = 0.02,
+        duration: float = 60.0,
+        request_at: float | None = None,
     ) -> None:
         self.speed = float(speed)
         self.dt = float(dt)
         self.duration = float(duration)
+        self.request_at = request_at
         self.task = SimpleNamespace(near_distance=8.0, far_preview=1.0)
         self.time = 0.0
 
     @property
     def state(self) -> dict[str, float]:
+        requested = self.request_at is not None and self.time >= self.request_at
+        since = self.time - self.request_at if requested else 0.0  # type: ignore[operator]
         return {
             "speed_mps": self.speed,
             "target_speed_mps": self.speed,
@@ -47,9 +57,9 @@ class StraightRoad:
             "near_angle_rad": 0.0,
             "far_angle_rad": 0.0,
             "yaw_rate_rad_s": 0.0,
-            "automation": 0.0,
-            "takeover_requested": 0.0,
-            "time_since_request_s": 0.0,
+            "automation": float(self.request_at is not None),
+            "takeover_requested": float(requested),
+            "time_since_request_s": since,
             "lead_present": 0.0,
             "gap_m": 100.0,
             "closing_speed_mps": 0.0,
@@ -76,6 +86,35 @@ class HoldLane:
 
     def act(self, state: Any) -> None:
         return None
+
+
+def simulate_takeover(
+    human: Human,
+    *,
+    signals: tuple[str, ...] = ("auditory", "visual"),
+    speed: float = 12.0,
+    request_at: float = 10.0,
+    seconds: float = 14.0,
+    seed: int = 0,
+    params: DriverAgentParameters = DriverAgentParameters(),
+) -> DrivingLog:
+    """Run SuRT during automation with a take-over request; the log holds
+    the reaction and the take-over components."""
+    road = StraightRoad(speed=speed, duration=seconds, request_at=request_at)
+    agent = AttentiveDriver(
+        human,
+        road,
+        SuRTTask(rng=np.random.default_rng(seed)),
+        replace(params, takeover_signals=signals),
+        reflex=HoldLane(),
+    )
+    road.reset(seed)
+    agent.reset(seed)
+    while True:
+        *_, truncated, _ = road.step(agent.act())
+        if truncated:
+            break
+    return agent.log
 
 
 def simulate_glances(

@@ -14,8 +14,11 @@ sees the road only through the human model.
 - An in-vehicle task (SuRT) is searched with fixations. Search progress is
   held in memory across road glances, and targets are touched with the
   motor module's Fitts-timed reaches.
-- After a takeover request, the driver looks to the road and moves the
-  hand to the wheel, and drives once the belief is certain again; the
+- A takeover request is a chime, a seat vibration and/or an icon. It is
+  heard over the cabin noise, felt through the seat and seen at its
+  eccentricity from the current gaze; the response module combines what
+  was sensed into the reaction. The driver then looks to the road, moves
+  the hand to the wheel, and drives once the belief is certain again; the
   take-over time emerges from these modules.
 
 Two-point steering uses the observed near- and far-point angles, corrected
@@ -55,9 +58,16 @@ class DriverAgentParameters(Parameters):
         search_fixation: Mean fixation duration in visual search, s.
         inspect_radius: Radius around a fixation within which a target is
             recognised, degrees.
-        response_latency: Median delay from a takeover request to the first
-            action, s (log-normal with ``response_spread``).
-        response_spread: SD of the log response latency.
+        takeover_signals: Modalities of the takeover request: any of
+            ``auditory``, ``tactile`` and ``visual``.
+        chime_level: Sound pressure level of the chime at the ear, dB SPL.
+        chime_frequency: Dominant frequency of the chime, Hz.
+        seat_vibration: R.m.s. acceleration of the seat vibration, m/s^2.
+        seat_frequency: Frequency of the seat vibration, Hz.
+        seat_site: Body site and axis of the vibration thresholds.
+        icon_position: Direction of the takeover icon, degrees.
+        request_capability: Automation capability (0-1) a takeover request
+            reveals to the trust module.
         assessment_fixations: Road fixations needed after a takeover request
             to rebuild the situation before driving.
         scene_fixation: Mean fixation duration in scene viewing, s.
@@ -80,8 +90,14 @@ class DriverAgentParameters(Parameters):
     heading_sd: float = 0.01
     search_fixation: float = 0.275
     inspect_radius: float = 3.0
-    response_latency: float = 0.3
-    response_spread: float = 0.3
+    takeover_signals: tuple[str, ...] = ("auditory", "visual")
+    chime_level: float = 75.0
+    chime_frequency: float = 1000.0
+    seat_vibration: float = 1.0
+    seat_frequency: float = 60.0
+    seat_site: str = "seat_vertical"
+    icon_position: Gaze = (0.0, -12.0)
+    request_capability: float = 0.8
     assessment_fixations: int = 3
     scene_fixation: float = 0.33
     display_distance: float = 0.45
@@ -110,8 +126,34 @@ class DriverAgentParameters(Parameters):
         "inspect_radius": Source(
             "model choice", None, "assumed", "functional field for a size oddball"
         ),
-        "response_latency": Source("model choice", None, "assumed"),
-        "response_spread": Source("model choice", None, "assumed"),
+        "takeover_signals": Source(
+            "model choice", None, "assumed", "a chime with an icon, as is common"
+        ),
+        "chime_level": Source(
+            "ISO 7731:2003, 4.2.2",
+            None,
+            "standard",
+            "at least 65 dB(A) and 15 dB above the cabin noise",
+        ),
+        "chime_frequency": Source(
+            "ISO 7731:2003, 6.3 (as quoted by Pfannenberg, 2020)",
+            None,
+            "standard",
+            "danger signals should have components at 500-2500 Hz",
+        ),
+        "seat_vibration": Source("model choice", None, "assumed"),
+        "seat_frequency": Source("model choice", None, "assumed"),
+        "seat_site": Source("model choice", None, "assumed"),
+        "icon_position": Source(
+            "model choice", None, "assumed", "the instrument cluster below the road"
+        ),
+        "request_capability": Source(
+            "Kraus, Scholz, Stiegemeier & Baumann (2020), Table 2; fitted here",
+            "https://doi.org/10.1177/0018720819853686",
+            "fitted",
+            "a first request lowered trust from 5.51 to 5.21 on a 7-point "
+            "scale; one EDFT step from full trust gives 1 - (1 - c) / 4",
+        ),
         "assessment_fixations": Source(
             "model choice",
             None,
@@ -183,6 +225,10 @@ class DrivingLog:
     reacted_at: float | None = None
     hand_back_at: float | None = None
     road_at: float | None = None
+    reaction: dict[str, Any] = field(default_factory=dict)
+    speed: list[float] = field(default_factory=list)
+    yaw_rate: list[float] = field(default_factory=list)
+    trust: list[tuple[float, float]] = field(default_factory=list)
 
     def glances(self) -> list[tuple[float, float]]:
         """Off-road glances as (start, end): gaze leaving the road area
@@ -253,6 +299,18 @@ class DrivingLog:
             "eyes_s": since(self.road_at),
             "engaged_s": since(self.engaged_at),
         }
+
+    def head_motion(self, dt: float) -> tuple[np.ndarray, np.ndarray]:
+        """Approximate head acceleration and angular velocity, from the
+        vehicle's speed and yaw rate (the head assumed fixed to the car,
+        as in Wada et al., 2018), in the head frame x forward, y left,
+        z up; for the vestibular module."""
+        speed = np.asarray(self.speed, dtype=float)
+        yaw = np.asarray(self.yaw_rate, dtype=float)
+        forward = np.gradient(speed, dt) if len(speed) > 1 else np.zeros_like(speed)
+        acceleration = np.column_stack([forward, speed * yaw, np.zeros_like(speed)])
+        angular = np.column_stack([np.zeros_like(yaw), np.zeros_like(yaw), yaw])
+        return acceleration, angular
 
     def trace(self) -> dict[str, np.ndarray]:
         """Per-step columns: time, area, gaze, belief and truth."""
@@ -451,9 +509,7 @@ class AttentiveDriver:
             self.log.request_at = t - state.get("time_since_request_s", 0.0)
         if self.log.request_at is not None and self._latency is None:
             rng = human.attention.rng
-            self._latency = p.response_latency * math.exp(
-                p.response_spread * rng.standard_normal()
-            )
+            self._latency = self._react(state, eye.gaze)
             self._assessment = float(
                 sum(
                     rng.gamma(4.0, p.scene_fixation / 4.0)
@@ -492,13 +548,70 @@ class AttentiveDriver:
         if task_active:
             self._task_step(t, area == DISPLAY and self._destination == DISPLAY)
 
+        self.log.speed.append(float(state["speed_mps"]))
+        self.log.yaw_rate.append(yaw_rate)
+
         # Driving from belief.
         if automation and not self._engaged_now(t, uncertainty):
-            from myosuite_carla.fullbody import DriverIntent
-
-            return DriverIntent()
+            return self._idle()
         believed = self._believed(state)
         return self.reflex.act(believed)
+
+    def _idle(self) -> Any:
+        """No input while automation drives (myosuite-carla's empty intent)."""
+        try:
+            from myosuite_carla.fullbody import DriverIntent
+        except ImportError:
+            return None
+        return DriverIntent()
+
+    def _react(self, state: dict[str, float], gaze: Gaze) -> float:
+        """Time from the takeover request to the first action, sampled from
+        what the senses picked up; records the mechanism in the log."""
+        from ..hearing import cabin_noise_level
+        from ..response import Signal
+
+        human, p = self.human, self.params
+        signals = []
+        details: dict[str, Any] = {}
+        if "auditory" in p.takeover_signals:
+            noise = cabin_noise_level(3.6 * state["speed_mps"])
+            level = human.hearing.sensation_level(  # type: ignore[attr-defined]
+                p.chime_level, p.chime_frequency, noise
+            )
+            latency = human.hearing.latency(level)  # type: ignore[attr-defined]
+            signals.append(Signal("auditory", 0.0, latency))
+            details["auditory"] = {
+                "sensation_db": level,
+                "latency_s": latency,
+                "noise_dba": noise,
+            }
+        if "tactile" in p.takeover_signals:
+            level = human.touch.sensation_level(  # type: ignore[attr-defined]
+                p.seat_vibration, p.seat_frequency, p.seat_site
+            )
+            latency = human.touch.latency(level)  # type: ignore[attr-defined]
+            signals.append(Signal("tactile", 0.0, latency))
+            details["tactile"] = {"sensation_db": level, "latency_s": latency}
+        if "visual" in p.takeover_signals:
+            eccentricity = math.hypot(
+                p.icon_position[0] - gaze[0], p.icon_position[1] - gaze[1]
+            )
+            latency = human.response.visual_latency(eccentricity)  # type: ignore[attr-defined]
+            signals.append(Signal("visual", 0.0, latency))
+            details["visual"] = {"eccentricity_deg": eccentricity, "latency_s": latency}
+        reaction = human.response.respond(signals)  # type: ignore[attr-defined]
+        details["first"] = reaction.first
+        details["integrated"] = reaction.integrated
+        self.log.reaction = details
+        # The request also tells the driver the automation reached its limit.
+        trust = human.trust
+        before = trust.trust  # type: ignore[attr-defined]
+        trust.update(  # type: ignore[attr-defined]
+            automation_capability=p.request_capability, manual_capability=None
+        )
+        self.log.trust.append((before, trust.trust))  # type: ignore[attr-defined]
+        return reaction.time if math.isfinite(reaction.time) else 7.0
 
     def _engaged_now(self, t: float, uncertainty: float) -> bool:
         if self.log.request_at is None:

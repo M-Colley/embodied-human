@@ -220,6 +220,119 @@ REFERENCES: dict[str, Reference] = {
             "17.5 mm; the range spans the neighbouring sizes",
         ),
         Reference(
+            "response.modality_order",
+            1.0,
+            1.0,
+            1.0,
+            "fraction",
+            "Diederich & Colonius (2004), Table 2",
+            "https://doi.org/10.3758/BF03195006",
+            "simple RT, same 4 people: tone (90 dB) 132 ms < light 163 ms < "
+            "strong vibration 177 ms; share of the three orderings reproduced",
+        ),
+        Reference(
+            "response.drt_visual",
+            344.0,
+            326.0,
+            362.0,
+            "ms",
+            "Conti, Dlugosch & Bengler (2014), Table 3",
+            "https://www.hfes-europe.org/wp-content/uploads/2014/06/Conti.pdf",
+            "head-mounted visual DRT while driving a simulator, n = 71; range "
+            "over instruction groups",
+        ),
+        Reference(
+            "response.drt_tactile",
+            526.0,
+            482.0,
+            570.0,
+            "ms",
+            "Cooper et al. (2020), Table 4",
+            "https://doi.org/10.3389/fpsyg.2020.01154",
+            "tactile DRT on-road, drivers aged 21-36 without a secondary task, "
+            "526 (SD 110) ms, n = 24; range is the 95% CI of the mean",
+        ),
+        Reference(
+            "response.older_slowing",
+            1.215,
+            1.07,
+            1.36,
+            "ratio",
+            "Cooper et al. (2020), Table 4",
+            "https://doi.org/10.3389/fpsyg.2020.01154",
+            "tactile DRT 639 ms (55-75 years) over 526 ms (21-36 years); range "
+            "from the two means' standard errors (derived)",
+        ),
+        Reference(
+            "driving.takeover_modality_order",
+            1.0,
+            1.0,
+            1.0,
+            "fraction",
+            "Petermeijer, Doubek & de Winter (2017), abstract",
+            "https://doi.org/10.1109/SMC.2017.8122827",
+            "101 drivers: auditory and tactile take-over requests were "
+            "answered faster than visual ones; share of the two orderings "
+            "reproduced",
+        ),
+        Reference(
+            "driving.takeover_hands_auditory",
+            1.87,
+            1.36,
+            2.38,
+            "s",
+            "Ko, Sanghavi, Zhang & Jeon (2022), Fig. 4",
+            "https://doi.org/10.1016/j.trf.2022.08.008",
+            "time to grab the wheel after an auditory warning with a visual "
+            "text, game on the centre console, laps 2-3, n = 21; range is "
+            "+-1 between-person SD (0.51 s)",
+        ),
+        Reference(
+            "vestibular.vertical_msi_error",
+            0.0,
+            0.0,
+            10.0,
+            "% points",
+            "O'Hanlon & McCauley (1973/1974), Tables 1-2",
+            "https://archive.org/details/DTIC_AD0768215",
+            "RMS error of MSI after 2 h of vertical oscillation, 14 conditions "
+            "at 0.083-0.5 Hz; acceptance is an assumed tolerance (the "
+            "descriptive fit of McCauley et al. 1976 reached 6.1)",
+        ),
+        Reference(
+            "fatigue.endurance_error",
+            0.0,
+            0.0,
+            0.25,
+            "|ln ratio|",
+            "Frey-Law & Avin (2010), Table 2",
+            "https://doi.org/10.1080/00140130903389068",
+            "median log ratio of endurance times to the joint-specific power "
+            "models at 20-80% MVC; acceptance (about 28%) assumed",
+        ),
+        Reference(
+            "risk.lane_width_speed_error",
+            0.0,
+            0.0,
+            9.4,
+            "km/h",
+            "Liu, Wang & Fu (2016), Table 2",
+            "https://doi.org/10.3390/ijerph13101010",
+            "simulator speeds at lane widths 2.85-3.75 m, n = 24; acceptance is "
+            "the mean between-driver SD",
+        ),
+        Reference(
+            "affect.emotion_rmse",
+            0.0,
+            0.0,
+            0.13,
+            "intensity",
+            "Zhang, Hilpert, Broekens & Jokinen (2024), Experiment 1",
+            "https://doi.org/10.1145/3613904.3641908",
+            "normalised happiness, boredom and irritation ratings in three "
+            "tasks, n = 27; acceptance is the original model's RMSE",
+        ),
+        Reference(
             "driving.takeover_time",
             2.72,
             1.27,

@@ -34,16 +34,48 @@
     "estimator": {
       "name": "lane_kalman",
       "params": {}
+    },
+    "hearing": {
+      "name": "psychoacoustic",
+      "params": {}
+    },
+    "touch": {
+      "name": "vibrotactile",
+      "params": {}
+    },
+    "vestibular": {
+      "name": "subjective_vertical",
+      "params": {}
+    },
+    "response": {
+      "name": "twin",
+      "params": {}
+    },
+    "fatigue": {
+      "name": "three_compartment",
+      "params": {}
+    },
+    "affect": {
+      "name": "appraisal",
+      "params": {}
+    },
+    "risk": {
+      "name": "risk_field",
+      "params": {}
+    },
+    "trust": {
+      "name": "decision_field",
+      "params": {}
     }
   },
   "parameter_sources": {
-    "measured": 8,
-    "assumed": 10,
-    "fitted": 13,
-    "standard": 2,
-    "derived": 1
+    "measured": 10,
+    "assumed": 18,
+    "fitted": 50,
+    "standard": 3,
+    "derived": 4
   },
-  "wall_seconds": 111.0,
+  "wall_seconds": 217.37,
   "results": [
     {
       "name": "eyes.main_sequence",
@@ -448,7 +480,7 @@
       "score": 1.0,
       "skipped": null,
       "metrics": {
-        "driving.takeover_time": 1.6149999999998412
+        "driving.takeover_time": 1.5149999999998434
       },
       "scores": {
         "driving.takeover_time": 1.0
@@ -467,24 +499,521 @@
       },
       "details": {
         "takeover_times_s": [
-          1.9799999999998334,
-          1.3199999999998475,
-          1.9199999999998347,
-          1.439999999999845,
-          1.5599999999998424,
-          1.3999999999998458,
-          1.3999999999998458,
-          1.8999999999998352
+          1.339999999999847,
+          1.6399999999998407,
+          1.7799999999998377,
+          1.6399999999998407,
+          1.6199999999998411,
+          1.479999999999844,
+          1.2799999999998484,
+          1.339999999999847
         ],
-        "sd_s": 0.2727112549408722,
+        "sd_s": 0.18134418735022328,
         "missed": 0,
         "median_components_s": {
-          "response_s": 0.29999999999986926,
-          "hand_s": 0.7059403199567846,
-          "eyes_s": 0.5999999999998629,
-          "engaged_s": 1.4199999999998454
+          "response_s": 0.21999999999987097,
+          "hand_s": 0.6259403199567863,
+          "eyes_s": 0.5199999999998646,
+          "engaged_s": 1.4699999999998443
         },
         "scenario": "myosuite-carla takeover_request: automation at 12 m/s, request at 10 s, 7 s budget"
+      }
+    },
+    {
+      "name": "fatigue.endurance",
+      "categories": [
+        "fatigue"
+      ],
+      "passed": true,
+      "score": 1.0,
+      "skipped": null,
+      "metrics": {
+        "fatigue.endurance_error": 0.15921739542809688
+      },
+      "scores": {
+        "fatigue.endurance_error": 1.0
+      },
+      "references": {
+        "fatigue.endurance_error": {
+          "value": 0.0,
+          "range": [
+            0.0,
+            0.25
+          ],
+          "unit": "|ln ratio|",
+          "citation": "Frey-Law & Avin (2010), Table 2",
+          "doi": "https://doi.org/10.1080/00140130903389068"
+        }
+      },
+      "details": {
+        "endurance": [
+          {
+            "joint": "ankle",
+            "load": 0.2,
+            "model_s": 864.0199999995042,
+            "meta_s": 955.7247273522341
+          },
+          {
+            "joint": "ankle",
+            "load": 0.5,
+            "model_s": 178.96000000001774,
+            "meta_s": 144.7359462351813
+          },
+          {
+            "joint": "ankle",
+            "load": 0.8,
+            "model_s": 43.12000000000114,
+            "meta_s": 54.96538071914697
+          },
+          {
+            "joint": "knee",
+            "load": 0.2,
+            "model_s": 340.61999999998017,
+            "meta_s": 399.4085715582674
+          },
+          {
+            "joint": "knee",
+            "load": 0.5,
+            "model_s": 70.44000000000312,
+            "meta_s": 71.33294667644032
+          },
+          {
+            "joint": "knee",
+            "load": 0.8,
+            "model_s": 17.019999999999726,
+            "meta_s": 29.481161995147836
+          },
+          {
+            "joint": "trunk",
+            "load": 0.2,
+            "model_s": 675.9999999996752,
+            "meta_s": 875.9844678524516
+          },
+          {
+            "joint": "trunk",
+            "load": 0.5,
+            "model_s": 139.71999999999767,
+            "meta_s": 109.43911844121342
+          },
+          {
+            "joint": "trunk",
+            "load": 0.8,
+            "model_s": 33.65999999999966,
+            "meta_s": 37.65478961162304
+          },
+          {
+            "joint": "shoulder",
+            "load": 0.2,
+            "model_s": 275.0400000000398,
+            "meta_s": 282.57511782453736
+          },
+          {
+            "joint": "shoulder",
+            "load": 0.5,
+            "model_s": 57.860000000003446,
+            "meta_s": 52.83280896854094
+          },
+          {
+            "joint": "shoulder",
+            "load": 0.8,
+            "model_s": 14.03999999999979,
+            "meta_s": 22.354457417396052
+          },
+          {
+            "joint": "elbow",
+            "load": 0.2,
+            "model_s": 566.219999999775,
+            "meta_s": 630.2507874693839
+          },
+          {
+            "joint": "elbow",
+            "load": 0.5,
+            "model_s": 115.93999999999407,
+            "meta_s": 83.18901418646827
+          },
+          {
+            "joint": "elbow",
+            "load": 0.8,
+            "model_s": 27.899999999999494,
+            "meta_s": 29.441559878130835
+          },
+          {
+            "joint": "hand",
+            "load": 0.2,
+            "model_s": 473.7199999998591,
+            "meta_s": 447.74859473693675
+          },
+          {
+            "joint": "hand",
+            "load": 0.5,
+            "model_s": 105.7399999999961,
+            "meta_s": 102.41199292125353
+          },
+          {
+            "joint": "hand",
+            "load": 0.8,
+            "model_s": 25.859999999999538,
+            "meta_s": 48.05268345683863
+          },
+          {
+            "joint": "general",
+            "load": 0.2,
+            "model_s": 517.6799999998192,
+            "meta_s": 530.6414345776451
+          },
+          {
+            "joint": "general",
+            "load": 0.5,
+            "model_s": 108.47999999999556,
+            "meta_s": 86.47288352997774
+          },
+          {
+            "joint": "general",
+            "load": 0.8,
+            "model_s": 26.21999999999953,
+            "meta_s": 34.09748724286797
+          }
+        ],
+        "note": "consistency check: the rates were fitted to these curves"
+      }
+    },
+    {
+      "name": "risk.lane_width",
+      "categories": [
+        "risk"
+      ],
+      "passed": false,
+      "score": 0.6940186385600676,
+      "skipped": null,
+      "metrics": {
+        "risk.lane_width_speed_error": 12.276224797535365
+      },
+      "scores": {
+        "risk.lane_width_speed_error": 0.6940186385600676
+      },
+      "references": {
+        "risk.lane_width_speed_error": {
+          "value": 0.0,
+          "range": [
+            0.0,
+            9.4
+          ],
+          "unit": "km/h",
+          "citation": "Liu, Wang & Fu (2016), Table 2",
+          "doi": "https://doi.org/10.3390/ijerph13101010"
+        }
+      },
+      "details": {
+        "threshold": 453.3342967403525,
+        "speed_kmh": {
+          "2.85": {
+            "model": 41.01819121363983,
+            "human": 56.18
+          },
+          "3.0": {
+            "model": 47.319626205841786,
+            "human": 60.78
+          },
+          "3.25": {
+            "model": 60.300674194870034,
+            "human": 65.46
+          },
+          "3.5": {
+            "model": 76.85001962350469,
+            "human": 76.85
+          },
+          "3.75": {
+            "model": 97.24339080449312,
+            "human": 81.92
+          }
+        },
+        "kendall_tau": 0.9999999999999999
+      }
+    },
+    {
+      "name": "affect.emotion_study",
+      "categories": [
+        "affect"
+      ],
+      "passed": true,
+      "score": 1.0,
+      "skipped": null,
+      "metrics": {
+        "affect.emotion_rmse": 0.09795064541135827
+      },
+      "scores": {
+        "affect.emotion_rmse": 1.0
+      },
+      "references": {
+        "affect.emotion_rmse": {
+          "value": 0.0,
+          "range": [
+            0.0,
+            0.13
+          ],
+          "unit": "intensity",
+          "citation": "Zhang, Hilpert, Broekens & Jokinen (2024), Experiment 1",
+          "doi": "https://doi.org/10.1145/3613904.3641908"
+        }
+      },
+      "details": {
+        "model": {
+          "happiness": {
+            "boredom": 0.19105176267665672,
+            "happiness": 0.7690627681897436,
+            "irritation": 0.03988546913359986
+          },
+          "boredom": {
+            "boredom": 0.5155657371214646,
+            "happiness": 0.30501360668746635,
+            "irritation": 0.17942065619106923
+          },
+          "irritation": {
+            "boredom": 0.15248232518502097,
+            "happiness": 0.03399728698152527,
+            "irritation": 0.8135203878334539
+          }
+        },
+        "human": {
+          "happiness": {
+            "happiness": 0.825,
+            "boredom": 0.164,
+            "irritation": 0.01
+          },
+          "boredom": {
+            "happiness": 0.383,
+            "boredom": 0.487,
+            "irritation": 0.13
+          },
+          "irritation": {
+            "happiness": 0.193,
+            "boredom": 0.204,
+            "irritation": 0.603
+          }
+        },
+        "r_squared": 0.8434344538489956,
+        "original_model": {
+          "r_squared": 0.78,
+          "rmse": 0.13
+        }
+      }
+    },
+    {
+      "name": "response.modality_rt",
+      "categories": [
+        "hearing",
+        "touch",
+        "response"
+      ],
+      "passed": true,
+      "score": 1.0,
+      "skipped": null,
+      "metrics": {
+        "response.modality_order": 1.0
+      },
+      "scores": {
+        "response.modality_order": 1.0
+      },
+      "references": {
+        "response.modality_order": {
+          "value": 1.0,
+          "range": [
+            1.0,
+            1.0
+          ],
+          "unit": "fraction",
+          "citation": "Diederich & Colonius (2004), Table 2",
+          "doi": "https://doi.org/10.3758/BF03195006"
+        }
+      },
+      "details": {
+        "model_ms": {
+          "auditory": 251.9177577685267,
+          "visual": 318.75007026222636,
+          "tactile": 335.3766732043175
+        },
+        "human_ms": {
+          "auditory": 132.0,
+          "visual": 163.0,
+          "tactile": 177.0
+        },
+        "redundant_av_ms": 224.01206732212927,
+        "note": "the model's parameters come from other participants (Diederich & Colonius, 2015); only the order is compared"
+      }
+    },
+    {
+      "name": "response.drt",
+      "categories": [
+        "response",
+        "touch"
+      ],
+      "passed": false,
+      "score": 0.6666666666666666,
+      "skipped": null,
+      "metrics": {
+        "response.drt_visual": 349.2593766871013,
+        "response.drt_tactile": 351.57721861605444,
+        "response.older_slowing": 1.3283236582434037
+      },
+      "scores": {
+        "response.drt_visual": 1.0,
+        "response.drt_tactile": 0.0,
+        "response.older_slowing": 1.0
+      },
+      "references": {
+        "response.drt_visual": {
+          "value": 344.0,
+          "range": [
+            326.0,
+            362.0
+          ],
+          "unit": "ms",
+          "citation": "Conti, Dlugosch & Bengler (2014), Table 3",
+          "doi": "https://www.hfes-europe.org/wp-content/uploads/2014/06/Conti.pdf"
+        },
+        "response.drt_tactile": {
+          "value": 526.0,
+          "range": [
+            482.0,
+            570.0
+          ],
+          "unit": "ms",
+          "citation": "Cooper et al. (2020), Table 4",
+          "doi": "https://doi.org/10.3389/fpsyg.2020.01154"
+        },
+        "response.older_slowing": {
+          "value": 1.215,
+          "range": [
+            1.07,
+            1.36
+          ],
+          "unit": "ratio",
+          "citation": "Cooper et al. (2020), Table 4",
+          "doi": "https://doi.org/10.3389/fpsyg.2020.01154"
+        }
+      },
+      "details": {
+        "visual_ms": 349.2593766871013,
+        "tactile_ms": 351.57721861605444,
+        "tactile_older_ms": 467.00833718711834,
+        "light_eccentricity_deg": 17.0,
+        "vibration_sensation_db": 20.0
+      }
+    },
+    {
+      "name": "vestibular.vertical_sickness",
+      "categories": [
+        "vestibular"
+      ],
+      "passed": false,
+      "score": 0.02664678003594856,
+      "skipped": null,
+      "metrics": {
+        "vestibular.vertical_msi_error": 19.733532199640514
+      },
+      "scores": {
+        "vestibular.vertical_msi_error": 0.02664678003594856
+      },
+      "references": {
+        "vestibular.vertical_msi_error": {
+          "value": 0.0,
+          "range": [
+            0.0,
+            10.0
+          ],
+          "unit": "% points",
+          "citation": "O'Hanlon & McCauley (1973/1974), Tables 1-2",
+          "doi": "https://archive.org/details/DTIC_AD0768215"
+        }
+      },
+      "details": {
+        "conditions": [
+          {
+            "frequency_hz": 0.083,
+            "mean_accel_g": 0.025,
+            "observed_pct": 0,
+            "predicted_pct": 0.23967362311262932
+          },
+          {
+            "frequency_hz": 0.083,
+            "mean_accel_g": 0.05,
+            "observed_pct": 5,
+            "predicted_pct": 0.9467041505518405
+          },
+          {
+            "frequency_hz": 0.167,
+            "mean_accel_g": 0.025,
+            "observed_pct": 0,
+            "predicted_pct": 0.5565287278681516
+          },
+          {
+            "frequency_hz": 0.167,
+            "mean_accel_g": 0.05,
+            "observed_pct": 10,
+            "predicted_pct": 2.162704312015427
+          },
+          {
+            "frequency_hz": 0.167,
+            "mean_accel_g": 0.1,
+            "observed_pct": 30,
+            "predicted_pct": 7.777582904798271
+          },
+          {
+            "frequency_hz": 0.167,
+            "mean_accel_g": 0.2,
+            "observed_pct": 60,
+            "predicted_pct": 22.441341651445605
+          },
+          {
+            "frequency_hz": 0.333,
+            "mean_accel_g": 0.05,
+            "observed_pct": 5,
+            "predicted_pct": 0.789742169000503
+          },
+          {
+            "frequency_hz": 0.333,
+            "mean_accel_g": 0.1,
+            "observed_pct": 15,
+            "predicted_pct": 3.033042700668538
+          },
+          {
+            "frequency_hz": 0.333,
+            "mean_accel_g": 0.2,
+            "observed_pct": 52,
+            "predicted_pct": 10.492337520061104
+          },
+          {
+            "frequency_hz": 0.333,
+            "mean_accel_g": 0.3,
+            "observed_pct": 52,
+            "predicted_pct": 19.386469076057168
+          },
+          {
+            "frequency_hz": 0.5,
+            "mean_accel_g": 0.1,
+            "observed_pct": 0,
+            "predicted_pct": 1.3328703059342786
+          },
+          {
+            "frequency_hz": 0.5,
+            "mean_accel_g": 0.2,
+            "observed_pct": 15,
+            "predicted_pct": 4.98390035331265
+          },
+          {
+            "frequency_hz": 0.5,
+            "mean_accel_g": 0.3,
+            "observed_pct": 25,
+            "predicted_pct": 10.132349899822533
+          },
+          {
+            "frequency_hz": 0.5,
+            "mean_accel_g": 0.4,
+            "observed_pct": 30,
+            "predicted_pct": 15.912584014121428
+          }
+        ],
+        "correlation": 0.9226558682806917
       }
     },
     {
@@ -1240,6 +1769,78 @@
         },
         "alpha": 0.05,
         "gap_mm": 0.0
+      }
+    },
+    {
+      "name": "driving.takeover_modality",
+      "categories": [
+        "hearing",
+        "touch",
+        "response",
+        "eyes",
+        "motor"
+      ],
+      "passed": false,
+      "score": 0.6499707450768557,
+      "skipped": null,
+      "metrics": {
+        "driving.takeover_modality_order": 1.0,
+        "driving.takeover_hands_auditory": 0.6459403199567859
+      },
+      "scores": {
+        "driving.takeover_modality_order": 1.0,
+        "driving.takeover_hands_auditory": 0.2999414901537114
+      },
+      "references": {
+        "driving.takeover_modality_order": {
+          "value": 1.0,
+          "range": [
+            1.0,
+            1.0
+          ],
+          "unit": "fraction",
+          "citation": "Petermeijer, Doubek & de Winter (2017), abstract",
+          "doi": "https://doi.org/10.1109/SMC.2017.8122827"
+        },
+        "driving.takeover_hands_auditory": {
+          "value": 1.87,
+          "range": [
+            1.36,
+            2.38
+          ],
+          "unit": "s",
+          "citation": "Ko, Sanghavi, Zhang & Jeon (2022), Fig. 4",
+          "doi": "https://doi.org/10.1016/j.trf.2022.08.008"
+        }
+      },
+      "details": {
+        "median_components_s": {
+          "visual": {
+            "response_s": 0.3299999999998686,
+            "hand_s": 0.735940319956784,
+            "eyes_s": 0.5899999999998631,
+            "engaged_s": 1.579999999999842
+          },
+          "auditory": {
+            "response_s": 0.2699999999998699,
+            "hand_s": 0.6759403199567853,
+            "eyes_s": 0.5399999999998641,
+            "engaged_s": 1.5499999999998426
+          },
+          "tactile": {
+            "response_s": 0.30999999999986905,
+            "hand_s": 0.7159403199567844,
+            "eyes_s": 0.5799999999998633,
+            "engaged_s": 1.5599999999998424
+          },
+          "auditory+visual": {
+            "response_s": 0.23999999999987054,
+            "hand_s": 0.6459403199567859,
+            "eyes_s": 0.5199999999998646,
+            "engaged_s": 1.489999999999844
+          }
+        },
+        "runs": 12
       }
     }
   ]

@@ -241,7 +241,7 @@ def touch_tapping(human: Human) -> Result:
 
 def run(human: Human, names: list[str] | None = None) -> list[Result]:
     """Run the named benchmarks (all by default), in registration order."""
-    from . import integrated, studies  # noqa: F401  (register their benchmarks)
+    from . import integrated, motivation, senses, studies  # noqa: F401  (register)
 
     chosen = names or list(BENCHMARKS)
     unknown = set(chosen) - set(BENCHMARKS)
