@@ -97,14 +97,16 @@ def simulate_takeover(
     seconds: float = 14.0,
     seed: int = 0,
     params: DriverAgentParameters = DriverAgentParameters(),
+    surt: bool = True,
 ) -> DrivingLog:
-    """Run SuRT during automation with a take-over request; the log holds
-    the reaction and the take-over components."""
+    """Run SuRT (or, with ``surt=False``, no task) during automation with a
+    take-over request; the log holds the reaction and the take-over
+    components."""
     road = StraightRoad(speed=speed, duration=seconds, request_at=request_at)
     agent = AttentiveDriver(
         human,
         road,
-        SuRTTask(rng=np.random.default_rng(seed)),
+        SuRTTask(rng=np.random.default_rng(seed)) if surt else None,
         replace(params, takeover_signals=signals),
         reflex=HoldLane(),
     )

@@ -695,3 +695,100 @@ before.
 
 The light, reported in the benchmark details, is answered 197 ms more
 slowly by Cooper et al.'s drivers than by the model (557 against 360 ms).
+
+## 2026-10-26 (later): Zhang et al., Bos & Bles, Gao & Lee, Diederich & Colonius
+
+Same PC and versions. Four more papers were read:
+
+- **Zhang et al. (2019):** the take-over meta-analysis.
+- **Bos & Bles (1998):** the one-dimensional subjective vertical model.
+- **Gao & Lee (2006):** the trust model.
+- **Diederich & Colonius (2007, Exp. Brain Res.):** auditory and tactile
+  non-targets with visual saccade targets.
+
+### Changes
+
+- **Common random numbers in TWIN.** Every response now draws one
+  peripheral time per known modality, used or not.
+  - **Why:** adding a vibration used to shift every later random draw. In
+    100 runs that made the model's take-over 0.07 s *slower* with an extra
+    signal. The race itself was correct; the comparison was not.
+  - **Now:** a counterfactual (a request with and without a vibration)
+    compares the same random draws.
+  - **Side effects:** all response-based results shift by sampling noise.
+    The take-over benchmarks now use 64 runs (32 for the modality
+    benchmark), because 16 left a standard error of about 0.1 s.
+- **Refit.** `hand_release` is refitted with 64 runs, in one pass: the
+  hands-on time grows one for one with it. It is now 0.59 s (was 0.64 s),
+  giving 1.63 s against the 1.62 s target.
+- **Ko et al.** They report means, so `driving.takeover_modality` now
+  scores the model's mean time to the wheel instead of its median.
+- **`driving.takeover_determinants` (new).** The model's log effects of
+  the request's modality and of a visual task are scored against Zhang
+  et al.'s mixed-effects coefficients (Table 5). The ranges are 95% CIs
+  from each estimate and its t value.
+- **New tests.**
+  - The one-dimensional reduction of the vestibular model reproduces Bos
+    & Bles's closed-form sickness (Eqs. 5–6, Table 1) within 1%.
+  - The trust model reduces to Gao & Lee's Eq. 11.
+- **Checked, with no change needed.** Gao & Lee's Eq. 6 (beliefs), Eqs.
+  7–9 and Table 1 match `DecisionFieldTrust` term for term. Their stated
+  θ = 1.9 √(2σ²) = 0.27 implies σ = 0.1, not the σ² = 0.1 of their Table
+  1, as the parameter's note already said.
+
+### Tests
+
+`python -m pytest tests -q` passes 70 tests and skips 1 (the notebook
+needs the `test` extra). The tutorial notebook was re-executed.
+
+### Benchmark
+
+```bash
+python examples/fit_takeover.py --out evidence/takeover-fit.json
+python -m embodied_human.bench --out evidence/benchmark-baseline.json
+python -m embodied_human.bench --replace vestibular=subjective_vertical:accel_gain=0,accel_feedback=0,conflict_scale=0.7 --only vestibular.vertical_sickness vestibular.sickness_time_course --out evidence/benchmark-vestibular-bos-bles.json
+```
+
+The run took 148 s; **16 of 26 benchmarks pass**.
+
+| Benchmark | Before | Now | Human reference |
+| --- | --- | --- | --- |
+| driving.takeover_determinants (new) | — | icon alone +0.06, vibration −0.01, SuRT +0.42: **fail** | +0.21 (0.13–0.29), −0.18 (−0.27 to −0.09), +0.10 (0.04–0.16) |
+| driving.takeover_motor_readiness | road 0.74 s: pass (16 runs) | road 0.81 s, hands 1.03 s: **fail** (64 runs) | 0.69 (0.64–0.74); 1.14 (1.05–1.23) |
+| driving.takeover_components | gaze 0.48, road 0.73, hands 1.63, input 1.81 s | gaze 0.42, road 0.78, hands 1.63 (fitted), input 1.82 s | 0.41–0.54, 0.69–0.94, 1.45–1.79, 2.10–2.89 s |
+| driving.takeover_modality | hands 1.52 s (median) | hands 1.62 s (mean): pass | 1.87 ± 0.51 s |
+| driving.takeover (MyoSuite) | 2.03 s | 2.20 s, SD 0.80: pass | 2.72 ± 1.45 s |
+
+The Zeeb et al. road fixation that passed before was sampling noise
+from 16 runs.
+
+### Interpretation
+
+- **What changes take-over time.**
+  - **Modality:** the request's modality changes only how fast it is
+    detected, a few hundred milliseconds. People's take-over times change
+    four to eighteen times more with it, which suggests the modality also
+    changes how urgently they act.
+  - **Task:** the model's visual task, conversely, costs too much. Without
+    one, its driver is already looking at the road with nothing to let go
+    of.
+- **Bos & Bles's own model.** With their one-dimensional parameters
+  (no internal acceleration model, b = 0.7 m/s²), the 2-hour data are
+  missed by 17.6 % points (r = 0.65) and the time courses by 20.3
+  (r = 0.88). The refitted six-degree-of-freedom model scores 7.5 and
+  14.8.
+  - **Caveat:** they describe McCauley's accelerations as RMS values,
+    while the benchmark converts mean absolute accelerations to
+    amplitudes. Part of the gap may be that conversion.
+  - **Conflict size:** at the frequency where sickness peaks (0.167 Hz),
+    the six-degree-of-freedom model's conflict is only 17% of the 1-D
+    model's, because its internal acceleration model cancels most of it.
+    This is why its conflict scale had to be refitted far below Bos &
+    Bles's.
+- **Diederich & Colonius (Exp. Brain Res.)** report crossmodal
+  interaction ratios, not peripheral times per modality. Their palm
+  vibration (50 Hz, 1–2 mm) was far above threshold, so it cannot
+  calibrate the touch latency. Their finding that a second non-target
+  adds facilitation is consistent with the race, but their
+  focused-attention design (only the light triggers the saccade) is not
+  what the take-over model simulates, so it is not scored.

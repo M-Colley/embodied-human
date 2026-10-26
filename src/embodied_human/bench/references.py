@@ -333,9 +333,9 @@ REFERENCES: dict[str, Reference] = {
             "s",
             "Ko, Sanghavi, Zhang & Jeon (2022), Fig. 4",
             "https://doi.org/10.1016/j.trf.2022.08.008",
-            "time to grab the wheel after an auditory warning with a visual "
-            "text, game on the centre console, laps 2-3, n = 21; range is "
-            "+-1 between-person SD (0.51 s)",
+            "mean time to grab the wheel after an auditory warning with a "
+            "visual text, game on a laptop on the centre console, lap 3 "
+            "(M = 1.875 s, SD 0.513), n = 21; range is +-1 between-person SD",
         ),
         *(
             Reference(
@@ -374,6 +374,25 @@ REFERENCES: dict[str, Reference] = {
             for name, what, mean, sd, n in (
                 ("road", "first gaze at the road", 0.69, 0.20, 62),
                 ("hands", "first contact with the wheel", 1.14, 0.45, 88),
+            )
+        ),
+        *(
+            Reference(
+                f"driving.zhang_{name}",
+                estimate,
+                round(estimate - 1.96 * abs(estimate / t_value), 3),
+                round(estimate + 1.96 * abs(estimate / t_value), 3),
+                "ln ratio",
+                "Zhang, de Winter, Varotto, Happee & Martens (2019), Table 5",
+                "https://doi.org/10.1016/j.trf.2019.04.020",
+                f"{what}: effect on the log of mean take-over time in a "
+                "mixed-effects model of 520 means from 129 studies; range is "
+                "the 95% CI from the estimate and its t value",
+            )
+            for name, what, estimate, t_value in (
+                ("no_auditory", "take-over request without a sound", 0.2129, -5.29),
+                ("vibrotactile", "take-over request with a vibration", -0.1801, -4.00),
+                ("visual_task", "a visual non-driving task", 0.0975, 3.32),
             )
         ),
         Reference(

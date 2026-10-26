@@ -109,7 +109,7 @@ class DriverAgentParameters(Parameters):
     seat_site: str = "seat_vertical"
     icon_position: Gaze = (0.0, -12.0)
     request_capability: float = 0.8
-    hand_release: float = 0.64
+    hand_release: float = 0.59
     assessment_fixations: int = 3
     engage_sd: float = 0.15
     scene_fixation: float = 0.33

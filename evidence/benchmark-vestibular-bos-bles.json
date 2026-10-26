@@ -1,0 +1,323 @@
+{
+  "package": "embodied-human 0.1.0",
+  "python": "3.12.13",
+  "seed": 0,
+  "config": {
+    "eyes": {
+      "name": "main_sequence",
+      "params": {}
+    },
+    "vision": {
+      "name": "foveated",
+      "params": {}
+    },
+    "objects": {
+      "name": "eccentricity_noise",
+      "params": {}
+    },
+    "attention": {
+      "name": "uncertainty_sampler",
+      "params": {}
+    },
+    "memory": {
+      "name": "act_r",
+      "params": {}
+    },
+    "proprioception": {
+      "name": "spindle",
+      "params": {}
+    },
+    "motor": {
+      "name": "ffitts_min_jerk",
+      "params": {}
+    },
+    "estimator": {
+      "name": "lane_kalman",
+      "params": {}
+    },
+    "hearing": {
+      "name": "psychoacoustic",
+      "params": {}
+    },
+    "touch": {
+      "name": "vibrotactile",
+      "params": {}
+    },
+    "vestibular": {
+      "name": "subjective_vertical",
+      "params": {
+        "accel_gain": 0,
+        "accel_feedback": 0,
+        "conflict_scale": 0.7
+      }
+    },
+    "response": {
+      "name": "twin",
+      "params": {}
+    },
+    "fatigue": {
+      "name": "three_compartment",
+      "params": {}
+    },
+    "affect": {
+      "name": "appraisal",
+      "params": {}
+    },
+    "risk": {
+      "name": "risk_field",
+      "params": {}
+    },
+    "trust": {
+      "name": "decision_field",
+      "params": {}
+    }
+  },
+  "parameter_sources": {
+    "measured": 10,
+    "assumed": 18,
+    "fitted": 50,
+    "standard": 3,
+    "derived": 4
+  },
+  "wall_seconds": 134.86,
+  "results": [
+    {
+      "name": "vestibular.vertical_sickness",
+      "categories": [
+        "vestibular"
+      ],
+      "passed": false,
+      "score": 0.24065091258792637,
+      "skipped": null,
+      "metrics": {
+        "vestibular.vertical_msi_error": 17.593490874120736
+      },
+      "scores": {
+        "vestibular.vertical_msi_error": 0.24065091258792637
+      },
+      "references": {
+        "vestibular.vertical_msi_error": {
+          "value": 0.0,
+          "range": [
+            0.0,
+            10.0
+          ],
+          "unit": "% points",
+          "citation": "O'Hanlon & McCauley (1973/1974), Tables 1-2",
+          "doi": "https://archive.org/details/DTIC_AD0768215"
+        }
+      },
+      "details": {
+        "conditions": [
+          {
+            "frequency_hz": 0.083,
+            "mean_accel_g": 0.025,
+            "observed_pct": 0,
+            "predicted_pct": 0.25715435349314747
+          },
+          {
+            "frequency_hz": 0.083,
+            "mean_accel_g": 0.05,
+            "observed_pct": 5,
+            "predicted_pct": 1.0148290694041198
+          },
+          {
+            "frequency_hz": 0.167,
+            "mean_accel_g": 0.025,
+            "observed_pct": 0,
+            "predicted_pct": 8.821474309323808
+          },
+          {
+            "frequency_hz": 0.167,
+            "mean_accel_g": 0.05,
+            "observed_pct": 10,
+            "predicted_pct": 24.590177524548068
+          },
+          {
+            "frequency_hz": 0.167,
+            "mean_accel_g": 0.1,
+            "observed_pct": 30,
+            "predicted_pct": 46.66517049752573
+          },
+          {
+            "frequency_hz": 0.167,
+            "mean_accel_g": 0.2,
+            "observed_pct": 60,
+            "predicted_pct": 64.16158477463104
+          },
+          {
+            "frequency_hz": 0.333,
+            "mean_accel_g": 0.05,
+            "observed_pct": 5,
+            "predicted_pct": 0.7610055331733176
+          },
+          {
+            "frequency_hz": 0.333,
+            "mean_accel_g": 0.1,
+            "observed_pct": 15,
+            "predicted_pct": 2.9268935359802737
+          },
+          {
+            "frequency_hz": 0.333,
+            "mean_accel_g": 0.2,
+            "observed_pct": 52,
+            "predicted_pct": 10.172054274943791
+          },
+          {
+            "frequency_hz": 0.333,
+            "mean_accel_g": 0.3,
+            "observed_pct": 52,
+            "predicted_pct": 18.892072401567628
+          },
+          {
+            "frequency_hz": 0.5,
+            "mean_accel_g": 0.1,
+            "observed_pct": 0,
+            "predicted_pct": 0.9922883557682615
+          },
+          {
+            "frequency_hz": 0.5,
+            "mean_accel_g": 0.2,
+            "observed_pct": 15,
+            "predicted_pct": 3.772662692607615
+          },
+          {
+            "frequency_hz": 0.5,
+            "mean_accel_g": 0.3,
+            "observed_pct": 25,
+            "predicted_pct": 7.849735258741335
+          },
+          {
+            "frequency_hz": 0.5,
+            "mean_accel_g": 0.4,
+            "observed_pct": 30,
+            "predicted_pct": 12.64671246211806
+          }
+        ],
+        "correlation": 0.6475627183011992
+      }
+    },
+    {
+      "name": "vestibular.sickness_time_course",
+      "categories": [
+        "vestibular"
+      ],
+      "passed": false,
+      "score": 0.0,
+      "skipped": null,
+      "metrics": {
+        "vestibular.time_course_msi_error": 20.27342636499856
+      },
+      "scores": {
+        "vestibular.time_course_msi_error": 0.0
+      },
+      "references": {
+        "vestibular.time_course_msi_error": {
+          "value": 0.0,
+          "range": [
+            0.0,
+            10.0
+          ],
+          "unit": "% points",
+          "citation": "McCauley, Royal, Wylie, O'Hanlon & Mackie (1976), Appendix B",
+          "doi": "https://archive.org/details/DTIC_ADA024709"
+        }
+      },
+      "details": {
+        "points": 43,
+        "correlation": 0.8837306840302084,
+        "mccauley_model_error": 6.252441383636791,
+        "predicted": [
+          3.1679625315037474,
+          17.248264838967778,
+          29.970129868896816,
+          38.36850378419155,
+          43.265490373364905,
+          48.393401135123575,
+          2.925603426422978,
+          15.788419511221356,
+          27.388791861858333,
+          35.04232180285691,
+          39.50371528421672,
+          41.93597743166341,
+          44.17434235067772,
+          0.521615583482965,
+          2.7711618584201654,
+          4.793010718545389,
+          7.324938802928231,
+          7.5460693724112256,
+          7.761044018334209,
+          1.4910346074915164,
+          7.980301112510922,
+          13.822373012500607,
+          17.674616852801517,
+          19.91954854432495,
+          21.14324024942455,
+          21.78285586846143,
+          22.26921185733797,
+          22.404734997680496,
+          2.3234998468723074,
+          12.47779541844877,
+          21.626179272619854,
+          27.66002304266341,
+          34.09583347527354,
+          34.604749172057495,
+          35.07016896799674,
+          6.389004357552522,
+          17.42320057252439,
+          17.92020980935027,
+          8.585181738723595,
+          8.829702016036334,
+          4.541636740588413,
+          12.726978775940331,
+          9.531788400158801
+        ],
+        "observed": [
+          8.0,
+          23.0,
+          40.0,
+          47.0,
+          55.0,
+          60.0,
+          11.0,
+          37.0,
+          43.0,
+          57.0,
+          60.0,
+          69.0,
+          71.0,
+          3.0,
+          7.0,
+          17.0,
+          24.0,
+          28.0,
+          31.0,
+          6.0,
+          17.0,
+          32.0,
+          39.0,
+          41.0,
+          54.0,
+          56.0,
+          57.0,
+          63.0,
+          2.0,
+          40.0,
+          51.0,
+          56.0,
+          58.0,
+          67.0,
+          69.0,
+          20.0,
+          33.0,
+          40.0,
+          4.0,
+          8.0,
+          9.0,
+          18.0,
+          4.0
+        ]
+      }
+    }
+  ]
+}

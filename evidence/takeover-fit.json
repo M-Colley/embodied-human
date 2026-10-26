@@ -1,7 +1,7 @@
 {
   "target_s": 1.62,
-  "runs": 16,
+  "runs": 64,
   "speed_kmh": 120,
-  "hand_release_s": 0.64,
-  "mean_hands_s": 1.627190319956765
+  "hand_release_s": 0.59,
+  "mean_hands_s": 1.6325028199567648
 }

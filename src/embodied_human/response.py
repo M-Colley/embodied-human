@@ -36,6 +36,12 @@ from .core import Module, Parameters, Source, register
 
 Modality = Literal["visual", "auditory", "tactile"]
 
+#: Each modality's slot in the peripheral draws. Every response draws all
+#: slots, so adding or removing a signal leaves the other signals' random
+#: times unchanged: counterfactual comparisons (a request with or without a
+#: vibration) then use common random numbers.
+_SLOTS: tuple[Modality, ...] = ("auditory", "visual", "tactile")
+
 _TWIN_2015 = (
     "Diederich & Colonius (2015), Table 1",
     "https://doi.org/10.1037/a0038696",
@@ -197,9 +203,18 @@ class TwinResponse(Response):
         self, signals: Sequence[Signal], load: Sequence[CentralTask] = ()
     ) -> Reaction:
         p = self.params
+        # First signal of each modality in its slot, any further ones after.
+        slots, extra = [], len(_SLOTS)
+        for s in signals:
+            if s.modality in _SLOTS and _SLOTS.index(s.modality) not in slots:
+                slots.append(_SLOTS.index(s.modality))
+            else:
+                slots.append(extra)
+                extra += 1
+        draws = self.rng.standard_exponential(extra)
         finished = sorted(
-            (s.onset + self.rng.exponential(s.latency), s.modality)
-            for s in signals
+            (s.onset + s.latency * draws[slot], s.modality)
+            for s, slot in zip(signals, slots)
             if math.isfinite(s.latency) and s.latency > 0
         )
         if not finished:

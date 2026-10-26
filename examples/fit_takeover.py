@@ -5,9 +5,12 @@ wheel in parallel with the gaze shift (Zeeb, Buchner & Schrauf, 2015); how
 long it takes to let go grows with the task's manual load. Gold et al.'s
 drivers did SuRT on a touchscreen, as the simulated driver does, and had
 their hands on the wheel after 1.45 s (5 s budget) and 1.79 s (7 s). The
-model has no time budget, so ``hand_release`` is chosen on a 10 ms grid to
-match the midpoint, over the runs of ``driving.takeover_components`` (tone
-with an icon, 120 km/h). The take-over reaction waits for the central stage
+model has no time budget, so ``hand_release`` is chosen to match the
+midpoint over the runs of ``driving.takeover_components`` (tone with an
+icon, 120 km/h). The hand starts one release time after the reaction, so
+the mean time to the wheel grows one for one with it: the fit takes the
+release at zero, shifts it by the remaining gap, rounds to 10 ms and
+checks the result. The take-over reaction waits for the central stage
 held by SuRT, whose chunk is fitted to Conti et al. (2014), so refit after
 changing that chunk. Ko et al.'s (2022) 1.87 s with a laptop game is left
 for ``driving.takeover_modality`` to test.
@@ -29,7 +32,7 @@ from embodied_human.agents.driver import DriverAgentParameters
 from embodied_human.agents.road import simulate_takeover
 from embodied_human.bench.references import REFERENCES
 
-RUNS = 16
+RUNS = 64
 SPEED = 120 / 3.6
 
 
@@ -51,15 +54,13 @@ def main() -> None:
     args = parser.parse_args()
     reference = REFERENCES["driving.takeover_hands"]
     target = (reference.low + reference.high) / 2
-    grid = np.round(np.arange(0.0, 1.51, 0.01), 2)
-    hands = {float(r): mean_hands(float(r)) for r in grid}
-    best = min(hands, key=lambda r: abs(hands[r] - target))
+    release = round(max(0.0, target - mean_hands(0.0)), 2)
     report = {
         "target_s": target,
         "runs": RUNS,
         "speed_kmh": 120,
-        "hand_release_s": best,
-        "mean_hands_s": hands[best],
+        "hand_release_s": release,
+        "mean_hands_s": mean_hands(release),
     }
     print(json.dumps(report, indent=2))
     if args.out:

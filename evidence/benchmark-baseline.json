@@ -75,7 +75,7 @@
     "standard": 3,
     "derived": 4
   },
-  "wall_seconds": 144.78,
+  "wall_seconds": 148.21,
   "results": [
     {
       "name": "eyes.main_sequence",
@@ -489,7 +489,7 @@
       "score": 1.0,
       "skipped": null,
       "metrics": {
-        "driving.takeover_time": 2.0274999999998324
+        "driving.takeover_time": 2.2024999999998287
       },
       "scores": {
         "driving.takeover_time": 1.0
@@ -508,23 +508,23 @@
       },
       "details": {
         "takeover_times_s": [
-          1.3799999999998462,
-          1.9199999999998347,
-          2.8199999999998155,
-          3.2999999999998053,
-          1.6599999999998403,
+          3.3399999999998045,
+          1.6399999999998407,
+          3.0999999999998096,
+          1.8799999999998356,
+          2.9999999999998117,
           1.479999999999844,
-          2.099999999999831,
-          1.5599999999998424
+          1.3599999999998467,
+          1.8199999999998369
         ],
-        "sd_s": 0.690419127362902,
+        "sd_s": 0.80480254898771,
         "missed": 0,
         "median_components_s": {
-          "response_s": 0.5099999999998648,
-          "gaze_s": 0.6072830881159526,
-          "hand_s": 1.575940319956766,
-          "eyes_s": 0.7499999999998597,
-          "engaged_s": 1.7099999999998392
+          "response_s": 0.5799999999998633,
+          "gaze_s": 0.5821386490071756,
+          "hand_s": 1.5859403199567659,
+          "eyes_s": 0.9099999999998563,
+          "engaged_s": 1.769999999999838
         },
         "scenario": "myosuite-carla takeover_request: automation at 12 m/s, request at 10 s, 7 s budget"
       }
@@ -537,15 +537,15 @@
         "attention"
       ],
       "passed": false,
-      "score": 0.63982594761253,
+      "score": 0.6400004502144315,
       "skipped": null,
       "metrics": {
-        "response.drt_driving_cost": 28.29184473353098,
-        "response.drt_2back_cost": 289.4140345662237,
-        "response.drt_surt_cost": 365.12017386665195
+        "response.drt_driving_cost": 28.312052134831163,
+        "response.drt_2back_cost": 290.4336168600792,
+        "response.drt_surt_cost": 371.0965921108995
       },
       "scores": {
-        "response.drt_driving_cost": 0.9194778428375902,
+        "response.drt_driving_cost": 0.9200013506432945,
         "response.drt_2back_cost": 1.0,
         "response.drt_surt_cost": 0.0
       },
@@ -584,11 +584,11 @@
       "details": {
         "display_share": 0.559,
         "conti_model_ms": {
-          "alone": 356.8870626273706,
-          "driving": 385.1789073609016,
-          "0-back": 513.5935241185621,
-          "2-back": 676.6731698161831,
-          "surt": 774.6212612130953
+          "alone": 355.09875225243223,
+          "driving": 383.4108043872634,
+          "0-back": 510.0370773784911,
+          "2-back": 676.7969305186058,
+          "surt": 784.1987248157135
         },
         "conti_human_ms": {
           "alone": 293.4,
@@ -599,22 +599,22 @@
         },
         "conti_fitted_costs_ms": {
           "0-back": {
-            "model": 128.4146167576605,
+            "model": 126.62627299122772,
             "human": 135.0
           },
           "2-back": {
-            "model": 291.4942624552815,
+            "model": 293.3861261313424,
             "human": 292.5
           },
           "surt": {
-            "model": 389.4423538521937,
+            "model": 400.7879204284501,
             "human": 385.1
           }
         },
         "cooper_model_ms": {
-          "driving": 383.6742638430255,
-          "2-back": 673.0882984092492,
-          "surt": 748.7944377096775
+          "driving": 379.0592911192602,
+          "2-back": 669.4929079793394,
+          "surt": 750.1558832301597
         },
         "cooper_human_ms": {
           "driving": 523.0,
@@ -1086,16 +1086,16 @@
       },
       "details": {
         "model_ms": {
-          "auditory": 252.93250891167614,
-          "visual": 319.0599064813557,
-          "tactile": 334.16404120032803
+          "auditory": 252.34815729601956,
+          "visual": 317.7828221341222,
+          "tactile": 330.5380626829121
         },
         "human_ms": {
           "auditory": 132.0,
           "visual": 163.0,
           "tactile": 177.0
         },
-        "redundant_av_ms": 223.90878352187866,
+        "redundant_av_ms": 223.94990637601438,
         "note": "the model's parameters come from other participants (Diederich & Colonius, 2015); only the order is compared"
       }
     },
@@ -1151,15 +1151,15 @@
         "touch"
       ],
       "passed": false,
-      "score": 0.4557616468455203,
+      "score": 0.4747153433411792,
       "skipped": null,
       "metrics": {
-        "response.drt_visual": 384.7777421406838,
-        "response.drt_tactile": 380.11594369652664,
-        "response.older_slowing": 1.3008953167672606
+        "response.drt_visual": 382.73074291915265,
+        "response.drt_tactile": 377.2546145314541,
+        "response.older_slowing": 1.3088184692551645
       },
       "scores": {
-        "response.drt_visual": 0.3672849405365608,
+        "response.drt_visual": 0.42414603002353757,
         "response.drt_tactile": 0.0,
         "response.older_slowing": 1.0
       },
@@ -1196,11 +1196,11 @@
         }
       },
       "details": {
-        "visual_ms": 384.7777421406838,
-        "tactile_ms": 380.11594369652664,
-        "tactile_older_ms": 494.4910509833792,
-        "visual_alone_ms": 355.29780939013335,
-        "windshield_light_ms": 360.2533092476899,
+        "visual_ms": 382.73074291915265,
+        "tactile_ms": 377.2546145314541,
+        "tactile_older_ms": 493.75780711050487,
+        "visual_alone_ms": 358.0296855244085,
+        "windshield_light_ms": 359.8670781687252,
         "windshield_light_human_ms": {
           "mean": 557.3,
           "ci95": [
@@ -2218,7 +2218,7 @@
       "skipped": null,
       "metrics": {
         "driving.takeover_modality_order": 1.0,
-        "driving.takeover_hands_auditory": 1.5159403199567674
+        "driving.takeover_hands_auditory": 1.6228153199567652
       },
       "scores": {
         "driving.takeover_modality_order": 1.0,
@@ -2249,35 +2249,65 @@
       "details": {
         "median_components_s": {
           "visual": {
-            "response_s": 0.5199999999998646,
-            "gaze_s": 0.5210758374112086,
+            "response_s": 0.5799999999998633,
+            "gaze_s": 0.5231083153846985,
             "hand_s": 1.5859403199567659,
-            "eyes_s": 0.6499999999998618,
-            "engaged_s": 1.7999999999998373
+            "eyes_s": 0.7399999999998599,
+            "engaged_s": 1.9399999999998343
           },
           "auditory": {
-            "response_s": 0.3499999999998682,
-            "gaze_s": 0.4950218323615099,
-            "hand_s": 1.4159403199567695,
-            "eyes_s": 0.6199999999998624,
-            "engaged_s": 1.6599999999998403
+            "response_s": 0.359999999999868,
+            "gaze_s": 0.5114666066794751,
+            "hand_s": 1.3659403199567706,
+            "eyes_s": 0.6299999999998622,
+            "engaged_s": 1.8499999999998362
           },
           "tactile": {
-            "response_s": 0.499999999999865,
-            "gaze_s": 0.5112374509690936,
-            "hand_s": 1.5659403199567663,
-            "eyes_s": 0.639999999999862,
-            "engaged_s": 1.7499999999998384
+            "response_s": 0.4399999999998663,
+            "gaze_s": 0.5389968165106982,
+            "hand_s": 1.4459403199567689,
+            "eyes_s": 0.6999999999998607,
+            "engaged_s": 1.8499999999998362
           },
           "auditory+visual": {
-            "response_s": 0.44999999999986606,
-            "gaze_s": 0.5211734224491806,
-            "hand_s": 1.5159403199567674,
-            "eyes_s": 0.6599999999998616,
-            "engaged_s": 1.6599999999998403
+            "response_s": 0.2799999999998697,
+            "gaze_s": 0.48070363867881394,
+            "hand_s": 1.2859403199567723,
+            "eyes_s": 0.5999999999998629,
+            "engaged_s": 1.8199999999998369
           }
         },
-        "runs": 12
+        "mean_components_s": {
+          "visual": {
+            "response_s": 0.73687499999986,
+            "gaze_s": 0.6780306913409118,
+            "hand_s": 1.7428153199567626,
+            "eyes_s": 0.9543749999998553,
+            "engaged_s": 2.0081249999998327
+          },
+          "auditory": {
+            "response_s": 0.6531249999998617,
+            "gaze_s": 0.6295604595036239,
+            "hand_s": 1.6590653199567642,
+            "eyes_s": 0.8874999999998567,
+            "engaged_s": 1.9387499999998343
+          },
+          "tactile": {
+            "response_s": 0.6987499999998608,
+            "gaze_s": 0.652757687575943,
+            "hand_s": 1.7046903199567633,
+            "eyes_s": 0.9293749999998558,
+            "engaged_s": 1.9768749999998336
+          },
+          "auditory+visual": {
+            "response_s": 0.6168749999998625,
+            "gaze_s": 0.6084995579301393,
+            "hand_s": 1.6228153199567652,
+            "eyes_s": 0.8543749999998574,
+            "engaged_s": 1.903124999999835
+          }
+        },
+        "runs": 32
       }
     },
     {
@@ -2290,19 +2320,19 @@
         "motor"
       ],
       "passed": false,
-      "score": 0.9086234177214674,
+      "score": 0.912974683544252,
       "skipped": null,
       "metrics": {
-        "driving.takeover_gaze": 0.4845883479851344,
-        "driving.takeover_road": 0.7299999999998601,
-        "driving.takeover_hands": 1.627190319956765,
-        "driving.takeover_intervention": 1.811249999999837
+        "driving.takeover_gaze": 0.42022702580932775,
+        "driving.takeover_road": 0.7815624999998589,
+        "driving.takeover_hands": 1.6325028199567648,
+        "driving.takeover_intervention": 1.8249999999998368
       },
       "scores": {
         "driving.takeover_gaze": 1.0,
         "driving.takeover_road": 1.0,
         "driving.takeover_hands": 1.0,
-        "driving.takeover_intervention": 0.6344936708858696
+        "driving.takeover_intervention": 0.6518987341770084
       },
       "references": {
         "driving.takeover_gaze": {
@@ -2348,32 +2378,32 @@
       },
       "details": {
         "model_mean_s": {
-          "gaze": 0.4845883479851344,
-          "road": 0.7299999999998601,
-          "hands": 1.627190319956765,
-          "intervention": 1.811249999999837
+          "gaze": 0.42022702580932775,
+          "road": 0.7815624999998589,
+          "hands": 1.6325028199567648,
+          "intervention": 1.8249999999998368
         },
         "model_ci95_s": {
           "gaze": [
-            0.36261975957499637,
-            0.6527205785382163
+            0.3362535568553833,
+            0.5291237137614004
           ],
           "road": [
-            0.546249999999864,
-            1.0251463712362439
+            0.6498112316818248,
+            0.943130135228929
           ],
           "hands": [
-            1.4650101248913705,
-            1.952339583402262
+            1.5087776190360753,
+            1.7847697081022513
           ],
           "intervention": [
-            1.587534218665647,
-            2.163424781909167
+            1.6886426134166825,
+            1.9959374999998332
           ]
         },
-        "model_response_s": 0.5612499999998637,
-        "runs": 16,
-        "runs_with_eyes_on_task": 13,
+        "model_response_s": 0.6265624999998622,
+        "runs": 64,
+        "runs_with_eyes_on_task": 57,
         "gold_mean_s": {
           "5 s": {
             "gaze": 0.41,
@@ -2421,15 +2451,15 @@
         "motor"
       ],
       "passed": false,
-      "score": 0.776917555435497,
+      "score": 0.6194175554362007,
       "skipped": null,
       "metrics": {
-        "driving.zeeb_road": 0.7363636363634963,
-        "driving.zeeb_hands": 0.969690319956779
+        "driving.zeeb_road": 0.8062222222220807,
+        "driving.zeeb_hands": 1.0321903199567777
       },
       "scores": {
-        "driving.zeeb_road": 1.0,
-        "driving.zeeb_hands": 0.5538351108709941
+        "driving.zeeb_road": 0.3377777777791925,
+        "driving.zeeb_hands": 0.901057333093209
       },
       "references": {
         "driving.zeeb_road": {
@@ -2454,9 +2484,9 @@
         }
       },
       "details": {
-        "runs": 16,
-        "runs_eyes_off_road": 11,
-        "model_engaged_s": 1.7587499999998382,
+        "runs": 64,
+        "runs_eyes_off_road": 45,
+        "model_engaged_s": 1.763749999999838,
         "human_braking_by_group_s": {
           "high-risk": [
             2.31,
@@ -2563,6 +2593,77 @@
             ]
           }
         }
+      }
+    },
+    {
+      "name": "driving.takeover_determinants",
+      "categories": [
+        "hearing",
+        "touch",
+        "response",
+        "motor"
+      ],
+      "passed": false,
+      "score": 0.35113382822206923,
+      "skipped": null,
+      "metrics": {
+        "driving.zhang_no_auditory": 0.05868882511579209,
+        "driving.zhang_vibrotactile": -0.009289590286193012,
+        "driving.zhang_visual_task": 0.4247421885967926
+      },
+      "scores": {
+        "driving.zhang_no_auditory": 0.5233469944037473,
+        "driving.zhang_vibrotactile": 0.5300544902624604,
+        "driving.zhang_visual_task": 0.0
+      },
+      "references": {
+        "driving.zhang_no_auditory": {
+          "value": 0.2129,
+          "range": [
+            0.134,
+            0.292
+          ],
+          "unit": "ln ratio",
+          "citation": "Zhang, de Winter, Varotto, Happee & Martens (2019), Table 5",
+          "doi": "https://doi.org/10.1016/j.trf.2019.04.020"
+        },
+        "driving.zhang_vibrotactile": {
+          "value": -0.1801,
+          "range": [
+            -0.268,
+            -0.092
+          ],
+          "unit": "ln ratio",
+          "citation": "Zhang, de Winter, Varotto, Happee & Martens (2019), Table 5",
+          "doi": "https://doi.org/10.1016/j.trf.2019.04.020"
+        },
+        "driving.zhang_visual_task": {
+          "value": 0.0975,
+          "range": [
+            0.04,
+            0.155
+          ],
+          "unit": "ln ratio",
+          "citation": "Zhang, de Winter, Varotto, Happee & Martens (2019), Table 5",
+          "doi": "https://doi.org/10.1016/j.trf.2019.04.020"
+        }
+      },
+      "details": {
+        "model_mean_first_input_s": {
+          "tone_icon_surt": 1.8249999999998368,
+          "icon_surt": 1.9353124999998343,
+          "tone_icon_vibration_surt": 1.808124999999837,
+          "tone_icon_no_task": 1.1934374999998503
+        },
+        "human_baseline_s": 2.15,
+        "human_within_study_differences_s": {
+          "handheld_device": 1.33,
+          "visual_task_vs_none": 0.29,
+          "auditory_or_vibrotactile_vs_visual_only": -1.41,
+          "large_vs_small_time_budget": 1.35
+        },
+        "runs": 64,
+        "note": "the model has no time budget or urgency, the largest determinant in the meta-analysis"
       }
     }
   ]

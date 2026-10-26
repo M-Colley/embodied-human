@@ -251,14 +251,14 @@ def touch_key_size(
 
 
 @benchmark("driving.takeover_modality")
-def takeover_modality(human: Human, runs: int = 12) -> Result:
+def takeover_modality(human: Human, runs: int = 32) -> Result:
     """Take-over requests by sound, vibration, light, or sound with light,
     during automation with SuRT on the straight road.
 
-    The order of the modalities is compared with Petermeijer, Doubek and
-    de Winter (2017) and the time to grab the wheel after a chime with an
-    icon with Ko et al. (2022), whose drivers played a game on the centre
-    console.
+    The order of the modalities (median reactions) is compared with
+    Petermeijer, Doubek and de Winter (2017), and the mean time to grab the
+    wheel after a chime with an icon with Ko et al.'s (2022) mean; their
+    drivers played a game on a laptop on the centre console.
     """
     from ..agents.road import simulate_takeover
 
@@ -266,6 +266,7 @@ def takeover_modality(human: Human, runs: int = 12) -> Result:
         "driving.takeover_modality", ("hearing", "touch", "response", "eyes", "motor")
     )
     medians: dict[str, dict[str, float]] = {}
+    means: dict[str, dict[str, float]] = {}
     for signals in (("visual",), ("auditory",), ("tactile",), ("auditory", "visual")):
         parts = [
             simulate_takeover(
@@ -276,13 +277,20 @@ def takeover_modality(human: Human, runs: int = 12) -> Result:
         medians["+".join(signals)] = {
             key: float(np.nanmedian([p[key] for p in parts])) for key in parts[0]
         }
+        means["+".join(signals)] = {
+            key: float(np.nanmean([p[key] for p in parts])) for key in parts[0]
+        }
     visual = medians["visual"]["response_s"]
     agree = [medians[m]["response_s"] < visual for m in ("auditory", "tactile")]
     result.score_against("driving.takeover_modality_order", float(np.mean(agree)))
     result.score_against(
-        "driving.takeover_hands_auditory", medians["auditory+visual"]["hand_s"]
+        "driving.takeover_hands_auditory", means["auditory+visual"]["hand_s"]
     )
-    result.details = {"median_components_s": medians, "runs": runs}
+    result.details = {
+        "median_components_s": medians,
+        "mean_components_s": means,
+        "runs": runs,
+    }
     return result
 
 
@@ -299,7 +307,7 @@ GOLD_INPUTS = {
 
 
 @benchmark("driving.takeover_components")
-def takeover_components(human: Human, runs: int = 16) -> Result:
+def takeover_components(human: Human, runs: int = 64) -> Result:
     """The steps of a take-over against Gold et al. (2013).
 
     A tone with an icon interrupts SuRT during automation at 120 km/h on the
@@ -376,7 +384,7 @@ def _area_at(log: Any, time: float | None) -> str:
 
 
 @benchmark("driving.takeover_motor_readiness")
-def takeover_motor_readiness(human: Human, runs: int = 16) -> Result:
+def takeover_motor_readiness(human: Human, runs: int = 64) -> Result:
     """First road fixation and hands on the wheel against Zeeb et al. (2015).
 
     Their drivers worked a visual task in the head unit through a rotary
@@ -459,5 +467,89 @@ def automation_monitoring(human: Human, runs: int = 8) -> Result:
         "window_s": [start, end],
         "model_road_glances_per_min": float(np.mean(returns)),
         "human_by_group": ZEEB_GROUPS,
+    }
+    return result
+
+
+#: Zhang, de Winter, Varotto, Happee & Martens (2019): mean take-over time
+#: (s) of their baseline (SAE L3, auditory request, visual task, high
+#: urgency, no handheld device, no traffic; Table 6) and within-study
+#: differences (s; Fig. 3, Section 3.2).
+ZHANG_BASELINE = 2.15
+ZHANG_WITHIN = {
+    "handheld_device": 1.33,
+    "visual_task_vs_none": 0.29,
+    "auditory_or_vibrotactile_vs_visual_only": -1.41,
+    "large_vs_small_time_budget": 1.35,
+}
+
+
+@benchmark("driving.takeover_determinants")
+def takeover_determinants(human: Human, runs: int = 64) -> Result:
+    """How the request's modality and the task change take-over time,
+    against the meta-analysis of Zhang et al. (2019).
+
+    Their mixed-effects model gives each factor's effect on the log of
+    mean take-over time across 129 studies. The model's effects are the
+    log ratios of its mean first input on the straight road at 120 km/h:
+
+    - no auditory request: an icon alone against a tone with an icon;
+    - a vibrotactile request: a seat vibration added to the tone and icon;
+    - a visual task: SuRT against no task. Without a task there is nothing
+      to let go of, so ``hand_release`` is 0.
+
+    None of the model's parameters was fitted to these data.
+    """
+    from dataclasses import replace
+
+    from ..agents.driver import DriverAgentParameters
+    from ..agents.road import simulate_takeover
+
+    result = Result(
+        "driving.takeover_determinants", ("hearing", "touch", "response", "motor")
+    )
+    base = DriverAgentParameters()
+    conditions = {
+        "tone_icon_surt": (("auditory", "visual"), True, base),
+        "icon_surt": (("visual",), True, base),
+        "tone_icon_vibration_surt": (("auditory", "visual", "tactile"), True, base),
+        "tone_icon_no_task": (
+            ("auditory", "visual"),
+            False,
+            replace(base, hand_release=0.0),
+        ),
+    }
+    means = {}
+    for name, (signals, task, params) in conditions.items():
+        times = [
+            simulate_takeover(
+                build_human(human.config, seed=seed),
+                signals=signals,
+                speed=120 * KMH,
+                seed=seed,
+                params=params,
+                surt=task,
+            ).takeover_components()["engaged_s"]
+            for seed in range(runs)
+        ]
+        means[name] = float(np.nanmean(times))
+    base_time = means["tone_icon_surt"]
+    result.score_against(
+        "driving.zhang_no_auditory", math.log(means["icon_surt"] / base_time)
+    )
+    result.score_against(
+        "driving.zhang_vibrotactile",
+        math.log(means["tone_icon_vibration_surt"] / base_time),
+    )
+    result.score_against(
+        "driving.zhang_visual_task", math.log(base_time / means["tone_icon_no_task"])
+    )
+    result.details = {
+        "model_mean_first_input_s": means,
+        "human_baseline_s": ZHANG_BASELINE,
+        "human_within_study_differences_s": ZHANG_WITHIN,
+        "runs": runs,
+        "note": "the model has no time budget or urgency, the largest "
+        "determinant in the meta-analysis",
     }
     return result

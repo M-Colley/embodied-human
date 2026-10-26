@@ -142,6 +142,31 @@ def test_vertical_conflict_matches_kamiji_band_pass():
     np.testing.assert_allclose(amplitude, expected, rtol=0.005)
 
 
+def test_one_dimensional_sickness_matches_bos_and_bles():
+    # Bos & Bles (1998), Eqs. 5-6 with their Table 1 (tau 5 s, K 5/s,
+    # b 0.7 m/s^2, mu 12 min, P 85%): the Hill transform averaged over a
+    # sinusoidal conflict, through a second-order lag.
+    svc = SubjectiveVertical(accel_gain=0.0, accel_feedback=0.0, conflict_scale=0.7)
+    p, dt, duration = svc.params, 0.2, 2400.0
+    t = np.arange(0, duration, dt)
+    # Low frequencies, where linear interpolation of 0.2 s samples is exact
+    # enough; the start-up transient that Bos & Bles ignore fades by 40 min.
+    conditions = [(0.167, 1.0), (0.083, 2.0)]
+    motion = np.zeros((len(conditions), len(t), 3))
+    for i, (f, a) in enumerate(conditions):
+        motion[i, :, 2] = a * np.sin(2 * math.pi * f * t)
+    msi = svc.simulate(dt, motion)[:, -1]
+    lag = p.sickness_lag
+    for i, (f, a) in enumerate(conditions):
+        w = 2 * math.pi * f
+        conflict = a / math.sqrt(
+            (p.vertical_feedback / w - p.vertical_lag * w) ** 2 + 1
+        )
+        hill = 1 - 1 / math.sqrt(1 + (conflict / p.conflict_scale) ** 2)
+        growth = 1 - (1 + duration / lag) * math.exp(-duration / lag)
+        assert msi[i] == pytest.approx(p.max_incidence * hill * growth, rel=0.01)
+
+
 def test_motion_sickness_grows_with_acceleration():
     t = np.arange(0, 1800, 0.1)
     motion = np.zeros((2, len(t), 3))
@@ -187,6 +212,18 @@ def test_trust_inertia_and_hysteresis():
     trust.belief_automation = 0.2
     trust.update(None, None)
     assert trust.belief_automation == pytest.approx(0.2 + 0.8 / 50)
+
+
+def test_trust_reduces_to_gao_and_lee_eq_11():
+    # With a transparent interface (b1 = 1) and no noise, Gao & Lee's
+    # Eq. 11: P(n) = (1 - s) P(n-1) + s (C_A(n-1) - C_M(n-1)).
+    trust = DecisionFieldTrust(opacity=1.0, noise_sd=0.0)
+    trust.reset(np.random.default_rng(0))
+    s, preference = trust.params.inertia, trust.preference
+    for automation, manual in [(0.9, 0.6), (0.4, 0.8), (0.4, 0.8), (1.0, 0.5)]:
+        trust.update(automation, manual)
+        preference = (1 - s) * preference + s * (automation - manual)
+        assert trust.preference == pytest.approx(preference)
 
 
 def test_risk_field_closed_form_and_lane_width():
