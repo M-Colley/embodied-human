@@ -79,6 +79,8 @@ class DriverAgentParameters(Parameters):
             gaze shift.
         assessment_fixations: Road fixations needed after a takeover request
             to rebuild the situation before driving.
+        engage_sd: Believed lateral SD (m) below which the driver takes over
+            control after a request.
         scene_fixation: Mean fixation duration in scene viewing, s.
         display_distance: Hand travel from the wheel to the display, m.
         display_width: Physical width of the display, m.
@@ -109,6 +111,7 @@ class DriverAgentParameters(Parameters):
     request_capability: float = 0.8
     hand_release: float = 0.64
     assessment_fixations: int = 3
+    engage_sd: float = 0.15
     scene_fixation: float = 0.33
     display_distance: float = 0.45
     display_width: float = 0.2
@@ -177,6 +180,13 @@ class DriverAgentParameters(Parameters):
             None,
             "assumed",
             "situation assessment before acting; fit to take-over data",
+        ),
+        "engage_sd": Source(
+            "model choice",
+            None,
+            "assumed",
+            "the baseline attention module's leave_sd: certain enough to look "
+            "away is certain enough to drive",
         ),
         "scene_fixation": Source(
             "Rayner (1998), Table 1",
@@ -712,7 +722,7 @@ class AttentiveDriver:
             and t >= self._hand_back
             and self._destination == ROAD
             and assessed
-            and uncertainty <= self.human.attention.params.leave_sd  # type: ignore[attr-defined]
+            and uncertainty <= self.params.engage_sd
         )
         if ready and self.log.engaged_at is None:
             self.log.engaged_at = t

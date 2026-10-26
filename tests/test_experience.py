@@ -333,6 +333,14 @@ def test_hands_return_in_parallel_and_driving_waits_for_assessment():
         assert parts["engaged_s"] >= max(parts["hand_s"], parts["eyes_s"])
 
 
+def test_takeover_works_with_any_attention_module():
+    from embodied_human.agents.road import simulate_takeover
+
+    config = eh.HumanConfig().replace("attention", "seev")
+    parts = simulate_takeover(eh.build_human(config, seed=0)).takeover_components()
+    assert math.isfinite(parts["engaged_s"])
+
+
 def test_takeover_waits_for_surt_and_logs_the_gaze_reaction():
     from embodied_human.agents.road import simulate_takeover
 

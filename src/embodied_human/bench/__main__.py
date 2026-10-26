@@ -4,14 +4,17 @@ python -m embodied_human.bench --out results.json
 python -m embodied_human.bench --only eyes.main_sequence memory.span
 python -m embodied_human.bench --replace attention=seev --out seev.json
 python -m embodied_human.bench --replace attention=uncertainty_sampler:return_sd=0.8
+python -m embodied_human.bench --import my_modules --replace attention=my_sampler
 
 A replacement is ``category=name`` with optional ``:key=value,...``
-parameters (numbers, ``true``/``false`` or text).
+parameters (numbers, ``true``/``false`` or text). ``--import`` loads Python
+modules first, so implementations they register can be named.
 """
 
 from __future__ import annotations
 
 import argparse
+import importlib
 import json
 import math
 import platform
@@ -68,10 +71,19 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--replace", nargs="*", default=[], help="category=name module swaps"
     )
+    parser.add_argument(
+        "--import",
+        dest="imports",
+        nargs="*",
+        default=[],
+        help="Python modules to import first (they may register modules)",
+    )
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--out", type=Path)
     args = parser.parse_args(argv)
 
+    for name in args.imports:
+        importlib.import_module(name)
     config = _config(args.replace)
     human = build_human(config, seed=args.seed)
     started = time.perf_counter()

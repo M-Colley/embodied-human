@@ -34,6 +34,107 @@ everything else fixed, and show what changes in the integrated behaviour.
       joint sense, reflex delay (MuJoCo muscles)
 ```
 
+## What is included
+
+- **Modules.** Sixteen categories:
+  - senses: `eyes`, `vision`, `objects`, `hearing`, `touch`, `vestibular`
+    and `proprioception`;
+  - cognition: `attention`, `memory`, `estimator` and `response`;
+  - action: `motor` and `fatigue`;
+  - experience and motivation: `affect`, `risk` and `trust`.
+
+  Each has an abstract interface and a cited baseline. Two have
+  alternatives: SEEV for attention and the ISO 2631-1 dose for motion
+  sickness.
+- **Sources for every parameter.** 110 parameters: 12 measured, 5 set by
+  standards, 52 fitted, 4 derived and 37 assumed. See
+  [docs/parameters.md](docs/parameters.md).
+- **Tasks.** SuRT (ISO/TS 14198), the detection-response task (ISO
+  17488), delayed digit recall and ISO 9241-411 tapping.
+- **Agents.**
+  - a touchscreen user;
+  - an attentive driver that shares gaze with SuRT and takes over from
+    automation. It runs on a fast straight road or on the MyoSuite full
+    body through myosuite-carla.
+- **Simulated studies.** Simulated participants, parameter inference by
+  approximate Bayesian computation, bootstrap intervals, and traces of
+  every run.
+- **Benchmark.** 25 benchmarks score the model against 42 published human
+  references. Any module can be swapped from the command line. Reports
+  and the fitting scripts' outputs are in [evidence/](evidence/).
+- **Tutorial.** [examples/tutorial_modules.ipynb](examples/tutorial_modules.ipynb)
+  shows how to change parameters, swap implementations, and write,
+  register, test and benchmark a new module.
+
+The package contains only published aggregates of human data, and no
+code from the projects listed under [Relation to other work](#relation-to-other-work).
+
+## What was replicated
+
+Here, *replicated* means rebuilt from a publication and checked against
+it. There are two kinds.
+
+### Published models, reimplemented from their equations
+
+| Model | Module | Checked against the publication |
+| --- | --- | --- |
+| Saccade main sequence and log-normal latency (Carpenter, 1988; Baloh et al., 1975) | `eyes` | duration slope and intercept, median latency |
+| Foveated resolution (Geisler & Perry, 1998) | `vision` | resolution halves at E2 = 2.3° |
+| ACT-R base-level memory (Anderson et al., 2004) with a focus of four (Cowan, 2001) | `memory` | activation, retrieval and latency equations; span of 4 |
+| Fitts' law with minimum-jerk paths (Bi, Li & Zhai, 2013; Flash & Hogan, 1985) | `motor` | throughput and slope in ISO tapping through physical contact |
+| Uncertainty sampling (Senders et al., 1967) with a Kalman belief; SEEV (Wickens et al., 2003); AttenD (Kircher & Ahlström, 2009) | `attention`, `estimator` | thresholds, covariance growth, SEEV probabilities, AttenD timing |
+| Muscle spindle Ia rates (Prochazka & Gorassini, 1998) | `proprioception` | rates on a MuJoCo muscle |
+| Thresholds in quiet and masking (ISO 226; Zwicker & Terhardt, 1980), Piéron latency (Kohfeld et al., 1981), MoSQITo loudness | `hearing` | threshold table, A-weighting, 4 sone at 60 phon |
+| Time window of integration (Diederich & Colonius, 2015) with a central stage shared as in threaded cognition (Salvucci & Taatgen, 2008) | `response` | redundant-signal facilitation; waiting time d²/2T within 2 ms |
+| Six-degree-of-freedom subjective vertical conflict (Bos & Bles, 1998; Kamiji et al., 2007; Wada et al., 2018); ISO 2631-1 dose | `vestibular` | Kamiji et al.'s closed-form band-pass within 0.5%; Wf weighting and dose within 1% |
+| Three-compartment fatigue (Xia & Frey-Law, 2008; Looft et al., 2018); Consumed Endurance (Hincapié-Ramos et al., 2014) | `fatigue` | endurance times per joint, median error 17% |
+| Appraisal-based emotion (Zhang et al., 2024) | `affect` | the published appraisal profiles; ratings fitted at least as well as the original (RMSE 0.098 against 0.13) |
+| Driver's risk field (Kolekar et al., 2020) | `risk` | closed form of lane risk |
+| Extended decision field theory of trust (Gao & Lee, 2006) | `trust` | inertia and hysteresis |
+| Vibration thresholds (Morioka & Griffin, 2005, 2007, 2008) | `touch` | tables, and vector data of figures; the orderings the papers report |
+| Take-over process (Zeeb et al., 2015) | driver agent | the structure: hands return in parallel with the gaze, and action waits for the scene to be assessed |
+
+### Published human results
+
+- **Replicated:** nothing was fitted to the result, and the model falls
+  inside its acceptance range.
+- **Fitted:** the result set parameters, so matching it checks only
+  consistency.
+- **Not replicated:** the result was held out, and the model misses it.
+
+| Study | Result | Status |
+| --- | --- | --- |
+| Diederich & Colonius (2007) | saccades to lights at 50° and 70° are 39 and 58 ms slower than at 10° | replicated (within 1 ms) |
+| Diederich & Colonius (2004) | a tone is answered faster than a light, a light faster than a vibration | replicated (order) |
+| Petermeijer et al. (2017) | sound and vibration take-over requests are answered faster than light | replicated (order) |
+| Gold et al. (2013) | first saccade away from SuRT and first road fixation after a take-over request | replicated |
+| Gold et al. (2013) | hands on the wheel | fitted |
+| Gold et al. (2013) | first braking or steering input | **not replicated**: 1.81 s against 2.10–2.89 s |
+| Zeeb et al. (2015) | first gaze at the road after a take-over request | replicated |
+| Zeeb et al. (2015) | hands on the wheel with a knob task; monitoring during automation | **not replicated** |
+| Ko et al. (2022) | hands on the wheel after an auditory warning | replicated (1.52 s against 1.87 ± 0.51 s) |
+| Zhang et al. (2019) | take-over time across 520 conditions | replicated (2.03 s against 2.72 ± 1.45 s) |
+| Kujala & Saariluoma (2011) | mean and within-person SD of in-vehicle glances | fitted |
+| Kujala & Saariluoma (2011) | share of glances over 2 s | replicated |
+| Kujala & Saariluoma (2011) | longest glances | **not replicated**: 4.2 s against 2.4–3.7 s |
+| NHTSA (2013); in-vehicle glance studies | SuRT glances on the full body | partly: criteria and mean met; share over 2 s just below |
+| Senders et al. (1967); Jokinen et al. (2021) | how glance duration changes with speed | **not replicated**: lies between the two results |
+| Conti et al. (2014) | DRT costs of n-back and SuRT | fitted |
+| Conti et al. (2014) | DRT time and its cost of driving | **not replicated**: 60 ms slow; cost +28 ms against +31 to +70 ms |
+| Cooper et al. (2020) | DRT cost of a 2-back on the road; slowing of older drivers | replicated |
+| Cooper et al. (2020) | on-road DRT time; DRT cost of SuRT | **not replicated** |
+| O'Hanlon & McCauley (1974) | motion sickness after 2 h of vertical oscillation | fitted (one parameter) |
+| McCauley et al. (1976) | motion sickness over time at nine other conditions | **not replicated**: error 14.8 against ≤ 10 |
+| Frey-Law & Avin (2010) | endurance times per joint | fitted (by Frey-Law et al., 2012) |
+| Liu et al. (2016) | preferred speed by lane width | fitted on two widths; replicated on three held out |
+| Kraus et al. (2020) | trust over a drive | fitted on Study 1; replicated on Study 2 |
+| Kraus et al. (2020) | transient drop in trust after a malfunction | **not replicated** |
+| Zhang et al. (2024) | emotion ratings in three tasks | replicated (RMSE 0.098; the original model 0.13) |
+| Kim et al. (2014) | key size beyond which larger touch keys stop helping | replicated (12.5 mm, at the edge of 12.5–22.5 mm) |
+
+The [benchmark table](#benchmark) gives every number and acceptance range,
+and [VALIDATION.md](VALIDATION.md) records each run.
+
 ## Install
 
 ```bash
@@ -55,7 +156,9 @@ for row in human.provenance():                          # every parameter's sour
 ```
 
 Each category has an abstract interface. Implement it and register the
-implementation:
+implementation. The tutorial notebook
+[examples/tutorial_modules.ipynb](examples/tutorial_modules.ipynb) walks
+through changing, swapping, writing, testing and benchmarking modules:
 
 ```python
 from embodied_human import register
@@ -161,6 +264,7 @@ requirements for computational user models discussed at Dagstuhl Seminar
 ```bash
 python -m embodied_human.bench --out results.json
 python -m embodied_human.bench --replace attention=seev --out seev.json
+python -m embodied_human.bench --import my_modules --replace attention=my_sampler
 ```
 
 Results of the baseline (seed 0; [report](evidence/benchmark-baseline.json)).
@@ -347,9 +451,13 @@ python -m mypy src/embodied_human --ignore-missing-imports
 python examples/calibrate_glances.py --out evidence/glance-calibration.json
 python examples/fit_motion_sickness.py --out evidence/motion-sickness-fit.json
 python examples/fit_drt_load.py --out evidence/drt-load-fit.json
+python examples/fit_takeover.py --out evidence/takeover-fit.json
+python examples/parameter_table.py                      # regenerates docs/parameters.md
 ```
 
-Continuous integration runs the tests (without MyoSuite), ruff, mypy and
-the build on Python 3.10 and 3.12.
+`pip install -e ".[test]"` also installs what the tests need to execute
+the tutorial notebook. Continuous integration runs the tests, including
+the notebook but without MyoSuite, then ruff, mypy and the build on
+Python 3.10 and 3.12.
 
 Apache-2.0.

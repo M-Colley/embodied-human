@@ -600,3 +600,30 @@ The run took 146 s; **16 of 25 benchmarks pass**. Both new benchmarks fail.
     detection only. The journal version (Morioka and Griffin, 2009,
     Applied Ergonomics, doi:10.1016/j.apergo.2008.06.001) may tabulate
     them.
+
+## 2026-10-26 (evening): tutorial, README, module swaps
+
+Same PC and versions.
+
+- **Bug.** The driver read its threshold for taking over control from the
+  baseline attention module's `leave_sd`. Any other attention module, such
+  as SEEV, therefore crashed during a take-over. The driver now has its
+  own `engage_sd` (0.15 m, the same value), so baseline results are
+  unchanged. A test runs a take-over with SEEV.
+- **Command line.** `python -m embodied_human.bench --import module` loads
+  modules that register new implementations before `--replace` names
+  them.
+- **Tutorial.** `examples/tutorial_modules.ipynb` changes parameters, swaps
+  implementations, changes an agent parameter, and writes, registers,
+  tests and benchmarks a new attention module. It also adds a reference
+  and a benchmark.
+  - **Test:** `tests/test_tutorial.py` executes it with nbclient. It needs
+    the `test` extra and is skipped without it.
+  - **Run:** in a fresh Python 3.10 environment it ran in 27 s. That
+    environment passed 63 tests and skipped 2 (MyoSuite).
+- **README.** Two new sections, *What is included* and *What was
+  replicated*.
+  - **Models:** 15 reimplemented models, each with the check against its
+    publication.
+  - **Human results:** 27 published results, each marked replicated,
+    fitted or not replicated.
