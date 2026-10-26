@@ -458,6 +458,6 @@ python examples/parameter_table.py                      # regenerates docs/param
 `pip install -e ".[test]"` also installs what the tests need to execute
 the tutorial notebook. Continuous integration runs the tests, including
 the notebook but without MyoSuite, then ruff, mypy and the build on
-Python 3.10 and 3.12.
+Python 3.10, 3.12 and 3.14.
 
 Apache-2.0.

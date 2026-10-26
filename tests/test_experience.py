@@ -1,6 +1,7 @@
 """Hearing, touch, multisensory responses, motion sickness, fatigue, risk,
 trust and emotion."""
 
+import importlib.util
 import math
 
 import numpy as np
@@ -59,7 +60,9 @@ def test_cabin_noise_and_iso7731():
 
 
 def test_loudness_with_mosqito():
-    pytest.importorskip("mosqito")
+    # Skip only without MoSQITo; a broken install must fail, not skip.
+    if importlib.util.find_spec("mosqito") is None:
+        pytest.skip("needs the experience extra (MoSQITo)")
     from embodied_human.hearing import loudness
 
     rate = 48000

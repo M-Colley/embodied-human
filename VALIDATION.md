@@ -627,3 +627,21 @@ Same PC and versions.
     publication.
   - **Human results:** 27 published results, each marked replicated,
     fitted or not replicated.
+
+## 2026-10-26: Python 3.14
+
+Fresh Python 3.14.4 environment (uv): NumPy 2.5.4, SciPy 1.18.1,
+MuJoCo 3.17.0.
+
+- **As in CI.** With embodied-ui from GitHub and
+  `pip install -e ".[test,lint,experience]"`, tests, ruff, mypy and the
+  build all pass. Only the MyoSuite tests are skipped.
+- **With MyoSuite.** With the local MyoSuite `dev` checkout and
+  myosuite-carla added, all 69 tests pass and none are skipped. The
+  warnings are the same MuJoCo spec-prefix warnings as on 3.12.
+- **Hidden skip.** MoSQITo imports matplotlib without declaring it, so
+  the loudness test had been skipped in every environment, CI included.
+  - **Fix:** matplotlib is now part of the `experience` and `test` extras.
+  - **Test:** it now skips only when MoSQITo is absent, so a broken
+    install fails.
+- **CI.** The workflow now also runs on Python 3.14.
