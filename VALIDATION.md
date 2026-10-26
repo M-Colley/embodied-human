@@ -792,3 +792,99 @@ from 16 runs.
   adds facilitation is consistent with the race, but their
   focused-attention design (only the light triggers the saccade) is not
   what the take-over model simulates, so it is not scored.
+
+## 2026-10-26 (evening): trust-driven monitoring, Petermeijer et al., Donohew & Griffin, steering wheel
+
+Same PC and versions. Five more papers were read:
+
+- **Hergeth et al. (2016)** and **Petermeijer et al. (2017)**: used.
+- **Donohew & Griffin (2009)**: used.
+- **Morioka & Griffin (2009, Applied Ergonomics)**: used.
+- **Morioka & Griffin (2008, Acoustics'08)**: reports the seated (no
+  backrest) thresholds already taken from the JSV paper, so it adds
+  nothing new.
+
+### Changes
+
+- **Monitoring during automation.** While automation drives and a task
+  is shown, the driver leaves the task to check the road at a rate of
+  `monitoring_gain` × (1 − trust).
+  - **Before:** the attention module sampled the road by lane
+    uncertainty, as if the driver were steering.
+  - **Fit:** `examples/fit_monitoring.py` fits the gain to Hergeth et
+    al.'s two measurements (median 0.13 checks/s at a mean trust of 74%,
+    0.097/s at 82%). It gives 0.62/s; the model's medians are 0.125 and
+    0.100.
+  - **Road glances:** a check on the road lasts 0.6 s on average (Zeeb et
+    al., measured).
+- **Trust prior.** The trust module's initial belief in automation is now
+  0.744, Hergeth et al.'s first rating (it was an assumed 1.0). The
+  capability a take-over request reveals is re-derived from Kraus et
+  al.'s first request (0.752 to 0.702): 0.55, was 0.8.
+- **`driving.automation_monitoring` measurement fix.** It now measures from
+  the per-sample gaze record. The previous version dropped looks away still
+  under way at the end of the window, which hid long looks at the task.
+- **`driving.takeover_eyes_by_modality` (new).** It tests Petermeijer et
+  al.'s eyes-on-road differences between a light and a sound or a
+  vibration. The 95% CIs are derived from their paired p values.
+- **`vestibular.roll_compensation` (new).** It simulates Donohew &
+  Griffin's 30 min lateral oscillations, with and without the roll that
+  cancels the lateral force at the seat (Table I), with the head 0.795 m
+  above the roll centre. Two tests check the motion: zero lateral force at
+  the seat, and 7.30° of peak roll at 0.2 Hz.
+- **Steering-wheel touch.**
+  - **Thresholds:** from Morioka & Griffin's (2009) Table 2, now
+    tabulated, for both hand positions. The 2007 figure reading agreed
+    within 2%.
+  - **Perceived intensity:** `perceived_intensity` gives it by Stevens'
+    power law with their exponents and constants. A test reproduces
+    their Fig. 4 example and their crossover: 16 Hz feels stronger than
+    125 Hz at 1.0 m/s², weaker at 0.2 m/s².
+- **Hand release.** `hand_release` was refitted to the new monitoring; it
+  stays at 0.59 s.
+
+### Tests
+
+`python -m pytest tests -q` passes 73 tests and skips 1 (the notebook
+needs the `test` extra). The tutorial notebook was re-executed: its last
+section now compares two trust levels, since attention modules no longer
+decide when to look up during automation.
+
+### Benchmark
+
+```bash
+python examples/fit_monitoring.py --out evidence/monitoring-fit.json
+python examples/fit_takeover.py --out evidence/takeover-fit.json
+python -m embodied_human.bench --out evidence/benchmark-baseline.json
+```
+
+The run took 602 s (148 s before, with other load on the machine);
+**17 of 28 benchmarks pass**.
+
+| Benchmark | Before | Now | Human reference |
+| --- | --- | --- | --- |
+| driving.automation_monitoring | longest look away 1.8 s, road 36%: fail | 15.9 s, 11.6%, 8.4 road glances/min: **pass** | 8.6–44.4 s, 2.2–12.5% (Zeeb et al.) |
+| driving.takeover_eyes_by_modality (new) | — | light − sound +0.07 s, light − vibration −0.01 s: **fail** | +0.37 (0.10–0.64), +0.50 (0.18–0.82) |
+| vestibular.roll_compensation (new) | — | 5 of 5 frequency differences: pass; compensated/uncompensated at 0.315 Hz 0.49: **fail** | 5 of 5; sicker with compensation |
+| driving.takeover_components | gaze 0.42, road 0.78, input 1.82 s | gaze 0.81 (**fail**), road 0.91, input 1.98 s | 0.41–0.54, 0.69–0.94, 2.10–2.89 s |
+| driving.takeover_motor_readiness | road 0.81, hands 1.03 s | road 0.91, hands 1.03 s: **fail** | 0.64–0.74; 1.05–1.23 |
+| driving.takeover_determinants | +0.06, −0.01, +0.42 | +0.05, −0.01, +0.50: **fail** | +0.21, −0.18, +0.10 |
+| driving.takeover (MyoSuite) | 2.20 s | 2.44 s, SD 0.84: pass | 2.72 ± 1.45 s |
+
+### Interpretation
+
+- **Monitoring.** One fitted gain, with the trust prior measured in the
+  same study, predicts Zeeb et al.'s held-out monitoring. The model
+  closes the gap from the overview.
+- **Gaze reaction.** Gold et al.'s gaze reaction now fails. Earlier, the
+  driver's frequent, uncertainty-driven glances often left SuRT just after
+  the request by chance. Absorbed in the task, it looks up only after
+  reacting, which takes the reaction (0.56 s with the central wait) plus a
+  saccade latency.
+- **Modality.** Petermeijer et al.'s data confirm Zhang et al.'s
+  meta-analysis: in the model, a request's modality changes only its
+  detection.
+- **Roll compensation.** The six-degree-of-freedom model orders the
+  frequencies of roll-compensated motion correctly. It predicts less
+  sickness with compensation at 0.315 Hz, where people got more. Kamiji
+  et al.'s own validation of the model used uncompensated lateral motion.

@@ -69,13 +69,13 @@
     }
   },
   "parameter_sources": {
-    "measured": 10,
-    "assumed": 18,
+    "measured": 11,
+    "assumed": 17,
     "fitted": 50,
     "standard": 3,
     "derived": 4
   },
-  "wall_seconds": 148.21,
+  "wall_seconds": 602.32,
   "results": [
     {
       "name": "eyes.main_sequence",
@@ -489,7 +489,7 @@
       "score": 1.0,
       "skipped": null,
       "metrics": {
-        "driving.takeover_time": 2.2024999999998287
+        "driving.takeover_time": 2.4424999999998236
       },
       "scores": {
         "driving.takeover_time": 1.0
@@ -508,23 +508,23 @@
       },
       "details": {
         "takeover_times_s": [
-          3.3399999999998045,
-          1.6399999999998407,
-          3.0999999999998096,
-          1.8799999999998356,
-          2.9999999999998117,
-          1.479999999999844,
-          1.3599999999998467,
-          1.8199999999998369
+          3.219999999999807,
+          1.6999999999998394,
+          3.359999999999804,
+          2.0599999999998317,
+          3.3799999999998036,
+          1.3199999999998475,
+          1.6999999999998394,
+          2.799999999999816
         ],
-        "sd_s": 0.80480254898771,
+        "sd_s": 0.841932301316424,
         "missed": 0,
         "median_components_s": {
           "response_s": 0.5799999999998633,
-          "gaze_s": 0.5821386490071756,
+          "gaze_s": 0.9370329066734246,
           "hand_s": 1.5859403199567659,
-          "eyes_s": 0.9099999999998563,
-          "engaged_s": 1.769999999999838
+          "eyes_s": 0.8499999999998575,
+          "engaged_s": 2.3499999999998256
         },
         "scenario": "myosuite-carla takeover_request: automation at 12 m/s, request at 10 s, 7 s budget"
       }
@@ -1450,6 +1450,69 @@
       }
     },
     {
+      "name": "vestibular.roll_compensation",
+      "categories": [
+        "vestibular"
+      ],
+      "passed": false,
+      "score": 0.97177627453096,
+      "skipped": null,
+      "metrics": {
+        "vestibular.roll_frequency_order": 1.0,
+        "vestibular.roll_compensation_effect": 0.4919729415572812
+      },
+      "scores": {
+        "vestibular.roll_frequency_order": 1.0,
+        "vestibular.roll_compensation_effect": 0.9435525490619201
+      },
+      "references": {
+        "vestibular.roll_frequency_order": {
+          "value": 1.0,
+          "range": [
+            1.0,
+            1.0
+          ],
+          "unit": "fraction",
+          "citation": "Donohew & Griffin (2009), Results",
+          "doi": "https://doi.org/10.3357/ASEM.2345.2009"
+        },
+        "vestibular.roll_compensation_effect": {
+          "value": 3.707,
+          "range": [
+            1.0,
+            10.0
+          ],
+          "unit": "ratio",
+          "citation": "Donohew & Griffin (2009), Tables II-III",
+          "doi": "https://doi.org/10.3357/ASEM.2345.2009"
+        }
+      },
+      "details": {
+        "msi_compensated_pct": {
+          "0.05": 0.0036648122745164807,
+          "0.08": 0.03433937871378044,
+          "0.125": 0.3368584362524028,
+          "0.16": 1.0702820496284458,
+          "0.2": 2.5241247056485827,
+          "0.315": 2.9149802880380484,
+          "0.5": 2.1832189857207003,
+          "0.8": 1.6147564654578581
+        },
+        "msi_uncompensated_pct": {
+          "0.315": 5.925082543789967,
+          "0.5": 1.0258357093522539,
+          "0.8": 0.1547776852985159
+        },
+        "orderings_reproduced": {
+          "(0.2, 0.08)": true,
+          "(0.16, 0.125)": true,
+          "(0.2, 0.05)": true,
+          "(0.2, 0.125)": true,
+          "(0.315, 0.8)": true
+        }
+      }
+    },
+    {
       "name": "driving.glance_population",
       "categories": [
         "eyes",
@@ -2218,7 +2281,7 @@
       "skipped": null,
       "metrics": {
         "driving.takeover_modality_order": 1.0,
-        "driving.takeover_hands_auditory": 1.6228153199567652
+        "driving.takeover_hands_auditory": 1.623440319956765
       },
       "scores": {
         "driving.takeover_modality_order": 1.0,
@@ -2250,61 +2313,61 @@
         "median_components_s": {
           "visual": {
             "response_s": 0.5799999999998633,
-            "gaze_s": 0.5231083153846985,
+            "gaze_s": 0.6728402613024116,
             "hand_s": 1.5859403199567659,
-            "eyes_s": 0.7399999999998599,
-            "engaged_s": 1.9399999999998343
+            "eyes_s": 0.7599999999998595,
+            "engaged_s": 2.009999999999833
           },
           "auditory": {
             "response_s": 0.359999999999868,
-            "gaze_s": 0.5114666066794751,
+            "gaze_s": 0.5990315417180119,
             "hand_s": 1.3659403199567706,
-            "eyes_s": 0.6299999999998622,
-            "engaged_s": 1.8499999999998362
+            "eyes_s": 0.6499999999998618,
+            "engaged_s": 1.8699999999998358
           },
           "tactile": {
             "response_s": 0.4399999999998663,
-            "gaze_s": 0.5389968165106982,
+            "gaze_s": 0.5990167069032442,
             "hand_s": 1.4459403199567689,
-            "eyes_s": 0.6999999999998607,
-            "engaged_s": 1.8499999999998362
+            "eyes_s": 0.689999999999861,
+            "engaged_s": 1.949999999999834
           },
           "auditory+visual": {
             "response_s": 0.2799999999998697,
-            "gaze_s": 0.48070363867881394,
+            "gaze_s": 0.5521515387549485,
             "hand_s": 1.2859403199567723,
-            "eyes_s": 0.5999999999998629,
-            "engaged_s": 1.8199999999998369
+            "eyes_s": 0.6299999999998622,
+            "engaged_s": 1.8399999999998364
           }
         },
         "mean_components_s": {
           "visual": {
-            "response_s": 0.73687499999986,
-            "gaze_s": 0.6780306913409118,
-            "hand_s": 1.7428153199567626,
-            "eyes_s": 0.9543749999998553,
-            "engaged_s": 2.0081249999998327
+            "response_s": 0.7381249999998599,
+            "gaze_s": 0.9101997438929736,
+            "hand_s": 1.7440653199567624,
+            "eyes_s": 1.005624999999854,
+            "engaged_s": 2.104999999999831
           },
           "auditory": {
             "response_s": 0.6531249999998617,
-            "gaze_s": 0.6295604595036239,
+            "gaze_s": 0.8449911795165189,
             "hand_s": 1.6590653199567642,
-            "eyes_s": 0.8874999999998567,
-            "engaged_s": 1.9387499999998343
+            "eyes_s": 0.9187499999998561,
+            "engaged_s": 2.0149999999998327
           },
           "tactile": {
             "response_s": 0.6987499999998608,
-            "gaze_s": 0.652757687575943,
+            "gaze_s": 0.8513446038797344,
             "hand_s": 1.7046903199567633,
-            "eyes_s": 0.9293749999998558,
-            "engaged_s": 1.9768749999998336
+            "eyes_s": 0.9637499999998551,
+            "engaged_s": 2.0606249999998316
           },
           "auditory+visual": {
-            "response_s": 0.6168749999998625,
-            "gaze_s": 0.6084995579301393,
-            "hand_s": 1.6228153199567652,
-            "eyes_s": 0.8543749999998574,
-            "engaged_s": 1.903124999999835
+            "response_s": 0.6174999999998625,
+            "gaze_s": 0.8123598844255872,
+            "hand_s": 1.623440319956765,
+            "eyes_s": 0.8862499999998568,
+            "engaged_s": 1.9824999999998334
           }
         },
         "runs": 32
@@ -2320,19 +2383,19 @@
         "motor"
       ],
       "passed": false,
-      "score": 0.912974683544252,
+      "score": 0.7107397151898207,
       "skipped": null,
       "metrics": {
-        "driving.takeover_gaze": 0.42022702580932775,
-        "driving.takeover_road": 0.7815624999998589,
-        "driving.takeover_hands": 1.6325028199567648,
-        "driving.takeover_intervention": 1.8249999999998368
+        "driving.takeover_gaze": 0.8100870008366292,
+        "driving.takeover_road": 0.9049999999998564,
+        "driving.takeover_hands": 1.6331278199567647,
+        "driving.takeover_intervention": 1.9759374999998336
       },
       "scores": {
-        "driving.takeover_gaze": 1.0,
+        "driving.takeover_gaze": 0.0,
         "driving.takeover_road": 1.0,
         "driving.takeover_hands": 1.0,
-        "driving.takeover_intervention": 0.6518987341770084
+        "driving.takeover_intervention": 0.842958860759283
       },
       "references": {
         "driving.takeover_gaze": {
@@ -2378,32 +2441,32 @@
       },
       "details": {
         "model_mean_s": {
-          "gaze": 0.42022702580932775,
-          "road": 0.7815624999998589,
-          "hands": 1.6325028199567648,
-          "intervention": 1.8249999999998368
+          "gaze": 0.8100870008366292,
+          "road": 0.9049999999998564,
+          "hands": 1.6331278199567647,
+          "intervention": 1.9759374999998336
         },
         "model_ci95_s": {
           "gaze": [
-            0.3362535568553833,
-            0.5291237137614004
+            0.6949572659935445,
+            0.9530294397484717
           ],
           "road": [
-            0.6498112316818248,
-            0.943130135228929
+            0.782499999999859,
+            1.058213424504858
           ],
           "hands": [
-            1.5087776190360753,
-            1.7847697081022513
+            1.508969559206412,
+            1.7851744125498674
           ],
           "intervention": [
-            1.6886426134166825,
-            1.9959374999998332
+            1.8316098024064944,
+            2.139814948558374
           ]
         },
-        "model_response_s": 0.6265624999998622,
+        "model_response_s": 0.6271874999998623,
         "runs": 64,
-        "runs_with_eyes_on_task": 57,
+        "runs_with_eyes_on_task": 61,
         "gold_mean_s": {
           "5 s": {
             "gaze": 0.41,
@@ -2451,15 +2514,15 @@
         "motor"
       ],
       "passed": false,
-      "score": 0.6194175554362007,
+      "score": 0.44966061099104915,
       "skipped": null,
       "metrics": {
-        "driving.zeeb_road": 0.8062222222220807,
-        "driving.zeeb_hands": 1.0321903199567777
+        "driving.zeeb_road": 0.906545454545311,
+        "driving.zeeb_hands": 1.0318778199567777
       },
       "scores": {
-        "driving.zeeb_road": 0.3377777777791925,
-        "driving.zeeb_hands": 0.901057333093209
+        "driving.zeeb_road": 0.0,
+        "driving.zeeb_hands": 0.8993212219820983
       },
       "references": {
         "driving.zeeb_road": {
@@ -2485,8 +2548,8 @@
       },
       "details": {
         "runs": 64,
-        "runs_eyes_off_road": 45,
-        "model_engaged_s": 1.763749999999838,
+        "runs_eyes_off_road": 55,
+        "model_engaged_s": 1.9615624999998338,
         "human_braking_by_group_s": {
           "high-risk": [
             2.31,
@@ -2519,18 +2582,19 @@
       "name": "driving.automation_monitoring",
       "categories": [
         "attention",
-        "eyes"
+        "eyes",
+        "trust"
       ],
-      "passed": false,
-      "score": 0.4054110738255055,
+      "passed": true,
+      "score": 1.0,
       "skipped": null,
       "metrics": {
-        "driving.automation_max_offroad": 1.8250000000001534,
-        "driving.automation_road_share": 36.36666666666311
+        "driving.automation_max_offroad": 15.8702900966989,
+        "driving.automation_road_share": 11.562187395798599
       },
       "scores": {
-        "driving.automation_max_offroad": 0.810822147651011,
-        "driving.automation_road_share": 0.0
+        "driving.automation_max_offroad": 1.0,
+        "driving.automation_road_share": 1.0
       },
       "references": {
         "driving.automation_max_offroad": {
@@ -2555,12 +2619,16 @@
         }
       },
       "details": {
-        "runs": 8,
+        "runs": 16,
         "window_s": [
           10.0,
           70.0
         ],
-        "model_road_glances_per_min": 53.75,
+        "model_mean": {
+          "longest_offroad_s": 15.8702900966989,
+          "road_share_pct": 11.562187395798599,
+          "road_glances_per_min": 8.375
+        },
         "human_by_group": {
           "high-risk": {
             "n": 20,
@@ -2604,16 +2672,16 @@
         "motor"
       ],
       "passed": false,
-      "score": 0.35113382822206923,
+      "score": 0.3336741995998141,
       "skipped": null,
       "metrics": {
-        "driving.zhang_no_auditory": 0.05868882511579209,
-        "driving.zhang_vibrotactile": -0.009289590286193012,
-        "driving.zhang_visual_task": 0.4247421885967926
+        "driving.zhang_no_auditory": 0.051625360076360115,
+        "driving.zhang_vibrotactile": -0.007939069961870346,
+        "driving.zhang_visual_task": 0.5042051708331383
       },
       "scores": {
-        "driving.zhang_no_auditory": 0.5233469944037473,
-        "driving.zhang_vibrotactile": 0.5300544902624604,
+        "driving.zhang_no_auditory": 0.4786415194706335,
+        "driving.zhang_vibrotactile": 0.5223810793288088,
         "driving.zhang_visual_task": 0.0
       },
       "references": {
@@ -2650,9 +2718,9 @@
       },
       "details": {
         "model_mean_first_input_s": {
-          "tone_icon_surt": 1.8249999999998368,
-          "icon_surt": 1.9353124999998343,
-          "tone_icon_vibration_surt": 1.808124999999837,
+          "tone_icon_surt": 1.9759374999998336,
+          "icon_surt": 2.080624999999831,
+          "tone_icon_vibration_surt": 1.960312499999834,
           "tone_icon_no_task": 1.1934374999998503
         },
         "human_baseline_s": 2.15,
@@ -2664,6 +2732,90 @@
         },
         "runs": 64,
         "note": "the model has no time budget or urgency, the largest determinant in the meta-analysis"
+      }
+    },
+    {
+      "name": "driving.takeover_eyes_by_modality",
+      "categories": [
+        "hearing",
+        "touch",
+        "response",
+        "eyes"
+      ],
+      "passed": false,
+      "score": 0.8246106902356893,
+      "skipped": null,
+      "metrics": {
+        "driving.petermeijer_visual_vs_auditory": 0.06981818181818067,
+        "driving.petermeijer_visual_vs_tactile": -0.008727272727272584
+      },
+      "scores": {
+        "driving.petermeijer_visual_vs_auditory": 0.944107744107742,
+        "driving.petermeijer_visual_vs_tactile": 0.7051136363636366
+      },
+      "references": {
+        "driving.petermeijer_visual_vs_auditory": {
+          "value": 0.37,
+          "range": [
+            0.1,
+            0.64
+          ],
+          "unit": "s",
+          "citation": "Petermeijer, Doubek & de Winter (2017), Table II",
+          "doi": "https://doi.org/10.1109/SMC.2017.8122827"
+        },
+        "driving.petermeijer_visual_vs_tactile": {
+          "value": 0.5,
+          "range": [
+            0.18,
+            0.82
+          ],
+          "unit": "s",
+          "citation": "Petermeijer, Doubek & de Winter (2017), Table II",
+          "doi": "https://doi.org/10.1109/SMC.2017.8122827"
+        }
+      },
+      "details": {
+        "model_mean_eyes_on_road_s": {
+          "visual": 0.9934545454544,
+          "auditory": 0.9236363636362194,
+          "tactile": 1.0021818181816726
+        },
+        "human_mean_sd_s": {
+          "eyes_on_road": {
+            "visual": [
+              1.94,
+              1.36
+            ],
+            "auditory": [
+              1.57,
+              0.49
+            ],
+            "tactile": [
+              1.44,
+              0.48
+            ]
+          },
+          "steer_initiation": {
+            "visual": [
+              2.29,
+              1.71
+            ],
+            "auditory": [
+              1.54,
+              0.63
+            ],
+            "tactile": [
+              1.47,
+              0.49
+            ]
+          }
+        },
+        "led_position_deg": [
+          10.0,
+          -25.0
+        ],
+        "note": "the study's scenarios were not urgent (more than 10 s to collision), and its absolute times are about twice the model's"
       }
     }
   ]

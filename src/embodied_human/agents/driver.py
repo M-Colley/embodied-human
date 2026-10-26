@@ -10,7 +10,10 @@ sees the road only through the human model.
   eccentricity-dependent noise, and nothing during saccades.
 - The estimator keeps the belief, whose uncertainty grows while the eyes
   are elsewhere.
-- Attention returns to the road when that uncertainty is high.
+- Attention returns to the road when that uncertainty is high. While
+  automation drives, the road is checked instead at a rate that falls with
+  trust in the automation (Hergeth et al., 2016): the driver no longer
+  needs the lane belief to steer.
 - An in-vehicle task (SuRT) is searched with fixations. Search progress is
   held in memory across road glances, and targets are touched with the
   motor module's Fitts-timed reaches.
@@ -92,6 +95,10 @@ class DriverAgentParameters(Parameters):
             heading are still perceived, degrees.
         perception_interval: Time between perceptual samples, s; visual
             samples are not independent at the simulation rate.
+        monitoring_gain: While automation drives and a task is shown, the
+            rate (1/s) of leaving the task to check the road is this gain
+            times one minus trust in the automation.
+        monitoring_dwell: Mean road glance when checking on automation, s.
     """
 
     display_position: Gaze = (20.0, -25.0)
@@ -108,7 +115,7 @@ class DriverAgentParameters(Parameters):
     seat_frequency: float = 60.0
     seat_site: str = "seat_vertical"
     icon_position: Gaze = (0.0, -12.0)
-    request_capability: float = 0.8
+    request_capability: float = 0.55
     hand_release: float = 0.59
     assessment_fixations: int = 3
     engage_sd: float = 0.15
@@ -119,6 +126,8 @@ class DriverAgentParameters(Parameters):
     driving_chunks: int = 4
     road_field: float = 20.0
     perception_interval: float = 0.1
+    monitoring_gain: float = 0.62
+    monitoring_dwell: float = 0.6
 
     SOURCES: ClassVar = {
         "display_position": Source(
@@ -173,7 +182,8 @@ class DriverAgentParameters(Parameters):
             "https://doi.org/10.1177/0018720819853686",
             "fitted",
             "a first request lowered trust from 5.51 to 5.21 on a 7-point "
-            "scale; one EDFT step from full trust gives 1 - (1 - c) / 4",
+            "scale, 0.752 to 0.702 on trust's 0-1 scale; one EDFT step from "
+            "T = 0.752 gives T + (c - T) / 4",
         ),
         "assessment_fixations": Source(
             "model choice",
@@ -214,6 +224,21 @@ class DriverAgentParameters(Parameters):
         ),
         "perception_interval": Source(
             "model choice", None, "assumed", "about the temporal integration of vision"
+        ),
+        "monitoring_gain": Source(
+            "Hergeth, Lorenz, Vilimek & Krems (2016), Results; "
+            "examples/fit_monitoring.py",
+            "https://doi.org/10.1177/0018720815625744",
+            "fitted",
+            "median monitoring frequency 0.13/s at a mean trust of 74% and "
+            "0.097/s at 82%, SuRT during automation; both give about 0.52/s "
+            "times one minus trust",
+        ),
+        "monitoring_dwell": Source(
+            "Zeeb, Buchner & Schrauf (2015), Section 4.1",
+            "https://doi.org/10.1016/j.aap.2015.02.023",
+            "measured",
+            "mean road glance during automation with a visual task",
         ),
     }
 
@@ -452,6 +477,8 @@ class AttentiveDriver:
         self._assessment: float | None = None
         self._road_since: float | None = None
         self._next_sample = 0.0
+        self._next_check: float | None = None
+        self._check_end: float | None = None
         state = self.env.state
         self.human.estimator.reset(  # type: ignore[call-arg]
             self.human.estimator.rng,
@@ -610,12 +637,18 @@ class AttentiveDriver:
         task_active = self.task is not None and not self._reacted
         demands = {DISPLAY: 1.0} if task_active else {}
 
-        # Attention.
+        # Attention: checks on automation until the request is noticed,
+        # otherwise sampling the road to steer.
         uncertainty = estimator.lateral_sd  # type: ignore[attr-defined]
-        target = human.attention.select(t, self._destination, demands, uncertainty)  # type: ignore[attr-defined]
+        trust = getattr(human.trust, "trust", None)
+        if automation and task_active and trust is not None:
+            target = self._monitor(t, area, float(trust))
+            reason = "monitoring"
+        else:
+            target = human.attention.select(t, self._destination, demands, uncertainty)  # type: ignore[attr-defined]
+            reason = getattr(human.attention, "reason", "")
         if target != self._destination:
             if target == ROAD:
-                reason = getattr(human.attention, "reason", "")
                 self.log.returns.append((t, reason or "unspecified"))
             self._destination = target
             if target == ROAD:
@@ -636,6 +669,25 @@ class AttentiveDriver:
             return self._idle()
         believed = self._believed(state)
         return self.reflex.act(believed)
+
+    def _monitor(self, t: float, area: str, trust: float) -> str:
+        """Where to look while automation drives: the task, with checks of
+        the road at a rate of ``monitoring_gain`` times one minus trust."""
+        p, rng = self.params, self.human.attention.rng
+        if self._destination != ROAD:
+            if self._next_check is None:
+                rate = max(p.monitoring_gain * (1.0 - trust), 1e-6)
+                self._next_check = t + float(rng.exponential(1.0 / rate))
+            if t < self._next_check:
+                return DISPLAY
+            self._check_end = None
+            return ROAD
+        if area == ROAD and self._check_end is None:
+            self._check_end = t + float(rng.gamma(4.0, p.monitoring_dwell / 4.0))
+        if self._check_end is not None and t >= self._check_end:
+            self._next_check = None
+            return DISPLAY
+        return ROAD
 
     def _feel(self, body: BodySensing) -> None:
         """Log the head's motion and update muscle fatigue."""

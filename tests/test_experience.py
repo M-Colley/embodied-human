@@ -91,6 +91,20 @@ def test_vibration_needs_contact_and_follows_thresholds():
     # A gripped steering wheel is most sensitive around 125 Hz (Pacinian).
     wheel = [touch.threshold(f, "steering_wheel") for f in (4, 16, 31.5, 125, 250)]
     assert min(wheel) == touch.threshold(125, "steering_wheel")
+
+
+def test_steering_wheel_perceived_intensity():
+    touch = VibrotactileTouch()
+    # Morioka & Griffin (2009), Fig. 4: psi = 260.4 (a - 0.08)^0.779 at 5 Hz.
+    assert touch.perceived_intensity(0.5, 5, "steering_wheel") == pytest.approx(
+        260.4 * 0.42**0.779
+    )
+    assert touch.perceived_intensity(0.01, 125, "steering_wheel") == 0.0
+    # Their finding: 16 Hz feels stronger than 125 Hz at 1.0 m/s^2 r.m.s.,
+    # but weaker at 0.2 m/s^2 r.m.s.
+    feel = touch.perceived_intensity
+    assert feel(1.0, 16, "steering_wheel") > feel(1.0, 125, "steering_wheel")
+    assert feel(0.2, 16, "steering_wheel") < feel(0.2, 125, "steering_wheel")
     assert touch.latency(30) == pytest.approx(0.1166)
     with pytest.raises(ValueError):
         touch.threshold(10, "elbow")
@@ -196,7 +210,8 @@ def test_three_compartment_endurance_and_recovery():
 
 
 def test_trust_inertia_and_hysteresis():
-    trust = DecisionFieldTrust(noise_sd=0.0)
+    # Gao & Lee's initial bias towards automation, z = 0.3.
+    trust = DecisionFieldTrust(noise_sd=0.0, automation_belief=1.0)
     trust.reset(np.random.default_rng(0))
     assert trust.preference == pytest.approx(0.3)
     modes = [trust.update(0.2, None) for _ in range(6)]
@@ -430,3 +445,42 @@ def test_trust_course_follows_events():
     assert len(course) == 12 and course[0] == 4.6
     assert course[4] < course[3] and course[6] < course[5]  # request, malfunction
     assert kraus_events(2, "MF-/LT") == [["ok"]] * 9
+
+
+def test_monitoring_during_automation_falls_with_trust():
+    from embodied_human.agents.road import simulate_takeover
+    from embodied_human.bench.studies import gaze_in_window
+
+    checks = {}
+    for trust in (0.5, 0.9):
+        config = eh.HumanConfig().replace(
+            "trust", "decision_field", automation_belief=trust
+        )
+        logs = [
+            simulate_takeover(
+                eh.build_human(config, seed=s), request_at=60.0, seconds=60.0, seed=s
+            )
+            for s in range(4)
+        ]
+        assert all(reason == "monitoring" for log in logs for _, reason in log.returns)
+        checks[trust] = sum(len(log.returns) for log in logs)
+    assert checks[0.5] > checks[0.9]
+    # Looks away still under way at the window's edges count up to them.
+    log = logs[0]
+    window = gaze_in_window(log, 0.0, 60.0)
+    assert 0 < window["road_share_pct"] < 50
+    assert window["longest_offroad_s"] > max(e - s for s, e in log.glances())
+
+
+def test_roll_compensated_motion_cancels_lateral_force_at_the_seat():
+    from embodied_human.bench.senses import lateral_roll_motion
+
+    # Donohew & Griffin (2009), Table I: 0.2 Hz at 1.0 m/s peak velocity
+    # needs 7.30 deg of roll.
+    acceleration, rate, up = lateral_roll_motion(
+        0.2, True, 0.05, 10.0, velocity=1.0, eye_height=0.0
+    )
+    np.testing.assert_allclose(acceleration[:, 1] + up[:, 1], 0.0, atol=1e-12)
+    roll = np.degrees(np.arctan2(up[:, 1], up[:, 2]))
+    assert roll.max() == pytest.approx(7.30, abs=0.01)
+    assert np.abs(rate[:, 0]).max() == pytest.approx(math.radians(9.17), abs=0.002)

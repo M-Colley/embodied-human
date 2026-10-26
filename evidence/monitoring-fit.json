@@ -1,0 +1,18 @@
+{
+  "hergeth": [
+    {
+      "trust": 0.7443,
+      "median_per_s": 0.13
+    },
+    {
+      "trust": 0.8208,
+      "median_per_s": 0.097
+    }
+  ],
+  "runs": 32,
+  "monitoring_gain": 0.62,
+  "model_median_per_s": [
+    0.125,
+    0.1
+  ]
+}

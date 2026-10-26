@@ -59,7 +59,7 @@ class TrustParameters(Parameters):
     noise_sd: float = 0.1
     inertia: float = 0.5
     threshold: float = 0.27
-    automation_belief: float = 1.0
+    automation_belief: float = 0.744
     manual_belief: float = 0.7
 
     SOURCES: ClassVar = {
@@ -76,10 +76,11 @@ class TrustParameters(Parameters):
         ),
         "threshold": Source(*_GAO_LEE, "fitted", "1.9 sqrt(2 sigma^2)"),
         "automation_belief": Source(
-            "model choice",
-            None,
-            "assumed",
-            "with manual_belief, gives Gao & Lee's initial bias T - SC = 0.3",
+            "Hergeth, Lorenz, Vilimek & Krems (2016), Results",
+            "https://doi.org/10.1177/0018720815625744",
+            "measured",
+            "self-reported trust of 35 drivers new to highly automated driving "
+            "at its first use, 74.43% (SD 17.56), on trust's 0-1 scale",
         ),
         "manual_belief": Source("model choice", None, "assumed"),
     }

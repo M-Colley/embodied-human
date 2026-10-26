@@ -428,21 +428,41 @@ def takeover_motor_readiness(human: Human, runs: int = 64) -> Result:
     return result
 
 
+def gaze_in_window(log: Any, start: float, end: float) -> dict[str, float]:
+    """Looks away from the road within [start, end), counting looks still
+    under way at either edge up to the edge: the longest, the share of time
+    on the road, and road glances per minute."""
+    times = np.asarray(log.times)
+    on_road = np.asarray(log.areas)[(times >= start) & (times < end)] == ROAD
+    dt = (end - start) / max(len(on_road), 1)
+    longest = run = 0
+    for road in on_road:
+        run = 0 if road else run + 1
+        longest = max(longest, run)
+    entries = int(np.sum(on_road[1:] & ~on_road[:-1]))
+    return {
+        "longest_offroad_s": longest * dt,
+        "road_share_pct": 100.0 * float(np.mean(on_road)),
+        "road_glances_per_min": entries * 60.0 / (end - start),
+    }
+
+
 @benchmark("driving.automation_monitoring")
-def automation_monitoring(human: Human, runs: int = 8) -> Result:
+def automation_monitoring(human: Human, runs: int = 16) -> Result:
     """How the eyes share a visual task with the road while automation
     drives, against the minute before the request in Zeeb et al. (2015).
 
-    The acceptance ranges span their low- to high-risk groups' means. The
-    attention module knows nothing about automation: it returns to the road
-    whenever the belief about the lane grows uncertain, as in manual
-    driving.
+    The acceptance ranges span their low- to high-risk groups' means. During
+    automation the driver checks the road at a rate that falls with its
+    trust (``monitoring_gain``, fitted to Hergeth et al., 2016), starting
+    from the trust Hergeth et al.'s drivers reported at first use. Nothing
+    was fitted to Zeeb et al.'s data.
     """
     from ..agents.road import simulate_takeover
 
-    result = Result("driving.automation_monitoring", ("attention", "eyes"))
+    result = Result("driving.automation_monitoring", ("attention", "eyes", "trust"))
     start, end = 10.0, 70.0
-    longest, road_share, returns = [], [], []
+    rows = []
     for seed in range(runs):
         log = simulate_takeover(
             build_human(human.config, seed=seed),
@@ -451,21 +471,14 @@ def automation_monitoring(human: Human, runs: int = 8) -> Result:
             seconds=end,
             seed=seed,
         )
-        glances = [
-            (max(s, start), min(e, end))
-            for s, e in log.glances()
-            if e > start and s < end
-        ]
-        off = sum(e - s for s, e in glances)
-        longest.append(max((e - s for s, e in glances), default=0.0))
-        road_share.append(100.0 * (1.0 - off / (end - start)))
-        returns.append(len(glances) * 60.0 / (end - start))
-    result.score_against("driving.automation_max_offroad", float(np.mean(longest)))
-    result.score_against("driving.automation_road_share", float(np.mean(road_share)))
+        rows.append(gaze_in_window(log, start, end))
+    mean = {key: float(np.mean([r[key] for r in rows])) for key in rows[0]}
+    result.score_against("driving.automation_max_offroad", mean["longest_offroad_s"])
+    result.score_against("driving.automation_road_share", mean["road_share_pct"])
     result.details = {
         "runs": runs,
         "window_s": [start, end],
-        "model_road_glances_per_min": float(np.mean(returns)),
+        "model_mean": mean,
         "human_by_group": ZEEB_GROUPS,
     }
     return result
@@ -551,5 +564,74 @@ def takeover_determinants(human: Human, runs: int = 64) -> Result:
         "runs": runs,
         "note": "the model has no time budget or urgency, the largest "
         "determinant in the meta-analysis",
+    }
+    return result
+
+
+#: Petermeijer, Doubek & de Winter (2017), Table II: mean (SD) times (s)
+#: after unimodal take-over requests at 120 km/h, 101 drivers reading,
+#: watching a video or calling.
+PETERMEIJER = {
+    "eyes_on_road": {
+        "visual": (1.94, 1.36),
+        "auditory": (1.57, 0.49),
+        "tactile": (1.44, 0.48),
+    },
+    "steer_initiation": {
+        "visual": (2.29, 1.71),
+        "auditory": (1.54, 0.63),
+        "tactile": (1.47, 0.49),
+    },
+}
+
+
+@benchmark("driving.takeover_eyes_by_modality")
+def takeover_eyes_by_modality(human: Human, runs: int = 64) -> Result:
+    """How much later the eyes reach the road after a light than after a
+    sound or a vibration, against Petermeijer, Doubek and de Winter (2017).
+
+    As in the study, each request uses one modality: LEDs beside the task
+    display, two 2700 Hz beeps at 80.6 dB, or the seat vibrating at about
+    60 Hz; the driver does SuRT on the display at 120 km/h. Runs with the
+    eyes already on the road at the request are left out, as the study
+    discarded reactions under 0.3 s. Nothing was fitted to these data.
+    """
+    from dataclasses import replace
+
+    from ..agents.driver import DriverAgentParameters
+    from ..agents.road import simulate_takeover
+
+    result = Result(
+        "driving.takeover_eyes_by_modality", ("hearing", "touch", "response", "eyes")
+    )
+    base = DriverAgentParameters()
+    led = (base.display_position[0] - 10.0, base.display_position[1])
+    params = replace(base, chime_level=80.6, chime_frequency=2700.0, icon_position=led)
+    means = {}
+    for modality in ("visual", "auditory", "tactile"):
+        eyes = []
+        for seed in range(runs):
+            log = simulate_takeover(
+                build_human(human.config, seed=seed),
+                signals=(modality,),
+                speed=120 * KMH,
+                seed=seed,
+                params=params,
+            )
+            if _area_at(log, log.request_at) != ROAD:
+                eyes.append(log.takeover_components()["eyes_s"])
+        means[modality] = float(np.mean(eyes))
+    result.score_against(
+        "driving.petermeijer_visual_vs_auditory", means["visual"] - means["auditory"]
+    )
+    result.score_against(
+        "driving.petermeijer_visual_vs_tactile", means["visual"] - means["tactile"]
+    )
+    result.details = {
+        "model_mean_eyes_on_road_s": means,
+        "human_mean_sd_s": PETERMEIJER,
+        "led_position_deg": list(led),
+        "note": "the study's scenarios were not urgent (more than 10 s to "
+        "collision), and its absolute times are about twice the model's",
     }
     return result

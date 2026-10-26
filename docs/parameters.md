@@ -90,7 +90,7 @@ choice to fit or replace).
 | trust | `TrustParameters.noise_sd` | 0.1 | derived | [Gao & Lee (2006), Table 1](https://doi.org/10.1109/TSMCA.2005.855783) | the text gives sigma^2 = 0.1, but its theta = 1.9 sqrt(2 sigma^2) = 0.27 holds only for sigma = 0.1 |
 | trust | `TrustParameters.inertia` | 0.5 | fitted | [Gao & Lee (2006), Table 1](https://doi.org/10.1109/TSMCA.2005.855783) | taken from Lee & Moray (1992) by Gao & Lee |
 | trust | `TrustParameters.threshold` | 0.27 | fitted | [Gao & Lee (2006), Table 1](https://doi.org/10.1109/TSMCA.2005.855783) | 1.9 sqrt(2 sigma^2) |
-| trust | `TrustParameters.automation_belief` | 1.0 | assumed | model choice | with manual_belief, gives Gao & Lee's initial bias T - SC = 0.3 |
+| trust | `TrustParameters.automation_belief` | 0.744 | measured | [Hergeth, Lorenz, Vilimek & Krems (2016), Results](https://doi.org/10.1177/0018720815625744) | self-reported trust of 35 drivers new to highly automated driving at its first use, 74.43% (SD 17.56), on trust's 0-1 scale |
 | trust | `TrustParameters.manual_belief` | 0.7 | assumed | model choice |  |
 | agents.driver | `DriverAgentParameters.display_position` | (20.0, -25.0) | assumed | model choice | a centre-stack touchscreen |
 | agents.driver | `DriverAgentParameters.display_size` | (16.0, 8.0) | assumed | model choice |  |
@@ -106,7 +106,7 @@ choice to fit or replace).
 | agents.driver | `DriverAgentParameters.seat_frequency` | 60.0 | assumed | model choice |  |
 | agents.driver | `DriverAgentParameters.seat_site` | seat_vertical | assumed | model choice |  |
 | agents.driver | `DriverAgentParameters.icon_position` | (0.0, -12.0) | assumed | model choice | the instrument cluster below the road |
-| agents.driver | `DriverAgentParameters.request_capability` | 0.8 | fitted | [Kraus, Scholz, Stiegemeier & Baumann (2020), Table 2; fitted here](https://doi.org/10.1177/0018720819853686) | a first request lowered trust from 5.51 to 5.21 on a 7-point scale; one EDFT step from full trust gives 1 - (1 - c) / 4 |
+| agents.driver | `DriverAgentParameters.request_capability` | 0.55 | fitted | [Kraus, Scholz, Stiegemeier & Baumann (2020), Table 2; fitted here](https://doi.org/10.1177/0018720819853686) | a first request lowered trust from 5.51 to 5.21 on a 7-point scale, 0.752 to 0.702 on trust's 0-1 scale; one EDFT step from T = 0.752 gives T + (c - T) / 4 |
 | agents.driver | `DriverAgentParameters.hand_release` | 0.59 | fitted | [Gold, Damböck, Lorenz & Bengler (2013), Fig. 3; examples/fit_takeover.py](https://doi.org/10.1177/1541931213571433) | mean hands on the wheel after a tone with an icon during touch SuRT at 120 km/h, midway between 1.45 s (5 s budget) and 1.79 s (7 s); zero for a knob (Zeeb, Buchner & Schrauf, 2015) |
 | agents.driver | `DriverAgentParameters.assessment_fixations` | 3 | assumed | model choice | situation assessment before acting; fit to take-over data |
 | agents.driver | `DriverAgentParameters.engage_sd` | 0.15 | assumed | model choice | the baseline attention module's leave_sd: certain enough to look away is certain enough to drive |
@@ -117,5 +117,7 @@ choice to fit or replace).
 | agents.driver | `DriverAgentParameters.driving_chunks` | 4 | assumed | model choice | with a focus capacity of 4, a road glance displaces task state |
 | agents.driver | `DriverAgentParameters.road_field` | 20.0 | assumed | model choice | peripheral lane keeping degrades with display eccentricity; fit to glance data |
 | agents.driver | `DriverAgentParameters.perception_interval` | 0.1 | assumed | model choice | about the temporal integration of vision |
+| agents.driver | `DriverAgentParameters.monitoring_gain` | 0.62 | fitted | [Hergeth, Lorenz, Vilimek & Krems (2016), Results; examples/fit_monitoring.py](https://doi.org/10.1177/0018720815625744) | median monitoring frequency 0.13/s at a mean trust of 74% and 0.097/s at 82%, SuRT during automation; both give about 0.52/s times one minus trust |
+| agents.driver | `DriverAgentParameters.monitoring_dwell` | 0.6 | measured | [Zeeb, Buchner & Schrauf (2015), Section 4.1](https://doi.org/10.1016/j.aap.2015.02.023) | mean road glance during automation with a visual task |
 
-Counts: assumed 37, derived 4, fitted 52, measured 12, standard 5
+Counts: assumed 36, derived 4, fitted 53, measured 14, standard 5

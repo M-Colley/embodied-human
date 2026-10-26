@@ -22,6 +22,7 @@ from ..core import Human, build_human
 from ..population import OLDER_ADULTS, Population
 from ..response import Signal
 from ..tasks.load import DRIVING
+from ..vestibular import GRAVITY
 from .benchmarks import Result, benchmark
 
 #: Sensation level assumed for the strong vibration of Diederich and
@@ -287,5 +288,99 @@ def sickness_time_course_benchmark(human: Human, dt: float = 0.1) -> Result:
         "mccauley_model_error": float(np.sqrt(np.mean((descriptive - observed) ** 2))),
         "predicted": predicted.tolist(),
         "observed": observed.tolist(),
+    }
+    return result
+
+
+#: Donohew & Griffin (2009), Table I: 30 min of Earth-lateral oscillation,
+#: fully roll-compensated at eight frequencies and uncompensated at three,
+#: as (frequency Hz, peak velocity m/s or None, peak jerk m/s^3 or None).
+ROLL_COMPENSATED = (
+    (0.05, 1.0, None),
+    (0.08, 1.0, None),
+    (0.125, 1.0, None),
+    (0.16, 1.0, None),
+    (0.2, 1.0, None),
+    (0.315, None, 1.96),
+    (0.5, None, 1.96),
+    (0.8, None, 1.96),
+)
+UNCOMPENSATED = ((0.315, None, 1.96), (0.5, None, 1.96), (0.8, None, 1.96))
+#: Their paired comparisons of average illness ratings with compensation
+#: (Mann-Whitney, p < 0.05): (more sickening, less sickening) frequency.
+ROLL_ORDERINGS = ((0.2, 0.08), (0.16, 0.125), (0.2, 0.05), (0.2, 0.125), (0.315, 0.8))
+#: Seated eye height above the centre of roll, m (Pheasant, 1996, as cited).
+EYE_HEIGHT = 0.795
+
+
+def lateral_roll_motion(
+    frequency: float,
+    compensated: bool,
+    dt: float,
+    duration: float,
+    velocity: float | None = None,
+    jerk: float | None = None,
+    eye_height: float = EYE_HEIGHT,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Head acceleration, angular velocity and upward gravity in the head
+    frame for sinusoidal Earth-lateral oscillation of the seat, optionally
+    with the roll about the seat surface that removes the lateral force
+    there (roll angle arctan(a / g)); the head sits ``eye_height`` above."""
+    w = 2 * math.pi * frequency
+    amplitude = velocity / w if velocity is not None else (jerk or 0.0) / w**3
+    t = np.arange(0.0, duration, dt)
+    lateral = -amplitude * w**2 * np.sin(w * t)
+    if compensated:
+        # tan(phi) = u with u = -a / g, differentiated analytically.
+        u = -lateral / GRAVITY
+        du = amplitude * w**3 / GRAVITY * np.cos(w * t)
+        ddu = -(w**2) * u
+        phi = np.arctan(u)
+        dphi = du / (1 + u**2)
+        ddphi = (ddu * (1 + u**2) - 2 * u * du**2) / (1 + u**2) ** 2
+    else:
+        phi = dphi = ddphi = np.zeros_like(t)
+    # Earth-frame head acceleration: the seat's plus the head's swing.
+    ay = lateral - eye_height * (np.cos(phi) * ddphi - np.sin(phi) * dphi**2)
+    az = -eye_height * (np.sin(phi) * ddphi + np.cos(phi) * dphi**2)
+    c, s = np.cos(phi), np.sin(phi)
+    acceleration = np.stack([np.zeros_like(t), c * ay + s * az, -s * ay + c * az], -1)
+    rate = np.stack([dphi, np.zeros_like(t), np.zeros_like(t)], -1)
+    gravity = np.stack([np.zeros_like(t), s * GRAVITY, c * GRAVITY], -1)
+    return acceleration, rate, gravity
+
+
+@benchmark("vestibular.roll_compensation")
+def roll_compensation(human: Human, dt: float = 0.05) -> Result:
+    """Sickness from lateral oscillation with and without full roll
+    compensation (Donohew and Griffin, 2009), on the six-degree-of-freedom
+    model; nothing was fitted to these data.
+
+    - With compensation, the model's MSI after 30 min should follow the five
+      significant differences between frequencies.
+    - At 0.315 Hz, compensation made people significantly sicker (p =
+      0.009; relative risk of mild nausea 3.7 in their Cox model).
+    """
+    result = Result("vestibular.roll_compensation", ("vestibular",))
+    conditions = [(f, True, v, j) for f, v, j in ROLL_COMPENSATED]
+    conditions += [(f, False, v, j) for f, v, j in UNCOMPENSATED]
+    motions = [
+        lateral_roll_motion(f, comp, dt, 1800.0, velocity=v, jerk=j)
+        for f, comp, v, j in conditions
+    ]
+    acceleration, rate, gravity = (np.stack(m) for m in zip(*motions))
+    vestibular: Any = human.vestibular
+    final = vestibular.simulate(dt, acceleration, rate, gravity)[:, -1]
+    msi = {(f, comp): float(value) for (f, comp, _, _), value in zip(conditions, final)}
+    agree = [msi[(hi, True)] > msi[(lo, True)] for hi, lo in ROLL_ORDERINGS]
+    result.score_against("vestibular.roll_frequency_order", float(np.mean(agree)))
+    result.score_against(
+        "vestibular.roll_compensation_effect",
+        msi[(0.315, True)] / max(msi[(0.315, False)], 1e-9),
+    )
+    result.details = {
+        "msi_compensated_pct": {str(f): msi[(f, True)] for f, _, _ in ROLL_COMPENSATED},
+        "msi_uncompensated_pct": {str(f): msi[(f, False)] for f, _, _ in UNCOMPENSATED},
+        "orderings_reproduced": dict(zip(map(str, ROLL_ORDERINGS), agree)),
     }
     return result

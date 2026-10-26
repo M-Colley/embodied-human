@@ -231,6 +231,31 @@ REFERENCES: dict[str, Reference] = {
             "strong vibration 177 ms; share of the three orderings reproduced",
         ),
         Reference(
+            "vestibular.roll_frequency_order",
+            1.0,
+            1.0,
+            1.0,
+            "fraction",
+            "Donohew & Griffin (2009), Results",
+            "https://doi.org/10.3357/ASEM.2345.2009",
+            "30 min of fully roll-compensated lateral oscillation, 20 males per "
+            "frequency: illness rose from 0.08, 0.125 and 0.05 to 0.2 Hz and "
+            "from 0.125 to 0.16 Hz, and fell from 0.315 to 0.8 Hz (p < 0.05); "
+            "share of these five differences reproduced",
+        ),
+        Reference(
+            "vestibular.roll_compensation_effect",
+            3.707,
+            1.0,
+            10.0,
+            "ratio",
+            "Donohew & Griffin (2009), Tables II-III",
+            "https://doi.org/10.3357/ASEM.2345.2009",
+            "MSI with full roll compensation over MSI without, 0.315 Hz: people "
+            "were sicker with compensation (p = 0.009; relative risk of mild "
+            "nausea 3.7); range is any increase up to tenfold",
+        ),
+        Reference(
             "response.eccentricity_rmse",
             0.0,
             0.0,
@@ -393,6 +418,25 @@ REFERENCES: dict[str, Reference] = {
                 ("no_auditory", "take-over request without a sound", 0.2129, -5.29),
                 ("vibrotactile", "take-over request with a vibration", -0.1801, -4.00),
                 ("visual_task", "a visual non-driving task", 0.0975, 3.32),
+            )
+        ),
+        *(
+            Reference(
+                f"driving.petermeijer_visual_vs_{other}",
+                difference,
+                low,
+                high,
+                "s",
+                "Petermeijer, Doubek & de Winter (2017), Table II",
+                "https://doi.org/10.1109/SMC.2017.8122827",
+                f"eyes on the road after a visual minus after a{n} {other} "
+                "take-over request, 67 drivers reading or watching a video on a "
+                "tablet, 120 km/h; range is the 95% CI derived from the paired p "
+                f"value ({p})",
+            )
+            for other, n, difference, low, high, p in (
+                ("auditory", "n", 0.37, 0.10, 0.64, ".008"),
+                ("tactile", "", 0.50, 0.18, 0.82, ".003"),
             )
         ),
         Reference(

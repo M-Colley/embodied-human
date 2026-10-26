@@ -16,9 +16,14 @@ medians of Morioka and Griffin's young male participants:
   handle (2005, Fig. 2; 8-500 Hz; forced choice). Two-interval forced
   choice gives lower thresholds than yes-no, so compare sites within one
   study.
-- ``steering_wheel``: vertical vibration of a 30 mm handle held like a
-  steering wheel at 45 deg in the coronal plane (Morioka and Griffin, 2007,
-  Fig. 3; 4-250 Hz).
+- ``steering_wheel`` and ``steering_wheel_lower``: vertical vibration of
+  a steering wheel gripped 45 deg above or below its centre (Morioka and
+  Griffin, 2009, Table 2; 4-250 Hz). Their 2007 figure gives the same
+  upper-position thresholds within 2%.
+
+For the steering wheel, :meth:`VibrotactileTouch.perceived_intensity`
+also gives how strong a felt vibration is, by Stevens' power law with an
+additive threshold and the exponents and constants of the same table.
 
 Below the lowest frequency of a site the threshold is held constant.
 
@@ -261,13 +266,94 @@ THRESHOLDS: dict[str, tuple[tuple[float, float], ...]] = {
         (500, 0.0848),
     ),
     "steering_wheel": (
-        (4, 0.0805),
-        (8, 0.0818),
+        (4, 0.08),
+        (5, 0.08),
+        (6.3, 0.079),
+        (8, 0.081),
+        (10, 0.091),
+        (12.5, 0.102),
         (16, 0.115),
-        (31.5, 0.0784),
-        (63, 0.0376),
-        (125, 0.0227),
-        (250, 0.0415),
+        (20, 0.101),
+        (25, 0.089),
+        (31.5, 0.079),
+        (40, 0.062),
+        (50, 0.048),
+        (63, 0.038),
+        (80, 0.032),
+        (100, 0.027),
+        (125, 0.023),
+        (160, 0.028),
+        (200, 0.034),
+        (250, 0.041),
+    ),
+    "steering_wheel_lower": (
+        (4, 0.053),
+        (5, 0.063),
+        (6.3, 0.073),
+        (8, 0.086),
+        (10, 0.102),
+        (12.5, 0.12),
+        (16, 0.142),
+        (20, 0.124),
+        (25, 0.108),
+        (31.5, 0.094),
+        (40, 0.07),
+        (50, 0.052),
+        (63, 0.039),
+        (80, 0.035),
+        (100, 0.031),
+        (125, 0.027),
+        (160, 0.033),
+        (200, 0.04),
+        (250, 0.049),
+    ),
+}
+
+#: Growth of perceived intensity above threshold, psi = k (a - a0)^n on a
+#: scale where subjects called 0.4 m/s^2 r.m.s. at 31.5 Hz 100: (frequency
+#: Hz, n, k), medians of 12 subjects (Morioka and Griffin, 2009, Table 2).
+SENSATION_GROWTH: dict[str, tuple[tuple[float, float, float], ...]] = {
+    "steering_wheel": (
+        (4, 0.649, 223.7),
+        (5, 0.779, 260.4),
+        (6.3, 0.786, 234.4),
+        (8, 0.71, 255.4),
+        (10, 0.573, 219.8),
+        (12.5, 0.595, 179.6),
+        (16, 0.653, 188.5),
+        (20, 0.873, 186.3),
+        (25, 1.02, 211.2),
+        (31.5, 0.895, 185.6),
+        (40, 0.77, 162.3),
+        (50, 0.623, 163.9),
+        (63, 0.544, 177.9),
+        (80, 0.366, 158.1),
+        (100, 0.371, 161.3),
+        (125, 0.283, 157.0),
+        (160, 0.326, 163.8),
+        (200, 0.433, 165.3),
+        (250, 0.419, 143.4),
+    ),
+    "steering_wheel_lower": (
+        (4, 0.691, 270.3),
+        (5, 0.668, 234.5),
+        (6.3, 0.661, 188.8),
+        (8, 0.954, 230.1),
+        (10, 0.881, 211.6),
+        (12.5, 1.154, 204.8),
+        (16, 0.698, 162.0),
+        (20, 1.045, 173.2),
+        (25, 1.198, 197.4),
+        (31.5, 0.879, 166.8),
+        (40, 0.85, 181.7),
+        (50, 0.718, 162.8),
+        (63, 0.503, 155.1),
+        (80, 0.488, 166.2),
+        (100, 0.371, 161.3),
+        (125, 0.467, 156.9),
+        (160, 0.401, 160.7),
+        (200, 0.461, 162.5),
+        (250, 0.572, 157.6),
     ),
 }
 
@@ -303,14 +389,19 @@ THRESHOLD_SOURCES = {
             ("grip", "30 mm handle, 10 N; 8 and 16 Hz markers overlap palm"),
         )
     },
-    "steering_wheel": Source(
-        "Morioka & Griffin (2007), Fig. 3",
-        "https://doi.org/10.1109/WHC.2007.58",
-        "measured",
-        "median thresholds of Morioka (2003) overlaid on the figure; read "
-        "from its vector data, mean of the three panels, which agree "
-        "within 3%",
-    ),
+    **{
+        site: Source(
+            "Morioka & Griffin (2009), Table 2",
+            "https://doi.org/10.1016/j.apergo.2008.06.001",
+            "measured",
+            f"medians of 12 males; 30 mm handles on a steering-wheel rig, hands "
+            f"45 deg {where} the wheel centre, comfortable grip (mean 85 N)",
+        )
+        for site, where in (
+            ("steering_wheel", "above"),
+            ("steering_wheel_lower", "below"),
+        )
+    },
 }
 
 
@@ -368,6 +459,15 @@ class Touch(Module):
         """Mean peripheral processing time of a felt vibration, s."""
         raise NotImplementedError
 
+    def perceived_intensity(
+        self, amplitude: float, frequency: float, site: str
+    ) -> float:
+        """Perceived intensity of an r.m.s. acceleration on a magnitude-
+        estimation scale; 0 below threshold. Subjects called a 0.4 m/s^2
+        r.m.s. 31.5 Hz reference 100; the median exponents and constants
+        give it 67."""
+        raise NotImplementedError
+
 
 @register("touch", "vibrotactile")
 class VibrotactileTouch(Touch):
@@ -398,6 +498,24 @@ class VibrotactileTouch(Touch):
         if not contact or amplitude <= 0:
             return -math.inf
         return 20 * math.log10(amplitude / self.threshold(frequency, site))
+
+    def perceived_intensity(
+        self, amplitude: float, frequency: float, site: str
+    ) -> float:
+        try:
+            growth = np.array(SENSATION_GROWTH[site])
+        except KeyError:
+            raise ValueError(
+                f"no growth of sensation for {site!r}; known: "
+                f"{', '.join(SENSATION_GROWTH)}"
+            ) from None
+        above = amplitude - self.threshold(frequency, site)
+        if above <= 0:
+            return 0.0
+        log_f = math.log10(frequency)
+        exponent = float(np.interp(log_f, np.log10(growth[:, 0]), growth[:, 1]))
+        constant = float(np.interp(log_f, np.log10(growth[:, 0]), growth[:, 2]))
+        return constant * above**exponent
 
     def latency(self, sensation_level: float) -> float:
         p = self.params
