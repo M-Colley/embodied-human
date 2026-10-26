@@ -356,6 +356,49 @@ REFERENCES: dict[str, Reference] = {
                 ("intervention", "first braking or steering input", 2.10, 2.89),
             )
         ),
+        *(
+            Reference(
+                f"driving.zeeb_{name}",
+                mean,
+                round(mean - 1.96 * sd / n**0.5, 2),
+                round(mean + 1.96 * sd / n**0.5, 2),
+                "s",
+                "Zeeb, Buchner & Schrauf (2015), Section 3.3",
+                "https://doi.org/10.1016/j.aap.2015.02.023",
+                f"{what} after a tone with an icon in the head unit, visual task "
+                f"through a rotary knob during automation, 120 km/h; {mean} "
+                f"(SD {sd}) s, n = {n}; range is the 95% CI of the mean",
+            )
+            for name, what, mean, sd, n in (
+                ("road", "first gaze at the road", 0.69, 0.20, 62),
+                ("hands", "first contact with the wheel", 1.14, 0.45, 88),
+            )
+        ),
+        Reference(
+            "driving.automation_max_offroad",
+            21.6,
+            8.59,
+            44.35,
+            "s",
+            "Zeeb, Buchner & Schrauf (2015), Table 1",
+            "https://doi.org/10.1016/j.aap.2015.02.023",
+            "longest eyes-off-road time in the minute before a take-over "
+            "request, visual task during automation, 89 drivers; value is the "
+            "n-weighted mean (derived), range the low- and high-risk groups' "
+            "means",
+        ),
+        Reference(
+            "driving.automation_road_share",
+            7.4,
+            2.15,
+            12.48,
+            "%",
+            "Zeeb, Buchner & Schrauf (2015), Table 1",
+            "https://doi.org/10.1016/j.aap.2015.02.023",
+            "share of that minute looking through the windshield; value is the "
+            "n-weighted mean (derived), range the high- and low-risk groups' "
+            "means",
+        ),
         Reference(
             "vestibular.vertical_msi_error",
             0.0,

@@ -48,17 +48,17 @@ choice to fit or replace).
 | touch | `TouchParameters.latency_gain` | 0.1175 | assumed | [Diederich & Colonius (2004), Table 2; fitted here](https://doi.org/10.3758/BF03195006) | tactile RT 218 vs 177 ms for their weakest and strongest vibration, assumed 10 and 30 dB above threshold |
 | touch | `TouchParameters.latency_exponent` | -0.29 | assumed | [Kohfeld, Santee & Wallace (1981)](https://doi.org/10.3758/BF03207370) | auditory exponent; no vibrotactile fit exists |
 | touch | `TouchParameters.reference_latency` | 0.1166 | derived | [Diederich & Colonius (2004, 2015); derived](https://doi.org/10.3758/BF03195006) | visual 1/lambda_V of 102.6 ms (2015) plus the 14 ms by which strong tactile RT exceeded visual RT (2004) |
-| vestibular | `VerticalConflictParameters.accel_gain` | 0.1 | fitted | [Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1016/j.ergon.2016.11.003) |  |
-| vestibular | `VerticalConflictParameters.rate_gain` | 0.8 | fitted | [Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1016/j.ergon.2016.11.003) |  |
-| vestibular | `VerticalConflictParameters.rate_feedback` | 5.0 | fitted | [Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1016/j.ergon.2016.11.003) |  |
-| vestibular | `VerticalConflictParameters.vertical_feedback` | 5.0 | fitted | [Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1016/j.ergon.2016.11.003) |  |
-| vestibular | `VerticalConflictParameters.accel_feedback` | 1.0 | fitted | [Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1016/j.ergon.2016.11.003) |  |
+| vestibular | `VerticalConflictParameters.accel_gain` | 0.1 | fitted | [Kamiji, Kurata, Wada & Doi (2007), Table 1; Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1109/SICE.2007.4421156) |  |
+| vestibular | `VerticalConflictParameters.rate_gain` | 0.8 | fitted | [Kamiji, Kurata, Wada & Doi (2007), Table 1; Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1109/SICE.2007.4421156) |  |
+| vestibular | `VerticalConflictParameters.rate_feedback` | 5.0 | fitted | [Kamiji, Kurata, Wada & Doi (2007), Table 1; Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1109/SICE.2007.4421156) |  |
+| vestibular | `VerticalConflictParameters.vertical_feedback` | 5.0 | fitted | [Kamiji, Kurata, Wada & Doi (2007), Table 1; Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1109/SICE.2007.4421156) |  |
+| vestibular | `VerticalConflictParameters.accel_feedback` | 1.0 | fitted | [Kamiji, Kurata, Wada & Doi (2007), Table 1; Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1109/SICE.2007.4421156) |  |
 | vestibular | `VerticalConflictParameters.vertical_lag` | 5.0 | measured | [Wada, Fujisawa & Doi (2018), p. 7; Bos & Bles (2002)](https://doi.org/10.1016/j.ergon.2016.11.003) | from vertical perception studies |
-| vestibular | `VerticalConflictParameters.canal_lag` | 7.0 | fitted | [Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1016/j.ergon.2016.11.003) |  |
-| vestibular | `VerticalConflictParameters.adaptation_lag` | 190.0 | fitted | [Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1016/j.ergon.2016.11.003) |  |
+| vestibular | `VerticalConflictParameters.canal_lag` | 7.0 | fitted | [Kamiji, Kurata, Wada & Doi (2007), Table 1; Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1109/SICE.2007.4421156) |  |
+| vestibular | `VerticalConflictParameters.adaptation_lag` | 190.0 | fitted | [Kamiji, Kurata, Wada & Doi (2007), Table 1; Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1109/SICE.2007.4421156) |  |
 | vestibular | `VerticalConflictParameters.conflict_scale` | 0.196 | fitted | [O'Hanlon & McCauley (1974), Tables 1-2; fitted here](https://archive.org/details/DTIC_AD0768215) | MSI after 2 h at 14 vertical conditions (examples/fit_motion_sickness.py); Wada et al. (2018) used 0.5 for car passengers, Bos & Bles (1998) fitted 0.7 in 1-D |
-| vestibular | `VerticalConflictParameters.sickness_lag` | 720.0 | fitted | [Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1016/j.ergon.2016.11.003) |  |
-| vestibular | `VerticalConflictParameters.max_incidence` | 85.0 | fitted | [Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1016/j.ergon.2016.11.003) |  |
+| vestibular | `VerticalConflictParameters.sickness_lag` | 720.0 | fitted | [Kamiji, Kurata, Wada & Doi (2007), Table 1; Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1109/SICE.2007.4421156) |  |
+| vestibular | `VerticalConflictParameters.max_incidence` | 85.0 | fitted | [Kamiji, Kurata, Wada & Doi (2007), Table 1; Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1109/SICE.2007.4421156) |  |
 | response | `TwinParameters.central` | 0.2171 | fitted | [Diederich & Colonius (2015), Table 1](https://doi.org/10.1037/a0038696) | median over 11 participants |
 | response | `TwinParameters.facilitation` | 0.0204 | fitted | [Diederich & Colonius (2015), Table 1](https://doi.org/10.1037/a0038696) | median over 11 participants |
 | response | `TwinParameters.window` | 0.3588 | fitted | [Diederich & Colonius (2015), Table 1](https://doi.org/10.1037/a0038696) | median omega_RT |
@@ -107,7 +107,7 @@ choice to fit or replace).
 | agents.driver | `DriverAgentParameters.seat_site` | seat_vertical | assumed | model choice |  |
 | agents.driver | `DriverAgentParameters.icon_position` | (0.0, -12.0) | assumed | model choice | the instrument cluster below the road |
 | agents.driver | `DriverAgentParameters.request_capability` | 0.8 | fitted | [Kraus, Scholz, Stiegemeier & Baumann (2020), Table 2; fitted here](https://doi.org/10.1177/0018720819853686) | a first request lowered trust from 5.51 to 5.21 on a 7-point scale; one EDFT step from full trust gives 1 - (1 - c) / 4 |
-| agents.driver | `DriverAgentParameters.decision_dwell` | 0.78 | fitted | [Ko, Sanghavi, Zhang & Jeon (2022), Fig. 4; examples/fit_takeover.py](https://doi.org/10.1016/j.trf.2022.08.008) | median hands on the wheel 1.87 s after a chime with a text, with SuRT holding the central stage; cognitive processing rather than motor readiness sets take-over time (Zeeb, Buchner & Schrauf, 2015) |
+| agents.driver | `DriverAgentParameters.hand_release` | 0.64 | fitted | [Gold, Damböck, Lorenz & Bengler (2013), Fig. 3; examples/fit_takeover.py](https://doi.org/10.1177/1541931213571433) | mean hands on the wheel after a tone with an icon during touch SuRT at 120 km/h, midway between 1.45 s (5 s budget) and 1.79 s (7 s); zero for a knob (Zeeb, Buchner & Schrauf, 2015) |
 | agents.driver | `DriverAgentParameters.assessment_fixations` | 3 | assumed | model choice | situation assessment before acting; fit to take-over data |
 | agents.driver | `DriverAgentParameters.scene_fixation` | 0.33 | measured | [Rayner (1998), Table 1](https://doi.org/10.1037/0033-2909.124.3.372) | mean fixation in scene perception |
 | agents.driver | `DriverAgentParameters.display_distance` | 0.45 | assumed | model choice |  |

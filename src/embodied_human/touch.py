@@ -16,6 +16,9 @@ medians of Morioka and Griffin's young male participants:
   handle (2005, Fig. 2; 8-500 Hz; forced choice). Two-interval forced
   choice gives lower thresholds than yes-no, so compare sites within one
   study.
+- ``steering_wheel``: vertical vibration of a 30 mm handle held like a
+  steering wheel at 45 deg in the coronal plane (Morioka and Griffin, 2007,
+  Fig. 3; 4-250 Hz).
 
 Below the lowest frequency of a site the threshold is held constant.
 
@@ -257,6 +260,15 @@ THRESHOLDS: dict[str, tuple[tuple[float, float], ...]] = {
         (250, 0.0244),
         (500, 0.0848),
     ),
+    "steering_wheel": (
+        (4, 0.0805),
+        (8, 0.0818),
+        (16, 0.115),
+        (31.5, 0.0784),
+        (63, 0.0376),
+        (125, 0.0227),
+        (250, 0.0415),
+    ),
 }
 
 _MG_2008 = (
@@ -291,6 +303,14 @@ THRESHOLD_SOURCES = {
             ("grip", "30 mm handle, 10 N; 8 and 16 Hz markers overlap palm"),
         )
     },
+    "steering_wheel": Source(
+        "Morioka & Griffin (2007), Fig. 3",
+        "https://doi.org/10.1109/WHC.2007.58",
+        "measured",
+        "median thresholds of Morioka (2003) overlaid on the figure; read "
+        "from its vector data, mean of the three panels, which agree "
+        "within 3%",
+    ),
 }
 
 

@@ -85,6 +85,9 @@ def test_vibration_needs_contact_and_follows_thresholds():
     sites = ("fingertip", "palm", "grip")
     assert min(sites, key=lambda s: touch.threshold(8, s)) == "fingertip"
     assert max(sites, key=lambda s: touch.threshold(125, s)) == "fingertip"
+    # A gripped steering wheel is most sensitive around 125 Hz (Pacinian).
+    wheel = [touch.threshold(f, "steering_wheel") for f in (4, 16, 31.5, 125, 250)]
+    assert min(wheel) == touch.threshold(125, "steering_wheel")
     assert touch.latency(30) == pytest.approx(0.1166)
     with pytest.raises(ValueError):
         touch.threshold(10, "elbow")
@@ -119,6 +122,21 @@ def test_vestibular_rest_wf_and_iso_dose():
     dose = IsoDose().simulate(dt, motion)[-1]
     expected = wf_weighting(f) * peak / math.sqrt(2) * math.sqrt(3600) / 3
     assert dose == pytest.approx(float(expected), rel=0.01)
+
+
+def test_vertical_conflict_matches_kamiji_band_pass():
+    # Kamiji et al. (2007), Eq. 11: without rotation or an internal model of
+    # acceleration, the conflict is s / (tau s^2 + s + K_vc) times a.
+    svc = SubjectiveVertical(accel_gain=0.0, accel_feedback=0.0)
+    p, dt = svc.params, 0.02
+    t = np.arange(0, 100, dt)
+    frequencies = np.array([0.05, 0.2, 0.5])
+    motion = np.zeros((len(frequencies), len(t), 3))
+    motion[..., 2] = np.sin(2 * math.pi * frequencies[:, None] * t)
+    amplitude = svc.conflict(dt, motion)[:, t > 80].max(axis=1)
+    s = 2j * math.pi * frequencies
+    expected = np.abs(s / (p.vertical_lag * s**2 + s + p.vertical_feedback))
+    np.testing.assert_allclose(amplitude, expected, rtol=0.005)
 
 
 def test_motion_sickness_grows_with_acceleration():
@@ -294,20 +312,25 @@ def test_drt_benchmark_measures_while_driving():
     assert details["on_road_older_ms"] > details["on_road_ms"]
 
 
-def test_takeover_decision_waits_for_the_road():
+def test_hands_return_in_parallel_and_driving_waits_for_assessment():
     from dataclasses import replace
 
     from embodied_human.agents.driver import DriverAgentParameters
     from embodied_human.agents.road import simulate_takeover
 
-    quick = replace(DriverAgentParameters(), decision_dwell=0.0)
-    slow = replace(DriverAgentParameters(), decision_dwell=1.0)
-    fast_log = simulate_takeover(eh.build_human(seed=2), seed=2, params=quick)
-    slow_log = simulate_takeover(eh.build_human(seed=2), seed=2, params=slow)
+    knob = replace(DriverAgentParameters(), hand_release=0.0)
+    laptop = replace(DriverAgentParameters(), hand_release=1.0)
+    fast_log = simulate_takeover(eh.build_human(seed=2), seed=2, params=knob)
+    slow_log = simulate_takeover(eh.build_human(seed=2), seed=2, params=laptop)
     fast, late = fast_log.takeover_components(), slow_log.takeover_components()
     assert late["hand_s"] - fast["hand_s"] == pytest.approx(1.0, abs=0.05)
-    # The hand starts only after the eyes are on the road.
-    assert late["hand_s"] > late["eyes_s"] + 1.0
+    # The hand starts at the reaction, whether or not the eyes are on the
+    # road yet; it then takes one Fitts-timed reach.
+    reach = eh.build_human(seed=2).motor.movement_time(0.45, 0.1)  # type: ignore[attr-defined]
+    assert fast["hand_s"] - fast["response_s"] == pytest.approx(reach, abs=0.03)
+    # Driving waits for the hand and for the assessment of the road scene.
+    for parts in (fast, late):
+        assert parts["engaged_s"] >= max(parts["hand_s"], parts["eyes_s"])
 
 
 def test_takeover_waits_for_surt_and_logs_the_gaze_reaction():

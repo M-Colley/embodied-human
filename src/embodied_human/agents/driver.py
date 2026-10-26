@@ -18,10 +18,12 @@ sees the road only through the human model.
   heard over the cabin noise, felt through the seat and seen at its
   eccentricity from the current gaze; the response module combines what
   was sensed into the reaction, which waits for the central stage held by
-  the task (threaded cognition). The driver then drops the task and looks
-  to the road, decides from the road scene to take over, moves the hand to
-  the wheel, and drives once the situation is assessed and the belief is
-  certain again; the take-over time emerges from these steps.
+  the task (threaded cognition). The driver then drops the task: gaze
+  goes to the road and, in parallel, the hand leaves the task and returns
+  to the wheel (motor readiness). It drives once the hand is back, the
+  situation has been assessed from the road and the belief is certain
+  again: cognitive processing rather than motor readiness sets the
+  take-over time (Zeeb, Buchner and Schrauf, 2015).
 
 Two-point steering uses the observed near- and far-point angles, corrected
 by the belief error in lateral offset and heading; curvature preview is
@@ -71,9 +73,10 @@ class DriverAgentParameters(Parameters):
         icon_position: Direction of the takeover icon, degrees.
         request_capability: Automation capability (0-1) a takeover request
             reveals to the trust module.
-        decision_dwell: Time looking at the road after a takeover request
-            before the hand starts back to the wheel, s: the decision to
-            take over is made from the road scene.
+        hand_release: Time from the reaction to a takeover request until
+            the hand leaves the task and starts back to the wheel, s. It
+            grows with the task's manual load and runs in parallel with the
+            gaze shift.
         assessment_fixations: Road fixations needed after a takeover request
             to rebuild the situation before driving.
         scene_fixation: Mean fixation duration in scene viewing, s.
@@ -104,7 +107,7 @@ class DriverAgentParameters(Parameters):
     seat_site: str = "seat_vertical"
     icon_position: Gaze = (0.0, -12.0)
     request_capability: float = 0.8
-    decision_dwell: float = 0.78
+    hand_release: float = 0.64
     assessment_fixations: int = 3
     scene_fixation: float = 0.33
     display_distance: float = 0.45
@@ -154,14 +157,13 @@ class DriverAgentParameters(Parameters):
         "icon_position": Source(
             "model choice", None, "assumed", "the instrument cluster below the road"
         ),
-        "decision_dwell": Source(
-            "Ko, Sanghavi, Zhang & Jeon (2022), Fig. 4; examples/fit_takeover.py",
-            "https://doi.org/10.1016/j.trf.2022.08.008",
+        "hand_release": Source(
+            "Gold, Damböck, Lorenz & Bengler (2013), Fig. 3; examples/fit_takeover.py",
+            "https://doi.org/10.1177/1541931213571433",
             "fitted",
-            "median hands on the wheel 1.87 s after a chime with a text, "
-            "with SuRT holding the central stage; cognitive processing rather "
-            "than motor readiness sets take-over time (Zeeb, Buchner & "
-            "Schrauf, 2015)",
+            "mean hands on the wheel after a tone with an icon during touch "
+            "SuRT at 120 km/h, midway between 1.45 s (5 s budget) and 1.79 s "
+            "(7 s); zero for a knob (Zeeb, Buchner & Schrauf, 2015)",
         ),
         "request_capability": Source(
             "Kraus, Scholz, Stiegemeier & Baumann (2020), Table 2; fitted here",
@@ -586,10 +588,10 @@ class AttentiveDriver:
         if (
             self._reacted
             and self._hand_back is None
-            and self._road_since is not None
-            and t - self._road_since >= p.decision_dwell
+            and t >= self.log.reacted_at + p.hand_release  # type: ignore[operator]
         ):
-            # Decided from the road scene: the hand starts back to the wheel.
+            # Motor readiness, in parallel with the gaze shift: the hand
+            # leaves the task and starts back to the wheel.
             movement = human.motor.plan(  # type: ignore[attr-defined]
                 np.zeros(3), np.array([p.display_distance, 0.0, 0.0]), p.wheel_width, t
             )

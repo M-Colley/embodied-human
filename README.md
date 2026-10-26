@@ -80,8 +80,8 @@ class InterferenceMemory(Memory):
 | `motor` | `ffitts_min_jerk` | MT = 147.7 + 105.0 log2(A/W + 1) ms; endpoint SD² = (W/4.133)² + σa², σa = 1.5 mm; minimum-jerk path | Bi, Li & Zhai (2013); Soukoreff & MacKenzie (2004); Flash & Hogan (1985) |
 | `estimator` | `lane_kalman` | Kalman filter on lateral offset and heading with known speed and yaw rate; heading process noise sets how fast uncertainty grows | Senders et al. (1967) account; parameters assumed |
 | `hearing` | `psychoacoustic` | Threshold in quiet (ISO 226); masking by noise in the critical band, K = 0.4; car cabin noise by speed; latency by Piéron's law (k = 7.31 ms, n = −0.33); ISO 7731 audibility; loudness of waveforms with MoSQITo | ISO 226:2003/2023; Zwicker & Terhardt (1980); Scharf (1970); Kohfeld et al. (1981) |
-| `touch` | `vibrotactile` | Vibration thresholds by frequency for the hand on a handle, the seat and the foot in three axes, and for the fingertip, palm and grip; felt only through contact | Morioka & Griffin (2005, 2008) |
-| `vestibular` | `subjective_vertical` | 6-DOF subjective vertical conflict model: otoliths, canals and their internal model; conflict to motion sickness incidence. Alternative: `iso_2631` (Wf-weighted motion sickness dose) | Bos & Bles (1998); Wada, Fujisawa & Doi (2018); ISO 2631-1 |
+| `touch` | `vibrotactile` | Vibration thresholds by frequency for the hand on a handle, the seat and the foot in three axes, for the fingertip, palm and grip, and for a steering wheel; felt only through contact | Morioka & Griffin (2005, 2007, 2008) |
+| `vestibular` | `subjective_vertical` | 6-DOF subjective vertical conflict model: otoliths, canals and their internal model; conflict to motion sickness incidence. Alternative: `iso_2631` (Wf-weighted motion sickness dose) | Bos & Bles (1998); Kamiji et al. (2007); Wada, Fujisawa & Doi (2018); ISO 2631-1 |
 | `response` | `twin` | Time-window-of-integration model: channels race, signals within 359 ms integrate and save 20 ms; visual latency grows with eccentricity | Diederich & Colonius (2015); Osaka (1976) |
 | `fatigue` | `three_compartment` | Active, fatigued and resting motor units per joint; recovery 15-30× faster at rest; Consumed Endurance for comparison | Xia & Frey-Law (2008); Frey-Law et al. (2012); Looft et al. (2018); Hincapié-Ramos et al. (2014) |
 | `affect` | `appraisal` | Q-learning values appraised (suddenness, relevance, conduciveness, power) and recognised as emotions by linear SVMs | Zhang, Hilpert, Broekens & Jokinen (2024); Scherer (2001) |
@@ -164,7 +164,7 @@ python -m embodied_human.bench --replace attention=seev --out seev.json
 ```
 
 Results of the baseline (seed 0; [report](evidence/benchmark-baseline.json)).
-Sixteen of twenty-three benchmarks pass:
+Sixteen of twenty-five benchmarks pass:
 
 | Benchmark | Measured | Human reference (acceptance range) | Kind of check |
 | --- | --- | --- | --- |
@@ -175,9 +175,11 @@ Sixteen of twenty-three benchmarks pass:
 | `memory.span` | 4 items | 3–5 chunks (Cowan, 2001) | consistency |
 | `motor.touch_tapping` | 6.28 bits/s; 104 ms/bit | 6.95 bits/s (5.5–8.5; MacKenzie, 2015); 105 ms/bit (75–135; Bi et al., 2013) | **through physical contact** |
 | `driving.surt_glances` | Full body at 72 km/h: mean off-road glance 0.93 s; 2.2% over 2 s | NHTSA (2013) criteria: pass. Human in-vehicle glances, mean 0.8–1.2 s: pass; 3–13% over 2 s: just below (score 0.98) | **held out** (fitted on a straight road at 50 km/h) |
-| `driving.takeover` | chime and icon: first input after 2.24 s, SD 0.62 s (8 runs); median response 0.51 s, gaze leaves SuRT 0.61 s, eyes on the road 0.75 s, hand on the wheel 1.96 s, driving 1.97 s | 2.72 ± 1.45 s across 520 conditions (Zhang et al., 2019): pass | **held out** |
-| `driving.takeover_components` | at 120 km/h, means of 16 runs: gaze leaves SuRT 0.48 s, first road fixation 0.73 s, hands on 1.94 s, first input 1.99 s | Gold et al. (2013), between their 5 and 7 s budgets: 0.41–0.54 s and 0.69–0.94 s: pass; 1.45–1.79 s and 2.10–2.89 s: **fail** | **held out** |
-| `driving.takeover_modality` | median response: sound 0.35 s, vibration 0.50 s, light 0.52 s; hand on the wheel after chime and icon 1.87 s | sound and touch faster than light (Petermeijer et al., 2017): pass. Grabbing the wheel 1.87 s (Ko et al., 2022): the decision time is fitted to it | order emergent; hands fitted |
+| `driving.takeover` | chime and icon: first input after 2.03 s, SD 0.69 s (8 runs); median response 0.51 s, gaze leaves SuRT 0.61 s, eyes on the road 0.75 s, hand on the wheel 1.58 s, driving 1.71 s | 2.72 ± 1.45 s across 520 conditions (Zhang et al., 2019): pass | **held out** |
+| `driving.takeover_components` | at 120 km/h, means of 16 runs: gaze leaves SuRT 0.48 s, first road fixation 0.73 s, hands on 1.63 s, first input 1.81 s | Gold et al. (2013), between their 5 and 7 s budgets: 0.41–0.54 s and 0.69–0.94 s: pass; hands 1.45–1.79 s: fitted to the midpoint; first input 2.10–2.89 s: **fail** | **held out**; hands fitted |
+| `driving.takeover_motor_readiness` | task worked through a knob, icon in its display: first road fixation 0.74 s, hands on 0.97 s | Zeeb et al. (2015): 0.69 s (0.64–0.74): pass; 1.14 s (1.05–1.23): **fail** | **held out** |
+| `driving.automation_monitoring` | a visual task during automation at 120 km/h: longest look away from the road 1.8 s per minute; eyes on the road 36% of the time | Zeeb et al. (2015), between their low- and high-risk groups: 8.6–44.4 s and 2.2–12.5%: **fail** | **held out** |
+| `driving.takeover_modality` | median response: sound 0.35 s, vibration 0.50 s, light 0.52 s; hand on the wheel after chime and icon 1.52 s | sound and touch faster than light (Petermeijer et al., 2017): pass. Grabbing the wheel 1.87 s (1.36–2.38; Ko et al., 2022): pass | **held out** |
 | `response.drt_load` | DRT cost of driving +28 ms; of an auditory 2-back +284 ms; of SuRT +382 ms | +51 ms (31–70; Conti et al., 2014), predicted from threaded cognition: just below. Cooper et al. (2020) on the road: 2-back +234 ms (152–316): pass; SuRT +177 ms (104–250): **fail** | driving and Cooper held out; chunks fitted to Conti |
 | `response.modality_rt` | tone 252 ms < light 319 ms < vibration 335 ms | same order (Diederich & Colonius, 2004) | order only |
 | `response.eccentricity` | a light at 50° and 70° answered 40 and 59 ms later than at 10° | saccades 39 and 58 ms later (Diederich & Colonius, 2007), RMS error ≤ 10 ms: pass | **held out**; 70° extrapolated |
@@ -208,21 +210,36 @@ real test:
     occlusion data nor in-car search, which looks unaffected by speed.
     [docs/seminar-requirements.md](docs/seminar-requirements.md) discusses
     what this implies for alternative attention modules.
-- **Take-over.** After noticing the request, the driver looks at the road
-  and decides from the scene before reaching for the wheel; cognitive
-  processing rather than motor readiness sets take-over time (Zeeb et al.,
-  2015). The request finds the central stage busy with SuRT, whose chunk
-  was fitted to Conti et al.'s DRT data, so the reaction waits 0.36 s on
-  average. Without being fitted to Gold et al. (2013), this puts the first
-  saccade away from SuRT and the first road fixation between their means
-  for 5 and 7 s budgets; without the wait both came too early (0.39 and
-  0.43 s). The rest does not match: the hands arrive later than in Gold et
-  al. (1.94 s; the decision time is fitted to Ko et al.'s 1.87 s) and the
-  first input follows at once (1.99 s against 2.10-2.89 s). Gold et al.'s
-  drivers held the wheel 0.65-1.10 s before braking or steering, choosing a
-  manoeuvre around an obstacle that the straight road does not have. On
-  the full body the first input comes after 2.24 s, against the
-  meta-analytic 2.72 s.
+- **Take-over.** The take-over follows Zeeb et al.'s (2015) model. After
+  noticing the request, the driver drops the task: the eyes go to the road
+  and, in parallel, the hand returns to the wheel. It acts only after the
+  hand is back and the road scene has been assessed.
+  - **Reaction.** The request finds the central stage busy with SuRT,
+    whose chunk was fitted to Conti et al.'s DRT data, so the reaction
+    waits 0.36 s on average. Without being fitted to Gold et al. (2013),
+    this puts the first saccade away from SuRT and the first road fixation
+    between their means for 5 and 7 s budgets. Without the wait, both came
+    too early (0.39 and 0.43 s).
+  - **Hands.** The time to let go of the task grows with its manual load.
+    It is fitted to Gold et al.'s touchscreen SuRT. That predicts Ko et
+    al.'s laptop game (1.52 s against 1.87 ± 0.51 s). Assuming no release
+    time for Zeeb et al.'s knob, the first road fixation matches theirs,
+    but the hands arrive 0.17 s early.
+  - **Acting.** The first input comes 1.08 s after the eyes reach the road,
+    against 1.4–1.95 s in Gold et al.: three scene fixations are too few.
+    Zeeb et al. found that drivers who had watched the road less before the
+    request braked later. Each second of their longest look away added
+    about 19 ms (derived from the three group means). The model does not
+    link assessment to monitoring yet.
+  - **Full body:** the first input comes after 2.03 s, against the
+    meta-analytic 2.72 s.
+- **Monitoring during automation.** Zeeb et al.'s drivers looked away from
+  the road for 8.6–44 s at a time and watched it 2–12% of the time. The
+  model glances as if it were steering: it looks away for at most 1.8 s
+  and watches the road 36% of the time. Its attention returns to the road
+  when its belief about the lane grows uncertain, and nothing tells it
+  that automation is driving. Trust (Gao & Lee's decision field) would be
+  the natural input.
 - **Senses and responses.** Older drivers slow down as much as in Cooper
   et al. (2020), but absolute DRT times miss in both directions. The
   head-mounted light is answered about 60 ms later than in Conti et al.,
@@ -314,6 +331,10 @@ No code from these projects is included.
   predictions too. Hit rates under load are not modelled.
 - **Take-over:** the model has no time budget or hazard to act on, so it
   cannot show that drivers react sooner with less time (Gold et al., 2013).
+  Its assessment of the scene does not depend on how well it watched the
+  road before the request (Zeeb et al., 2015).
+- **Attention under automation:** monitoring ignores automation and trust
+  (see above).
 - **Next benchmarks:**
   - Occlusion distance on highways: mean 15.5 m (Kujala et al., 2016).
 

@@ -1,14 +1,16 @@
-"""Fit the take-over decision time to Ko et al. (2022).
+"""Fit the hand's release from the task to Gold et al. (2013).
 
-Ko et al.'s drivers grabbed the wheel 1.87 s after an auditory warning with
-a visual text while they played a game on the centre console. The driver's
-``decision_dwell`` (time looking at the road before the hand starts back)
-is chosen on a 10 ms grid so that the median time to the wheel over the
-runs of ``driving.takeover_modality`` (chime and icon, SuRT during
-automation) matches it. The take-over reaction waits for the central stage
+After a take-over request the hand leaves the task and returns to the
+wheel in parallel with the gaze shift (Zeeb, Buchner & Schrauf, 2015); how
+long it takes to let go grows with the task's manual load. Gold et al.'s
+drivers did SuRT on a touchscreen, as the simulated driver does, and had
+their hands on the wheel after 1.45 s (5 s budget) and 1.79 s (7 s). The
+model has no time budget, so ``hand_release`` is chosen on a 10 ms grid to
+match the midpoint, over the runs of ``driving.takeover_components`` (tone
+with an icon, 120 km/h). The take-over reaction waits for the central stage
 held by SuRT, whose chunk is fitted to Conti et al. (2014), so refit after
-changing that chunk. Gold et al.'s (2013) take-over components are not
-used here; ``driving.takeover_components`` tests them.
+changing that chunk. Ko et al.'s (2022) 1.87 s with a laptop game is left
+for ``driving.takeover_modality`` to test.
 
 python examples/fit_takeover.py --out evidence/takeover-fit.json
 """
@@ -27,37 +29,37 @@ from embodied_human.agents.driver import DriverAgentParameters
 from embodied_human.agents.road import simulate_takeover
 from embodied_human.bench.references import REFERENCES
 
-RUNS = 12
+RUNS = 16
+SPEED = 120 / 3.6
 
 
-def median_hands(dwell: float) -> float:
-    """Median time to the wheel after a chime with an icon, s."""
-    params = replace(DriverAgentParameters(), decision_dwell=dwell)
+def mean_hands(release: float) -> float:
+    """Mean time to the wheel after a tone with an icon, s."""
+    params = replace(DriverAgentParameters(), hand_release=release)
     times = [
         simulate_takeover(
-            eh.build_human(seed=seed),
-            signals=("auditory", "visual"),
-            seed=seed,
-            params=params,
+            eh.build_human(seed=seed), speed=SPEED, seed=seed, params=params
         ).takeover_components()["hand_s"]
         for seed in range(RUNS)
     ]
-    return float(np.median(times))
+    return float(np.mean(times))
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", type=Path)
     args = parser.parse_args()
-    target = REFERENCES["driving.takeover_hands_auditory"].value
-    grid = np.round(np.arange(0.3, 1.31, 0.01), 2)
-    hands = {float(d): median_hands(float(d)) for d in grid}
-    best = min(hands, key=lambda d: abs(hands[d] - target))
+    reference = REFERENCES["driving.takeover_hands"]
+    target = (reference.low + reference.high) / 2
+    grid = np.round(np.arange(0.0, 1.51, 0.01), 2)
+    hands = {float(r): mean_hands(float(r)) for r in grid}
+    best = min(hands, key=lambda r: abs(hands[r] - target))
     report = {
         "target_s": target,
         "runs": RUNS,
-        "decision_dwell_s": best,
-        "median_hands_s": hands[best],
+        "speed_kmh": 120,
+        "hand_release_s": best,
+        "mean_hands_s": hands[best],
     }
     print(json.dumps(report, indent=2))
     if args.out:

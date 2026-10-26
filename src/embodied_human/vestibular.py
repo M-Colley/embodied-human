@@ -1,9 +1,9 @@
 """Self-motion perception and motion sickness.
 
 Baseline :class:`SubjectiveVertical` is the 6-DOF subjective vertical
-conflict model (Bos and Bles, 1998; Kamiji et al., 2007; parameters of
-Wada, Fujisawa and Doi, 2018, Table 1, with the conflict scale refitted to
-vertical-motion data). The vestibular organs sense the
+conflict model (Bos and Bles, 1998; Kamiji et al., 2007), with Kamiji et
+al.'s parameters (2007, Table 1; the same in Wada, Fujisawa and Doi, 2018)
+and the conflict scale refitted to vertical-motion data. The vestibular organs sense the
 gravito-inertial acceleration ``f = g + a`` (otoliths) and angular
 velocity (semicircular canals, a high-pass filter); the brain fuses them
 into a sensed vertical and runs an internal model of the same organs on
@@ -35,15 +35,15 @@ from .core import Module, Parameters, Source, register
 GRAVITY = 9.81
 Array = NDArray[np.float64]
 
-_WADA_2018 = (
-    "Wada, Fujisawa & Doi (2018), Table 1",
-    "https://doi.org/10.1016/j.ergon.2016.11.003",
+_KAMIJI_2007 = (
+    "Kamiji, Kurata, Wada & Doi (2007), Table 1; Wada, Fujisawa & Doi (2018), Table 1",
+    "https://doi.org/10.1109/SICE.2007.4421156",
 )
 
 
 @dataclass(frozen=True)
 class VerticalConflictParameters(Parameters):
-    """6-DOF subjective vertical conflict model (Wada et al., 2018).
+    """6-DOF subjective vertical conflict model (Kamiji et al., 2007).
 
     Args:
         accel_gain: K_a, accuracy of sensed self-acceleration (internal model).
@@ -72,7 +72,7 @@ class VerticalConflictParameters(Parameters):
     max_incidence: float = 85.0
 
     SOURCES: ClassVar = {
-        name: Source(*_WADA_2018, "fitted")
+        name: Source(*_KAMIJI_2007, "fitted")
         for name in (
             "accel_gain",
             "rate_gain",
@@ -198,6 +198,26 @@ class SubjectiveVertical(Vestibular):
         angular_velocity: Array | None = None,
         gravity: Array | None = None,
     ) -> Array:
+        return self._run(dt, acceleration, angular_velocity, gravity)[1]
+
+    def conflict(
+        self,
+        dt: float,
+        acceleration: Array,
+        angular_velocity: Array | None = None,
+        gravity: Array | None = None,
+    ) -> Array:
+        """Magnitude of the vertical conflict (m/s²) over time, the input to
+        the sickness stage; arguments as in :meth:`simulate`."""
+        return self._run(dt, acceleration, angular_velocity, gravity)[0]
+
+    def _run(
+        self,
+        dt: float,
+        acceleration: Array,
+        angular_velocity: Array | None,
+        gravity: Array | None,
+    ) -> tuple[Array, Array]:
         a_all = np.asarray(acceleration, dtype=float)
         w_all = _shape(angular_velocity, a_all)
         up = np.array([0.0, 0.0, GRAVITY])
@@ -207,6 +227,7 @@ class SubjectiveVertical(Vestibular):
         batch, steps = a_all.shape[:-2], a_all.shape[-2]
         x = self.initial(batch, g_all[..., 0, :])
         msi = np.zeros(batch + (steps,))
+        conflict = np.zeros(batch + (steps,))
 
         def inputs(k: float) -> tuple[Array, Array, Array]:
             lo = min(int(math.floor(k)), steps - 1)
@@ -233,7 +254,8 @@ class SubjectiveVertical(Vestibular):
                 for key in x
             }
             msi[..., k] = x["msi"]
-        return msi
+            conflict[..., k] = np.linalg.norm(x["g_s"] - x["g_hat_s"], axis=-1)
+        return conflict, msi
 
 
 @dataclass(frozen=True)

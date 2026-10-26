@@ -498,3 +498,105 @@ smaller eccentricity. The cost of driving itself is close (+32 ms against
 even without driving. Cooper et al.'s on-road times are 158 ms slower than
 the model's; their colour-changing light reflected in the windshield and
 real traffic are not modelled.
+
+## 2026-10-26 (later): parallel motor readiness, Zeeb et al., Kamiji et al., steering wheel
+
+Same PC and versions. Five more papers were uploaded:
+
+- **Zeeb, Buchner and Schrauf (2015):** used.
+- **Kamiji et al. (2007):** used.
+- **Morioka and Griffin (2007), steering wheel:** used.
+- **Morioka and Griffin (2008, JSV):** a second copy of a paper already in
+  use. All 165 table values agree with the stored thresholds.
+- **Bharitkar et al. (2004, JASA):** a room-equalisation paper, not one of
+  the requested sources. The intended one was probably Morioka and Griffin
+  (2008, JASA), doi:10.1121/1.2935002.
+
+### Changes
+
+- **Take-over structure.** Zeeb et al. argue, and Gold et al.'s data show,
+  that the hands return to the wheel reflexively and in parallel with the
+  gaze, and that the first input waits for the situation to be processed.
+  The driver had the hand wait for a decision dwell on the road scene.
+  - **Now:** the hand leaves the task `hand_release` seconds after the
+    reaction. Driving still waits for the hand and for the assessment of
+    the road.
+  - **Refit:** `hand_release` replaces `decision_dwell`. It is fitted to
+    the midpoint of Gold et al.'s hands-on times (1.62 s) on their SuRT
+    task, which is the simulated driver's task. This gives 0.64 s (10 ms
+    grid, 16 runs at 120 km/h).
+  - **Ko et al.:** their laptop game is a different task, so their
+    hands-on time is now held out.
+- **Vestibular.**
+  - **Sources:** the parameters now cite Kamiji et al. (2007), Table 1,
+    whose values are those already used.
+  - **New method:** `SubjectiveVertical.conflict` returns the conflict
+    over time.
+- **Touch.** A `steering_wheel` site comes from the median thresholds in
+  Morioka and Griffin (2007), Fig. 3:
+  - read from the PDF's vector data;
+  - the three panels draw the same curve and agree within 3%.
+
+### Tests
+
+`python -m pytest tests -q` passes 67 tests. New or changed tests:
+
+- the hand starts one release time after the reaction, whatever the eyes
+  are doing, and driving waits for both hand and assessment;
+- with rotation and the internal acceleration model switched off, the
+  vertical conflict follows Kamiji et al.'s closed form
+  s/(τs² + s + K_vc)·a. The match is within 0.5% at 0.05, 0.2 and 0.5 Hz;
+- the steering wheel is most sensitive near 125 Hz.
+
+### Fit
+
+```bash
+python examples/fit_takeover.py --out evidence/takeover-fit.json
+```
+
+`hand_release` = 0.64 s gives a mean hands-on time of 1.63 s against the
+1.62 s target.
+
+### Benchmark
+
+```bash
+python -m embodied_human.bench --out evidence/benchmark-baseline.json
+```
+
+The run took 146 s; **16 of 25 benchmarks pass**. Both new benchmarks fail.
+
+| Benchmark | Before | Now | Human reference |
+| --- | --- | --- | --- |
+| driving.takeover_components | gaze 0.48, road 0.73, hands 1.94, input 1.99 s | gaze 0.48, road 0.73, hands 1.63 (fitted), input 1.81 s: **fail** on input | 0.41–0.54, 0.69–0.94, 1.45–1.79, 2.10–2.89 s |
+| driving.takeover_modality | hands 1.87 s (fitted) | hands 1.52 s (held out): pass | 1.87 s (1.36–2.38) |
+| driving.takeover_motor_readiness (new) | — | road 0.74 s: pass; hands 0.97 s: **fail** | 0.69 s (0.64–0.74); 1.14 s (1.05–1.23) (Zeeb et al.) |
+| driving.automation_monitoring (new) | — | longest look away 1.8 s; road 36%: **fail** | 8.6–44.4 s; 2.2–12.5% (Zeeb et al., Table 1) |
+| driving.takeover (MyoSuite) | 2.24 s, SD 0.62 | 2.03 s, SD 0.69: pass | 2.72 ± 1.45 s |
+
+### Interpretation
+
+- **Motor readiness.** With the hand released at the reaction, hands-on
+  times line up across tasks by manual load: Zeeb et al.'s knob (1.14 s),
+  Gold et al.'s SuRT (1.45–1.79 s) and Ko et al.'s laptop (1.87 s). Even
+  with no release time, the model's knob take-over is 0.17 s faster than
+  Zeeb et al.'s. They detected contact from steering-wheel motion, which
+  probably lags the touch.
+- **Processing.** The first input comes 1.08 s after the eyes reach the
+  road; Gold et al.'s drivers needed 1.4–1.95 s. Zeeb et al.'s groups
+  braked at 1.63, 1.86 and 2.31 s after longest looks away of 8.6, 20.8
+  and 44.4 s. That is about 19 ms more per second away from the road
+  (derived; it is linear across the three groups). Linking the number of
+  assessment fixations to what memory lost while the eyes were away would
+  turn this into a prediction.
+- **Monitoring.** During automation the model glances as if it were
+  steering. Zeeb et al.'s drivers watched the road far less, and how much
+  they did predicted their braking time.
+- **Not used.**
+  - Kamiji et al.'s improved parameter set (Table 2) adds a second-order
+    learning filter. It also changes predictions in a way the authors
+    describe as worse at low and high frequencies.
+  - The steering-wheel paper's rate of growth of sensation (Fig. 2) and
+    its equivalent comfort contours are not used; the touch module models
+    detection only. The journal version (Morioka and Griffin, 2009,
+    Applied Ergonomics, doi:10.1016/j.apergo.2008.06.001) may tabulate
+    them.

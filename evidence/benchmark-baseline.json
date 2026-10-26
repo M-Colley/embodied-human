@@ -75,7 +75,7 @@
     "standard": 3,
     "derived": 4
   },
-  "wall_seconds": 145.92,
+  "wall_seconds": 145.56,
   "results": [
     {
       "name": "eyes.main_sequence",
@@ -489,7 +489,7 @@
       "score": 1.0,
       "skipped": null,
       "metrics": {
-        "driving.takeover_time": 2.244999999999828
+        "driving.takeover_time": 2.0274999999998324
       },
       "scores": {
         "driving.takeover_time": 1.0
@@ -508,23 +508,23 @@
       },
       "details": {
         "takeover_times_s": [
-          1.5399999999998428,
-          2.099999999999831,
-          2.8599999999998147,
-          3.459999999999802,
+          1.3799999999998462,
           1.9199999999998347,
-          1.8199999999998369,
-          2.2599999999998275,
-          1.999999999999833
+          2.8199999999998155,
+          3.2999999999998053,
+          1.6599999999998403,
+          1.479999999999844,
+          2.099999999999831,
+          1.5599999999998424
         ],
-        "sd_s": 0.6232403801331833,
+        "sd_s": 0.690419127362902,
         "missed": 0,
         "median_components_s": {
           "response_s": 0.5099999999998648,
           "gaze_s": 0.6072830881159526,
-          "hand_s": 1.955940319956758,
+          "hand_s": 1.575940319956766,
           "eyes_s": 0.7499999999998597,
-          "engaged_s": 1.9699999999998337
+          "engaged_s": 1.7099999999998392
         },
         "scenario": "myosuite-carla takeover_request: automation at 12 m/s, request at 10 s, 7 s budget"
       }
@@ -2210,7 +2210,7 @@
       "skipped": null,
       "metrics": {
         "driving.takeover_modality_order": 1.0,
-        "driving.takeover_hands_auditory": 1.86594031995676
+        "driving.takeover_hands_auditory": 1.5159403199567674
       },
       "scores": {
         "driving.takeover_modality_order": 1.0,
@@ -2243,30 +2243,30 @@
           "visual": {
             "response_s": 0.5199999999998646,
             "gaze_s": 0.5210758374112086,
-            "hand_s": 1.8559403199567601,
+            "hand_s": 1.5859403199567659,
             "eyes_s": 0.6499999999998618,
-            "engaged_s": 2.049999999999832
+            "engaged_s": 1.7999999999998373
           },
           "auditory": {
             "response_s": 0.3499999999998682,
             "gaze_s": 0.4950218323615099,
-            "hand_s": 1.8259403199567608,
+            "hand_s": 1.4159403199567695,
             "eyes_s": 0.6199999999998624,
-            "engaged_s": 1.8899999999998354
+            "engaged_s": 1.6599999999998403
           },
           "tactile": {
             "response_s": 0.499999999999865,
             "gaze_s": 0.5112374509690936,
-            "hand_s": 1.8459403199567603,
+            "hand_s": 1.5659403199567663,
             "eyes_s": 0.639999999999862,
-            "engaged_s": 2.0299999999998324
+            "engaged_s": 1.7499999999998384
           },
           "auditory+visual": {
             "response_s": 0.44999999999986606,
             "gaze_s": 0.5211734224491806,
-            "hand_s": 1.86594031995676,
+            "hand_s": 1.5159403199567674,
             "eyes_s": 0.6599999999998616,
-            "engaged_s": 1.8799999999998356
+            "engaged_s": 1.6599999999998403
           }
         },
         "runs": 12
@@ -2282,19 +2282,19 @@
         "motor"
       ],
       "passed": false,
-      "score": 0.8570896753854284,
+      "score": 0.9086234177214674,
       "skipped": null,
       "metrics": {
         "driving.takeover_gaze": 0.4845883479851344,
         "driving.takeover_road": 0.7299999999998601,
-        "driving.takeover_hands": 1.9359403199567584,
-        "driving.takeover_intervention": 1.9874999999998333
+        "driving.takeover_hands": 1.627190319956765,
+        "driving.takeover_intervention": 1.811249999999837
       },
       "scores": {
         "driving.takeover_gaze": 1.0,
         "driving.takeover_road": 1.0,
-        "driving.takeover_hands": 0.5707637648330637,
-        "driving.takeover_intervention": 0.8575949367086496
+        "driving.takeover_hands": 1.0,
+        "driving.takeover_intervention": 0.6344936708858696
       },
       "references": {
         "driving.takeover_gaze": {
@@ -2342,8 +2342,8 @@
         "model_mean_s": {
           "gaze": 0.4845883479851344,
           "road": 0.7299999999998601,
-          "hands": 1.9359403199567584,
-          "intervention": 1.9874999999998333
+          "hands": 1.627190319956765,
+          "intervention": 1.811249999999837
         },
         "model_ci95_s": {
           "gaze": [
@@ -2355,12 +2355,12 @@
             1.0251463712362439
           ],
           "hands": [
-            1.7521903199567623,
-            2.231086691193142
+            1.4650101248913705,
+            1.952339583402262
           ],
           "intervention": [
-            1.7837499999998374,
-            2.322772530732608
+            1.587534218665647,
+            2.163424781909167
           ]
         },
         "model_response_s": 0.5612499999998637,
@@ -2399,6 +2399,159 @@
             "steering": [
               3.65,
               1.33
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "driving.takeover_motor_readiness",
+      "categories": [
+        "hearing",
+        "response",
+        "eyes",
+        "motor"
+      ],
+      "passed": false,
+      "score": 0.776917555435497,
+      "skipped": null,
+      "metrics": {
+        "driving.zeeb_road": 0.7363636363634963,
+        "driving.zeeb_hands": 0.969690319956779
+      },
+      "scores": {
+        "driving.zeeb_road": 1.0,
+        "driving.zeeb_hands": 0.5538351108709941
+      },
+      "references": {
+        "driving.zeeb_road": {
+          "value": 0.69,
+          "range": [
+            0.64,
+            0.74
+          ],
+          "unit": "s",
+          "citation": "Zeeb, Buchner & Schrauf (2015), Section 3.3",
+          "doi": "https://doi.org/10.1016/j.aap.2015.02.023"
+        },
+        "driving.zeeb_hands": {
+          "value": 1.14,
+          "range": [
+            1.05,
+            1.23
+          ],
+          "unit": "s",
+          "citation": "Zeeb, Buchner & Schrauf (2015), Section 3.3",
+          "doi": "https://doi.org/10.1016/j.aap.2015.02.023"
+        }
+      },
+      "details": {
+        "runs": 16,
+        "runs_eyes_off_road": 11,
+        "model_engaged_s": 1.7587499999998382,
+        "human_braking_by_group_s": {
+          "high-risk": [
+            2.31,
+            0.67
+          ],
+          "medium-risk": [
+            1.86,
+            0.67
+          ],
+          "low-risk": [
+            1.63,
+            0.5
+          ]
+        },
+        "human_mean_sd_n": {
+          "road_s": [
+            0.69,
+            0.2,
+            62
+          ],
+          "hands_s": [
+            1.14,
+            0.45,
+            88
+          ]
+        }
+      }
+    },
+    {
+      "name": "driving.automation_monitoring",
+      "categories": [
+        "attention",
+        "eyes"
+      ],
+      "passed": false,
+      "score": 0.4054110738255055,
+      "skipped": null,
+      "metrics": {
+        "driving.automation_max_offroad": 1.8250000000001534,
+        "driving.automation_road_share": 36.36666666666311
+      },
+      "scores": {
+        "driving.automation_max_offroad": 0.810822147651011,
+        "driving.automation_road_share": 0.0
+      },
+      "references": {
+        "driving.automation_max_offroad": {
+          "value": 21.6,
+          "range": [
+            8.59,
+            44.35
+          ],
+          "unit": "s",
+          "citation": "Zeeb, Buchner & Schrauf (2015), Table 1",
+          "doi": "https://doi.org/10.1016/j.aap.2015.02.023"
+        },
+        "driving.automation_road_share": {
+          "value": 7.4,
+          "range": [
+            2.15,
+            12.48
+          ],
+          "unit": "%",
+          "citation": "Zeeb, Buchner & Schrauf (2015), Table 1",
+          "doi": "https://doi.org/10.1016/j.aap.2015.02.023"
+        }
+      },
+      "details": {
+        "runs": 8,
+        "window_s": [
+          10.0,
+          70.0
+        ],
+        "model_road_glances_per_min": 53.75,
+        "human_by_group": {
+          "high-risk": {
+            "n": 20,
+            "road_glances": 1.1,
+            "road_pct": 2.15,
+            "max_off_s": 44.35,
+            "braking_s": [
+              2.31,
+              0.67
+            ]
+          },
+          "medium-risk": {
+            "n": 36,
+            "road_glances": 4.72,
+            "road_pct": 5.56,
+            "max_off_s": 20.83,
+            "braking_s": [
+              1.86,
+              0.67
+            ]
+          },
+          "low-risk": {
+            "n": 33,
+            "road_glances": 11.79,
+            "road_pct": 12.48,
+            "max_off_s": 8.59,
+            "braking_s": [
+              1.63,
+              0.5
             ]
           }
         }

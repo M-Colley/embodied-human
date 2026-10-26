@@ -26,6 +26,7 @@ from typing import Any
 
 import numpy as np
 
+from ..attention import ROAD
 from ..core import Human, HumanConfig, build_human
 from ..population import BASELINE_VARIATIONS, Population, applicable
 from .benchmarks import Result, benchmark
@@ -333,5 +334,130 @@ def takeover_components(human: Human, runs: int = 16) -> Result:
         "runs_with_eyes_on_task": int(np.isfinite(model["gaze"]).sum()),
         "gold_mean_s": GOLD,
         "gold_inputs_mean_sd_s": GOLD_INPUTS,
+    }
+    return result
+
+
+#: Zeeb, Buchner & Schrauf (2015), Section 3.3: after a tone with an icon in
+#: the head unit, during a visual task operated by a rotary knob.
+ZEEB_TAKEOVER = {"road_s": (0.69, 0.20, 62), "hands_s": (1.14, 0.45, 88)}
+#: Their Table 1 and Section 3.3 per monitoring group (n = 20, 36, 33): road
+#: glances per minute, % of the minute on the road, longest eyes-off-road
+#: time (s) in the minute before the request, and braking time (mean, SD).
+ZEEB_GROUPS = {
+    "high-risk": {
+        "n": 20,
+        "road_glances": 1.10,
+        "road_pct": 2.15,
+        "max_off_s": 44.35,
+        "braking_s": (2.31, 0.67),
+    },
+    "medium-risk": {
+        "n": 36,
+        "road_glances": 4.72,
+        "road_pct": 5.56,
+        "max_off_s": 20.83,
+        "braking_s": (1.86, 0.67),
+    },
+    "low-risk": {
+        "n": 33,
+        "road_glances": 11.79,
+        "road_pct": 12.48,
+        "max_off_s": 8.59,
+        "braking_s": (1.63, 0.50),
+    },
+}
+
+
+def _area_at(log: Any, time: float | None) -> str:
+    """Area of interest the eyes were on at ``time`` (the start if None)."""
+    index = int(np.searchsorted(np.asarray(log.times), time or 0.0))
+    return str(log.areas[min(index, len(log.areas) - 1)])
+
+
+@benchmark("driving.takeover_motor_readiness")
+def takeover_motor_readiness(human: Human, runs: int = 16) -> Result:
+    """First road fixation and hands on the wheel against Zeeb et al. (2015).
+
+    Their drivers worked a visual task in the head unit through a rotary
+    knob, so the hand lets go at once (``hand_release`` 0, assumed for a
+    knob); the request was a tone with an icon in the same display. As in
+    the study, runs with the eyes already on the road at the request are
+    left out of the road fixation. Nothing was fitted to these data.
+    """
+    from dataclasses import replace
+
+    from ..agents.driver import DriverAgentParameters
+    from ..agents.road import simulate_takeover
+
+    result = Result(
+        "driving.takeover_motor_readiness", ("hearing", "response", "eyes", "motor")
+    )
+    base = DriverAgentParameters()
+    params = replace(base, hand_release=0.0, icon_position=base.display_position)
+    road, hands, engaged = [], [], []
+    for seed in range(runs):
+        log = simulate_takeover(
+            build_human(human.config, seed=seed),
+            speed=120 * KMH,
+            seed=seed,
+            params=params,
+        )
+        parts = log.takeover_components()
+        if _area_at(log, log.request_at) != ROAD:
+            road.append(parts["eyes_s"])
+        hands.append(parts["hand_s"])
+        engaged.append(parts["engaged_s"])
+    result.score_against("driving.zeeb_road", float(np.mean(road)))
+    result.score_against("driving.zeeb_hands", float(np.mean(hands)))
+    result.details = {
+        "runs": runs,
+        "runs_eyes_off_road": len(road),
+        "model_engaged_s": float(np.mean(engaged)),
+        "human_braking_by_group_s": {k: v["braking_s"] for k, v in ZEEB_GROUPS.items()},
+        "human_mean_sd_n": ZEEB_TAKEOVER,
+    }
+    return result
+
+
+@benchmark("driving.automation_monitoring")
+def automation_monitoring(human: Human, runs: int = 8) -> Result:
+    """How the eyes share a visual task with the road while automation
+    drives, against the minute before the request in Zeeb et al. (2015).
+
+    The acceptance ranges span their low- to high-risk groups' means. The
+    attention module knows nothing about automation: it returns to the road
+    whenever the belief about the lane grows uncertain, as in manual
+    driving.
+    """
+    from ..agents.road import simulate_takeover
+
+    result = Result("driving.automation_monitoring", ("attention", "eyes"))
+    start, end = 10.0, 70.0
+    longest, road_share, returns = [], [], []
+    for seed in range(runs):
+        log = simulate_takeover(
+            build_human(human.config, seed=seed),
+            speed=120 * KMH,
+            request_at=end,
+            seconds=end,
+            seed=seed,
+        )
+        glances = [
+            (max(s, start), min(e, end))
+            for s, e in log.glances()
+            if e > start and s < end
+        ]
+        off = sum(e - s for s, e in glances)
+        longest.append(max((e - s for s, e in glances), default=0.0))
+        road_share.append(100.0 * (1.0 - off / (end - start)))
+        returns.append(len(glances) * 60.0 / (end - start))
+    result.score_against("driving.automation_max_offroad", float(np.mean(longest)))
+    result.score_against("driving.automation_road_share", float(np.mean(road_share)))
+    result.details = {
+        "runs": runs,
+        "window_s": [start, end],
+        "model_road_glances_per_min": float(np.mean(returns)),
+        "human_by_group": ZEEB_GROUPS,
     }
     return result
