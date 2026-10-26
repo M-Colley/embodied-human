@@ -121,8 +121,8 @@ it. There are two kinds.
 | Senders et al. (1967); Jokinen et al. (2021) | how glance duration changes with speed | **not replicated**: lies between the two results |
 | Conti et al. (2014) | DRT costs of n-back and SuRT | fitted |
 | Conti et al. (2014) | DRT time and its cost of driving | **not replicated**: 60 ms slow; cost +28 ms against +31 to +70 ms |
-| Cooper et al. (2020) | DRT cost of a 2-back on the road; slowing of older drivers | replicated |
-| Cooper et al. (2020) | on-road DRT time; DRT cost of SuRT | **not replicated** |
+| Cooper et al. (2020), tactile responses from their raw data | DRT cost of a 2-back on the road; slowing of older drivers | replicated |
+| Cooper et al. (2020), tactile responses from their raw data | on-road DRT time; DRT cost of SuRT | **not replicated** |
 | O'Hanlon & McCauley (1974) | motion sickness after 2 h of vertical oscillation | fitted (one parameter) |
 | McCauley et al. (1976) | motion sickness over time at nine other conditions | **not replicated**: error 14.8 against ≤ 10 |
 | Frey-Law & Avin (2010) | endurance times per joint | fitted (by Frey-Law et al., 2012) |
@@ -284,10 +284,10 @@ Sixteen of twenty-five benchmarks pass:
 | `driving.takeover_motor_readiness` | task worked through a knob, icon in its display: first road fixation 0.74 s, hands on 0.97 s | Zeeb et al. (2015): 0.69 s (0.64–0.74): pass; 1.14 s (1.05–1.23): **fail** | **held out** |
 | `driving.automation_monitoring` | a visual task during automation at 120 km/h: longest look away from the road 1.8 s per minute; eyes on the road 36% of the time | Zeeb et al. (2015), between their low- and high-risk groups: 8.6–44.4 s and 2.2–12.5%: **fail** | **held out** |
 | `driving.takeover_modality` | median response: sound 0.35 s, vibration 0.50 s, light 0.52 s; hand on the wheel after chime and icon 1.52 s | sound and touch faster than light (Petermeijer et al., 2017): pass. Grabbing the wheel 1.87 s (1.36–2.38; Ko et al., 2022): pass | **held out** |
-| `response.drt_load` | DRT cost of driving +28 ms; of an auditory 2-back +284 ms; of SuRT +382 ms | +51 ms (31–70; Conti et al., 2014), predicted from threaded cognition: just below. Cooper et al. (2020) on the road: 2-back +234 ms (152–316): pass; SuRT +177 ms (104–250): **fail** | driving and Cooper held out; chunks fitted to Conti |
+| `response.drt_load` | DRT cost of driving +28 ms; tactile DRT cost of an auditory 2-back +289 ms, of SuRT +365 ms | +51 ms (31–70; Conti et al., 2014), predicted from threaded cognition: just below. Cooper et al. (2020) on the road, tactile responses from their raw data: 2-back +294 ms (261–328): pass; SuRT +193 ms (162–223): **fail** | driving and Cooper held out; chunks fitted to Conti |
 | `response.modality_rt` | tone 252 ms < light 319 ms < vibration 335 ms | same order (Diederich & Colonius, 2004) | order only |
 | `response.eccentricity` | a light at 50° and 70° answered 40 and 59 ms later than at 10° | saccades 39 and 58 ms later (Diederich & Colonius, 2007), RMS error ≤ 10 ms: pass | **held out**; 70° extrapolated |
-| `response.drt` | while driving: head-mounted light 385 ms (353 ms without driving); vibration and windshield light pooled 368 ms; older drivers 1.32× slower | head-mounted light 326–362 ms (Conti et al., 2014; 293 ms without driving): **fail**; pooled on the road 526 ms (482–570; Cooper et al., 2020): **fail**; ageing 1.07–1.36×: pass | **emergent** |
+| `response.drt` | while driving: head-mounted light 385 ms (355 ms without driving); vibration 380 ms; older drivers 1.30× slower | head-mounted light 326–362 ms (Conti et al., 2014; 293 ms without driving): **fail**; vibration on the road 523 ms (490–556; Cooper et al., 2020, from their raw data): **fail**; ageing 1.20–1.41×: pass | **emergent** |
 | `vestibular.vertical_sickness` | RMS error 7.5 % points, r = 0.93 (19.7 with the published conflict scale) | 2 h vertical oscillation (O'Hanlon & McCauley, 1974): ≤ 10 | fitted (one parameter) |
 | `vestibular.sickness_time_course` | RMS error 14.8 % points, r = 0.76 over 43 points | sickness over time at nine other conditions (McCauley et al., 1976), ≤ 10: **fail**; their descriptive model: 6.3. `--replace vestibular=iso_2631`: 12.4 | **held out** |
 | `fatigue.endurance` | median error 17% | endurance times per joint (Frey-Law & Avin, 2010) | consistency |
@@ -348,9 +348,10 @@ real test:
   et al. (2020), but absolute DRT times miss in both directions. The
   head-mounted light is answered about 60 ms later than in Conti et al.,
   with or without driving: TWIN's parameters come from another lab's
-  lights and task. Cooper et al.'s on-road DRT is 158 ms slower than the
-  model: their light changed colour as a reflection in the windshield, and
-  their drivers were in traffic. Latency
+  lights and task. On the road, Cooper et al.'s drivers answered a
+  vibration 143 ms and a light reflected in the windshield 197 ms more
+  slowly than the model. Their light changed colour rather than switching
+  on, and their drivers were in traffic. Latency
   grows with eccentricity as in Osaka's (1976) manual reactions, and
   Diederich and Colonius's (2007) saccades grow by the same amounts at 50°
   and 70° (within 1 ms), though 70° lies beyond Osaka's data. Their palm
@@ -362,9 +363,10 @@ real test:
   Driving's own cost, taken from threaded cognition's driver without
   fitting, comes out at 28 ms, just below Conti et al.'s 51 ms. With the
   n-back and SuRT chunks fitted to Conti et al.'s visual DRT, the model
-  predicts Cooper et al.'s 2-back cost on the road, but doubles their SuRT
-  cost: their touch-based SuRT paused at intersections, and their reaction
-  times pooled two stimulus types and counted only detected stimuli.
+  predicts Cooper et al.'s 2-back cost on the road for the vibration
+  (+289 against +294 ms; tactile times recomputed from their raw data).
+  It nearly doubles their SuRT cost (+365 against +193 ms): their
+  touch-based SuRT paused at intersections and hazards.
 - **Motion sickness.** One parameter (the conflict scale) refitted to the
   2-hour data cuts the error from 19.7 to 7.5. On the held-out time courses
   the error halves (28.6 to 14.8) but stays above the descriptive model of
@@ -452,6 +454,7 @@ python examples/calibrate_glances.py --out evidence/glance-calibration.json
 python examples/fit_motion_sickness.py --out evidence/motion-sickness-fit.json
 python examples/fit_drt_load.py --out evidence/drt-load-fit.json
 python examples/fit_takeover.py --out evidence/takeover-fit.json
+python examples/cooper_drt_aggregates.py drt.csv --out evidence/cooper-drt-aggregates.json  # raw data from the authors
 python examples/parameter_table.py                      # regenerates docs/parameters.md
 ```
 

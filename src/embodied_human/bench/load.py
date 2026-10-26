@@ -11,7 +11,9 @@ detection responses through the shared central stage
   those are consistency checks.
 - Cooper et al. (2020) used the same 2-back and a different SuRT on the
   road, with a tactile DRT and a forward light whose reaction times they
-  pooled. Their increases over driving are predictions.
+  pooled. Their raw data give the tactile times alone
+  (``examples/cooper_drt_aggregates.py``); its increases over driving are
+  predictions.
 
 During SuRT the eyes are often on the display, which moves a head-mounted
 light further into the periphery; how often comes from the attentive
@@ -48,8 +50,10 @@ CONTI = {
     "2-back": 636.6,
     "surt": 729.2,
 }
-#: Cooper et al. (2020), Table 4, drivers aged 21-36, ms.
-COOPER = {"driving": 526.0, "2-back": 760.0, "surt": 703.0}
+#: Cooper et al. (2020): tactile DRT of drivers aged 21-36, means of 65
+#: participants computed from their raw data
+#: (evidence/cooper-drt-aggregates.json), ms.
+COOPER = {"driving": 523.0, "2-back": 817.4, "surt": 715.4}
 
 
 def display_share(human: Human, seconds: float = 60.0) -> float:
@@ -117,7 +121,7 @@ def drt_load(human: Human) -> Result:
         for name, (load, on_display) in conditions(share).items()
     }
     cooper = {
-        name: drt_rt(human, ["tactile", "forward_light"], load, on_display)
+        name: drt_rt(human, ["tactile"], load, on_display)
         for name, (load, on_display) in conditions(share).items()
         if name in COOPER
     }

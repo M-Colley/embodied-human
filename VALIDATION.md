@@ -645,3 +645,53 @@ MuJoCo 3.17.0.
   - **Test:** it now skips only when MoSQITo is absent, so a broken
     install fails.
 - **CI.** The workflow now also runs on Python 3.14.
+
+## 2026-10-26: Cooper et al.'s raw DRT data
+
+Same PC and versions. Cooper et al. (2020) pooled responses to a vibration
+under the collarbone with responses to a light reflected in the
+windshield. Their raw data are in `data.zip` at
+https://github.com/utahcdst/Aging-Report-Frontiers.
+
+- **Download.** Downloaded on request (5.1 MB). The repository has no
+  licence, so the raw data stay outside this package. Only aggregates
+  were written ([evidence/cooper-drt-aggregates.json](evidence/cooper-drt-aggregates.json)),
+  by `examples/cooper_drt_aggregates.py`.
+- **Procedure.** The authors' `rt.R` keeps only hits, and SuRT stimuli
+  only while SuRT was in use. Averaging per session, as `rt.R` does,
+  reproduces their Table 4 exactly: 526, 639, 760, 944, 703 and 881 ms.
+- **Stimulus codes.** Code 2 is the vibration: it is hit in 97–98% of
+  single-task trials. Code 1 is the light, the one `hr.R` scores hits for.
+- **Intervals.** Participants drove up to six vehicles, so intervals use
+  participant means: 65 younger and 63 older drivers.
+
+Younger drivers, participant means with 95% intervals:
+
+| Stimulus | Driving | 2-back cost | SuRT cost | Older / younger |
+| --- | --- | --- | --- | --- |
+| Vibration | 523 ms [490, 556] | +294 ms [261, 328] | +193 ms [162, 223] | 1.30 [1.20, 1.41] |
+| Light | 557 ms [531, 583] | +205 ms [170, 239] | +181 ms [151, 211] | 1.19 [1.11, 1.29] |
+| Pooled | 536 ms [511, 562] | +248 ms [221, 275] | +182 ms [160, 205] | 1.24 [1.16, 1.33] |
+
+The model's DRT is tactile, so `response.drt` and `response.drt_load` now
+score the vibration alone. The intervals from 65 participants are also
+narrower than the earlier ones, which used n = 24.
+
+```bash
+python examples/cooper_drt_aggregates.py drt.csv --out evidence/cooper-drt-aggregates.json
+python -m embodied_human.bench --out evidence/benchmark-baseline.json
+```
+
+`python -m pytest tests -q` passes 68 tests and skips 1 (the notebook
+needs the `test` extra). The benchmark took 145 s; 16 of 25 pass, as
+before.
+
+| Benchmark measure | Model | Cooper et al., vibration | Result |
+| --- | --- | --- | --- |
+| DRT while driving | 380 ms | 523 ms (490–556) | **fail** (was a fail against the pooled 526 ms) |
+| Older / younger | 1.30 | 1.30 (1.20–1.41) | pass |
+| 2-back cost | +289 ms | +294 ms (261–328) | pass (held out) |
+| SuRT cost | +365 ms | +193 ms (162–223) | **fail** |
+
+The light, reported in the benchmark details, is answered 197 ms more
+slowly by Cooper et al.'s drivers than by the model (557 against 360 ms).

@@ -254,28 +254,29 @@ REFERENCES: dict[str, Reference] = {
             "over instruction groups",
         ),
         Reference(
-            "response.drt_on_road",
-            526.0,
-            482.0,
-            570.0,
+            "response.drt_tactile",
+            523.0,
+            489.8,
+            556.2,
             "ms",
-            "Cooper et al. (2020), Table 4",
+            "Cooper et al. (2020), raw data; examples/cooper_drt_aggregates.py",
             "https://doi.org/10.3389/fpsyg.2020.01154",
-            "DRT on-road, a vibration under the collarbone and a light "
-            "reflected in the windshield, pooled; drivers aged 21-36 without a "
-            "secondary task, 526 (SD 110) ms, n = 24; range is the 95% CI of "
-            "the mean",
+            "tactile DRT (a vibration under the collarbone) on the road, "
+            "drivers aged 21-36 without a secondary task; mean of 65 "
+            "participants' means, range its 95% CI; computed here from the "
+            "authors' data, which pooled it with a light in their Table 4",
         ),
         Reference(
             "response.older_slowing",
-            1.215,
-            1.07,
-            1.36,
+            1.301,
+            1.195,
+            1.413,
             "ratio",
-            "Cooper et al. (2020), Table 4",
+            "Cooper et al. (2020), raw data; examples/cooper_drt_aggregates.py",
             "https://doi.org/10.3389/fpsyg.2020.01154",
-            "pooled on-road DRT 639 ms (55-75 years) over 526 ms (21-36 "
-            "years); range from the two means' standard errors (derived)",
+            "tactile DRT on the road, drivers aged 55-75 (n = 63) over 21-36 "
+            "(n = 65), no secondary task; range is a participant bootstrap "
+            "95% interval",
         ),
         Reference(
             "response.drt_driving_cost",
@@ -291,25 +292,26 @@ REFERENCES: dict[str, Reference] = {
         ),
         Reference(
             "response.drt_2back_cost",
-            234.0,
-            152.5,
-            315.5,
+            294.4,
+            261.1,
+            327.8,
             "ms",
-            "Cooper et al. (2020), Table 4",
+            "Cooper et al. (2020), raw data; examples/cooper_drt_aggregates.py",
             "https://doi.org/10.3389/fpsyg.2020.01154",
-            "DRT with an auditory 2-back minus driving only, drivers aged "
-            "21-36 on the road, tactile and light responses pooled; range is "
-            "a 95% CI from the SDs with n = 24 (derived)",
+            "tactile DRT with an auditory 2-back minus driving only, drivers "
+            "aged 21-36 on the road; paired within 65 participants, range is "
+            "the 95% CI",
         ),
         Reference(
             "response.drt_surt_cost",
-            177.0,
-            104.3,
-            249.7,
+            192.5,
+            161.5,
+            223.4,
             "ms",
-            "Cooper et al. (2020), Table 4",
+            "Cooper et al. (2020), raw data; examples/cooper_drt_aggregates.py",
             "https://doi.org/10.3389/fpsyg.2020.01154",
-            "DRT with SuRT on an iPad minus driving only, as above",
+            "tactile DRT with SuRT on an iPad (stimuli while it was in use) "
+            "minus driving only, as above",
         ),
         Reference(
             "driving.takeover_modality_order",

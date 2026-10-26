@@ -75,7 +75,7 @@
     "standard": 3,
     "derived": 4
   },
-  "wall_seconds": 145.56,
+  "wall_seconds": 144.78,
   "results": [
     {
       "name": "eyes.main_sequence",
@@ -537,17 +537,17 @@
         "attention"
       ],
       "passed": false,
-      "score": 0.6687448151221825,
+      "score": 0.63982594761253,
       "skipped": null,
       "metrics": {
         "response.drt_driving_cost": 28.29184473353098,
-        "response.drt_2back_cost": 283.93610860421256,
-        "response.drt_surt_cost": 382.48558999228953
+        "response.drt_2back_cost": 289.4140345662237,
+        "response.drt_surt_cost": 365.12017386665195
       },
       "scores": {
         "response.drt_driving_cost": 0.9194778428375902,
         "response.drt_2back_cost": 1.0,
-        "response.drt_surt_cost": 0.08675660252895756
+        "response.drt_surt_cost": 0.0
       },
       "references": {
         "response.drt_driving_cost": {
@@ -561,23 +561,23 @@
           "doi": "https://www.hfes-europe.org/wp-content/uploads/2014/06/Conti.pdf"
         },
         "response.drt_2back_cost": {
-          "value": 234.0,
+          "value": 294.4,
           "range": [
-            152.5,
-            315.5
+            261.1,
+            327.8
           ],
           "unit": "ms",
-          "citation": "Cooper et al. (2020), Table 4",
+          "citation": "Cooper et al. (2020), raw data; examples/cooper_drt_aggregates.py",
           "doi": "https://doi.org/10.3389/fpsyg.2020.01154"
         },
         "response.drt_surt_cost": {
-          "value": 177.0,
+          "value": 192.5,
           "range": [
-            104.3,
-            249.7
+            161.5,
+            223.4
           ],
           "unit": "ms",
-          "citation": "Cooper et al. (2020), Table 4",
+          "citation": "Cooper et al. (2020), raw data; examples/cooper_drt_aggregates.py",
           "doi": "https://doi.org/10.3389/fpsyg.2020.01154"
         }
       },
@@ -612,14 +612,14 @@
           }
         },
         "cooper_model_ms": {
-          "driving": 371.51648389923696,
-          "2-back": 655.4525925034495,
-          "surt": 754.0020738915265
+          "driving": 383.6742638430255,
+          "2-back": 673.0882984092492,
+          "surt": 748.7944377096775
         },
         "cooper_human_ms": {
-          "driving": 526.0,
-          "2-back": 760.0,
-          "surt": 703.0
+          "driving": 523.0,
+          "2-back": 817.4,
+          "surt": 715.4
         }
       }
     },
@@ -1086,16 +1086,16 @@
       },
       "details": {
         "model_ms": {
-          "auditory": 253.69813076547865,
-          "visual": 316.7873188705843,
-          "tactile": 333.46613858622925
+          "auditory": 252.93250891167614,
+          "visual": 319.0599064813557,
+          "tactile": 334.16404120032803
         },
         "human_ms": {
           "auditory": 132.0,
           "visual": 163.0,
           "tactile": 177.0
         },
-        "redundant_av_ms": 223.42176328186227,
+        "redundant_av_ms": 223.90878352187866,
         "note": "the model's parameters come from other participants (Diederich & Colonius, 2015); only the order is compared"
       }
     },
@@ -1151,16 +1151,16 @@
         "touch"
       ],
       "passed": false,
-      "score": 0.44965943143684123,
+      "score": 0.4557616468455203,
       "skipped": null,
       "metrics": {
-        "response.drt_visual": 385.43678140482115,
-        "response.drt_on_road": 367.778119954979,
-        "response.older_slowing": 1.316048680581684
+        "response.drt_visual": 384.7777421406838,
+        "response.drt_tactile": 380.11594369652664,
+        "response.older_slowing": 1.3008953167672606
       },
       "scores": {
-        "response.drt_visual": 0.34897829431052374,
-        "response.drt_on_road": 0.0,
+        "response.drt_visual": 0.3672849405365608,
+        "response.drt_tactile": 0.0,
         "response.older_slowing": 1.0
       },
       "references": {
@@ -1174,32 +1174,40 @@
           "citation": "Conti, Dlugosch & Bengler (2014), Table 3",
           "doi": "https://www.hfes-europe.org/wp-content/uploads/2014/06/Conti.pdf"
         },
-        "response.drt_on_road": {
-          "value": 526.0,
+        "response.drt_tactile": {
+          "value": 523.0,
           "range": [
-            482.0,
-            570.0
+            489.8,
+            556.2
           ],
           "unit": "ms",
-          "citation": "Cooper et al. (2020), Table 4",
+          "citation": "Cooper et al. (2020), raw data; examples/cooper_drt_aggregates.py",
           "doi": "https://doi.org/10.3389/fpsyg.2020.01154"
         },
         "response.older_slowing": {
-          "value": 1.215,
+          "value": 1.301,
           "range": [
-            1.07,
-            1.36
+            1.195,
+            1.413
           ],
           "unit": "ratio",
-          "citation": "Cooper et al. (2020), Table 4",
+          "citation": "Cooper et al. (2020), raw data; examples/cooper_drt_aggregates.py",
           "doi": "https://doi.org/10.3389/fpsyg.2020.01154"
         }
       },
       "details": {
-        "visual_ms": 385.43678140482115,
-        "on_road_ms": 367.778119954979,
-        "on_road_older_ms": 484.0139095135624,
-        "visual_alone_ms": 353.23992147194457,
+        "visual_ms": 384.7777421406838,
+        "tactile_ms": 380.11594369652664,
+        "tactile_older_ms": 494.4910509833792,
+        "visual_alone_ms": 355.29780939013335,
+        "windshield_light_ms": 360.2533092476899,
+        "windshield_light_human_ms": {
+          "mean": 557.3,
+          "ci95": [
+            531.3,
+            583.4
+          ]
+        },
         "vibration_sensation_db": 20.0
       }
     },

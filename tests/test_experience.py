@@ -312,7 +312,7 @@ def test_drt_benchmark_measures_while_driving():
     assert details["visual_ms"] - details["visual_alone_ms"] == pytest.approx(
         28.6, abs=8
     )
-    assert details["on_road_older_ms"] > details["on_road_ms"]
+    assert details["tactile_older_ms"] > details["tactile_ms"]
 
 
 def test_hands_return_in_parallel_and_driving_waits_for_assessment():

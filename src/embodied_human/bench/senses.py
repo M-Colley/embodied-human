@@ -5,9 +5,8 @@
 - ``response.eccentricity``: how much later a peripheral light is
   answered, against saccades (Diederich and Colonius, 2007).
 - ``response.drt``: detection-response task reaction times while driving
-  (a head-mounted light: Conti, Dlugosch and Bengler, 2014; a vibration
-  and a windshield light, pooled: Cooper et al., 2020) and how much older
-  drivers are slower.
+  (a head-mounted light: Conti, Dlugosch and Bengler, 2014; a vibration:
+  Cooper et al., 2020) and how much older drivers are slower.
 - ``vestibular.vertical_sickness``: motion sickness after 2 hours of
   vertical oscillation (O'Hanlon and McCauley, 1974).
 """
@@ -123,26 +122,29 @@ def drt(human: Human) -> Result:
 
     Both studies measured while driving, so driving holds the central stage
     (``response.drt_load``). Conti et al.'s light was head-mounted where ISO
-    17488 puts it; Cooper et al. pooled a vibration under the collarbone
-    with a light reflected in the windshield, equally often.
+    17488 puts it. Cooper et al. alternated a vibration under the collarbone
+    with a light reflected in the windshield; the vibration is scored, and
+    the light is reported in the details.
     """
     from .load import VIBRATION_DB, drt_rt
 
     result = Result("response.drt", ("response", "touch"))
     visual = drt_rt(human, ["head_light"], [DRIVING])
-    on_road = drt_rt(human, ["tactile", "forward_light"], [DRIVING])
+    tactile = drt_rt(human, ["tactile"], [DRIVING])
     older = build_human(
         Population(human.config, profile=OLDER_ADULTS).typical(), seed=0
     )
-    on_road_older = drt_rt(older, ["tactile", "forward_light"], [DRIVING])
+    tactile_older = drt_rt(older, ["tactile"], [DRIVING])
     result.score_against("response.drt_visual", visual)
-    result.score_against("response.drt_on_road", on_road)
-    result.score_against("response.older_slowing", on_road_older / on_road)
+    result.score_against("response.drt_tactile", tactile)
+    result.score_against("response.older_slowing", tactile_older / tactile)
     result.details = {
         "visual_ms": visual,
-        "on_road_ms": on_road,
-        "on_road_older_ms": on_road_older,
+        "tactile_ms": tactile,
+        "tactile_older_ms": tactile_older,
         "visual_alone_ms": drt_rt(human, ["head_light"], []),
+        "windshield_light_ms": drt_rt(human, ["forward_light"], [DRIVING]),
+        "windshield_light_human_ms": {"mean": 557.3, "ci95": [531.3, 583.4]},
         "vibration_sensation_db": VIBRATION_DB,
     }
     return result
