@@ -283,6 +283,17 @@ def test_drt_slows_with_driving_and_memory_load():
     assert two_back - driving == pytest.approx(292, abs=25)
 
 
+def test_drt_benchmark_measures_while_driving():
+    from embodied_human.bench.senses import drt
+
+    details = drt(eh.build_human(seed=0)).details
+    # Both reference studies measured while driving.
+    assert details["visual_ms"] - details["visual_alone_ms"] == pytest.approx(
+        28.6, abs=8
+    )
+    assert details["on_road_older_ms"] > details["on_road_ms"]
+
+
 def test_takeover_decision_waits_for_the_road():
     from dataclasses import replace
 

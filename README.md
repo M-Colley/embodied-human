@@ -181,7 +181,7 @@ Sixteen of twenty-three benchmarks pass:
 | `response.drt_load` | DRT cost of driving +28 ms; of an auditory 2-back +284 ms; of SuRT +382 ms | +51 ms (31–70; Conti et al., 2014), predicted from threaded cognition: just below. Cooper et al. (2020) on the road: 2-back +234 ms (152–316): pass; SuRT +177 ms (104–250): **fail** | driving and Cooper held out; chunks fitted to Conti |
 | `response.modality_rt` | tone 252 ms < light 319 ms < vibration 335 ms | same order (Diederich & Colonius, 2004) | order only |
 | `response.eccentricity` | a light at 50° and 70° answered 40 and 59 ms later than at 10° | saccades 39 and 58 ms later (Diederich & Colonius, 2007), RMS error ≤ 10 ms: pass | **held out**; 70° extrapolated |
-| `response.drt` | visual DRT 349 ms; tactile 352 ms; older drivers 1.33× slower | visual 326–362 ms (Conti et al., 2014): pass; tactile 526 ms (482–570; Cooper et al., 2020): **fail**; ageing 1.07–1.36×: pass | **emergent** |
+| `response.drt` | while driving: head-mounted light 385 ms (353 ms without driving); vibration and windshield light pooled 368 ms; older drivers 1.32× slower | head-mounted light 326–362 ms (Conti et al., 2014; 293 ms without driving): **fail**; pooled on the road 526 ms (482–570; Cooper et al., 2020): **fail**; ageing 1.07–1.36×: pass | **emergent** |
 | `vestibular.vertical_sickness` | RMS error 7.5 % points, r = 0.93 (19.7 with the published conflict scale) | 2 h vertical oscillation (O'Hanlon & McCauley, 1974): ≤ 10 | fitted (one parameter) |
 | `vestibular.sickness_time_course` | RMS error 14.8 % points, r = 0.76 over 43 points | sickness over time at nine other conditions (McCauley et al., 1976), ≤ 10: **fail**; their descriptive model: 6.3. `--replace vestibular=iso_2631`: 12.4 | **held out** |
 | `fatigue.endurance` | median error 17% | endurance times per joint (Frey-Law & Avin, 2010) | consistency |
@@ -223,8 +223,13 @@ real test:
   manoeuvre around an obstacle that the straight road does not have. On
   the full body the first input comes after 2.24 s, against the
   meta-analytic 2.72 s.
-- **Senses and responses.** The visual DRT and the slowing of older
-  drivers match; the tactile DRT is too fast in absolute terms. Latency
+- **Senses and responses.** Older drivers slow down as much as in Cooper
+  et al. (2020), but absolute DRT times miss in both directions. The
+  head-mounted light is answered about 60 ms later than in Conti et al.,
+  with or without driving: TWIN's parameters come from another lab's
+  lights and task. Cooper et al.'s on-road DRT is 158 ms slower than the
+  model: their light changed colour as a reflection in the windshield, and
+  their drivers were in traffic. Latency
   grows with eccentricity as in Osaka's (1976) manual reactions, and
   Diederich and Colonius's (2007) saccades grow by the same amounts at 50°
   and 70° (within 1 ms), though 70° lies beyond Osaka's data. Their palm

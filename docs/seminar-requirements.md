@@ -13,7 +13,7 @@ baseline model. The seminar distinguished three kinds of task:
 
 | Kind | Here | Status |
 | --- | --- | --- |
-| A battery of lab tasks covered by one model | Saccades, peripheral acuity, foveation, memory span, ISO tapping, all run with one simulated human | Done. The DRT runs but is not yet scored |
+| A battery of lab tasks covered by one model | Saccades, peripheral acuity, foveation, memory span, ISO tapping, all run with one simulated human | Done. DRT reaction times are scored through the response module (`response.drt`, `response.drt_load`); the ISO 17488 task itself runs but is not yet scored |
 | A naturalistic task | Driving the MyoSuite full body with SuRT and take-over requests (`driving.surt_glances`, `driving.takeover`); glance studies on a straight road (`driving.glance_population`) | Partial: straight roads, myosuite-carla's vehicle surrogate offline; CARLA live through myosuite-carla |
 | An application: rank design alternatives as people do | `design.touch_key_size` repeats the published analysis of Kim et al. (2014) with 30 simulated participants and predicts where larger touch keys stop helping | New; stationary use only |
 

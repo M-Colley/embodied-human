@@ -463,3 +463,38 @@ al.'s range.
     above threshold.
   - No felt vibration in the model is as slow as their 5 Hz one: the
     model's slowest is 66 ms behind the light, theirs 95 ms.
+
+## 2026-10-26: DRT benchmark measured while driving
+
+Same PC and versions. `response.drt` compared a model without any driving
+load against DRT times both studies measured while driving. It also
+placed the head-mounted light at 17°, where `response.drt_load` uses ISO
+17488's 20° left and 10° up (22.4°). The benchmark now uses
+`response.drt_load`'s procedure: driving holds the central stage, the
+light is at the ISO position, and Cooper et al.'s vibration and windshield
+light are pooled, as they pooled them. The reference
+`response.drt_tactile` is renamed `response.drt_on_road`, because
+Cooper et al.'s 526 ms is not tactile-only.
+
+`python -m pytest tests -q` passes 66 tests. The new one checks that the
+benchmark includes the driving load.
+
+```bash
+python -m embodied_human.bench --out evidence/benchmark-baseline.json
+```
+
+The run took 146 s; **16 of 23 benchmarks pass**, as before.
+`response.drt` was already failing. It now fails on both absolute times:
+
+| Measure | Before | Now | Human reference |
+| --- | --- | --- | --- |
+| Head-mounted light while driving | 350 ms: pass | 385 ms: **fail** (353 ms without driving) | 344 ms (326–362); 293 ms without driving (Conti et al., 2014) |
+| On the road, vibration and light pooled | 348 ms (tactile only): fail | 368 ms: **fail** | 526 ms (482–570; Cooper et al., 2020) |
+| Older over younger | 1.34: pass | 1.32: pass | 1.215 (1.07–1.36) |
+
+The visual pass came from leaving out the driving load and using a
+smaller eccentricity. The cost of driving itself is close (+32 ms against
++51 ms), but the model answers Conti et al.'s light about 60 ms too slowly
+even without driving. Cooper et al.'s on-road times are 158 ms slower than
+the model's; their colour-changing light reflected in the windshield and
+real traffic are not modelled.

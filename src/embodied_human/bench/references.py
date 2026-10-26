@@ -254,15 +254,17 @@ REFERENCES: dict[str, Reference] = {
             "over instruction groups",
         ),
         Reference(
-            "response.drt_tactile",
+            "response.drt_on_road",
             526.0,
             482.0,
             570.0,
             "ms",
             "Cooper et al. (2020), Table 4",
             "https://doi.org/10.3389/fpsyg.2020.01154",
-            "tactile DRT on-road, drivers aged 21-36 without a secondary task, "
-            "526 (SD 110) ms, n = 24; range is the 95% CI of the mean",
+            "DRT on-road, a vibration under the collarbone and a light "
+            "reflected in the windshield, pooled; drivers aged 21-36 without a "
+            "secondary task, 526 (SD 110) ms, n = 24; range is the 95% CI of "
+            "the mean",
         ),
         Reference(
             "response.older_slowing",
@@ -272,8 +274,8 @@ REFERENCES: dict[str, Reference] = {
             "ratio",
             "Cooper et al. (2020), Table 4",
             "https://doi.org/10.3389/fpsyg.2020.01154",
-            "tactile DRT 639 ms (55-75 years) over 526 ms (21-36 years); range "
-            "from the two means' standard errors (derived)",
+            "pooled on-road DRT 639 ms (55-75 years) over 526 ms (21-36 "
+            "years); range from the two means' standard errors (derived)",
         ),
         Reference(
             "response.drt_driving_cost",

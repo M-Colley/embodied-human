@@ -75,7 +75,7 @@
     "standard": 3,
     "derived": 4
   },
-  "wall_seconds": 140.74,
+  "wall_seconds": 145.92,
   "results": [
     {
       "name": "eyes.main_sequence",
@@ -1151,16 +1151,16 @@
         "touch"
       ],
       "passed": false,
-      "score": 0.6666666666666666,
+      "score": 0.44965943143684123,
       "skipped": null,
       "metrics": {
-        "response.drt_visual": 349.81386273405985,
-        "response.drt_tactile": 347.57145771514706,
-        "response.older_slowing": 1.343632587834229
+        "response.drt_visual": 385.43678140482115,
+        "response.drt_on_road": 367.778119954979,
+        "response.older_slowing": 1.316048680581684
       },
       "scores": {
-        "response.drt_visual": 1.0,
-        "response.drt_tactile": 0.0,
+        "response.drt_visual": 0.34897829431052374,
+        "response.drt_on_road": 0.0,
         "response.older_slowing": 1.0
       },
       "references": {
@@ -1174,7 +1174,7 @@
           "citation": "Conti, Dlugosch & Bengler (2014), Table 3",
           "doi": "https://www.hfes-europe.org/wp-content/uploads/2014/06/Conti.pdf"
         },
-        "response.drt_tactile": {
+        "response.drt_on_road": {
           "value": 526.0,
           "range": [
             482.0,
@@ -1196,10 +1196,10 @@
         }
       },
       "details": {
-        "visual_ms": 349.81386273405985,
-        "tactile_ms": 347.57145771514706,
-        "tactile_older_ms": 467.00833718711834,
-        "light_eccentricity_deg": 17.0,
+        "visual_ms": 385.43678140482115,
+        "on_road_ms": 367.778119954979,
+        "on_road_older_ms": 484.0139095135624,
+        "visual_alone_ms": 353.23992147194457,
         "vibration_sensation_db": 20.0
       }
     },

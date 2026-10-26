@@ -2,9 +2,12 @@
 
 - ``response.modality_rt``: simple reaction times to a tone, a light and a
   vibration, in the order Diederich and Colonius (2004) measured them.
+- ``response.eccentricity``: how much later a peripheral light is
+  answered, against saccades (Diederich and Colonius, 2007).
 - ``response.drt``: detection-response task reaction times while driving
-  (visual: Conti, Dlugosch and Bengler, 2014; tactile: Cooper et al.,
-  2020) and how much older drivers are slower.
+  (a head-mounted light: Conti, Dlugosch and Bengler, 2014; a vibration
+  and a windshield light, pooled: Cooper et al., 2020) and how much older
+  drivers are slower.
 - ``vestibular.vertical_sickness``: motion sickness after 2 hours of
   vertical oscillation (O'Hanlon and McCauley, 1974).
 """
@@ -19,15 +22,12 @@ import numpy as np
 from ..core import Human, build_human
 from ..population import OLDER_ADULTS, Population
 from ..response import Signal
+from ..tasks.load import DRIVING
 from .benchmarks import Result, benchmark
 
 #: Sensation level assumed for the strong vibration of Diederich and
-#: Colonius (2004) and for DRT vibrators, dB above threshold.
+#: Colonius (2004), dB above threshold.
 STRONG_VIBRATION_DB = 30.0
-DRT_VIBRATION_DB = 20.0
-#: Eccentricity of a head-mounted DRT light, deg (assumed: ISO 17488
-#: places it in the left periphery).
-DRT_LIGHT_DEG = 17.0
 
 
 def _mean_rt(human: Human, signals: list[Signal], samples: int = 4000) -> float:
@@ -117,35 +117,33 @@ def eccentricity(human: Human) -> Result:
     return result
 
 
-def _drt(human: Human) -> tuple[float, float]:
-    visual = [Signal("visual", 0.0, human.response.visual_latency(DRT_LIGHT_DEG))]  # type: ignore[attr-defined]
-    tactile = [Signal("tactile", 0.0, human.touch.latency(DRT_VIBRATION_DB))]  # type: ignore[attr-defined]
-    return _mean_rt(human, visual), _mean_rt(human, tactile)
-
-
 @benchmark("response.drt")
 def drt(human: Human) -> Result:
     """Detection-response task while driving, younger and older drivers.
 
-    The model has no effect of driving itself on the central stage, so it
-    predicts the same RT with and without driving; Conti et al. measured
-    279-312 ms without driving and 326-362 ms while driving.
+    Both studies measured while driving, so driving holds the central stage
+    (``response.drt_load``). Conti et al.'s light was head-mounted where ISO
+    17488 puts it; Cooper et al. pooled a vibration under the collarbone
+    with a light reflected in the windshield, equally often.
     """
+    from .load import VIBRATION_DB, drt_rt
+
     result = Result("response.drt", ("response", "touch"))
-    visual, tactile = _drt(human)
+    visual = drt_rt(human, ["head_light"], [DRIVING])
+    on_road = drt_rt(human, ["tactile", "forward_light"], [DRIVING])
     older = build_human(
         Population(human.config, profile=OLDER_ADULTS).typical(), seed=0
     )
-    _, tactile_older = _drt(older)
+    on_road_older = drt_rt(older, ["tactile", "forward_light"], [DRIVING])
     result.score_against("response.drt_visual", visual)
-    result.score_against("response.drt_tactile", tactile)
-    result.score_against("response.older_slowing", tactile_older / tactile)
+    result.score_against("response.drt_on_road", on_road)
+    result.score_against("response.older_slowing", on_road_older / on_road)
     result.details = {
         "visual_ms": visual,
-        "tactile_ms": tactile,
-        "tactile_older_ms": tactile_older,
-        "light_eccentricity_deg": DRT_LIGHT_DEG,
-        "vibration_sensation_db": DRT_VIBRATION_DB,
+        "on_road_ms": on_road,
+        "on_road_older_ms": on_road_older,
+        "visual_alone_ms": drt_rt(human, ["head_light"], []),
+        "vibration_sensation_db": VIBRATION_DB,
     }
     return result
 
