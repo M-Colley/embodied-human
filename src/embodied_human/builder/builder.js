@@ -576,7 +576,7 @@ function disclosure(title, note = "") {
   return detail;
 }
 
-const roleLabels = {consistency: "Consistency check", calibration: "Calibration", held_out: "Held out evaluation", unclassified: "Unclassified"};
+const roleLabels = {consistency: "Consistency check", calibration: "Calibration", held_out: "Held out evaluation", exploratory: "Exploratory comparison", unclassified: "Unclassified"};
 
 function roleBadge(role) {
   const key = Object.hasOwn(roleLabels, role) ? role : "unclassified";

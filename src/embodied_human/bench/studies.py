@@ -159,6 +159,18 @@ def glance_speed(
         "distance_per_glance_m": {
             str(v): m * v * KMH for v, m in zip(speeds_kmh, means)
         },
+        "protocol_mismatch": {
+            "status": "exploratory_diagnostic",
+            "simulation": "Continuous pop out SuRT at five speeds.",
+            "occlusion_comparison": "Senders et al. (1967) measured voluntary "
+            "road occlusion without a secondary visual search task.",
+            "search_comparison": "Jokinen et al. (2021) used six or nine letter "
+            "triplets with target present and target absent trials.",
+            "speed_conflict": "Jokinen Methods states 60 and 120 km/h. "
+            "Appendix B states 80 and 120 km/h. Raw data must resolve this.",
+            "required_work": "Implement separate occlusion and search protocols "
+            "before interpreting these scores as task replications.",
+        },
     }
     return result
 
@@ -343,6 +355,11 @@ def takeover_components(human: Human, runs: int = 64) -> Result:
     result.details = {
         "model_mean_s": {k: float(np.nanmean(v)) for k, v in model.items()},
         "model_ci95_s": {k: bootstrap_ci(v[np.isfinite(v)]) for k, v in model.items()},
+        "finite_runs_by_component": {
+            k: int(np.isfinite(v).sum()) for k, v in model.items()
+        },
+        "observation_horizon_after_request_s": 10.0,
+        "means_condition_on_observed_component": True,
         "model_response_s": float(np.mean([p["response_s"] for p in parts])),
         "runs": runs,
         "runs_with_eyes_on_task": int(np.isfinite(model["gaze"]).sum()),
@@ -538,7 +555,7 @@ def takeover_determinants(human: Human, runs: int = 64) -> Result:
             replace(base, hand_release=0.0),
         ),
     }
-    means = {}
+    means, completed = {}, {}
     for name, (signals, task, params) in conditions.items():
         times = [
             simulate_takeover(
@@ -552,6 +569,7 @@ def takeover_determinants(human: Human, runs: int = 64) -> Result:
             for seed in protocol_seeds(runs)
         ]
         means[name] = float(np.nanmean(times))
+        completed[name] = int(np.isfinite(times).sum())
     base_time = means["tone_icon_surt"]
     result.score_against(
         "driving.zhang_no_auditory", math.log(means["icon_surt"] / base_time)
@@ -565,6 +583,9 @@ def takeover_determinants(human: Human, runs: int = 64) -> Result:
     )
     result.details = {
         "model_mean_first_input_s": means,
+        "completed_runs_by_condition": completed,
+        "observation_horizon_after_request_s": 10.0,
+        "means_condition_on_completion": True,
         "human_baseline_s": ZHANG_BASELINE,
         "human_within_study_differences_s": ZHANG_WITHIN,
         "runs": runs,
@@ -599,8 +620,9 @@ def takeover_eyes_by_modality(human: Human, runs: int = 64) -> Result:
     As in the study, each request uses one modality: LEDs beside the task
     display, two 2700 Hz beeps at 80.6 dB, or the seat vibrating at about
     60 Hz; the driver does SuRT on the display at 120 km/h. Runs with the
-    eyes already on the road at the request are left out, as the study
-    discarded reactions under 0.3 s. Nothing was fitted to these data.
+    eyes-on-road times below 0.3 s are discarded, following the study's
+    measurement rule. The simulated SuRT task differs from the source's
+    reading and video tasks. No parameters were fitted to these data.
     """
     from dataclasses import replace
 
@@ -614,6 +636,7 @@ def takeover_eyes_by_modality(human: Human, runs: int = 64) -> Result:
     led = (base.display_position[0] - 10.0, base.display_position[1])
     params = replace(base, chime_level=80.6, chime_frequency=2700.0, icon_position=led)
     means = {}
+    retained, discarded = {}, {}
     for modality in ("visual", "auditory", "tactile"):
         eyes = []
         for seed in protocol_seeds(runs):
@@ -624,9 +647,12 @@ def takeover_eyes_by_modality(human: Human, runs: int = 64) -> Result:
                 seed=seed,
                 params=params,
             )
-            if _area_at(log, log.request_at) != ROAD:
-                eyes.append(log.takeover_components()["eyes_s"])
+            latency = log.takeover_components()["eyes_s"]
+            if math.isfinite(latency) and latency >= 0.3:
+                eyes.append(latency)
         means[modality] = float(np.mean(eyes))
+        retained[modality] = len(eyes)
+        discarded[modality] = runs - len(eyes)
     result.score_against(
         "driving.petermeijer_visual_vs_auditory", means["visual"] - means["auditory"]
     )
@@ -637,6 +663,10 @@ def takeover_eyes_by_modality(human: Human, runs: int = 64) -> Result:
         "model_mean_eyes_on_road_s": means,
         "human_mean_sd_s": PETERMEIJER,
         "led_position_deg": list(led),
+        "retained_runs": retained,
+        "discarded_runs": discarded,
+        "minimum_response_s": 0.3,
+        "task_mismatch": "SuRT replaces reading and video tasks",
         "note": "the study's scenarios were not urgent (more than 10 s to "
         "collision), and its absolute times are about twice the model's",
     }

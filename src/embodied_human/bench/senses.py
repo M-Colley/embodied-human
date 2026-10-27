@@ -129,15 +129,24 @@ def drt(human: Human) -> Result:
     with a light reflected in the windshield; the vibration is scored, and
     the light is reported in the details.
     """
-    from .load import VIBRATION_DB, drt_rt
+    from .load import CONTI_WINDOW, COOPER_WINDOW, VIBRATION_DB, drt_measurement
 
     result = Result("response.drt", ("response", "touch"))
-    visual = drt_rt(human, ["head_light"], [DRIVING])
-    tactile = drt_rt(human, ["tactile"], [DRIVING])
+    visual_measurement = drt_measurement(
+        human, ["head_light"], [DRIVING], window=CONTI_WINDOW
+    )
+    tactile_measurement = drt_measurement(
+        human, ["tactile"], [DRIVING], window=COOPER_WINDOW
+    )
+    visual = visual_measurement["mean_rt_ms"]
+    tactile = tactile_measurement["mean_rt_ms"]
     older = build_human(
         Population(human.config, profile=OLDER_ADULTS).typical(), seed=protocol_seed()
     )
-    tactile_older = drt_rt(older, ["tactile"], [DRIVING])
+    older_measurement = drt_measurement(
+        older, ["tactile"], [DRIVING], window=COOPER_WINDOW
+    )
+    tactile_older = older_measurement["mean_rt_ms"]
     result.score_against("response.drt_visual", visual)
     result.score_against("response.drt_tactile", tactile)
     result.score_against("response.older_slowing", tactile_older / tactile)
@@ -145,10 +154,17 @@ def drt(human: Human) -> Result:
         "visual_ms": visual,
         "tactile_ms": tactile,
         "tactile_older_ms": tactile_older,
-        "visual_alone_ms": drt_rt(human, ["head_light"], []),
-        "windshield_light_ms": drt_rt(human, ["forward_light"], [DRIVING]),
+        "visual_alone_ms": drt_measurement(
+            human, ["head_light"], [], window=CONTI_WINDOW
+        )["mean_rt_ms"],
+        "windshield_light_ms": drt_measurement(
+            human, ["forward_light"], [DRIVING], window=COOPER_WINDOW
+        )["mean_rt_ms"],
         "windshield_light_human_ms": {"mean": 557.3, "ci95": [531.3, 583.4]},
         "vibration_sensation_db": VIBRATION_DB,
+        "visual_measurement": visual_measurement,
+        "tactile_measurement": tactile_measurement,
+        "older_tactile_measurement": older_measurement,
     }
     return result
 
@@ -178,7 +194,7 @@ def vertical_sickness(human: Human, dt: float = 0.1) -> Result:
     """Two hours of vertical sinusoidal motion at 14 frequency-acceleration
     combinations; MSI after 2 h against the percentage who vomited."""
     result = Result("vestibular.vertical_sickness", ("vestibular",))
-    time = np.arange(0.0, 7200.0, dt)
+    time = np.arange(0.0, 7200.0 + dt / 2.0, dt)
     motion = np.zeros((len(VERTICAL_SICKNESS), len(time), 3))
     for i, (frequency, mean_g, _) in enumerate(VERTICAL_SICKNESS):
         # Mean absolute acceleration is 0.637 of the peak.
@@ -206,11 +222,11 @@ def vertical_sickness(human: Human, dt: float = 0.1) -> Result:
 #: McCauley et al. (1976), Appendix B: cumulative MSI over time at the nine
 #: vertical conditions not in O'Hanlon & McCauley's 2-hour set, as
 #: (frequency Hz, r.m.s. acceleration g, minutes, observed %, the authors'
-#: descriptive model %). Row 17 reads 23 in the scan (27 by its printed
-#: difference); 23 is used.
+#: descriptive model %). Datum 17 on printed p. 57 reads 28 in the scan;
+#: its printed difference of +6 is inconsistent with the predicted 21.
 SICKNESS_TIME_COURSE = (
     (0.18, 0.170, 5, 8, 6),
-    (0.18, 0.170, 15, 23, 21),
+    (0.18, 0.170, 15, 28, 21),
     (0.18, 0.170, 25, 40, 31),
     (0.18, 0.170, 35, 47, 37),
     (0.18, 0.170, 45, 55, 42),
@@ -330,7 +346,7 @@ def lateral_roll_motion(
     there (roll angle arctan(a / g)); the head sits ``eye_height`` above."""
     w = 2 * math.pi * frequency
     amplitude = velocity / w if velocity is not None else (jerk or 0.0) / w**3
-    t = np.arange(0.0, duration, dt)
+    t = np.arange(0.0, duration + dt / 2.0, dt)
     lateral = -amplitude * w**2 * np.sin(w * t)
     if compensated:
         # tan(phi) = u with u = -a / g, differentiated analytically.

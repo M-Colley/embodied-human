@@ -8,9 +8,10 @@ their hands on the wheel after 1.45 s (5 s budget) and 1.79 s (7 s). The
 model has no time budget, so ``hand_release`` is chosen to match the
 midpoint over the runs of ``driving.takeover_components`` (tone with an
 icon, 120 km/h). The hand starts one release time after the reaction, so
-the mean time to the wheel grows one for one with it: the fit takes the
-release at zero, shifts it by the remaining gap, rounds to 10 ms and
-checks the result. The take-over reaction waits for the central stage
+the mean time to the wheel grows with it. The fit takes the release at
+zero and estimates the remaining gap. It then checks a local 10 ms grid
+to account for simulation time steps and selects the closest mean.
+The reaction waits for the central stage
 held by SuRT, whose chunk is fitted to Conti et al. (2014), so refit after
 changing that chunk. Ko et al.'s (2022) 1.87 s with a laptop game is left
 for ``driving.takeover_modality`` to test.
@@ -54,13 +55,19 @@ def main() -> None:
     args = parser.parse_args()
     reference = REFERENCES["driving.takeover_hands"]
     target = (reference.low + reference.high) / 2
-    release = round(max(0.0, target - mean_hands(0.0)), 2)
+    estimate = round(max(0.0, target - mean_hands(0.0)), 2)
+    candidates = sorted({round(max(0.0, estimate + delta), 2)
+                         for delta in (-0.02, -0.01, 0.0, 0.01, 0.02)})
+    evaluated = {release: mean_hands(release) for release in candidates}
+    release = min(candidates, key=lambda value: abs(evaluated[value] - target))
     report = {
         "target_s": target,
         "runs": RUNS,
         "speed_kmh": 120,
         "hand_release_s": release,
-        "mean_hands_s": mean_hands(release),
+        "mean_hands_s": evaluated[release],
+        "residual_s": evaluated[release] - target,
+        "local_grid_mean_hands_s": evaluated,
     }
     print(json.dumps(report, indent=2))
     if args.out:

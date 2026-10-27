@@ -29,7 +29,7 @@ from embodied_human.vestibular import SubjectiveVertical
 
 def endpoints(scale: float, dt: float) -> np.ndarray:
     """MSI after 2 hours at the 14 fitted conditions."""
-    t = np.arange(0.0, 7200.0, dt)
+    t = np.arange(0.0, 7200.0 + dt / 2.0, dt)
     motion = np.zeros((len(VERTICAL_SICKNESS), len(t), 3))
     for i, (frequency, mean_g, _) in enumerate(VERTICAL_SICKNESS):
         motion[i, :, 2] = mean_g / 0.637 * 9.81 * np.sin(2 * math.pi * frequency * t)

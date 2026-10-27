@@ -19,7 +19,7 @@ import numpy as np
 from scipy.optimize import brentq
 
 import embodied_human as eh
-from embodied_human.bench.load import CONTI, display_share, drt_rt
+from embodied_human.bench.load import CONTI, CONTI_WINDOW, display_share, drt_rt
 from embodied_human.tasks.load import DRIVING, SURT_SCREEN, n_back, surt
 
 
@@ -33,9 +33,11 @@ def main() -> None:
     def cost(load: list, on_display: float = 0.0) -> float:
         # Common random numbers: every evaluation draws the same samples.
         human.response.reset(np.random.default_rng(0))
-        driving = drt_rt(human, ["head_light"], [DRIVING], 0.0)
+        driving = drt_rt(human, ["head_light"], [DRIVING], 0.0, window=CONTI_WINDOW)
         human.response.reset(np.random.default_rng(0))
-        return drt_rt(human, ["head_light"], load, on_display) - driving
+        return drt_rt(
+            human, ["head_light"], load, on_display, window=CONTI_WINDOW
+        ) - driving
 
     targets = {
         "0-back": CONTI["0-back"] - CONTI["driving"],

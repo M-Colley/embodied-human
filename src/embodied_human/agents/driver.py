@@ -21,9 +21,12 @@ sees the road only through the human model.
   heard over the cabin noise, felt through the seat and seen at its
   eccentricity from the current gaze; the response module combines what
   was sensed into the reaction, which waits for the central stage held by
-  the task (threaded cognition). The driver then drops the task: gaze
-  goes to the road and, in parallel, the hand leaves the task and returns
-  to the wheel (motor readiness). It drives once the hand is back, the
+  the task (threaded cognition). The default serial coupling gates gaze
+  programming on the full response. An optional parallel coupling starts
+  gaze programming after peripheral processing and the task wait. Both
+  couplings are assumptions about effectors. The manual TWIN response
+  starts the hand's return to the wheel (motor readiness). It drives once
+  the hand is back, the
   situation has been assessed from the road and the belief is certain
   again: cognitive processing rather than motor readiness sets the
   take-over time (Zeeb, Buchner and Schrauf, 2015).
@@ -99,6 +102,9 @@ class DriverAgentParameters(Parameters):
             rate (1/s) of leaving the task to check the road is this gain
             times one minus trust in the automation.
         monitoring_dwell: Mean road glance when checking on automation, s.
+        parallel_gaze_preparation: Use peripheral detection and the task
+            wait to gate eye commands. This experimental coupling omits
+            TWIN's compound second stage from gaze command latency.
     """
 
     display_position: Gaze = (20.0, -25.0)
@@ -116,7 +122,7 @@ class DriverAgentParameters(Parameters):
     seat_site: str = "seat_vertical"
     icon_position: Gaze = (0.0, -12.0)
     request_capability: float = 0.55
-    hand_release: float = 0.59
+    hand_release: float = 0.20
     assessment_fixations: int = 3
     engage_sd: float = 0.15
     scene_fixation: float = 0.33
@@ -128,8 +134,15 @@ class DriverAgentParameters(Parameters):
     perception_interval: float = 0.1
     monitoring_gain: float = 0.62
     monitoring_dwell: float = 0.6
+    parallel_gaze_preparation: bool = False
 
     SOURCES: ClassVar = {
+        "parallel_gaze_preparation": Source(
+            "effector coupling assumption", None, "assumed",
+            "False gates eye commands on the complete response; True starts "
+            "them after peripheral processing and the task wait. Neither "
+            "mapping follows directly from TWIN's compound second stage.",
+        ),
         "display_position": Source(
             "model choice", None, "assumed", "a centre-stack touchscreen"
         ),
@@ -175,7 +188,7 @@ class DriverAgentParameters(Parameters):
             "fitted",
             "mean hands on the wheel after a tone with an icon during touch "
             "SuRT at 120 km/h, midway between 1.45 s (5 s budget) and 1.79 s "
-            "(7 s); zero for a knob (Zeeb, Buchner & Schrauf, 2015)",
+            "(7 s); the knob comparison assumes zero release time",
         ),
         "request_capability": Source(
             "Kraus, Scholz, Stiegemeier & Baumann (2020), Table 2; fitted here",
@@ -275,9 +288,11 @@ class DrivingLog:
     screen_times: list[tuple[float, float]] = field(default_factory=list)
     engaged_at: float | None = None
     request_at: float | None = None
+    request_area: str | None = None
     gaze_left_at: float | None = None
     reacted_at: float | None = None
     hand_back_at: float | None = None
+    planned_hand_back_at: float | None = None
     road_at: float | None = None
     reaction: dict[str, Any] = field(default_factory=dict)
     speed: list[float] = field(default_factory=list)
@@ -288,9 +303,14 @@ class DrivingLog:
     head_gravity: list[tuple[float, float, float]] = field(default_factory=list)
     fatigue: list[dict[str, float]] = field(default_factory=list)
 
-    def glances(self) -> list[tuple[float, float]]:
+    def glances(self, *, include_censored: bool = False) -> list[tuple[float, float]]:
         """Off-road glances as (start, end): gaze leaving the road area
-        until it is back, saccades included."""
+        until it is back, saccades included.
+
+        With ``include_censored``, include the observed part of a final
+        unfinished glance. Use this for time accounting, not duration
+        statistics: the eventual duration of that glance is unknown.
+        """
         result = []
         start = None
         for time, area in zip(self.times, self.areas):
@@ -299,6 +319,8 @@ class DrivingLog:
             elif area == ROAD and start is not None:
                 result.append((start, time))
                 start = None
+        if include_censored and start is not None:
+            result.append((start, self.times[-1]))
         return result
 
     def glance_metrics(self) -> dict[str, Any]:
@@ -308,12 +330,18 @@ class DrivingLog:
         reasons: dict[str, int] = {}
         for _, reason in self.returns:
             reasons[reason] = reasons.get(reason, 0) + 1
+        observed_glances = self.glances(include_censored=True)
+        censored = observed_glances[len(durations):]
         per_screen = []
         for start, end in self.screen_times:
-            off = sum(max(0.0, min(e, end) - max(s, start)) for s, e in self.glances())
+            off = sum(
+                max(0.0, min(e, end) - max(s, start)) for s, e in observed_glances
+            )
             per_screen.append(off)
         return {
             "glances": float(len(durations)),
+            "right_censored_glances": len(censored),
+            "right_censored_observed_s": sum(end - start for start, end in censored),
             "mean_offroad_glance_s": float(durations.mean())
             if len(durations)
             else math.nan,
@@ -340,7 +368,8 @@ class DrivingLog:
     def takeover_components(self) -> dict[str, float]:
         """How long each step of a take-over took, from the request.
 
-        ``response`` until the first action, ``gaze`` until the first
+        ``response`` until the manual response stage completes, ``gaze``
+        until the first
         saccade away from the task display (Gold et al.'s gaze reaction;
         NaN if the eyes were not on the task), ``hand`` until the hand was
         back on the wheel, ``eyes`` until gaze was on the road and
@@ -474,6 +503,7 @@ class AttentiveDriver:
         self._hand_back: float | None = None
         self._reacted = False
         self._latency: float | None = None
+        self._orient_latency: float | None = None
         self._assessment: float | None = None
         self._road_since: float | None = None
         self._next_sample = 0.0
@@ -575,12 +605,6 @@ class AttentiveDriver:
         self.log.belief.append((float(mean[0]), float(mean[1])))
         self.log.belief_sd.append(estimator.lateral_sd)  # type: ignore[attr-defined]
         self.log.truth.append((state["lane_offset_m"], state["heading_error_rad"]))
-        if self._reacted and area == ROAD and self.log.road_at is None:
-            self.log.road_at = t
-        if self._reacted and area == ROAD:
-            self._road_since = self._road_since if self._road_since is not None else t
-        elif area != ROAD:
-            self._road_since = None
         if area == ROAD:
             # The driving situation occupies the focus of attention.
             for k in range(p.driving_chunks):
@@ -592,8 +616,18 @@ class AttentiveDriver:
         requested = bool(state.get("takeover_requested", 0.0))
         if automation and requested and self.log.request_at is None:
             self.log.request_at = t - state.get("time_since_request_s", 0.0)
+            self.log.request_area = area
+        # Eyes-on-road time measures the observed first road fixation.
+        # A fixation can precede completion of the manual response stage.
+        if self.log.request_at is not None and area == ROAD:
+            if self.log.road_at is None:
+                self.log.road_at = t
+            self._road_since = self._road_since if self._road_since is not None else t
+        elif area != ROAD:
+            self._road_since = None
         if (
             self.log.request_at is not None
+            and self.log.request_area == DISPLAY
             and self.log.gaze_left_at is None
             and eye.in_saccade
         ):
@@ -633,8 +667,15 @@ class AttentiveDriver:
                 np.zeros(3), np.array([p.display_distance, 0.0, 0.0]), p.wheel_width, t
             )
             self._hand_back = movement.finish
-            self.log.hand_back_at = movement.finish
-        task_active = self.task is not None and not self._reacted
+            self.log.planned_hand_back_at = movement.finish
+        if self._hand_back is not None and t >= self._hand_back:
+            self.log.hand_back_at = self._hand_back
+        oriented = (
+            self.log.request_at is not None
+            and self._orient_latency is not None
+            and t >= self.log.request_at + self._orient_latency
+        )
+        task_active = self.task is not None and not oriented
         demands = {DISPLAY: 1.0} if task_active else {}
 
         # Attention: checks on automation until the request is noticed,
@@ -710,7 +751,7 @@ class AttentiveDriver:
         return DriverIntent()
 
     def _react(self, state: dict[str, float], gaze: Gaze) -> float:
-        """Time from the takeover request to the first action, sampled from
+        """Time from the request to manual response completion, sampled from
         what the senses picked up; records the mechanism in the log."""
         from ..hearing import cabin_noise_level
         from ..response import Signal
@@ -751,6 +792,24 @@ class AttentiveDriver:
         details["first"] = reaction.first
         details["integrated"] = reaction.integrated
         details["central_wait_s"] = reaction.waited
+        details["central_response_s"] = reaction.central
+        details["peripheral_s"] = reaction.peripheral
+        # TWIN's second stage combines integration and response preparation
+        # (Diederich & Colonius, 2015, p. 2). It does not identify a pure
+        # manual motor delay. The optional parallel mapping is experimental;
+        # Saslow's eye latency also includes several processing stages.
+        # Legacy response modules retain their total latency.
+        parallel = p.parallel_gaze_preparation and reaction.peripheral is not None
+        self._orient_latency = (
+            reaction.peripheral + reaction.waited
+            if parallel and reaction.peripheral is not None
+            else reaction.time
+        )
+        details["gaze_coupling"] = (
+            "parallel" if parallel else
+            "serial_fallback" if p.parallel_gaze_preparation else "serial"
+        )
+        details["orient_command_latency_s"] = self._orient_latency
         self.log.reaction = details
         # The request also tells the driver the automation reached its limit.
         trust = human.trust

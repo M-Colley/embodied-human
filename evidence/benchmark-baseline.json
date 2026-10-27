@@ -175,7 +175,7 @@
         "vertical_lag": 5.0,
         "canal_lag": 7.0,
         "adaptation_lag": 190.0,
-        "conflict_scale": 0.196,
+        "conflict_scale": 0.196237,
         "sickness_lag": 720.0,
         "max_incidence": 85.0
       }
@@ -554,10 +554,10 @@
       "category": "proprioception",
       "parameter": "SpindleParameters.joint_noise_deg",
       "value": 3.0,
-      "kind": "measured",
+      "kind": "assumed",
       "citation": "Talis & Levik (2016)",
       "doi": "https://doi.org/10.3389/fnins.2016.00520",
-      "note": "elbow contralateral matching, young adults 3.0 deg absolute error; shoulder 3-6 deg",
+      "note": "Gaussian sensory SD chosen as 3 deg. The source reports elbow contralateral matching absolute error; it does not identify this SD.",
       "overridden": false,
       "source_applies_to": "baseline_default"
     },
@@ -565,10 +565,10 @@
       "category": "proprioception",
       "parameter": "SpindleParameters.delay",
       "value": 0.025,
-      "kind": "measured",
+      "kind": "assumed",
       "citation": "Pruszynski, Kurtzer, Lillicrap & Scott (2009)",
       "doi": "https://doi.org/10.1152/jn.00085.2009",
-      "note": "short-latency stretch response 20-45 ms",
+      "note": "buffer delay chosen within the 20-45 ms stretch response range; reflex latency does not isolate sensory transmission delay",
       "overridden": false,
       "source_applies_to": "baseline_default"
     },
@@ -820,7 +820,7 @@
     {
       "category": "vestibular",
       "parameter": "VerticalConflictParameters.conflict_scale",
-      "value": 0.196,
+      "value": 0.196237,
       "kind": "fitted",
       "citation": "O'Hanlon & McCauley (1974), Tables 1-2; fitted here",
       "doi": "https://archive.org/details/DTIC_AD0768215",
@@ -1250,13 +1250,13 @@
     }
   ],
   "parameter_sources": {
-    "measured": 11,
-    "assumed": 18,
+    "measured": 9,
+    "assumed": 20,
     "fitted": 49,
     "standard": 3,
     "derived": 4
   },
-  "wall_seconds": 514.397,
+  "wall_seconds": 178.398,
   "validation_summary": {
     "consistency": {
       "metrics": 9,
@@ -1267,8 +1267,12 @@
       "passed": 5
     },
     "held_out": {
-      "metrics": 38,
-      "passed": 19
+      "metrics": 36,
+      "passed": 20
+    },
+    "exploratory": {
+      "metrics": 2,
+      "passed": 0
     },
     "unclassified": {
       "metrics": 1,
@@ -1276,7 +1280,7 @@
     }
   },
   "validation_summary_unit": "scored metric evaluations",
-  "validation_policy": "Roles describe declared baseline data use. Held out statistics can share participants with calibration data. User fitting requires updated declarations.",
+  "validation_policy": "Roles describe declared baseline data use. Held out statistics can share participants with calibration data. User fitting requires updated declarations. Exploratory outcomes informed model development or use task conditions that differ from the reference study.",
   "results": [
     {
       "name": "eyes.main_sequence",
@@ -1802,6 +1806,8 @@
       },
       "details": {
         "glances": 45.0,
+        "right_censored_glances": 1,
+        "right_censored_observed_s": 1.0800000000001688,
         "mean_offroad_glance_s": 0.9302222222222789,
         "sd_offroad_glance_s": 0.4728179011805432,
         "p85_offroad_glance_s": 1.2800000000000638,
@@ -1811,8 +1817,8 @@
         "returns_by_reason": {
           "uncertainty": 55
         },
-        "lane_offset_sd_m": 0.18044597588699363,
-        "lane_offset_max_m": 0.4991198025037745,
+        "lane_offset_sd_m": 0.18047484407230363,
+        "lane_offset_max_m": 0.4990917116492292,
         "terminated": false,
         "surt": {
           "screens": 13.0,
@@ -1820,13 +1826,13 @@
           "mean_screen_time_s": 4.310769230769474
         },
         "simulated_seconds": 60.0,
-        "motion_sickness_pct": 0.004729680361003761,
+        "motion_sickness_pct": 0.004700732733718765,
         "fatigued_fraction": {
-          "elbow_right": 0.012818206079345047,
-          "elbow_left": 0.01311040823491041,
+          "elbow_right": 0.012817696297216727,
+          "elbow_left": 0.013107218138556104,
           "hand_right": 0.04315133171437508,
           "hand_left": 0.02157566585718768,
-          "ankle_right": 0.002242938350560427,
+          "ankle_right": 0.0022427986888861632,
           "ankle_left": 0.001732754309089617
         }
       }
@@ -1843,7 +1849,7 @@
       "score": 1.0,
       "skipped": null,
       "metrics": {
-        "driving.takeover_time": 2.4349999999998237
+        "driving.takeover_time": 2.8649999999998146
       },
       "scores": {
         "driving.takeover_time": 1.0
@@ -1876,23 +1882,23 @@
       },
       "details": {
         "takeover_times_s": [
-          3.1999999999998074,
-          1.6999999999998394,
-          3.359999999999804,
+          4.259999999999785,
+          2.1199999999998305,
+          4.159999999999787,
           2.0599999999998317,
-          3.359999999999804,
-          1.3199999999998475,
+          4.079999999999789,
+          1.0399999999998535,
           1.6999999999998394,
-          2.7799999999998164
+          3.499999999999801
         ],
-        "sd_s": 0.8349337013884731,
+        "sd_s": 1.2757854723379247,
         "missed": 0,
         "median_components_s": {
-          "response_s": 0.5699999999998635,
-          "gaze_s": 0.9170329066734251,
-          "hand_s": 1.575940319956766,
-          "eyes_s": 0.8399999999998577,
-          "engaged_s": 2.3399999999998258
+          "response_s": 1.2899999999998482,
+          "gaze_s": 1.2362094503385537,
+          "hand_s": 1.9159403199567588,
+          "eyes_s": 0.7999999999998586,
+          "engaged_s": 2.7299999999998175
         },
         "scenario": "myosuite-carla takeover_request: automation at 12 m/s, request at 10 s, 7 s budget"
       }
@@ -1909,8 +1915,8 @@
       "skipped": null,
       "metrics": {
         "response.drt_driving_cost": 28.312052134831163,
-        "response.drt_2back_cost": 297.0260648248014,
-        "response.drt_surt_cost": 367.3475071888989
+        "response.drt_2back_cost": 298.06327320235056,
+        "response.drt_surt_cost": 574.6651445773098
       },
       "scores": {
         "response.drt_driving_cost": 0.9200013506432945,
@@ -1926,7 +1932,7 @@
           "fitting_data": [
             "conti2014.secondary_task_costs"
           ],
-          "rationale": "Secondary task costs were fitted; driving baseline and cost were reserved."
+          "rationale": "Secondary task costs were fitted as contrasts against this study's observed driving baseline. Baseline and driving cost were not separate fit targets, but their observations are shared with the calibration contrasts."
         },
         "response.drt_2back_cost": {
           "role": "held_out",
@@ -1991,9 +1997,9 @@
         "conti_model_ms": {
           "alone": 355.09875225243223,
           "driving": 383.4108043872634,
-          "0-back": 515.0668423479707,
-          "2-back": 683.0280198055297,
-          "surt": 780.508996682249
+          "0-back": 514.5607205497523,
+          "2-back": 682.8597479568804,
+          "surt": 775.0487877655919
         },
         "conti_human_ms": {
           "alone": 293.4,
@@ -2004,28 +2010,263 @@
         },
         "conti_fitted_costs_ms": {
           "0-back": {
-            "model": 131.6560379607073,
+            "model": 131.14991616248892,
             "human": 135.0
           },
           "2-back": {
-            "model": 299.61721541826626,
+            "model": 299.448943569617,
             "human": 292.5
           },
           "surt": {
-            "model": 397.09819229498555,
+            "model": 391.6379833783285,
             "human": 385.1
           }
         },
         "cooper_model_ms": {
           "driving": 379.0592911192602,
-          "2-back": 676.0853559440616,
-          "surt": 746.4067983081591
+          "2-back": 677.1225643216108,
+          "surt": 953.7244356965699
         },
         "cooper_human_ms": {
           "driving": 523.0,
           "2-back": 817.4,
           "surt": 715.4
-        }
+        },
+        "conti_measurements": {
+          "alone": {
+            "mean_rt_ms": 355.09875225243223,
+            "hit_rate": 1.0,
+            "premature_rate": 0.0,
+            "late_rate": 0.0,
+            "nonresponse_rate": 0.0,
+            "uncensored_mean_rt_ms": 355.09875225243223,
+            "uncensored_finite_mean_rt_ms": 355.09875225243223,
+            "window_s": [
+              0.1,
+              2.0
+            ],
+            "components": [
+              {
+                "stimulus": "head_light",
+                "gaze": [
+                  0.0,
+                  0.0
+                ],
+                "weight": 1.0,
+                "samples": 6000,
+                "hits": 6000,
+                "uncensored_mean_rt_ms": 355.09875225243223
+              }
+            ]
+          },
+          "driving": {
+            "mean_rt_ms": 383.4108043872634,
+            "hit_rate": 1.0,
+            "premature_rate": 0.0,
+            "late_rate": 0.0,
+            "nonresponse_rate": 0.0,
+            "uncensored_mean_rt_ms": 383.4108043872634,
+            "uncensored_finite_mean_rt_ms": 383.4108043872634,
+            "window_s": [
+              0.1,
+              2.0
+            ],
+            "components": [
+              {
+                "stimulus": "head_light",
+                "gaze": [
+                  0.0,
+                  0.0
+                ],
+                "weight": 1.0,
+                "samples": 6000,
+                "hits": 6000,
+                "uncensored_mean_rt_ms": 383.4108043872634
+              }
+            ]
+          },
+          "0-back": {
+            "mean_rt_ms": 514.5607205497523,
+            "hit_rate": 0.9996666666666667,
+            "premature_rate": 0.0,
+            "late_rate": 0.0003333333333333333,
+            "nonresponse_rate": 0.0,
+            "uncensored_mean_rt_ms": 515.0668423479707,
+            "uncensored_finite_mean_rt_ms": 515.0668423479707,
+            "window_s": [
+              0.1,
+              2.0
+            ],
+            "components": [
+              {
+                "stimulus": "head_light",
+                "gaze": [
+                  0.0,
+                  0.0
+                ],
+                "weight": 1.0,
+                "samples": 6000,
+                "hits": 5998,
+                "uncensored_mean_rt_ms": 515.0668423479707
+              }
+            ]
+          },
+          "2-back": {
+            "mean_rt_ms": 682.8597479568804,
+            "hit_rate": 0.9991666666666666,
+            "premature_rate": 0.0,
+            "late_rate": 0.0008333333333333334,
+            "nonresponse_rate": 0.0,
+            "uncensored_mean_rt_ms": 684.0510720917579,
+            "uncensored_finite_mean_rt_ms": 684.0510720917579,
+            "window_s": [
+              0.1,
+              2.0
+            ],
+            "components": [
+              {
+                "stimulus": "head_light",
+                "gaze": [
+                  0.0,
+                  0.0
+                ],
+                "weight": 1.0,
+                "samples": 6000,
+                "hits": 5995,
+                "uncensored_mean_rt_ms": 684.0510720917579
+              }
+            ]
+          },
+          "surt": {
+            "mean_rt_ms": 775.0487877655919,
+            "hit_rate": 0.7823385,
+            "premature_rate": 0.0,
+            "late_rate": 0.2176615,
+            "nonresponse_rate": 0.0,
+            "uncensored_mean_rt_ms": 1145.0145348427418,
+            "uncensored_finite_mean_rt_ms": 1145.0145348427418,
+            "window_s": [
+              0.1,
+              2.0
+            ],
+            "components": [
+              {
+                "stimulus": "head_light",
+                "gaze": [
+                  0.0,
+                  0.0
+                ],
+                "weight": 0.44099999999999995,
+                "samples": 6000,
+                "hits": 4689,
+                "uncensored_mean_rt_ms": 1141.8627200071269
+              },
+              {
+                "stimulus": "head_light",
+                "gaze": [
+                  20.0,
+                  -25.0
+                ],
+                "weight": 0.559,
+                "samples": 6000,
+                "hits": 4698,
+                "uncensored_mean_rt_ms": 1147.5010291942733
+              }
+            ]
+          }
+        },
+        "cooper_measurements": {
+          "driving": {
+            "mean_rt_ms": 379.0592911192602,
+            "hit_rate": 1.0,
+            "premature_rate": 0.0,
+            "late_rate": 0.0,
+            "nonresponse_rate": 0.0,
+            "uncensored_mean_rt_ms": 379.0592911192602,
+            "uncensored_finite_mean_rt_ms": 379.0592911192602,
+            "window_s": [
+              0.1,
+              2.5
+            ],
+            "components": [
+              {
+                "stimulus": "tactile",
+                "gaze": [
+                  0.0,
+                  0.0
+                ],
+                "weight": 1.0,
+                "samples": 6000,
+                "hits": 6000,
+                "uncensored_mean_rt_ms": 379.0592911192602
+              }
+            ]
+          },
+          "2-back": {
+            "mean_rt_ms": 677.1225643216108,
+            "hit_rate": 1.0,
+            "premature_rate": 0.0,
+            "late_rate": 0.0,
+            "nonresponse_rate": 0.0,
+            "uncensored_mean_rt_ms": 677.1225643216108,
+            "uncensored_finite_mean_rt_ms": 677.1225643216108,
+            "window_s": [
+              0.1,
+              2.5
+            ],
+            "components": [
+              {
+                "stimulus": "tactile",
+                "gaze": [
+                  0.0,
+                  0.0
+                ],
+                "weight": 1.0,
+                "samples": 6000,
+                "hits": 6000,
+                "uncensored_mean_rt_ms": 677.1225643216108
+              }
+            ]
+          },
+          "surt": {
+            "mean_rt_ms": 953.7244356965699,
+            "hit_rate": 0.9128333333333334,
+            "premature_rate": 0.0,
+            "late_rate": 0.08716666666666667,
+            "nonresponse_rate": 0.0,
+            "uncensored_mean_rt_ms": 1108.235769136167,
+            "uncensored_finite_mean_rt_ms": 1108.235769136167,
+            "window_s": [
+              0.1,
+              2.5
+            ],
+            "components": [
+              {
+                "stimulus": "tactile",
+                "gaze": [
+                  0.0,
+                  0.0
+                ],
+                "weight": 0.44099999999999995,
+                "samples": 6000,
+                "hits": 5477,
+                "uncensored_mean_rt_ms": 1106.6897115372333
+              },
+              {
+                "stimulus": "tactile",
+                "gaze": [
+                  20.0,
+                  -25.0
+                ],
+                "weight": 0.559,
+                "samples": 6000,
+                "hits": 5477,
+                "uncensored_mean_rt_ms": 1109.4554675281697
+              }
+            ]
+          }
+        },
+        "measurement_note": "Mean RT includes only responses within each study's response window. Uncensored model means and hit rates remain available."
       }
     },
     {
@@ -2690,7 +2931,7 @@
           "fitting_data": [
             "conti2014.secondary_task_costs"
           ],
-          "rationale": "Secondary task costs were fitted; driving baseline and cost were reserved."
+          "rationale": "Secondary task costs were fitted as contrasts against this study's observed driving baseline. Baseline and driving cost were not separate fit targets, but their observations are shared with the calibration contrasts."
         },
         "response.drt_tactile": {
           "role": "held_out",
@@ -2763,7 +3004,85 @@
             583.4
           ]
         },
-        "vibration_sensation_db": 20.0
+        "vibration_sensation_db": 20.0,
+        "visual_measurement": {
+          "mean_rt_ms": 382.92476787080676,
+          "hit_rate": 1.0,
+          "premature_rate": 0.0,
+          "late_rate": 0.0,
+          "nonresponse_rate": 0.0,
+          "uncensored_mean_rt_ms": 382.92476787080676,
+          "uncensored_finite_mean_rt_ms": 382.92476787080676,
+          "window_s": [
+            0.1,
+            2.0
+          ],
+          "components": [
+            {
+              "stimulus": "head_light",
+              "gaze": [
+                0.0,
+                0.0
+              ],
+              "weight": 1.0,
+              "samples": 6000,
+              "hits": 6000,
+              "uncensored_mean_rt_ms": 382.92476787080676
+            }
+          ]
+        },
+        "tactile_measurement": {
+          "mean_rt_ms": 380.2974551537188,
+          "hit_rate": 1.0,
+          "premature_rate": 0.0,
+          "late_rate": 0.0,
+          "nonresponse_rate": 0.0,
+          "uncensored_mean_rt_ms": 380.2974551537188,
+          "uncensored_finite_mean_rt_ms": 380.2974551537188,
+          "window_s": [
+            0.1,
+            2.5
+          ],
+          "components": [
+            {
+              "stimulus": "tactile",
+              "gaze": [
+                0.0,
+                0.0
+              ],
+              "weight": 1.0,
+              "samples": 6000,
+              "hits": 6000,
+              "uncensored_mean_rt_ms": 380.2974551537188
+            }
+          ]
+        },
+        "older_tactile_measurement": {
+          "mean_rt_ms": 493.75780711050487,
+          "hit_rate": 1.0,
+          "premature_rate": 0.0,
+          "late_rate": 0.0,
+          "nonresponse_rate": 0.0,
+          "uncensored_mean_rt_ms": 493.75780711050487,
+          "uncensored_finite_mean_rt_ms": 493.75780711050487,
+          "window_s": [
+            0.1,
+            2.5
+          ],
+          "components": [
+            {
+              "stimulus": "tactile",
+              "gaze": [
+                0.0,
+                0.0
+              ],
+              "weight": 1.0,
+              "samples": 6000,
+              "hits": 6000,
+              "uncensored_mean_rt_ms": 493.75780711050487
+            }
+          ]
+        }
       }
     },
     {
@@ -2775,7 +3094,7 @@
       "score": 1.0,
       "skipped": null,
       "metrics": {
-        "vestibular.vertical_msi_error": 7.465817554347785
+        "vestibular.vertical_msi_error": 7.462754210300906
       },
       "scores": {
         "vestibular.vertical_msi_error": 1.0
@@ -2811,88 +3130,88 @@
             "frequency_hz": 0.083,
             "mean_accel_g": 0.025,
             "observed_pct": 0,
-            "predicted_pct": 1.524321944380467
+            "predicted_pct": 1.5207404593351157
           },
           {
             "frequency_hz": 0.083,
             "mean_accel_g": 0.05,
             "observed_pct": 5,
-            "predicted_pct": 5.647794844706093
+            "predicted_pct": 5.6354876579112085
           },
           {
             "frequency_hz": 0.167,
             "mean_accel_g": 0.025,
             "observed_pct": 0,
-            "predicted_pct": 3.437183370134719
+            "predicted_pct": 3.4293816781506137
           },
           {
             "frequency_hz": 0.167,
             "mean_accel_g": 0.05,
             "observed_pct": 10,
-            "predicted_pct": 11.686112267316826
+            "predicted_pct": 11.663445320304868
           },
           {
             "frequency_hz": 0.167,
             "mean_accel_g": 0.1,
             "observed_pct": 30,
-            "predicted_pct": 29.860797847969124
+            "predicted_pct": 29.822225130256122
           },
           {
             "frequency_hz": 0.167,
             "mean_accel_g": 0.2,
             "observed_pct": 60,
-            "predicted_pct": 51.6617930133547
+            "predicted_pct": 51.6277256587627
           },
           {
             "frequency_hz": 0.333,
             "mean_accel_g": 0.05,
             "observed_pct": 5,
-            "predicted_pct": 4.776624193171955
+            "predicted_pct": 4.766045679434492
           },
           {
             "frequency_hz": 0.333,
             "mean_accel_g": 0.1,
             "observed_pct": 15,
-            "predicted_pct": 15.375661493752617
+            "predicted_pct": 15.347996985394966
           },
           {
             "frequency_hz": 0.333,
             "mean_accel_g": 0.2,
             "observed_pct": 52,
-            "predicted_pct": 35.60237950288476
+            "predicted_pct": 35.56286607669366
           },
           {
             "frequency_hz": 0.333,
             "mean_accel_g": 0.3,
             "observed_pct": 52,
-            "predicted_pct": 48.454417773732615
+            "predicted_pct": 48.41843972310776
           },
           {
             "frequency_hz": 0.5,
             "mean_accel_g": 0.1,
             "observed_pct": 0,
-            "predicted_pct": 7.694417646873499
+            "predicted_pct": 7.678286320170033
           },
           {
             "frequency_hz": 0.5,
             "mean_accel_g": 0.2,
             "observed_pct": 15,
-            "predicted_pct": 22.262711670151113
+            "predicted_pct": 22.228223307455647
           },
           {
             "frequency_hz": 0.5,
             "mean_accel_g": 0.3,
             "observed_pct": 25,
-            "predicted_pct": 34.90899215759987
+            "predicted_pct": 34.86950444516285
           },
           {
             "frequency_hz": 0.5,
             "mean_accel_g": 0.4,
             "observed_pct": 30,
-            "predicted_pct": 44.1989180228606
+            "predicted_pct": 44.160996639220905
           }
         ],
-        "correlation": 0.9335876869688079
+        "correlation": 0.9336069905810369
       }
     },
     {
@@ -2901,13 +3220,13 @@
         "vestibular"
       ],
       "passed": false,
-      "score": 0.5247670948058163,
+      "score": 0.5161230780984386,
       "skipped": null,
       "metrics": {
-        "vestibular.time_course_msi_error": 14.752329051941837
+        "vestibular.time_course_msi_error": 14.838769219015614
       },
       "scores": {
-        "vestibular.time_course_msi_error": 0.5247670948058163
+        "vestibular.time_course_msi_error": 0.5161230780984386
       },
       "validation": {
         "vestibular.time_course_msi_error": {
@@ -2936,56 +3255,56 @@
       },
       "details": {
         "points": 43,
-        "correlation": 0.7613517084264773,
-        "mccauley_model_error": 6.252441383636791,
+        "correlation": 0.7580406240064658,
+        "mccauley_model_error": 6.3355769179863115,
         "predicted": [
-          2.828191816179083,
-          15.295497248718107,
-          26.544744339148004,
-          33.96777977492584,
-          38.295147253399584,
-          42.82576162287273,
-          3.3734082683688524,
-          18.211275548828365,
-          31.594350538797737,
-          40.4243602412905,
-          45.57163668034658,
-          48.37785751293534,
-          50.960394077488246,
-          1.4946333143509418,
-          8.058911518250392,
-          13.978037008804433,
-          21.4003289053881,
-          22.049036689220323,
-          22.679824194753905,
-          2.944159766090242,
-          15.868158134238584,
-          27.520974288795482,
-          35.20853235560544,
-          39.68959760691771,
-          42.132531303547374,
-          43.40955661896494,
-          44.38067223353208,
-          44.65129762708106,
-          3.7093793507348582,
-          19.984222841102543,
-          34.65702811710476,
-          44.336657015222315,
-          54.66262028374042,
-          55.4792352687733,
-          56.22608149276343,
-          17.774902780384664,
-          48.59275392015387,
-          49.98193053281493,
-          36.95963754660117,
-          38.01605269147472,
-          16.058964902681243,
-          45.150382472223136,
-          39.977811905476464
+          2.824023738645529,
+          15.279737731789282,
+          26.519579626124795,
+          33.9366294392597,
+          38.260570648060614,
+          42.78765436678114,
+          3.369183964109702,
+          18.196521496486024,
+          31.571349457971156,
+          40.396179685371045,
+          45.540511805711276,
+          48.34515172350228,
+          50.92625388190101,
+          1.4914748700467462,
+          8.045416453618557,
+          13.9557699666469,
+          21.367342207013554,
+          22.015126363299295,
+          22.64501968347455,
+          2.939963626497446,
+          15.852517686252781,
+          27.496098329218764,
+          35.17779047309131,
+          39.65550144802319,
+          42.09662754937231,
+          43.372715250422026,
+          44.34312278006396,
+          44.61355230385971,
+          3.7051995807321734,
+          19.970488138054417,
+          34.636043292090896,
+          44.31117510391161,
+          54.63254032425703,
+          55.44880278347502,
+          56.19533001228079,
+          17.759938559555227,
+          48.558465758447674,
+          49.946829155324224,
+          36.92121047198826,
+          37.97665400986073,
+          16.04337383902129,
+          45.11284361722892,
+          39.9387056681084
         ],
         "observed": [
           8.0,
-          23.0,
+          28.0,
           40.0,
           47.0,
           55.0,
@@ -3036,15 +3355,15 @@
         "vestibular"
       ],
       "passed": false,
-      "score": 0.97177627453096,
+      "score": 0.971771559510232,
       "skipped": null,
       "metrics": {
         "vestibular.roll_frequency_order": 1.0,
-        "vestibular.roll_compensation_effect": 0.4919729415572812
+        "vestibular.roll_compensation_effect": 0.49188807118417527
       },
       "scores": {
         "vestibular.roll_frequency_order": 1.0,
-        "vestibular.roll_compensation_effect": 0.9435525490619201
+        "vestibular.roll_compensation_effect": 0.943543119020464
       },
       "validation": {
         "vestibular.roll_frequency_order": {
@@ -3094,19 +3413,19 @@
       },
       "details": {
         "msi_compensated_pct": {
-          "0.05": 0.0036648122745164807,
-          "0.08": 0.03433937871378044,
-          "0.125": 0.3368584362524028,
-          "0.16": 1.0702820496284458,
-          "0.2": 2.5241247056485827,
-          "0.315": 2.9149802880380484,
-          "0.5": 2.1832189857207003,
-          "0.8": 1.6147564654578581
+          "0.05": 0.003655966254053667,
+          "0.08": 0.034256552918287345,
+          "0.125": 0.3360519560495391,
+          "0.16": 1.0677659502814578,
+          "0.2": 2.518404338866948,
+          "0.315": 2.9084386622890466,
+          "0.5": 2.178227384352457,
+          "0.8": 1.6110114119765306
         },
         "msi_uncompensated_pct": {
-          "0.315": 5.925082543789967,
-          "0.5": 1.0258357093522539,
-          "0.8": 0.1547776852985159
+          "0.315": 5.91280584480784,
+          "0.5": 1.0234217728462696,
+          "0.8": 0.1544054819728029
         },
         "orderings_reproduced": {
           "(0.2, 0.08)": true,
@@ -3771,24 +4090,24 @@
       },
       "validation": {
         "driving.occlusion_speed_elasticity": {
-          "role": "held_out",
+          "role": "exploratory",
           "evaluation_data": [
             "senders1967.occlusion"
           ],
           "fitting_data": [
             "kujala_saariluoma2011.mean_and_sd"
           ],
-          "rationale": ""
+          "rationale": "Simulated SuRT conditions differ from the source tasks. These scores are diagnostic comparisons. No numerical acceptance range was changed."
         },
         "driving.incar_glance_speed_elasticity": {
-          "role": "held_out",
+          "role": "exploratory",
           "evaluation_data": [
             "jokinen2021.speed_effect"
           ],
           "fitting_data": [
             "kujala_saariluoma2011.mean_and_sd"
           ],
-          "rationale": ""
+          "rationale": "Simulated SuRT conditions differ from the source tasks. These scores are diagnostic comparisons. No numerical acceptance range was changed."
         }
       },
       "references": {
@@ -3829,6 +4148,14 @@
           "80.0": 19.816723940434105,
           "100.0": 22.092772384033246,
           "120.0": 24.691823899369684
+        },
+        "protocol_mismatch": {
+          "status": "exploratory_diagnostic",
+          "simulation": "Continuous pop out SuRT at five speeds.",
+          "occlusion_comparison": "Senders et al. (1967) measured voluntary road occlusion without a secondary visual search task.",
+          "search_comparison": "Jokinen et al. (2021) used six or nine letter triplets with target present and target absent trials.",
+          "speed_conflict": "Jokinen Methods states 60 and 120 km/h. Appendix B states 80 and 120 km/h. Raw data must resolve this.",
+          "required_work": "Implement separate occlusion and search protocols before interpreting these scores as task replications."
         }
       }
     },
@@ -3980,7 +4307,7 @@
       "skipped": null,
       "metrics": {
         "driving.takeover_modality_order": 1.0,
-        "driving.takeover_hands_auditory": 1.6196903199567652
+        "driving.takeover_hands_auditory": 1.624065319956765
       },
       "scores": {
         "driving.takeover_modality_order": 1.0,
@@ -4035,62 +4362,62 @@
       "details": {
         "median_components_s": {
           "visual": {
-            "response_s": 0.5799999999998633,
-            "gaze_s": 0.6728402613024116,
-            "hand_s": 1.5859403199567659,
-            "eyes_s": 0.7499999999998597,
-            "engaged_s": 2.009999999999833
+            "response_s": 0.9499999999998554,
+            "gaze_s": 0.5917144942883699,
+            "hand_s": 1.575940319956766,
+            "eyes_s": 0.5999999999998629,
+            "engaged_s": 2.189999999999829
           },
           "auditory": {
-            "response_s": 0.359999999999868,
-            "gaze_s": 0.5990315417180119,
-            "hand_s": 1.3659403199567706,
-            "eyes_s": 0.6499999999998618,
-            "engaged_s": 1.8699999999998358
+            "response_s": 0.7699999999998592,
+            "gaze_s": 0.5529217034077787,
+            "hand_s": 1.39594031995677,
+            "eyes_s": 0.5899999999998631,
+            "engaged_s": 2.089999999999831
           },
           "tactile": {
-            "response_s": 0.4399999999998663,
-            "gaze_s": 0.5990167069032442,
-            "hand_s": 1.4459403199567689,
-            "eyes_s": 0.689999999999861,
-            "engaged_s": 1.949999999999834
+            "response_s": 0.9099999999998563,
+            "gaze_s": 0.5674038030727626,
+            "hand_s": 1.535940319956767,
+            "eyes_s": 0.6099999999998627,
+            "engaged_s": 2.1099999999998307
           },
           "auditory+visual": {
-            "response_s": 0.2799999999998697,
-            "gaze_s": 0.5521515387549485,
-            "hand_s": 1.2859403199567723,
-            "eyes_s": 0.6299999999998622,
-            "engaged_s": 1.8399999999998364
+            "response_s": 0.7499999999998597,
+            "gaze_s": 0.5256183100382756,
+            "hand_s": 1.3759403199567704,
+            "eyes_s": 0.5599999999998637,
+            "engaged_s": 2.089999999999831
           }
         },
         "mean_components_s": {
           "visual": {
-            "response_s": 0.73437499999986,
-            "gaze_s": 0.9069739374413607,
-            "hand_s": 1.7403153199567627,
-            "eyes_s": 1.0018749999998544,
-            "engaged_s": 2.1012499999998306
+            "response_s": 1.116874999999852,
+            "gaze_s": 1.1275987799982417,
+            "hand_s": 1.7428153199567626,
+            "eyes_s": 0.8943749999998566,
+            "engaged_s": 2.4312499999998236
           },
           "auditory": {
-            "response_s": 0.6493749999998618,
-            "gaze_s": 0.8416578461831856,
-            "hand_s": 1.6553153199567645,
-            "eyes_s": 0.9143749999998562,
-            "engaged_s": 2.010624999999833
+            "response_s": 1.0343749999998537,
+            "gaze_s": 1.0270087053700794,
+            "hand_s": 1.6603153199567644,
+            "eyes_s": 0.8237499999998581,
+            "engaged_s": 2.3243749999998258
           },
           "tactile": {
-            "response_s": 0.6949999999998608,
-            "gaze_s": 0.8468039724205777,
-            "hand_s": 1.7009403199567634,
-            "eyes_s": 0.9593749999998552,
-            "engaged_s": 2.0562499999998316
+            "response_s": 1.0774999999998527,
+            "gaze_s": 1.0563350898690234,
+            "hand_s": 1.7034403199567634,
+            "eyes_s": 0.8443749999998577,
+            "engaged_s": 2.3649999999998252
           },
           "auditory+visual": {
-            "response_s": 0.6137499999998626,
-            "gaze_s": 0.809026551092254,
-            "hand_s": 1.6196903199567652,
-            "eyes_s": 0.8824999999998568,
-            "engaged_s": 1.9787499999998335
+            "response_s": 0.9981249999998544,
+            "gaze_s": 0.9941426395161909,
+            "hand_s": 1.624065319956765,
+            "eyes_s": 0.8012499999998586,
+            "engaged_s": 2.2943749999998264
           }
         },
         "runs": 32
@@ -4106,19 +4433,19 @@
         "motor"
       ],
       "passed": false,
-      "score": 0.7095530063290613,
+      "score": 0.75,
       "skipped": null,
       "metrics": {
-        "driving.takeover_gaze": 0.8068841563416499,
-        "driving.takeover_road": 0.9012499999998564,
-        "driving.takeover_hands": 1.6300028199567649,
-        "driving.takeover_intervention": 1.9721874999998337
+        "driving.takeover_gaze": 1.0245693401763047,
+        "driving.takeover_road": 0.9374999999998557,
+        "driving.takeover_hands": 1.620627819956765,
+        "driving.takeover_intervention": 2.2543749999998273
       },
       "scores": {
         "driving.takeover_gaze": 0.0,
         "driving.takeover_road": 1.0,
         "driving.takeover_hands": 1.0,
-        "driving.takeover_intervention": 0.8382120253162451
+        "driving.takeover_intervention": 1.0
       },
       "validation": {
         "driving.takeover_gaze": {
@@ -4210,32 +4537,40 @@
       },
       "details": {
         "model_mean_s": {
-          "gaze": 0.8068841563416499,
-          "road": 0.9012499999998564,
-          "hands": 1.6300028199567649,
-          "intervention": 1.9721874999998337
+          "gaze": 1.0245693401763047,
+          "road": 0.9374999999998557,
+          "hands": 1.620627819956765,
+          "intervention": 2.2543749999998273
         },
         "model_ci95_s": {
           "gaze": [
-            0.6934219478310477,
-            0.9488260421869581
+            0.831943850992727,
+            1.2499955228427075
           ],
           "road": [
-            0.78072301673741,
-            1.0536792552989678
+            0.7630286331357712,
+            1.1593094495265786
           ],
           "hands": [
-            1.5071903199567676,
-            1.781903474490089
+            1.427514452449356,
+            1.8406278199567603
           ],
           "intervention": [
-            1.828615301537547,
-            2.133924214225917
+            2.054452572749632,
+            2.474342111222878
           ]
         },
-        "model_response_s": 0.6240624999998623,
+        "finite_runs_by_component": {
+          "gaze": 52,
+          "road": 64,
+          "hands": 64,
+          "intervention": 64
+        },
+        "observation_horizon_after_request_s": 10.0,
+        "means_condition_on_observed_component": true,
+        "model_response_s": 0.9946874999998544,
         "runs": 64,
-        "runs_with_eyes_on_task": 61,
+        "runs_with_eyes_on_task": 52,
         "gold_mean_s": {
           "5 s": {
             "gaze": 0.41,
@@ -4283,15 +4618,15 @@
         "motor"
       ],
       "passed": false,
-      "score": 0.44098005543549407,
+      "score": 0.02950605567563891,
       "skipped": null,
       "metrics": {
-        "driving.zeeb_road": 0.902545454545311,
-        "driving.zeeb_hands": 1.028752819956778
+        "driving.zeeb_road": 1.0861818181816707,
+        "driving.zeeb_hands": 1.39937781995677
       },
       "scores": {
         "driving.zeeb_road": 0.0,
-        "driving.zeeb_hands": 0.8819601108709881
+        "driving.zeeb_hands": 0.05901211135127782
       },
       "validation": {
         "driving.zeeb_road": {
@@ -4344,7 +4679,7 @@
       "details": {
         "runs": 64,
         "runs_eyes_off_road": 55,
-        "model_engaged_s": 1.9578124999998339,
+        "model_engaged_s": 2.2521874999998275,
         "human_braking_by_group_s": {
           "high-risk": [
             2.31,
@@ -4493,16 +4828,16 @@
         "motor"
       ],
       "passed": false,
-      "score": 0.33299745718836726,
+      "score": 0.3197221079402725,
       "skipped": null,
       "metrics": {
-        "driving.zhang_no_auditory": 0.05172102733030334,
-        "driving.zhang_vibrotactile": -0.007475183913601032,
-        "driving.zhang_visual_task": 0.5023055343587645
+        "driving.zhang_no_auditory": 0.04777310523104019,
+        "driving.zhang_vibrotactile": -0.004863484887001395,
+        "driving.zhang_visual_task": 0.8658121579699615
       },
       "scores": {
-        "driving.zhang_no_auditory": 0.4792470084196413,
-        "driving.zhang_vibrotactile": 0.5197453631454605,
+        "driving.zhang_no_auditory": 0.4542601596901277,
+        "driving.zhang_vibrotactile": 0.5049061641306898,
         "driving.zhang_visual_task": 0.0
       },
       "validation": {
@@ -4574,11 +4909,19 @@
       },
       "details": {
         "model_mean_first_input_s": {
-          "tone_icon_surt": 1.9721874999998337,
-          "icon_surt": 2.0768749999998315,
-          "tone_icon_vibration_surt": 1.957499999999834,
-          "tone_icon_no_task": 1.1934374999998503
+          "tone_icon_surt": 2.2543749999998273,
+          "icon_surt": 2.3646874999998255,
+          "tone_icon_vibration_surt": 2.243437499999828,
+          "tone_icon_no_task": 0.9484374999998555
         },
+        "completed_runs_by_condition": {
+          "tone_icon_surt": 64,
+          "icon_surt": 64,
+          "tone_icon_vibration_surt": 64,
+          "tone_icon_no_task": 64
+        },
+        "observation_horizon_after_request_s": 10.0,
+        "means_condition_on_completion": true,
         "human_baseline_s": 2.15,
         "human_within_study_differences_s": {
           "handheld_device": 1.33,
@@ -4599,15 +4942,15 @@
         "eyes"
       ],
       "passed": false,
-      "score": 0.8264730639730631,
+      "score": 0.8379192872117385,
       "skipped": null,
       "metrics": {
-        "driving.petermeijer_visual_vs_auditory": 0.07090909090908981,
-        "driving.petermeijer_visual_vs_tactile": -0.007636363636363441
+        "driving.petermeijer_visual_vs_auditory": 0.07396226415094187,
+        "driving.petermeijer_visual_vs_tactile": 0.0033962264150941834
       },
       "scores": {
-        "driving.petermeijer_visual_vs_auditory": 0.946127946127944,
-        "driving.petermeijer_visual_vs_tactile": 0.706818181818182
+        "driving.petermeijer_visual_vs_auditory": 0.9517819706498923,
+        "driving.petermeijer_visual_vs_tactile": 0.7240566037735846
       },
       "validation": {
         "driving.petermeijer_visual_vs_auditory": {
@@ -4657,9 +5000,9 @@
       },
       "details": {
         "model_mean_eyes_on_road_s": {
-          "visual": 0.990181818181673,
-          "auditory": 0.9192727272725831,
-          "tactile": 0.9978181818180364
+          "visual": 1.213584905660227,
+          "auditory": 1.1396226415092852,
+          "tactile": 1.2101886792451328
         },
         "human_mean_sd_s": {
           "eyes_on_road": {
@@ -4695,17 +5038,934 @@
           10.0,
           -25.0
         ],
+        "retained_runs": {
+          "visual": 53,
+          "auditory": 53,
+          "tactile": 53
+        },
+        "discarded_runs": {
+          "visual": 11,
+          "auditory": 11,
+          "tactile": 11
+        },
+        "minimum_response_s": 0.3,
+        "task_mismatch": "SuRT replaces reading and video tasks",
         "note": "the study's scenarios were not urgent (more than 10 s to collision), and its absolute times are about twice the model's"
       }
     }
   ],
-  "verification_refresh": {
-    "benchmarks": [
-      "vision.foveation",
-      "trust.kraus_dynamics",
-      "risk.lane_width"
+  "comparison": {
+    "schema_version": 1,
+    "baseline_report_sha256": "f3dc2b35760a4a10988826012328bfb72a22848a07416add7081350a74573643",
+    "baseline_hash_encoding": "canonical_json",
+    "baseline_package": "embodied-human 0.1.0",
+    "current_package": "embodied-human 0.1.0",
+    "seed": 0,
+    "regression_tolerance": 1e-09,
+    "distance_definition": "distance outside acceptance range divided by its width",
+    "regressions": [
+      {
+        "benchmark": "driving.takeover_components",
+        "metric": "driving.takeover_gaze",
+        "reason": "distance from acceptance range increased"
+      },
+      {
+        "benchmark": "driving.takeover_determinants",
+        "metric": "driving.zhang_no_auditory",
+        "reason": "distance from acceptance range increased"
+      },
+      {
+        "benchmark": "driving.takeover_determinants",
+        "metric": "driving.zhang_vibrotactile",
+        "reason": "distance from acceptance range increased"
+      },
+      {
+        "benchmark": "driving.takeover_determinants",
+        "metric": "driving.zhang_visual_task",
+        "reason": "distance from acceptance range increased"
+      },
+      {
+        "benchmark": "driving.takeover_motor_readiness",
+        "metric": "driving.zeeb_hands",
+        "reason": "distance from acceptance range increased"
+      },
+      {
+        "benchmark": "driving.takeover_motor_readiness",
+        "metric": "driving.zeeb_road",
+        "reason": "distance from acceptance range increased"
+      },
+      {
+        "benchmark": "response.drt_load",
+        "metric": "response.drt_surt_cost",
+        "reason": "distance from acceptance range increased"
+      },
+      {
+        "benchmark": "vestibular.roll_compensation",
+        "metric": "vestibular.roll_compensation_effect",
+        "reason": "distance from acceptance range increased"
+      },
+      {
+        "benchmark": "vestibular.sickness_time_course",
+        "metric": "vestibular.time_course_msi_error",
+        "reason": "distance from acceptance range increased"
+      }
     ],
-    "wall_seconds": 1.388,
-    "reason": "Verify selected implementation paths after the complete offline run"
+    "incomparable": [
+      {
+        "benchmark": "driving.glance_speed",
+        "metric": "driving.incar_glance_speed_elasticity",
+        "reason": "reference or validation declaration changed"
+      },
+      {
+        "benchmark": "driving.glance_speed",
+        "metric": "driving.occlusion_speed_elasticity",
+        "reason": "reference or validation declaration changed"
+      }
+    ],
+    "metric_changes": [
+      {
+        "benchmark": "affect.emotion_study",
+        "metric": "affect.emotion_rmse",
+        "baseline": 0.09795064541135827,
+        "current": 0.09795064541135827,
+        "delta": 0.0,
+        "unit": "intensity",
+        "baseline_unit": "intensity",
+        "validation_role": "unclassified",
+        "baseline_score": 1.0,
+        "current_score": 1.0,
+        "baseline_distance": 0.0,
+        "current_distance": 0.0,
+        "status": "unchanged"
+      },
+      {
+        "benchmark": "design.touch_key_size",
+        "metric": "design.touch_key_asymptote",
+        "baseline": 12.5,
+        "current": 12.5,
+        "delta": 0.0,
+        "unit": "mm",
+        "baseline_unit": "mm",
+        "validation_role": "held_out",
+        "baseline_score": 1.0,
+        "current_score": 1.0,
+        "baseline_distance": 0.0,
+        "current_distance": 0.0,
+        "status": "unchanged"
+      },
+      {
+        "benchmark": "driving.automation_monitoring",
+        "metric": "driving.automation_max_offroad",
+        "baseline": 15.8702900966989,
+        "current": 15.8702900966989,
+        "delta": 0.0,
+        "unit": "s",
+        "baseline_unit": "s",
+        "validation_role": "held_out",
+        "baseline_score": 1.0,
+        "current_score": 1.0,
+        "baseline_distance": 0.0,
+        "current_distance": 0.0,
+        "status": "unchanged"
+      },
+      {
+        "benchmark": "driving.automation_monitoring",
+        "metric": "driving.automation_road_share",
+        "baseline": 11.562187395798599,
+        "current": 11.562187395798599,
+        "delta": 0.0,
+        "unit": "%",
+        "baseline_unit": "%",
+        "validation_role": "held_out",
+        "baseline_score": 1.0,
+        "current_score": 1.0,
+        "baseline_distance": 0.0,
+        "current_distance": 0.0,
+        "status": "unchanged"
+      },
+      {
+        "benchmark": "driving.glance_population",
+        "metric": "driving.human_glance_sd",
+        "baseline": 0.5823508036825675,
+        "current": 0.5823508036825675,
+        "delta": 0.0,
+        "unit": "s",
+        "baseline_unit": "s",
+        "validation_role": "calibration",
+        "baseline_score": 1.0,
+        "current_score": 1.0,
+        "baseline_distance": 0.0,
+        "current_distance": 0.0,
+        "status": "unchanged"
+      },
+      {
+        "benchmark": "driving.glance_population",
+        "metric": "driving.human_long_glance_share",
+        "baseline": 0.07934508816120907,
+        "current": 0.07934508816120907,
+        "delta": 0.0,
+        "unit": "fraction",
+        "baseline_unit": "fraction",
+        "validation_role": "held_out",
+        "baseline_score": 1.0,
+        "current_score": 1.0,
+        "baseline_distance": 0.0,
+        "current_distance": 0.0,
+        "status": "unchanged"
+      },
+      {
+        "benchmark": "driving.glance_population",
+        "metric": "driving.human_mean_glance",
+        "baseline": 1.131942561088478,
+        "current": 1.131942561088478,
+        "delta": 0.0,
+        "unit": "s",
+        "baseline_unit": "s",
+        "validation_role": "calibration",
+        "baseline_score": 1.0,
+        "current_score": 1.0,
+        "baseline_distance": 0.0,
+        "current_distance": 0.0,
+        "status": "unchanged"
+      },
+      {
+        "benchmark": "driving.glance_population",
+        "metric": "driving.long_glance_share",
+        "baseline": 0.07934508816120907,
+        "current": 0.07934508816120907,
+        "delta": 0.0,
+        "unit": "fraction",
+        "baseline_unit": "fraction",
+        "validation_role": "held_out",
+        "baseline_score": 1.0,
+        "current_score": 1.0,
+        "baseline_distance": 0.0,
+        "current_distance": 0.0,
+        "status": "unchanged"
+      },
+      {
+        "benchmark": "driving.glance_population",
+        "metric": "driving.mean_offroad_glance",
+        "baseline": 1.131942561088478,
+        "current": 1.131942561088478,
+        "delta": 0.0,
+        "unit": "s",
+        "baseline_unit": "s",
+        "validation_role": "held_out",
+        "baseline_score": 1.0,
+        "current_score": 1.0,
+        "baseline_distance": 0.0,
+        "current_distance": 0.0,
+        "status": "unchanged"
+      },
+      {
+        "benchmark": "driving.glance_speed",
+        "metric": "driving.incar_glance_speed_elasticity",
+        "baseline": -0.4532697066676095,
+        "current": -0.4532697066676095,
+        "delta": null,
+        "unit": "1",
+        "baseline_unit": "1",
+        "validation_role": "exploratory",
+        "baseline_score": 0.0,
+        "current_score": 0.0,
+        "baseline_distance": null,
+        "current_distance": null,
+        "status": "incomparable"
+      },
+      {
+        "benchmark": "driving.glance_speed",
+        "metric": "driving.occlusion_speed_elasticity",
+        "baseline": -0.4532697066676095,
+        "current": -0.4532697066676095,
+        "delta": null,
+        "unit": "1",
+        "baseline_unit": "1",
+        "validation_role": "exploratory",
+        "baseline_score": 0.5961563508821551,
+        "current_score": 0.5961563508821551,
+        "baseline_distance": null,
+        "current_distance": null,
+        "status": "incomparable"
+      },
+      {
+        "benchmark": "driving.surt_glances",
+        "metric": "driving.human_long_glance_share",
+        "baseline": 0.022222222222222223,
+        "current": 0.022222222222222223,
+        "delta": 0.0,
+        "unit": "fraction",
+        "baseline_unit": "fraction",
+        "validation_role": "held_out",
+        "baseline_score": 0.9222222222222223,
+        "current_score": 0.9222222222222223,
+        "baseline_distance": 0.07777777777777775,
+        "current_distance": 0.07777777777777775,
+        "status": "unchanged"
+      },
+      {
+        "benchmark": "driving.surt_glances",
+        "metric": "driving.human_mean_glance",
+        "baseline": 0.9302222222222789,
+        "current": 0.9302222222222789,
+        "delta": 0.0,
+        "unit": "s",
+        "baseline_unit": "s",
+        "validation_role": "calibration",
+        "baseline_score": 1.0,
+        "current_score": 1.0,
+        "baseline_distance": 0.0,
+        "current_distance": 0.0,
+        "status": "unchanged"
+      },
+      {
+        "benchmark": "driving.surt_glances",
+        "metric": "driving.long_glance_share",
+        "baseline": 0.022222222222222223,
+        "current": 0.022222222222222223,
+        "delta": 0.0,
+        "unit": "fraction",
+        "baseline_unit": "fraction",
+        "validation_role": "held_out",
+        "baseline_score": 1.0,
+        "current_score": 1.0,
+        "baseline_distance": 0.0,
+        "current_distance": 0.0,
+        "status": "unchanged"
+      },
+      {
+        "benchmark": "driving.surt_glances",
+        "metric": "driving.mean_offroad_glance",
+        "baseline": 0.9302222222222789,
+        "current": 0.9302222222222789,
+        "delta": 0.0,
+        "unit": "s",
+        "baseline_unit": "s",
+        "validation_role": "held_out",
+        "baseline_score": 1.0,
+        "current_score": 1.0,
+        "baseline_distance": 0.0,
+        "current_distance": 0.0,
+        "status": "unchanged"
+      },
+      {
+        "benchmark": "driving.takeover",
+        "metric": "driving.takeover_time",
+        "baseline": 2.4349999999998237,
+        "current": 2.8649999999998146,
+        "delta": 0.42999999999999083,
+        "unit": "s",
+        "baseline_unit": "s",
+        "validation_role": "held_out",
+        "baseline_score": 1.0,
+        "current_score": 1.0,
+        "baseline_distance": 0.0,
+        "current_distance": 0.0,
+        "status": "changed"
+      },
+      {
+        "benchmark": "driving.takeover_components",
+        "metric": "driving.takeover_gaze",
+        "baseline": 0.8068841563416499,
+        "current": 1.0245693401763047,
+        "delta": 0.21768518383465485,
+        "unit": "s",
+        "baseline_unit": "s",
+        "validation_role": "held_out",
+        "baseline_score": 0.0,
+        "current_score": 0.0,
+        "baseline_distance": 2.052955048781921,
+        "current_distance": 3.72745646289465,
+        "status": "regressed"
+      },
+      {
+        "benchmark": "driving.takeover_components",
+        "metric": "driving.takeover_hands",
+        "baseline": 1.6300028199567649,
+        "current": 1.620627819956765,
+        "delta": -0.009374999999999911,
+        "unit": "s",
+        "baseline_unit": "s",
+        "validation_role": "calibration",
+        "baseline_score": 1.0,
+        "current_score": 1.0,
+        "baseline_distance": 0.0,
+        "current_distance": 0.0,
+        "status": "changed"
+      },
+      {
+        "benchmark": "driving.takeover_components",
+        "metric": "driving.takeover_intervention",
+        "baseline": 1.9721874999998337,
+        "current": 2.2543749999998273,
+        "delta": 0.2821874999999936,
+        "unit": "s",
+        "baseline_unit": "s",
+        "validation_role": "held_out",
+        "baseline_score": 0.8382120253162451,
+        "current_score": 1.0,
+        "baseline_distance": 0.16178797468375494,
+        "current_distance": 0.0,
+        "status": "improved"
+      },
+      {
+        "benchmark": "driving.takeover_components",
+        "metric": "driving.takeover_road",
+        "baseline": 0.9012499999998564,
+        "current": 0.9374999999998557,
+        "delta": 0.03624999999999923,
+        "unit": "s",
+        "baseline_unit": "s",
+        "validation_role": "held_out",
+        "baseline_score": 1.0,
+        "current_score": 1.0,
+        "baseline_distance": 0.0,
+        "current_distance": 0.0,
+        "status": "changed"
+      },
+      {
+        "benchmark": "driving.takeover_determinants",
+        "metric": "driving.zhang_no_auditory",
+        "baseline": 0.05172102733030334,
+        "current": 0.04777310523104019,
+        "delta": -0.003947922099263153,
+        "unit": "ln ratio",
+        "baseline_unit": "ln ratio",
+        "validation_role": "held_out",
+        "baseline_score": 0.4792470084196413,
+        "current_score": 0.4542601596901277,
+        "baseline_distance": 0.5207529915803587,
+        "current_distance": 0.5457398403098723,
+        "status": "regressed"
+      },
+      {
+        "benchmark": "driving.takeover_determinants",
+        "metric": "driving.zhang_vibrotactile",
+        "baseline": -0.007475183913601032,
+        "current": -0.004863484887001395,
+        "delta": 0.0026116990265996377,
+        "unit": "ln ratio",
+        "baseline_unit": "ln ratio",
+        "validation_role": "held_out",
+        "baseline_score": 0.5197453631454605,
+        "current_score": 0.5049061641306898,
+        "baseline_distance": 0.4802546368545395,
+        "current_distance": 0.4950938358693102,
+        "status": "regressed"
+      },
+      {
+        "benchmark": "driving.takeover_determinants",
+        "metric": "driving.zhang_visual_task",
+        "baseline": 0.5023055343587645,
+        "current": 0.8658121579699615,
+        "delta": 0.363506623611197,
+        "unit": "ln ratio",
+        "baseline_unit": "ln ratio",
+        "validation_role": "held_out",
+        "baseline_score": 0.0,
+        "current_score": 0.0,
+        "baseline_distance": 3.0200481248588216,
+        "current_distance": 6.180975286695317,
+        "status": "regressed"
+      },
+      {
+        "benchmark": "driving.takeover_eyes_by_modality",
+        "metric": "driving.petermeijer_visual_vs_auditory",
+        "baseline": 0.07090909090908981,
+        "current": 0.07396226415094187,
+        "delta": 0.0030531732418520585,
+        "unit": "s",
+        "baseline_unit": "s",
+        "validation_role": "held_out",
+        "baseline_score": 0.946127946127944,
+        "current_score": 0.9517819706498923,
+        "baseline_distance": 0.05387205387205591,
+        "current_distance": 0.048218029350107654,
+        "status": "improved"
+      },
+      {
+        "benchmark": "driving.takeover_eyes_by_modality",
+        "metric": "driving.petermeijer_visual_vs_tactile",
+        "baseline": -0.007636363636363441,
+        "current": 0.0033962264150941834,
+        "delta": 0.011032590051457625,
+        "unit": "s",
+        "baseline_unit": "s",
+        "validation_role": "held_out",
+        "baseline_score": 0.706818181818182,
+        "current_score": 0.7240566037735846,
+        "baseline_distance": 0.29318181818181793,
+        "current_distance": 0.2759433962264154,
+        "status": "improved"
+      },
+      {
+        "benchmark": "driving.takeover_modality",
+        "metric": "driving.takeover_hands_auditory",
+        "baseline": 1.6196903199567652,
+        "current": 1.624065319956765,
+        "delta": 0.004374999999999796,
+        "unit": "s",
+        "baseline_unit": "s",
+        "validation_role": "held_out",
+        "baseline_score": 1.0,
+        "current_score": 1.0,
+        "baseline_distance": 0.0,
+        "current_distance": 0.0,
+        "status": "changed"
+      },
+      {
+        "benchmark": "driving.takeover_modality",
+        "metric": "driving.takeover_modality_order",
+        "baseline": 1.0,
+        "current": 1.0,
+        "delta": 0.0,
+        "unit": "fraction",
+        "baseline_unit": "fraction",
+        "validation_role": "held_out",
+        "baseline_score": 1.0,
+        "current_score": 1.0,
+        "baseline_distance": 0.0,
+        "current_distance": 0.0,
+        "status": "unchanged"
+      },
+      {
+        "benchmark": "driving.takeover_motor_readiness",
+        "metric": "driving.zeeb_hands",
+        "baseline": 1.028752819956778,
+        "current": 1.39937781995677,
+        "delta": 0.370624999999992,
+        "unit": "s",
+        "baseline_unit": "s",
+        "validation_role": "held_out",
+        "baseline_score": 0.8819601108709881,
+        "current_score": 0.05901211135127782,
+        "baseline_distance": 0.11803988912901184,
+        "current_distance": 0.9409878886487222,
+        "status": "regressed"
+      },
+      {
+        "benchmark": "driving.takeover_motor_readiness",
+        "metric": "driving.zeeb_road",
+        "baseline": 0.902545454545311,
+        "current": 1.0861818181816707,
+        "delta": 0.1836363636363597,
+        "unit": "s",
+        "baseline_unit": "s",
+        "validation_role": "held_out",
+        "baseline_score": 0.0,
+        "current_score": 0.0,
+        "baseline_distance": 1.6254545454531104,
+        "current_distance": 3.461818181816708,
+        "status": "regressed"
+      },
+      {
+        "benchmark": "eyes.latency",
+        "metric": "eyes.latency_median",
+        "baseline": 203.00954005463723,
+        "current": 203.00954005463723,
+        "delta": 0.0,
+        "unit": "ms",
+        "baseline_unit": "ms",
+        "validation_role": "consistency",
+        "baseline_score": 1.0,
+        "current_score": 1.0,
+        "baseline_distance": 0.0,
+        "current_distance": 0.0,
+        "status": "unchanged"
+      },
+      {
+        "benchmark": "eyes.main_sequence",
+        "metric": "eyes.duration_intercept",
+        "baseline": 20.999999999999996,
+        "current": 20.999999999999996,
+        "delta": 0.0,
+        "unit": "ms",
+        "baseline_unit": "ms",
+        "validation_role": "consistency",
+        "baseline_score": 1.0,
+        "current_score": 1.0,
+        "baseline_distance": 0.0,
+        "current_distance": 0.0,
+        "status": "unchanged"
+      },
+      {
+        "benchmark": "eyes.main_sequence",
+        "metric": "eyes.duration_slope",
+        "baseline": 2.200000000000001,
+        "current": 2.200000000000001,
+        "delta": 0.0,
+        "unit": "ms/deg",
+        "baseline_unit": "ms/deg",
+        "validation_role": "consistency",
+        "baseline_score": 1.0,
+        "current_score": 1.0,
+        "baseline_distance": 0.0,
+        "current_distance": 0.0,
+        "status": "unchanged"
+      },
+      {
+        "benchmark": "fatigue.endurance",
+        "metric": "fatigue.endurance_error",
+        "baseline": 0.15921739542809688,
+        "current": 0.15921739542809688,
+        "delta": 0.0,
+        "unit": "|ln ratio|",
+        "baseline_unit": "|ln ratio|",
+        "validation_role": "consistency",
+        "baseline_score": 1.0,
+        "current_score": 1.0,
+        "baseline_distance": 0.0,
+        "current_distance": 0.0,
+        "status": "unchanged"
+      },
+      {
+        "benchmark": "memory.span",
+        "metric": "memory.span",
+        "baseline": 4.0,
+        "current": 4.0,
+        "delta": 0.0,
+        "unit": "items",
+        "baseline_unit": "items",
+        "validation_role": "consistency",
+        "baseline_score": 1.0,
+        "current_score": 1.0,
+        "baseline_distance": 0.0,
+        "current_distance": 0.0,
+        "status": "unchanged"
+      },
+      {
+        "benchmark": "motor.touch_tapping",
+        "metric": "motor.touch_slope",
+        "baseline": 104.48043847975646,
+        "current": 104.48043847975646,
+        "delta": 0.0,
+        "unit": "ms/bit",
+        "baseline_unit": "ms/bit",
+        "validation_role": "consistency",
+        "baseline_score": 1.0,
+        "current_score": 1.0,
+        "baseline_distance": 0.0,
+        "current_distance": 0.0,
+        "status": "unchanged"
+      },
+      {
+        "benchmark": "motor.touch_tapping",
+        "metric": "motor.touch_throughput",
+        "baseline": 6.28071372668809,
+        "current": 6.28071372668809,
+        "delta": 0.0,
+        "unit": "bits/s",
+        "baseline_unit": "bits/s",
+        "validation_role": "held_out",
+        "baseline_score": 1.0,
+        "current_score": 1.0,
+        "baseline_distance": 0.0,
+        "current_distance": 0.0,
+        "status": "unchanged"
+      },
+      {
+        "benchmark": "objects.peripheral_acuity",
+        "metric": "objects.e2",
+        "baseline": 1.975508096950541,
+        "current": 1.975508096950541,
+        "delta": 0.0,
+        "unit": "deg",
+        "baseline_unit": "deg",
+        "validation_role": "consistency",
+        "baseline_score": 1.0,
+        "current_score": 1.0,
+        "baseline_distance": 0.0,
+        "current_distance": 0.0,
+        "status": "unchanged"
+      },
+      {
+        "benchmark": "response.drt",
+        "metric": "response.drt_tactile",
+        "baseline": 380.2974551537188,
+        "current": 380.2974551537188,
+        "delta": 0.0,
+        "unit": "ms",
+        "baseline_unit": "ms",
+        "validation_role": "held_out",
+        "baseline_score": 0.0,
+        "current_score": 0.0,
+        "baseline_distance": 1.6491347115403792,
+        "current_distance": 1.6491347115403792,
+        "status": "unchanged"
+      },
+      {
+        "benchmark": "response.drt",
+        "metric": "response.drt_visual",
+        "baseline": 382.92476787080676,
+        "current": 382.92476787080676,
+        "delta": 0.0,
+        "unit": "ms",
+        "baseline_unit": "ms",
+        "validation_role": "held_out",
+        "baseline_score": 0.4187564480331455,
+        "current_score": 0.4187564480331455,
+        "baseline_distance": 0.5812435519668545,
+        "current_distance": 0.5812435519668545,
+        "status": "unchanged"
+      },
+      {
+        "benchmark": "response.drt",
+        "metric": "response.older_slowing",
+        "baseline": 1.2983463350048574,
+        "current": 1.2983463350048574,
+        "delta": 0.0,
+        "unit": "ratio",
+        "baseline_unit": "ratio",
+        "validation_role": "held_out",
+        "baseline_score": 1.0,
+        "current_score": 1.0,
+        "baseline_distance": 0.0,
+        "current_distance": 0.0,
+        "status": "unchanged"
+      },
+      {
+        "benchmark": "response.drt_load",
+        "metric": "response.drt_2back_cost",
+        "baseline": 297.0260648248014,
+        "current": 298.06327320235056,
+        "delta": 1.0372083775491774,
+        "unit": "ms",
+        "baseline_unit": "ms",
+        "validation_role": "held_out",
+        "baseline_score": 1.0,
+        "current_score": 1.0,
+        "baseline_distance": 0.0,
+        "current_distance": 0.0,
+        "status": "changed"
+      },
+      {
+        "benchmark": "response.drt_load",
+        "metric": "response.drt_driving_cost",
+        "baseline": 28.312052134831163,
+        "current": 28.312052134831163,
+        "delta": 0.0,
+        "unit": "ms",
+        "baseline_unit": "ms",
+        "validation_role": "held_out",
+        "baseline_score": 0.9200013506432945,
+        "current_score": 0.9200013506432945,
+        "baseline_distance": 0.07999864935670559,
+        "current_distance": 0.07999864935670559,
+        "status": "unchanged"
+      },
+      {
+        "benchmark": "response.drt_load",
+        "metric": "response.drt_surt_cost",
+        "baseline": 367.3475071888989,
+        "current": 574.6651445773098,
+        "delta": 207.3176373884109,
+        "unit": "ms",
+        "baseline_unit": "ms",
+        "validation_role": "held_out",
+        "baseline_score": 0.0,
+        "current_score": 0.0,
+        "baseline_distance": 2.3254847688028892,
+        "current_distance": 5.674719621604358,
+        "status": "regressed"
+      },
+      {
+        "benchmark": "response.eccentricity",
+        "metric": "response.eccentricity_rmse",
+        "baseline": 1.0000000000000036,
+        "current": 1.0000000000000036,
+        "delta": 0.0,
+        "unit": "ms",
+        "baseline_unit": "ms",
+        "validation_role": "held_out",
+        "baseline_score": 1.0,
+        "current_score": 1.0,
+        "baseline_distance": 0.0,
+        "current_distance": 0.0,
+        "status": "unchanged"
+      },
+      {
+        "benchmark": "response.modality_rt",
+        "metric": "response.modality_order",
+        "baseline": 1.0,
+        "current": 1.0,
+        "delta": 0.0,
+        "unit": "fraction",
+        "baseline_unit": "fraction",
+        "validation_role": "consistency",
+        "baseline_score": 1.0,
+        "current_score": 1.0,
+        "baseline_distance": 0.0,
+        "current_distance": 0.0,
+        "status": "unchanged"
+      },
+      {
+        "benchmark": "risk.lane_width",
+        "metric": "risk.lane_width_speed_error",
+        "baseline": 2.1334713881069,
+        "current": 2.1334713881069,
+        "delta": 0.0,
+        "unit": "km/h",
+        "baseline_unit": "km/h",
+        "validation_role": "held_out",
+        "baseline_score": 1.0,
+        "current_score": 1.0,
+        "baseline_distance": 0.0,
+        "current_distance": 0.0,
+        "status": "unchanged"
+      },
+      {
+        "benchmark": "trust.kraus_dynamics",
+        "metric": "trust.malfunction_dip",
+        "baseline": 0.19738968779404154,
+        "current": 0.19738968779404154,
+        "delta": 0.0,
+        "unit": "scale points",
+        "baseline_unit": "scale points",
+        "validation_role": "held_out",
+        "baseline_score": 0.6459646573880458,
+        "current_score": 0.6459646573880458,
+        "baseline_distance": 0.3540353426119542,
+        "current_distance": 0.3540353426119542,
+        "status": "unchanged"
+      },
+      {
+        "benchmark": "trust.kraus_dynamics",
+        "metric": "trust.study2_rmse",
+        "baseline": 0.2900070839100977,
+        "current": 0.2900070839100977,
+        "delta": 0.0,
+        "unit": "scale points",
+        "baseline_unit": "scale points",
+        "validation_role": "held_out",
+        "baseline_score": 1.0,
+        "current_score": 1.0,
+        "baseline_distance": 0.0,
+        "current_distance": 0.0,
+        "status": "unchanged"
+      },
+      {
+        "benchmark": "vestibular.roll_compensation",
+        "metric": "vestibular.roll_compensation_effect",
+        "baseline": 0.4919729415572812,
+        "current": 0.49188807118417527,
+        "delta": -8.487037310594969e-05,
+        "unit": "ratio",
+        "baseline_unit": "ratio",
+        "validation_role": "held_out",
+        "baseline_score": 0.9435525490619201,
+        "current_score": 0.943543119020464,
+        "baseline_distance": 0.05644745093807987,
+        "current_distance": 0.05645688097953608,
+        "status": "regressed"
+      },
+      {
+        "benchmark": "vestibular.roll_compensation",
+        "metric": "vestibular.roll_frequency_order",
+        "baseline": 1.0,
+        "current": 1.0,
+        "delta": 0.0,
+        "unit": "fraction",
+        "baseline_unit": "fraction",
+        "validation_role": "held_out",
+        "baseline_score": 1.0,
+        "current_score": 1.0,
+        "baseline_distance": 0.0,
+        "current_distance": 0.0,
+        "status": "unchanged"
+      },
+      {
+        "benchmark": "vestibular.sickness_time_course",
+        "metric": "vestibular.time_course_msi_error",
+        "baseline": 14.752329051941837,
+        "current": 14.838769219015614,
+        "delta": 0.08644016707377666,
+        "unit": "% points",
+        "baseline_unit": "% points",
+        "validation_role": "held_out",
+        "baseline_score": 0.5247670948058163,
+        "current_score": 0.5161230780984386,
+        "baseline_distance": 0.4752329051941837,
+        "current_distance": 0.4838769219015614,
+        "status": "regressed"
+      },
+      {
+        "benchmark": "vestibular.vertical_sickness",
+        "metric": "vestibular.vertical_msi_error",
+        "baseline": 7.465817554347785,
+        "current": 7.462754210300906,
+        "delta": -0.003063344046879024,
+        "unit": "% points",
+        "baseline_unit": "% points",
+        "validation_role": "calibration",
+        "baseline_score": 1.0,
+        "current_score": 1.0,
+        "baseline_distance": 0.0,
+        "current_distance": 0.0,
+        "status": "changed"
+      },
+      {
+        "benchmark": "vision.foveation",
+        "metric": "vision.e2",
+        "baseline": 2.3000000000000003,
+        "current": 2.3000000000000003,
+        "delta": 0.0,
+        "unit": "deg",
+        "baseline_unit": "deg",
+        "validation_role": "consistency",
+        "baseline_score": 1.0,
+        "current_score": 1.0,
+        "baseline_distance": 0.0,
+        "current_distance": 0.0,
+        "status": "unchanged"
+      }
+    ],
+    "added_benchmarks": [],
+    "removed_benchmarks": [],
+    "configuration_changes": [
+      {
+        "category": "vestibular",
+        "baseline": {
+          "name": "subjective_vertical",
+          "params": {
+            "accel_gain": 0.1,
+            "rate_gain": 0.8,
+            "rate_feedback": 5.0,
+            "vertical_feedback": 5.0,
+            "accel_feedback": 1.0,
+            "vertical_lag": 5.0,
+            "canal_lag": 7.0,
+            "adaptation_lag": 190.0,
+            "conflict_scale": 0.196,
+            "sickness_lag": 720.0,
+            "max_incidence": 85.0
+          }
+        },
+        "current": {
+          "name": "subjective_vertical",
+          "params": {
+            "accel_gain": 0.1,
+            "rate_gain": 0.8,
+            "rate_feedback": 5.0,
+            "vertical_feedback": 5.0,
+            "accel_feedback": 1.0,
+            "vertical_lag": 5.0,
+            "canal_lag": 7.0,
+            "adaptation_lag": 190.0,
+            "conflict_scale": 0.196237,
+            "sickness_lag": 720.0,
+            "max_incidence": 85.0
+          }
+        }
+      }
+    ],
+    "counts": {
+      "matched_benchmarks": 28,
+      "comparable_metrics": 51,
+      "changed_metrics": 18,
+      "added_metrics": 0,
+      "removed_metrics": 0,
+      "regressions": 9,
+      "incomparable": 2
+    }
   }
 }

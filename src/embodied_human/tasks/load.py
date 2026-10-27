@@ -31,10 +31,10 @@ DRIVING = CentralTask("driving", period=0.7, duration=0.2)
 N_BACK_PERIOD = 2.25
 
 #: Central chunk per n-back digit, s (fitted; see the module notes).
-N_BACK_CHUNK = {0: 0.758, 2: 1.128}
+N_BACK_CHUNK = {0: 0.758, 2: 1.130}
 
 #: Central chunk per SuRT screen, s (fitted), and the mean screen time, s.
-SURT_CHUNK = 1.762
+SURT_CHUNK = 2.484
 SURT_SCREEN = 4.31
 
 SOURCES = {
@@ -60,7 +60,8 @@ SOURCES = {
         "Conti, Dlugosch & Bengler (2014), Table 3; fitted here",
         "https://www.hfes-europe.org/wp-content/uploads/2014/06/Conti.pdf",
         "fitted",
-        "visual DRT +385 ms with easy SuRT over driving",
+        "visual DRT +385 ms with easy SuRT over driving; fitted to hits "
+        "within the source's 100 to 2000 ms measurement window",
     ),
     "SURT_SCREEN": Source(
         "embodied-human attentive driver", None, "derived", "mean SuRT screen time"

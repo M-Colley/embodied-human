@@ -32,8 +32,8 @@ choice to fit or replace).
 | proprioception | `SpindleParameters.velocity_exponent` | 0.6 | fitted | [Prochazka & Gorassini (1998)](https://doi.org/10.1111/j.1469-7793.1998.277bu.x) |  |
 | proprioception | `SpindleParameters.length_gain` | 2.0 | fitted | [Prochazka & Gorassini (1998)](https://doi.org/10.1111/j.1469-7793.1998.277bu.x) |  |
 | proprioception | `SpindleParameters.baseline` | 10.0 | fitted | [Malik, Jabakhanji & Jones (2016)](https://doi.org/10.3389/fncom.2015.00154) | human wrist; 82 imp/s for cat |
-| proprioception | `SpindleParameters.joint_noise_deg` | 3.0 | measured | [Talis & Levik (2016)](https://doi.org/10.3389/fnins.2016.00520) | elbow contralateral matching, young adults 3.0 deg absolute error; shoulder 3-6 deg |
-| proprioception | `SpindleParameters.delay` | 0.025 | measured | [Pruszynski, Kurtzer, Lillicrap & Scott (2009)](https://doi.org/10.1152/jn.00085.2009) | short-latency stretch response 20-45 ms |
+| proprioception | `SpindleParameters.joint_noise_deg` | 3.0 | assumed | [Talis & Levik (2016)](https://doi.org/10.3389/fnins.2016.00520) | Gaussian sensory SD chosen as 3 deg. The source reports elbow contralateral matching absolute error; it does not identify this SD. |
+| proprioception | `SpindleParameters.delay` | 0.025 | assumed | [Pruszynski, Kurtzer, Lillicrap & Scott (2009)](https://doi.org/10.1152/jn.00085.2009) | buffer delay chosen within the 20-45 ms stretch response range; reflex latency does not isolate sensory transmission delay |
 | motor | `PointingParameters.intercept` | 0.1477 | fitted | [Bi, Li & Zhai (2013), FFitts law 2-D](https://doi.org/10.1145/2470654.2466180) |  |
 | motor | `PointingParameters.slope` | 0.105 | fitted | [Bi, Li & Zhai (2013), FFitts law 2-D](https://doi.org/10.1145/2470654.2466180) |  |
 | motor | `PointingParameters.absolute_sd` | 0.0015 | measured | [Bi, Li & Zhai (2013)](https://doi.org/10.1145/2470654.2466180) | 1.5 mm in 2-D tasks, 0.94 mm in 1-D |
@@ -56,7 +56,7 @@ choice to fit or replace).
 | vestibular | `VerticalConflictParameters.vertical_lag` | 5.0 | measured | [Wada, Fujisawa & Doi (2018), p. 7; Bos & Bles (2002)](https://doi.org/10.1016/j.ergon.2016.11.003) | from vertical perception studies |
 | vestibular | `VerticalConflictParameters.canal_lag` | 7.0 | fitted | [Kamiji, Kurata, Wada & Doi (2007), Table 1; Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1109/SICE.2007.4421156) |  |
 | vestibular | `VerticalConflictParameters.adaptation_lag` | 190.0 | fitted | [Kamiji, Kurata, Wada & Doi (2007), Table 1; Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1109/SICE.2007.4421156) |  |
-| vestibular | `VerticalConflictParameters.conflict_scale` | 0.196 | fitted | [O'Hanlon & McCauley (1974), Tables 1-2; fitted here](https://archive.org/details/DTIC_AD0768215) | MSI after 2 h at 14 vertical conditions (examples/fit_motion_sickness.py); Wada et al. (2018) used 0.5 for car passengers, Bos & Bles (1998) fitted 0.7 in 1-D |
+| vestibular | `VerticalConflictParameters.conflict_scale` | 0.196237 | fitted | [O'Hanlon & McCauley (1974), Tables 1-2; fitted here](https://archive.org/details/DTIC_AD0768215) | MSI after 2 h at 14 vertical conditions (examples/fit_motion_sickness.py); Wada et al. (2018) used 0.5 for car passengers, Bos & Bles (1998) fitted 0.7 in 1-D |
 | vestibular | `VerticalConflictParameters.sickness_lag` | 720.0 | fitted | [Kamiji, Kurata, Wada & Doi (2007), Table 1; Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1109/SICE.2007.4421156) |  |
 | vestibular | `VerticalConflictParameters.max_incidence` | 85.0 | fitted | [Kamiji, Kurata, Wada & Doi (2007), Table 1; Wada, Fujisawa & Doi (2018), Table 1](https://doi.org/10.1109/SICE.2007.4421156) |  |
 | response | `TwinParameters.central` | 0.2171 | fitted | [Diederich & Colonius (2015), Table 1](https://doi.org/10.1037/a0038696) | median over 11 participants |
@@ -107,7 +107,7 @@ choice to fit or replace).
 | agents.driver | `DriverAgentParameters.seat_site` | seat_vertical | assumed | model choice |  |
 | agents.driver | `DriverAgentParameters.icon_position` | (0.0, -12.0) | assumed | model choice | the instrument cluster below the road |
 | agents.driver | `DriverAgentParameters.request_capability` | 0.55 | fitted | [Kraus, Scholz, Stiegemeier & Baumann (2020), Table 2; fitted here](https://doi.org/10.1177/0018720819853686) | a first request lowered trust from 5.51 to 5.21 on a 7-point scale, 0.752 to 0.702 on trust's 0-1 scale; one EDFT step from T = 0.752 gives T + (c - T) / 4 |
-| agents.driver | `DriverAgentParameters.hand_release` | 0.59 | fitted | [Gold, Damböck, Lorenz & Bengler (2013), Fig. 3; examples/fit_takeover.py](https://doi.org/10.1177/1541931213571433) | mean hands on the wheel after a tone with an icon during touch SuRT at 120 km/h, midway between 1.45 s (5 s budget) and 1.79 s (7 s); zero for a knob (Zeeb, Buchner & Schrauf, 2015) |
+| agents.driver | `DriverAgentParameters.hand_release` | 0.2 | fitted | [Gold, Damböck, Lorenz & Bengler (2013), Fig. 3; examples/fit_takeover.py](https://doi.org/10.1177/1541931213571433) | mean hands on the wheel after a tone with an icon during touch SuRT at 120 km/h, midway between 1.45 s (5 s budget) and 1.79 s (7 s); the knob comparison assumes zero release time |
 | agents.driver | `DriverAgentParameters.assessment_fixations` | 3 | assumed | model choice | situation assessment before acting; fit to take-over data |
 | agents.driver | `DriverAgentParameters.engage_sd` | 0.15 | assumed | model choice | the baseline attention module's leave_sd: certain enough to look away is certain enough to drive |
 | agents.driver | `DriverAgentParameters.scene_fixation` | 0.33 | measured | [Rayner (1998), Table 1](https://doi.org/10.1037/0033-2909.124.3.372) | mean fixation in scene perception |
@@ -119,5 +119,6 @@ choice to fit or replace).
 | agents.driver | `DriverAgentParameters.perception_interval` | 0.1 | assumed | model choice | about the temporal integration of vision |
 | agents.driver | `DriverAgentParameters.monitoring_gain` | 0.62 | fitted | [Hergeth, Lorenz, Vilimek & Krems (2016), Results; examples/fit_monitoring.py](https://doi.org/10.1177/0018720815625744) | median monitoring frequency 0.13/s at a mean trust of 74% and 0.097/s at 82%, SuRT during automation; both give about 0.52/s times one minus trust |
 | agents.driver | `DriverAgentParameters.monitoring_dwell` | 0.6 | measured | [Zeeb, Buchner & Schrauf (2015), Section 4.1](https://doi.org/10.1016/j.aap.2015.02.023) | mean road glance during automation with a visual task |
+| agents.driver | `DriverAgentParameters.parallel_gaze_preparation` | False | assumed | effector coupling assumption | False gates eye commands on the complete response; True starts them after peripheral processing and the task wait. Neither mapping follows directly from TWIN's compound second stage. |
 
-Counts: assumed 37, derived 4, fitted 52, measured 14, standard 5
+Counts: assumed 40, derived 4, fitted 52, measured 12, standard 5

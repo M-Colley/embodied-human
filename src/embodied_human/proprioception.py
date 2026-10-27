@@ -61,15 +61,16 @@ class SpindleParameters(Parameters):
         "joint_noise_deg": Source(
             "Talis & Levik (2016)",
             "https://doi.org/10.3389/fnins.2016.00520",
-            "measured",
-            "elbow contralateral matching, young adults 3.0 deg "
-            "absolute error; shoulder 3-6 deg",
+            "assumed",
+            "Gaussian sensory SD chosen as 3 deg. The source reports elbow "
+            "contralateral matching absolute error; it does not identify this SD.",
         ),
         "delay": Source(
             "Pruszynski, Kurtzer, Lillicrap & Scott (2009)",
             "https://doi.org/10.1152/jn.00085.2009",
-            "measured",
-            "short-latency stretch response 20-45 ms",
+            "assumed",
+            "buffer delay chosen within the 20-45 ms stretch response range; "
+            "reflex latency does not isolate sensory transmission delay",
         ),
     }
 

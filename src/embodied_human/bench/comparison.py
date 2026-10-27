@@ -100,6 +100,7 @@ def _declaration(row: Mapping[str, Any], metric: str) -> tuple[Any, ...]:
         "consistency",
         "calibration",
         "held_out",
+        "exploratory",
         "unclassified",
     ):
         raise ValueError("unsupported validation role")
@@ -341,6 +342,7 @@ def markdown_summary(
         ("consistency", "Consistency"),
         ("calibration", "Calibration"),
         ("held_out", "Held out"),
+        ("exploratory", "Exploratory"),
         ("unclassified", "Unclassified"),
     ):
         totals = roles.get(role, {})

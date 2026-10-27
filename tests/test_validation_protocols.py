@@ -14,6 +14,8 @@ def test_every_reference_has_an_explicit_data_role_and_identifier():
     assert throughput.role == "held_out"
     assert throughput.evaluation_data == ("mackenzie2015.smartphone_throughput",)
     assert evaluation_for("motor.touch_slope").role == "consistency"
+    assert evaluation_for("driving.takeover_gaze").role == "held_out"
+    assert evaluation_for("driving.incar_glance_speed_elasticity").role == "exploratory"
 
 
 def test_nested_replicates_do_not_share_trial_seeds():

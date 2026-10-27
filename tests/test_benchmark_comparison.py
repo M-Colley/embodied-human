@@ -42,8 +42,11 @@ def report(value=0.5, *, name="fixture.protocol"):
     }
 
 
-def test_stored_baseline_retains_all_known_empirical_failures():
-    path = Path(__file__).resolve().parents[1] / "evidence/benchmark-baseline.json"
+def test_archived_baseline_retains_all_known_empirical_failures():
+    path = (
+        Path(__file__).resolve().parents[1]
+        / "evidence/benchmark-before-failure-audit.json"
+    )
     baseline = json.loads(path.read_text(encoding="utf-8"))
     result = compare_reports(baseline, baseline)
     assert not result["regressions"] and not result["incomparable"]
@@ -51,6 +54,14 @@ def test_stored_baseline_retains_all_known_empirical_failures():
     summary = markdown_summary(baseline, result)
     assert "Pass: 17. Fail: 11." in summary
     assert "Held out | 38 | 19" in summary
+
+
+def test_exploratory_role_remains_scored_and_comparable():
+    current = report()
+    current["results"][0]["validation"]["fixture.value"]["role"] = "exploratory"
+    compared = compare_reports(current, current)
+    assert not compared["regressions"] and not compared["incomparable"]
+    assert "Exploratory | 1 | 1" in markdown_summary(current, compared)
 
 
 def test_zero_floor_does_not_hide_a_worsening_existing_failure():

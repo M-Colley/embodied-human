@@ -73,6 +73,7 @@
 .role-consistency { color: #42617b; background: #eaf0f5; border-color: #d2dfea; }
 .role-calibration { color: #826026; background: #f5efdf; border-color: #e9ddbf; }
 .role-held_out { color: #406634; background: #e7efdf; border-color: #cbdcbd; }
+.role-exploratory { color: #77532d; background: #f7eadb; border-color: #e7cdb0; }
 .role-unclassified { color: #63706a; background: #edf0ec; border-color: #dbe1d9; }
 .result-note { font-size: 11px; color: var(--muted); line-height: 1.6; margin: 8px 0 16px; max-width: 950px; }
 .uncertainty-note { padding: 11px 13px; background: #e9efE4; border-left: 3px solid #90a979; border-radius: 0 5px 5px 0; font-size: 11px; color: #4f634e; line-height: 1.6; margin: 18px 0 22px; }

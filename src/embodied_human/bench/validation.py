@@ -3,10 +3,10 @@
 from __future__ import annotations
 
 from collections import Counter
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from typing import Any, Literal
 
-Role = Literal["consistency", "calibration", "held_out", "unclassified"]
+Role = Literal["consistency", "calibration", "held_out", "exploratory", "unclassified"]
 
 
 @dataclass(frozen=True)
@@ -143,7 +143,9 @@ _declare(
     "held_out",
     "conti2014.driving_baseline",
     ("conti2014.secondary_task_costs",),
-    "Secondary task costs were fitted; driving baseline and cost were reserved.",
+    "Secondary task costs were fitted as contrasts against this study's "
+    "observed driving baseline. Baseline and driving cost were not separate "
+    "fit targets, but their observations are shared with the calibration contrasts.",
 )
 _declare(
     (
@@ -264,6 +266,23 @@ _declare(
     ("gold2013.hands",),
 )
 
+# These tasks do not match the simulated SuRT protocol. Preserve their
+# original scores as exploratory diagnostics until task matched protocols
+# are implemented. The default driver's mechanisms retain their data roles.
+for _metric in (
+    "driving.occlusion_speed_elasticity", "driving.incar_glance_speed_elasticity",
+):
+    _previous = _DECLARATIONS[_metric]
+    _DECLARATIONS[_metric] = replace(
+        _previous,
+        role="exploratory",
+        rationale=(
+            _previous.rationale + " Simulated SuRT conditions differ from the "
+            "source tasks. These scores are diagnostic comparisons. No numerical "
+            "acceptance range was changed."
+        ).strip(),
+    )
+
 
 def evaluation_for(metric: str) -> Evaluation:
     """Return an explicit unclassified role for undeclared metrics."""
@@ -281,7 +300,9 @@ def validation_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
     """Count scored metrics by role, keeping held out scores separate."""
     totals: dict[str, Counter] = {
         role: Counter()
-        for role in ("consistency", "calibration", "held_out", "unclassified")
+        for role in (
+            "consistency", "calibration", "held_out", "exploratory", "unclassified",
+        )
     }
     for result in results:
         if result.get("skipped"):

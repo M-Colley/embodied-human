@@ -94,14 +94,17 @@ def simulate_takeover(
     signals: tuple[str, ...] = ("auditory", "visual"),
     speed: float = 12.0,
     request_at: float = 10.0,
-    seconds: float = 14.0,
+    seconds: float = 20.0,
     seed: int = 0,
     params: DriverAgentParameters = DriverAgentParameters(),
     surt: bool = True,
 ) -> DrivingLog:
     """Run SuRT (or, with ``surt=False``, no task) during automation with a
     take-over request; the log holds the reaction and the take-over
-    components."""
+    components. Stop after engagement or at ``seconds``, whichever occurs
+    first. The default allows ten seconds after the request; incomplete
+    responses retain missing component values in the log.
+    """
     road = StraightRoad(speed=speed, duration=seconds, request_at=request_at)
     agent = AttentiveDriver(
         human,
@@ -114,7 +117,7 @@ def simulate_takeover(
     agent.reset(seed)
     while True:
         *_, truncated, _ = road.step(agent.act())
-        if truncated:
+        if truncated or agent.log.engaged_at is not None:
             break
     return agent.log
 

@@ -67,7 +67,7 @@ class VerticalConflictParameters(Parameters):
     vertical_lag: float = 5.0
     canal_lag: float = 7.0
     adaptation_lag: float = 190.0
-    conflict_scale: float = 0.196
+    conflict_scale: float = 0.196237
     sickness_lag: float = 720.0
     max_incidence: float = 85.0
 
@@ -198,6 +198,7 @@ class SubjectiveVertical(Vestibular):
         angular_velocity: Array | None = None,
         gravity: Array | None = None,
     ) -> Array:
+        """MSI at input sample times, with the rest state at sample zero."""
         return self._run(dt, acceleration, angular_velocity, gravity)[1]
 
     def conflict(
@@ -243,7 +244,7 @@ class SubjectiveVertical(Vestibular):
         ) -> dict[str, Array]:
             return {key: x[key] + h * d[key] for key in x}
 
-        for k in range(steps):
+        for k in range(steps - 1):
             # Classic Runge-Kutta; inputs interpolated between samples.
             k1 = self._derivative(x, *inputs(k))
             k2 = self._derivative(shifted(x, k1, dt / 2), *inputs(k + 0.5))
@@ -253,8 +254,8 @@ class SubjectiveVertical(Vestibular):
                 key: x[key] + dt / 6 * (k1[key] + 2 * k2[key] + 2 * k3[key] + k4[key])
                 for key in x
             }
-            msi[..., k] = x["msi"]
-            conflict[..., k] = np.linalg.norm(x["g_s"] - x["g_hat_s"], axis=-1)
+            msi[..., k + 1] = x["msi"]
+            conflict[..., k + 1] = np.linalg.norm(x["g_s"] - x["g_hat_s"], axis=-1)
         return conflict, msi
 
 

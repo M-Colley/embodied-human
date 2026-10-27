@@ -66,22 +66,36 @@ class Signal:
     Args:
         modality: ``visual``, ``auditory`` or ``tactile``.
         onset: Time the signal starts, s.
-        latency: Mean peripheral processing time, s (``inf``: not sensed).
+        latency: Positive mean peripheral processing time, s (``inf``: not sensed).
     """
 
     modality: Modality
     onset: float
     latency: float
 
+    def __post_init__(self) -> None:
+        if self.modality not in _SLOTS:
+            raise ValueError("modality must be visual, auditory or tactile")
+        if not math.isfinite(self.onset):
+            raise ValueError("signal onset must be finite")
+        if math.isnan(self.latency) or self.latency <= 0:
+            raise ValueError("signal latency must be positive or positive infinity")
+
 
 @dataclass(frozen=True)
 class Reaction:
-    """A response and the mechanism behind it."""
+    """A response and its peripheral, central and concurrent task times.
+
+    ``peripheral`` includes the first channel's onset offset. ``central`` is
+    TWIN's compound second stage, including response preparation.
+    """
 
     time: float
     first: Modality | None
     integrated: bool
     waited: float = 0.0
+    peripheral: float | None = None
+    central: float | None = None
 
 
 @dataclass(frozen=True)
@@ -97,6 +111,8 @@ class CentralTask:
     duration: float
 
     def __post_init__(self) -> None:
+        if not math.isfinite(self.period) or not math.isfinite(self.duration):
+            raise ValueError("period and duration must be finite")
         if self.period < 0 or self.duration < 0:
             raise ValueError("period and duration must be non-negative")
         if self.period and self.duration > self.period:
@@ -116,6 +132,10 @@ def central_wait(tasks: Sequence[CentralTask], rng: np.random.Generator) -> floa
             if start + task.duration > 0:
                 intervals.append((start, start + task.duration))
             start += task.period
+    # A task occupying every period never releases the central stage.
+    # Keep phase draws above unchanged for seeded comparisons.
+    if any(task.period > 0 and task.duration == task.period for task in tasks):
+        return math.inf
     free = 0.0
     changed = True
     while changed:
@@ -144,6 +164,23 @@ class TwinParameters(Parameters):
     window: float = 0.3588
     visual_latency: float = 0.1026
     visual_field: float = 90.0
+
+    def __post_init__(self) -> None:
+        for name in (
+            "central", "facilitation", "window", "visual_latency", "visual_field"
+        ):
+            if not math.isfinite(getattr(self, name)):
+                raise ValueError(f"{name} must be finite")
+        if self.central < 0:
+            raise ValueError("central time must be nonnegative")
+        if not 0 <= self.facilitation <= self.central:
+            raise ValueError("facilitation must be between zero and central time")
+        if self.window < 0:
+            raise ValueError("integration window must be nonnegative")
+        if self.visual_latency <= 0:
+            raise ValueError("visual latency must be positive")
+        if self.visual_field < 0:
+            raise ValueError("visual field must be nonnegative")
 
     SOURCES: ClassVar = {
         "central": Source(*_TWIN_2015, "fitted", "median over 11 participants"),
@@ -218,12 +255,14 @@ class TwinResponse(Response):
             if math.isfinite(s.latency) and s.latency > 0
         )
         if not finished:
-            return Reaction(math.inf, None, False)
+            return Reaction(math.inf, None, False, peripheral=math.inf)
         (first, modality), rest = finished[0], finished[1:]
         integrated = any(time - first < p.window for time, _ in rest)
         central = p.central - (p.facilitation if integrated else 0.0)
         waited = central_wait(load, self.rng) if load else 0.0
-        return Reaction(first + waited + central, modality, integrated, waited)
+        return Reaction(
+            first + waited + central, modality, integrated, waited, first, central
+        )
 
     def mean_reaction(
         self,

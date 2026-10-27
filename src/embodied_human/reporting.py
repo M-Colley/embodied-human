@@ -388,7 +388,8 @@ def make_report(
                 "Roles describe declared baseline data use. "
                 "Held out statistics can share "
                 "participants with calibration data. User fitting requires updated "
-                "declarations."
+                "declarations. Exploratory outcomes informed model development "
+                "or use task conditions that differ from the reference study."
             ),
             "results": values,
         }
