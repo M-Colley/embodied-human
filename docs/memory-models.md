@@ -1,68 +1,33 @@
 # Memory models and current alternatives
 
-Reviewed 26 October 2026. Yes, newer work exists. The package's `act_r`
-name denotes a small reimplementation of selected memory equations, not
-an installed ACT-R release. Upgrading ACT-R software would not change this
-implementation automatically.
+The package includes two registered memory implementations: the existing `act_r` baseline and an optional `pyactup` backend using the actual PyACTUp package. The native version tested on 27 October 2026 is 2.2.5, released in March 2026 under MIT. The package's `act_r` name identifies its selected equations and focus wrapper. Source information is available in the [PyACTUp package](https://pypi.org/project/pyactup/), [native implementation](https://github.com/cmu-psych-fms/pyactup/blob/main/pyactup.py) and [licence](https://github.com/cmu-psych-fms/pyactup/blob/main/LICENSE).
 
-## What is implemented
+## Implemented memory behaviour
 
-`ActRMemory` has an immediate, capacity-limited focus and keyed declarative
-memory. Repeated encodings add traces; displaced items use a power-law
-base level, logistic activation noise, a retrieval threshold and an
-activation-dependent latency. The focus has no time-based eviction, and
-retrieving an item does not automatically rehearse it or move it into the
-focus. Calls to `encode` model rehearsal explicitly.
+`ActRMemory` provides an immediate focus and keyed declarative memory. Repeated encoding adds traces. Items outside the focus use power law base level activation, logistic activation noise, a retrieval threshold and activation dependent latency. The focus does not expire with time, and retrieval does not automatically rehearse an item or move it into the focus. Rehearsal requires an explicit `encode` call. Reusing a key replaces its payload while retaining its presentation history. Successful retrieval returns that key's current payload; the baseline does not model content confusion or competitor intrusions.
 
-The implementation has no content similarity, partial-match retrieval,
-competitor intrusions, context binding, spreading activation, blending or
-procedural production system. Re-encoding an existing key replaces its
-value while retaining its presentation history. Consequently, a digit
-task using unique position keys measures loss of accessibility, without
-modeling confusion between similar digits or positions. The four-item
-focus is a package modeling choice informed by Cowan's aggregate capacity
-estimate, not a complete implementation of ACT-R's buffers.
+`PyACTUpMemory` retains that immediate keyed focus and delegates displaced keyed retrieval to PyACTUp. Its explicit feature API adds native cue matching, configurable similarity, candidate competition and numeric blending. `retrieve_cued` accesses the declarative pool without using the focus, whereas ordinary keyed `retrieve` retains immediate focused access. Native queries require positive trace ages. PyACTUp accepts activation equal to the threshold; the baseline uses a strict comparison. The added mismatch penalty and blending temperature are assumed experimental settings, with source labels, and have not been fitted to human data for this package.
 
-Memory-span benchmarks that compare the focus against the source of its
-capacity parameter are consistency checks. They do not validate the
-unimplemented mechanisms above.
+Neither implementation is a complete cognitive architecture with procedural productions and all of its buffers. The package's focus of four is informed by Cowan's aggregate capacity estimate and remains a modelling choice. A span comparison against that capacity's own source is a consistency check. The native backend does not establish that the wrapper's focus, latency mapping, similarity function or task assumptions predict human recall accurately. See the [integration guide](model-integrations.md) for installation, interfaces, random stream handling and executable examples.
 
-## Newer work that is useful here
+## What the new task comparisons measure
 
-| Work | What it offers | What integration would require |
-| --- | --- | --- |
-| [Official ACT-R reference manual, currently titled 7.30+](https://act-r.psy.cmu.edu/actr7.x/reference-manual.pdf) | A maintained architecture, with declarative-memory features beyond this baseline. Software release numbers and theoretical mechanisms are separate matters. | An optional runtime adapter and explicit mapping to ACT-R buffers and timing, or equation-level additions with independent tests. The software download page timed out during this review, so the exact newest release is not asserted. |
-| [Stocco et al. (2024), *An Integrated Computational Framework for the Neurobiology of Memory Based on the ACT-R Declarative Memory System*](https://doi.org/10.1007/s42113-023-00189-y) | A recent account of contextual activation, partial matching and blending, plus extensions involving episodic context and emotion. This is a useful specification for expanding the current model. | Structured features and retrieval cues, candidate competition and tests of intrusion errors; additional parameters need their own provenance and calibration. |
-| [Oberauer & Lin (2024), *An interference model for visual and verbal working memory*](https://doi.org/10.1037/xlm0001303) | A formal alternative covering visual-feature errors and verbal serial recall through imprecise content-context bindings, a focused item and interference. | A context/similarity interface and tasks that score nontarget intrusions, serial position and continuous errors. Treating it as a changed ACT-R decay constant would omit its central mechanisms. |
-| [Hake et al. (2026), *Reliable detection and continuous monitoring of memory dysfunction in mild cognitive impairment and healthy aging through adaptive computational phenotyping*](https://doi.org/10.1371/journal.pdig.0001686) | A September 2026 application of an adaptive trace model: subsequent trace decay depends on activation at encoding, with individual forgetting estimates inferred from accuracy and response time. Useful for repeated learning and participant differences. | Trace-specific decay, learning histories and participant-level calibration. Its paired-associate assessment setting does not establish validity for driving or short-term dual-task recall. |
-| [Stocco et al. (2024), *Fitting, Evaluating, and Comparing Cognitive Architecture Models Using Likelihood*](https://arxiv.org/abs/2410.18055) | Methods for estimating and comparing ACT-R models using accuracy and response times. Figure 7 uses `d = 0.5, s = 0.25` as an illustration. | A fitting dataset and separate held-out evaluation. The package's `noise = 0.25` is therefore labeled **assumed**, rather than claiming a fit to its own tasks. |
+The separate `memory.serial_recall` experiment protocol encodes a target list followed by another list, then probes the target's positions at a common final time. It records accuracy by serial position, access failures and identifiable intrusions. A native result from a different stored identity is an intrusion even when it repeats the correct payload. A successful keyed response with incorrect content is recorded as a content error; its source identity is unknown and is not invented as an intrusion. Immediate target focus access is respected for both implementations before declarative retrieval is attempted.
 
-## Recommended next model
+The assumed default protocol uses six items in each of two lists, twelve simulation repetitions, one second between encodings and a one second final retention interval. These settings have their own parameter source records and are not a published human experiment. Native context matching is partial while serial position is exact unless a custom position similarity is supplied. Every position is probed without output rehearsal at the same time, so the protocol does not simulate output interference. Adding more distractor lists also increases target age; comparing different list counts therefore confounds additional competition with retention time. The example that contrasts exact and partial retrieval on the same encoding history controls that particular timing difference.
 
-For the existing n-back and interrupted-task use cases, implement the
-Oberauer–Lin interference model as an additional registered memory module
-after defining cue/context representations. Preserve `act_r` as the
-reproducible baseline. Compare both models on published serial-position,
-intrusion and load effects with separate fitting and held-out conditions.
-For long-term learning, use trace-specific adaptive decay as a separate
-extension; it answers a different empirical question.
+Tests compare native activation, latency and blending with their equations and check a deterministic serial position gradient and context driven intrusions. They also verify seed repetition, independent retrieval ties in concurrent threads and preservation of Python and NumPy global random streams. These results establish implementation consistency. No published human serial position curve, intrusion distribution or individual forgetting rate has been fitted or independently reproduced by the new backend or protocol.
 
-These are implementation recommendations, not claims that the newer
-models have already been replicated here. No new model or fitted constant
-has been added on the strength of a paper's publication date alone.
+## Relevant newer research
 
-## Robustness fixes in this review
+[Stocco and colleagues' 2024 account](https://doi.org/10.1007/s42113-023-00189-y) describes contextual activation, partial matching, blending and extensions involving episodic context and emotion. It provides a broader theoretical context for the features exposed by PyACTUp. It does not turn every such feature into a validated model of this package's driving and interaction tasks. The [2024 likelihood primer](https://arxiv.org/abs/2410.18055) gives concrete methods for fitting and comparing cognitive models using accuracy and response times. Its Figure 7 uses `d = 0.5` and `s = 0.25` illustratively; the baseline noise setting is consequently labelled assumed rather than fitted to this package's tasks.
 
-The existing baseline now rejects fractional or negative focus capacities,
-nonfinite parameters, negative decay/noise and nonpositive latency factors.
-It evaluates base-level activation in log space, computes the logistic
-probability without exponential overflow, and combines the latency scale
-in log space. Unrepresentably long retrieval times return infinity.
+[Oberauer and Lin's 2024 interference model](https://doi.org/10.1037/xlm0001303) is a distinct formal model of visual and verbal working memory. It binds content to contexts with limited precision and includes focus, encoding strength and updating mechanisms. The implemented PyACTUp competition task supplies useful cue and intrusion interfaces, but it does not implement or replicate that model. A faithful addition would require its binding and updating equations, appropriate visual or verbal task representations, fitting conditions and separate evaluation conditions. The authors identify an OSF code archive in their paper; its contents and reuse licence could not be verified during this review.
 
-Times must be finite and cannot precede the latest encoding. This prevents
-retrieving a future value from the current focus. Historical queries need
-a separate snapshot, and `reset()` starts a new history. At zero trace
-age, immediate focused retrieval remains available; the singular
-power-law term is excluded from declarative activation until its age is
-positive, preserving the baseline convention. Numeric defaults are
-unchanged.
+[Hake and colleagues' September 2026 study](https://doi.org/10.1371/journal.pdig.0001686) applies an adaptive trace model in repeated paired associate assessments. Later trace decay depends on activation at encoding, and individual forgetting estimates are informed by accuracy and response time. This remains a separate candidate for repeated learning and participant differences. The current backend uses its configured decay value and does not implement that adaptive assessment procedure. Its relevance to brief interrupted tasks would require new calibration and independent evaluation.
+
+The [official architecture reference manual](https://act-r.psy.cmu.edu/actr7.x/reference-manual.pdf), currently titled 7.30+, documents a Python RPC interface and LGPL 2.1 licensing for the full runtime. That runtime has not been integrated here. The software download page was unavailable during verification, so an exact newest runtime release is not asserted. Upgrading that separate runtime would not automatically change either registered memory implementation.
+
+## Baseline robustness
+
+The original baseline rejects fractional or negative focus capacity, nonfinite parameters, negative decay or noise and nonpositive latency factors. It evaluates activation and latency in log space and computes logistic probability without exponential overflow. Unrepresentably long retrieval times become infinity. Times must be finite and cannot precede the latest encoding; historical queries require a separate snapshot. At zero trace age, focused retrieval remains available and the baseline excludes the singular declarative power term until the trace age is positive. These robustness changes preserve its numeric defaults. PyACTUp uses its native numerical implementation for declarative computations and has its own supported numerical domain.

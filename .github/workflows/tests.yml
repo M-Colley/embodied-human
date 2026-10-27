@@ -32,3 +32,64 @@ jobs:
         run: python -m mypy src/embodied_human --ignore-missing-imports
       - name: Build
         run: python -m build
+
+  optional:
+    name: Optional integrations Python ${{ matrix.python }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.10", "3.12"]
+    env:
+      MPLBACKEND: Agg
+      NUMBA_NUM_THREADS: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install optional integrations
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[memory,decision,analysis,contact]" pytest build
+          python -m pip install -r requirements-touchsim.txt
+      - name: Verify optional packages are present
+        run: python -c "import pyactup, pyddm, SALib, touchsim, mujoco"
+      - name: Test native integrations
+        run: >-
+          python -m pytest -q
+          tests/test_memory_pyactup.py
+          tests/test_decision.py
+          tests/test_sensitivity.py
+          tests/test_touchsim.py
+          tests/test_touch_contact.py
+          tests/test_experiment_protocols.py
+          tests/test_experiments.py
+      - name: Build distributions
+        run: python -m build
+      - name: Verify third party licence and source package contents
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import tarfile
+          import zipfile
+
+          notice = "embodied_human/_vendor/MIMO_LICENSE.txt"
+          with zipfile.ZipFile(next(Path("dist").glob("*.whl"))) as wheel:
+              names = wheel.namelist()
+              assert notice in names
+              assert any(
+                  ".dist-info/licenses/" in name and name.endswith("/MIMO_LICENSE.txt")
+                  for name in names
+              )
+              assert b"MIT License" in wheel.read(notice)
+              source = wheel.read("embodied_human/_vendor/mimo_touch.py")
+              assert b"040b0ae4914cbfb26afdf830aa81775b90922f3f" in source
+              metadata = wheel.read(next(n for n in names if n.endswith("/METADATA")))
+              assert b"License-Expression: Apache-2.0 AND MIT" in metadata
+          with tarfile.open(next(Path("dist").glob("*.tar.gz"))) as sdist:
+              names = sdist.getnames()
+              assert any(n.endswith("/src/" + notice) for n in names)
+              assert any(n.endswith("/requirements-touchsim.txt") for n in names)
+              assert any(n.endswith("/docs/contact-sensing.md") for n in names)
+          PY

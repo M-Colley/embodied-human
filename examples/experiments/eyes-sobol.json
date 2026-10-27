@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "config": {},
+  "benchmarks": ["eyes.main_sequence"],
+  "seeds": [0],
+  "sensitivity": {
+    "method": "sobol",
+    "parameters": [
+      {"category": "eyes", "parameter": "duration_slope", "bounds": [0.0015, 0.003]},
+      {"category": "eyes", "parameter": "duration_intercept", "bounds": [0.015, 0.03]}
+    ],
+    "benchmark": "eyes.main_sequence",
+    "metric": "eyes.duration_slope",
+    "samples": 64,
+    "seed": 0
+  }
+}

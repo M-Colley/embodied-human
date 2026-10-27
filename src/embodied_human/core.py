@@ -157,15 +157,18 @@ def _load_builtins() -> None:
     from . import (  # noqa: F401
         affect,
         attention,
+        decision,
         estimation,
         fatigue,
         hearing,
         memory,
+        memory_pyactup,
         motor,
         proprioception,
         response,
         risk,
         touch,
+        touch_contact,
         trust,
         vestibular,
     )

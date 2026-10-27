@@ -1,0 +1,290 @@
+{
+  "eyes.main_sequence": {
+    "categories": [
+      "eyes"
+    ],
+    "metrics": [
+      "eyes.duration_slope",
+      "eyes.duration_intercept"
+    ]
+  },
+  "eyes.latency": {
+    "categories": [
+      "eyes"
+    ],
+    "metrics": [
+      "eyes.latency_median"
+    ]
+  },
+  "objects.peripheral_acuity": {
+    "categories": [
+      "objects"
+    ],
+    "metrics": [
+      "objects.e2"
+    ]
+  },
+  "vision.foveation": {
+    "categories": [
+      "vision"
+    ],
+    "metrics": [
+      "vision.e2"
+    ]
+  },
+  "memory.span": {
+    "categories": [
+      "memory"
+    ],
+    "metrics": [
+      "memory.span"
+    ]
+  },
+  "motor.touch_tapping": {
+    "categories": [
+      "motor",
+      "eyes"
+    ],
+    "metrics": [
+      "motor.touch_throughput",
+      "motor.touch_slope"
+    ]
+  },
+  "driving.surt_glances": {
+    "categories": [
+      "eyes",
+      "objects",
+      "attention",
+      "estimator",
+      "memory",
+      "motor"
+    ],
+    "metrics": [
+      "driving.mean_offroad_glance",
+      "driving.long_glance_share",
+      "driving.human_mean_glance",
+      "driving.human_long_glance_share"
+    ]
+  },
+  "driving.takeover": {
+    "categories": [
+      "eyes",
+      "attention",
+      "estimator",
+      "motor"
+    ],
+    "metrics": [
+      "driving.takeover_time"
+    ]
+  },
+  "response.drt_load": {
+    "categories": [
+      "response",
+      "touch",
+      "attention"
+    ],
+    "metrics": [
+      "response.drt_driving_cost",
+      "response.drt_2back_cost",
+      "response.drt_surt_cost"
+    ]
+  },
+  "fatigue.endurance": {
+    "categories": [
+      "fatigue"
+    ],
+    "metrics": [
+      "fatigue.endurance_error"
+    ]
+  },
+  "risk.lane_width": {
+    "categories": [
+      "risk"
+    ],
+    "metrics": [
+      "risk.lane_width_speed_error"
+    ]
+  },
+  "affect.emotion_study": {
+    "categories": [
+      "affect"
+    ],
+    "metrics": [
+      "affect.emotion_rmse"
+    ]
+  },
+  "trust.kraus_dynamics": {
+    "categories": [
+      "trust"
+    ],
+    "metrics": [
+      "trust.study2_rmse",
+      "trust.malfunction_dip"
+    ]
+  },
+  "response.modality_rt": {
+    "categories": [
+      "hearing",
+      "touch",
+      "response"
+    ],
+    "metrics": [
+      "response.modality_order"
+    ]
+  },
+  "response.eccentricity": {
+    "categories": [
+      "response"
+    ],
+    "metrics": [
+      "response.eccentricity_rmse"
+    ]
+  },
+  "response.drt": {
+    "categories": [
+      "response",
+      "touch"
+    ],
+    "metrics": [
+      "response.drt_visual",
+      "response.drt_tactile",
+      "response.older_slowing"
+    ]
+  },
+  "vestibular.vertical_sickness": {
+    "categories": [
+      "vestibular"
+    ],
+    "metrics": [
+      "vestibular.vertical_msi_error"
+    ]
+  },
+  "vestibular.sickness_time_course": {
+    "categories": [
+      "vestibular"
+    ],
+    "metrics": [
+      "vestibular.time_course_msi_error"
+    ]
+  },
+  "vestibular.roll_compensation": {
+    "categories": [
+      "vestibular"
+    ],
+    "metrics": [
+      "vestibular.roll_frequency_order",
+      "vestibular.roll_compensation_effect"
+    ]
+  },
+  "driving.glance_population": {
+    "categories": [
+      "eyes",
+      "objects",
+      "attention",
+      "estimator"
+    ],
+    "metrics": [
+      "driving.human_mean_glance",
+      "driving.human_glance_sd",
+      "driving.human_long_glance_share",
+      "driving.mean_offroad_glance",
+      "driving.long_glance_share"
+    ]
+  },
+  "driving.glance_speed": {
+    "categories": [
+      "attention",
+      "estimator",
+      "objects"
+    ],
+    "metrics": [
+      "driving.occlusion_speed_elasticity",
+      "driving.incar_glance_speed_elasticity"
+    ]
+  },
+  "design.touch_key_size": {
+    "categories": [
+      "motor",
+      "eyes"
+    ],
+    "metrics": [
+      "design.touch_key_asymptote"
+    ]
+  },
+  "driving.takeover_modality": {
+    "categories": [
+      "hearing",
+      "touch",
+      "response",
+      "eyes",
+      "motor"
+    ],
+    "metrics": [
+      "driving.takeover_modality_order",
+      "driving.takeover_hands_auditory"
+    ]
+  },
+  "driving.takeover_components": {
+    "categories": [
+      "hearing",
+      "response",
+      "eyes",
+      "attention",
+      "motor"
+    ],
+    "metrics": [
+      "driving.takeover_gaze",
+      "driving.takeover_road",
+      "driving.takeover_hands",
+      "driving.takeover_intervention"
+    ]
+  },
+  "driving.takeover_motor_readiness": {
+    "categories": [
+      "hearing",
+      "response",
+      "eyes",
+      "motor"
+    ],
+    "metrics": [
+      "driving.zeeb_road",
+      "driving.zeeb_hands"
+    ]
+  },
+  "driving.automation_monitoring": {
+    "categories": [
+      "attention",
+      "eyes",
+      "trust"
+    ],
+    "metrics": [
+      "driving.automation_max_offroad",
+      "driving.automation_road_share"
+    ]
+  },
+  "driving.takeover_determinants": {
+    "categories": [
+      "hearing",
+      "touch",
+      "response",
+      "motor"
+    ],
+    "metrics": [
+      "driving.zhang_no_auditory",
+      "driving.zhang_vibrotactile",
+      "driving.zhang_visual_task"
+    ]
+  },
+  "driving.takeover_eyes_by_modality": {
+    "categories": [
+      "hearing",
+      "touch",
+      "response",
+      "eyes"
+    ],
+    "metrics": [
+      "driving.petermeijer_visual_vs_auditory",
+      "driving.petermeijer_visual_vs_tactile"
+    ]
+  }
+}

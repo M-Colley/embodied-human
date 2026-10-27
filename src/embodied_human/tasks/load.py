@@ -31,10 +31,10 @@ DRIVING = CentralTask("driving", period=0.7, duration=0.2)
 N_BACK_PERIOD = 2.25
 
 #: Central chunk per n-back digit, s (fitted; see the module notes).
-N_BACK_CHUNK = {0: 0.743, 2: 1.115}
+N_BACK_CHUNK = {0: 0.758, 2: 1.128}
 
 #: Central chunk per SuRT screen, s (fitted), and the mean screen time, s.
-SURT_CHUNK = 1.771
+SURT_CHUNK = 1.762
 SURT_SCREEN = 4.31
 
 SOURCES = {

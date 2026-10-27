@@ -13,6 +13,7 @@
 from __future__ import annotations
 
 import math
+from dataclasses import fields, is_dataclass
 from typing import Any
 
 import numpy as np
@@ -20,6 +21,7 @@ import numpy as np
 from ..core import Human, ModuleChoice, create
 from .benchmarks import Result, benchmark
 from .metrics import kendall_tau
+from .protocol import protocol_seed
 
 #: Frey-Law & Avin (2010), Table 2: ET = b0 * f^b1 (s, f = fraction of MVC).
 ENDURANCE_POWER = {
@@ -64,32 +66,73 @@ LANE_WIDTH_SPEED = {2.85: 56.18, 3.0: 60.78, 3.25: 65.46, 3.5: 76.85, 3.75: 81.9
 LANE_WIDTH_FIT = (3.0, 3.5)
 
 
+class _UnsupportedLaneWidthModel(ValueError):
+    """The selected model cannot implement this calibration protocol."""
+
+
 def fit_lane_widths(
     choice: ModuleChoice, widths: tuple[float, ...] = LANE_WIDTH_FIT
 ) -> Any:
-    """Fit the threshold and the field's width growth to the speeds chosen
-    on ``widths`` (SciPy least squares); return the fitted module."""
+    """Fit unspecified width growth and threshold settings on training widths.
+
+    Explicit user settings remain fixed. With both supplied there is no fit.
+    The selected implementation must expose both named dataclass parameters.
+    Constructor errors are propagated rather than replaced by a baseline.
+    """
     from scipy.optimize import least_squares
 
+    prototype = create("risk", choice.name, **dict(choice.params))
+    prototype.reset(np.random.default_rng(protocol_seed()))
+    parameters = prototype.parameters
+    names: set[str] = (
+        {field.name for field in fields(parameters)}
+        if parameters is not None and is_dataclass(parameters)
+        else set()
+    )
+    if not {"width_rate", "threshold"} <= names:
+        raise _UnsupportedLaneWidthModel(
+            "lane width calibration requires width_rate and threshold "
+            "dataclass parameters on the selected risk implementation"
+        )
+    for name in names:
+        value = getattr(parameters, name)
+        if isinstance(value, (int, float)) and not math.isfinite(value):
+            raise ValueError(f"risk parameter {name!r} must be finite")
+    free = [name for name in ("width_rate", "threshold") if name not in choice.params]
+    if not free:
+        return prototype
+
     def module(x: np.ndarray) -> Any:
-        settings = {"width_rate": x[0], "threshold": math.exp(x[1])}
-        return create("risk", choice.name, **{**dict(choice.params), **settings})
+        settings = {
+            name: math.exp(value) if name == "threshold" else value
+            for name, value in zip(free, x)
+        }
+        selected = create("risk", choice.name, **{**dict(choice.params), **settings})
+        selected.reset(np.random.default_rng(protocol_seed()))
+        return selected
 
     def residuals(x: np.ndarray) -> list[float]:
         fitted = module(x)
         return [3.6 * fitted.preferred_speed(w) - LANE_WIDTH_SPEED[w] for w in widths]
 
+    lower = [0.0 if name == "width_rate" else -10.0 for name in free]
+    upper = [1.0 if name == "width_rate" else 30.0 for name in free]
+    starts = (0.001, 0.02, 0.05, 0.1) if "width_rate" in free else (None,)
     best = None
-    for start in (0.001, 0.02, 0.05, 0.1):
-        risk = module(np.array([start, 0.0])).lane_risk(
-            LANE_WIDTH_SPEED[3.5] / 3.6, 3.5
-        )
-        solution = least_squares(
-            residuals, [start, math.log(risk)], bounds=([0.0, -10.0], [1.0, 30.0])
-        )
-        if best is None or solution.cost < best.cost:
+    for start in starts:
+        initial = [start if name == "width_rate" else 0.0 for name in free]
+        if "threshold" in free:
+            risk = module(np.array(initial)).lane_risk(LANE_WIDTH_SPEED[3.5] / 3.6, 3.5)
+            if not math.isfinite(risk) or risk <= 0:
+                raise ValueError(
+                    "risk at the initialization width must be positive and finite"
+                )
+            initial[free.index("threshold")] = math.log(risk)
+        solution = least_squares(residuals, initial, bounds=(lower, upper))
+        if solution.success and (best is None or solution.cost < best.cost):
             best = solution
-    assert best is not None
+    if best is None:
+        raise ValueError("lane width calibration did not converge")
     return module(best.x)
 
 
@@ -97,17 +140,28 @@ def fit_lane_widths(
 def lane_width(human: Human) -> Result:
     """Speed chosen on straight lanes of different widths.
 
-    The perceived-risk threshold and the field's width growth are fitted
-    to the 3.0 and 3.5 m lanes; 2.85, 3.25 and 3.75 m are predictions.
+    Unspecified threshold and width growth are fitted to the 3.0 and 3.5 m
+    lanes; explicit overrides stay fixed. The other three widths are reserved.
     """
     result = Result("risk.lane_width", ("risk",))
-    tuned = fit_lane_widths(human.config.risk)
+    choice = human.config.risk
+    try:
+        tuned = fit_lane_widths(choice)
+    except _UnsupportedLaneWidthModel as unsupported:
+        result.skipped = str(unsupported)
+        return result
+    fitted = [name for name in ("width_rate", "threshold") if name not in choice.params]
     predicted = {w: 3.6 * tuned.preferred_speed(w) for w in LANE_WIDTH_SPEED}
     held_out = [w for w in LANE_WIDTH_SPEED if w not in LANE_WIDTH_FIT]
     error = float(np.mean([abs(predicted[w] - LANE_WIDTH_SPEED[w]) for w in held_out]))
     result.score_against("risk.lane_width_speed_error", error)
     result.details = {
-        "fitted_to_m": list(LANE_WIDTH_FIT),
+        "fitted_to_m": list(LANE_WIDTH_FIT) if fitted else [],
+        "calibration_widths_m": list(LANE_WIDTH_FIT),
+        "fitted_parameters": fitted,
+        "requested_risk_parameters": dict(choice.params),
+        "risk_module": choice.name,
+        "protocol_seed": protocol_seed(),
         "threshold": tuned.params.threshold,
         "width_rate": tuned.params.width_rate,
         "published_width_rate": 0.001,
@@ -117,6 +171,11 @@ def lane_width(human: Human) -> Result:
         },
         "kendall_tau": kendall_tau(
             list(predicted.values()), list(LANE_WIDTH_SPEED.values())
+        ),
+        "protocol": (
+            "Only unspecified width_rate and threshold parameters are calibrated "
+            "on the 3.0 and 3.5 m lanes. Explicit overrides remain fixed. "
+            "The scored error uses only the other three reserved lane widths."
         ),
     }
     return result
@@ -140,7 +199,7 @@ def emotion_study(human: Human, runs: int = 3) -> Result:
 
     result = Result("affect.emotion_study", ("affect",))
     try:
-        model = simulate(seed=0, runs=runs, choice=human.config.affect)
+        model = simulate(seed=protocol_seed(), runs=runs, choice=human.config.affect)
     except ImportError as error:
         result.skipped = f"needs the affect module's optional dependencies: {error}"
         return result
@@ -218,50 +277,118 @@ def trust_course(
     initial: float,
     events: list[list[str]],
     capability: dict[str, float],
+    *,
+    choice: ModuleChoice | None = None,
+    seed: int | None = None,
     **params: float,
 ) -> list[float]:
-    """Trust ratings (1-7) after each group of events, by the trust module
-    with no noise, starting from ``initial`` (1-7)."""
-    from ..trust import DecisionFieldTrust
+    """Run the selected trust model with reproducible protocol initialization.
 
+    The historical protocol disables noise and conditions on observed initial
+    trust when those fields are supported. Explicit user parameters take
+    precedence. The model must expose a finite scalar ``trust`` in its 0 to 1
+    coordinate system; outputs are reported on the study's 1 to 7 scale.
+    """
+    choice = choice or ModuleChoice("decision_field")
+    explicit = {**dict(choice.params), **params}
+    model: Any = create("trust", choice.name, **explicit)
+    names = _trust_parameter_names(model)
+    protocol = {}
+    if "noise_sd" in names and "noise_sd" not in explicit:
+        protocol["noise_sd"] = 0.0
     start = (initial - 1.0) / 6.0
-    model = DecisionFieldTrust(noise_sd=0.0, automation_belief=start, **params)
-    ratings = [initial]
+    if "automation_belief" in names and "automation_belief" not in explicit:
+        protocol["automation_belief"] = start
+    if protocol:
+        model = create("trust", choice.name, **{**protocol, **explicit})
+    model.reset(np.random.default_rng(protocol_seed() if seed is None else seed))
+    value = _trust_rating(model)
+    ratings = [initial if "automation_belief" in protocol else value]
     for group in events:
         for event in group:
             model.update(
                 automation_capability=capability[event], manual_capability=None
             )
-        ratings.append(1.0 + 6.0 * model.trust)
+        ratings.append(_trust_rating(model))
     return ratings
 
 
-def fit_kraus(inertia: float = 0.5) -> dict[str, float]:
-    """Fit event capabilities and opacity to Study 1 (SciPy least squares)."""
+def _trust_parameter_names(model: Any) -> set[str]:
+    """Validate numeric model settings before applying protocol defaults."""
+    parameters = model.parameters
+    names = (
+        {field.name for field in fields(parameters)}
+        if parameters is not None and is_dataclass(parameters)
+        else set()
+    )
+    for name in names:
+        value = getattr(parameters, name)
+        if isinstance(value, (int, float)) and not math.isfinite(value):
+            raise ValueError(f"trust parameter {name!r} must be finite")
+    if "noise_sd" in names and parameters.noise_sd < 0:
+        raise ValueError("trust noise_sd must be nonnegative")
+    return names
+
+
+def _trust_rating(model: Any) -> float:
+    try:
+        value = float(model.trust)
+    except (AttributeError, TypeError, ValueError) as exc:
+        raise ValueError("the Kraus protocol requires a scalar trust output") from exc
+    if not math.isfinite(value):
+        raise ValueError("the Kraus protocol requires a finite trust output")
+    return 1.0 + 6.0 * value
+
+
+def fit_kraus(
+    inertia: float = 0.5, *, choice: ModuleChoice | None = None
+) -> dict[str, float]:
+    """Fit Study 1 event capabilities, and opacity only when not overridden.
+
+    Explicit selected model settings are fixed during fitting. The inertia
+    argument preserves the original helper API and supplies a default only
+    when the selected model has that field and no explicit override.
+    """
     from scipy.optimize import least_squares
+
+    choice = choice or ModuleChoice("decision_field")
+    prototype = create("trust", choice.name, **dict(choice.params))
+    names = _trust_parameter_names(prototype)
+    settings = dict(choice.params)
+    if "inertia" in names:
+        settings.setdefault("inertia", inertia)
+    selected = ModuleChoice(choice.name, settings)
+    fit_opacity = "opacity" in names and "opacity" not in choice.params
 
     def residuals(x: np.ndarray) -> list[float]:
         capability = {"ok": x[0], "tor": x[1], "malfunction": x[2]}
         errors: list[float] = []
-        for group, observed in KRAUS_STUDY1.items():
+        for index, (group, observed) in enumerate(KRAUS_STUDY1.items()):
+            fitted = {"opacity": float(x[3])} if fit_opacity else {}
             course = trust_course(
                 observed[0], kraus_events(1, group), capability,
-                opacity=x[3], inertia=inertia,
+                choice=selected, seed=protocol_seed(index), **fitted,
             )  # fmt: skip
             errors += [m - o for m, o in zip(course[1:], observed[1:])]
         return errors
 
-    solution = least_squares(
-        residuals, [0.85, 0.6, 0.3, 3.0], bounds=([0, 0, 0, 1], [1, 1, 1, 50])
-    )
-    ok, tor, malfunction, opacity = solution.x
-    return {
-        "ok": float(ok),
-        "tor": float(tor),
-        "malfunction": float(malfunction),
-        "opacity": float(opacity),
+    initial = [0.85, 0.6, 0.3] + ([3.0] if fit_opacity else [])
+    lower = [0, 0, 0] + ([1] if fit_opacity else [])
+    upper = [1, 1, 1] + ([50] if fit_opacity else [])
+    solution = least_squares(residuals, initial, bounds=(lower, upper))
+    if not solution.success:
+        raise ValueError(f"Kraus Study 1 fit did not converge: {solution.message}")
+    report = {
+        "ok": float(solution.x[0]),
+        "tor": float(solution.x[1]),
+        "malfunction": float(solution.x[2]),
         "study1_rmse": float(np.sqrt(np.mean(np.square(solution.fun)))),
     }
+    if "opacity" in names:
+        report["opacity"] = (
+            float(solution.x[3]) if fit_opacity else float(settings["opacity"])
+        )
+    return report
 
 
 @benchmark("trust.kraus_dynamics")
@@ -272,13 +399,20 @@ def kraus_dynamics(human: Human) -> Result:
     The model has no notion of transparency, so the high-transparency
     groups are reported but not scored."""
     result = Result("trust.kraus_dynamics", ("trust",))
-    fitted = fit_kraus()
+    choice = human.config.trust
+    fitted = fit_kraus(choice=choice)
     capability = {k: fitted[k] for k in ("ok", "tor", "malfunction")}
+    parameters = {"opacity": fitted["opacity"]} if "opacity" in fitted else {}
     predicted = {
         group: trust_course(
-            observed[0], kraus_events(2, group), capability, opacity=fitted["opacity"]
+            observed[0],
+            kraus_events(2, group),
+            capability,
+            choice=choice,
+            seed=protocol_seed(index + len(KRAUS_STUDY1)),
+            **parameters,
         )
-        for group, observed in KRAUS_STUDY2.items()
+        for index, (group, observed) in enumerate(KRAUS_STUDY2.items())
     }
     errors = [
         m - o
@@ -296,5 +430,20 @@ def kraus_dynamics(human: Human) -> Result:
         "fitted_on_study1": fitted,
         "study2_model": predicted,
         "study2_human": KRAUS_STUDY2,
+        "trust_module": choice.name,
+        "requested_trust_parameters": dict(choice.params),
+        "study1_fitted_parameters": ["ok", "tor", "malfunction"]
+        + (
+            ["opacity"]
+            if "opacity" in fitted and "opacity" not in choice.params
+            else []
+        ),
+        "protocol": (
+            "Condition on observed initial trust and disable noise only when "
+            "those settings are supported and not explicitly overridden. "
+            "Other requested parameters remain fixed. Opacity is refitted only "
+            "when supported and not explicitly overridden. Study 2 outcomes "
+            "are reserved; group simulations use derived protocol seeds."
+        ),
     }
     return result

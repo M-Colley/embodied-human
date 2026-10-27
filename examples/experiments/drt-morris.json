@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "config": {},
+  "benchmarks": ["response.drt"],
+  "seeds": [0, 1, 2],
+  "sensitivity": {
+    "method": "morris",
+    "parameters": [
+      {"category": "response", "parameter": "central", "bounds": [0.15, 0.3]},
+      {"category": "touch", "parameter": "reference_latency", "bounds": [0.08, 0.15]}
+    ],
+    "benchmark": "response.drt",
+    "metric": "response.drt_tactile",
+    "samples": 8,
+    "seed": 0,
+    "num_levels": 4
+  }
+}

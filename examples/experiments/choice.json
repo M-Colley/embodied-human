@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "config": {"response": {"name": "pyddm", "params": {}}},
+  "benchmarks": ["response.choice"],
+  "seeds": [0, 1, 2, 3, 4],
+  "sweep": {"category": "response", "parameter": "decision_bound", "values": [0.5, 1.0, 1.5]}
+}

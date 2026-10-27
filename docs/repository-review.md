@@ -1,5 +1,9 @@
 # Repository review, 26 October 2026
 
+The 27 October additions provide native PyACTUp and PyDDM adapters, whole body contact maps, SALib analyses, explicit validation roles and reproducible experiment bundles. The builder runs these experiments in owned subprocesses and displays responsive summaries. [The experiment guide](experiments.md) describes the interfaces. [The validation record](../VALIDATION.md) reports the executed checks and remaining model mismatches.
+
+Further regression checks corrected trust and risk benchmarks that ignored explicit settings. The vision benchmark now exercises the selected perception method. Recall scoring checks both payload and stored identity. Nested protocol seeds remain distinct across outer simulation repetitions. Replay checks editable dependency changes and VCS commit identities. Windows progress updates retain atomic replacement while handling transient reader locks.
+
 The review covered the source modules, module registry, configuration,
 population and inference utilities, tasks, agents, benchmarks, examples,
 packaging, CI and existing tests. It combines code inspection, targeted

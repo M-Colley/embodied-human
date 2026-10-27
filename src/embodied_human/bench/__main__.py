@@ -17,13 +17,12 @@ import argparse
 import importlib
 import json
 import math
-import platform
 import time
-from collections import Counter
 from pathlib import Path
 from typing import Any
 
 from ..core import CATEGORIES, HumanConfig, build_human
+from ..reporting import load_replay, make_report, write_bundle, write_json
 
 
 def _value(text: str) -> Any:
@@ -60,7 +59,7 @@ def _config(replacements: list[str]) -> HumanConfig:
 
 def main(argv: list[str] | None = None) -> int:
     from . import integrated, load, motivation, senses, studies  # noqa: F401
-    from .benchmarks import BENCHMARKS, json_safe, run
+    from .benchmarks import BENCHMARKS, run
 
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
@@ -80,24 +79,47 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--out", type=Path)
+    parser.add_argument("--bundle", type=Path, help="write a replayable run directory")
+    parser.add_argument("--config", type=Path, help="builder JSON project or config")
+    parser.add_argument("--replay", type=Path, help="replay a checked run manifest")
+    parser.add_argument("--allow-source-mismatch", action="store_true")
+    parser.add_argument("--allow-environment-mismatch", action="store_true")
     args = parser.parse_args(argv)
+
+    if args.bundle and args.imports:
+        parser.error(
+            "bundles require packaged implementations; "
+            "external --import sources are not captured"
+        )
 
     for name in args.imports:
         importlib.import_module(name)
     config = _config(args.replace)
+    if args.config and args.replay:
+        parser.error("choose either --config or --replay")
+    if args.config or args.replay:
+        from ..builder import config_from_dict
+
+        if args.replay:
+            replay = load_replay(
+                args.replay,
+                allow_source_mismatch=args.allow_source_mismatch,
+                allow_environment_mismatch=args.allow_environment_mismatch,
+            )
+            if replay.get("kind") != "benchmark":
+                parser.error("manifest does not contain a benchmark run")
+            config = config_from_dict(replay["config"])
+            args.only, args.seed = replay["benchmarks"], replay["seed"]
+        else:
+            data = json.loads(args.config.read_text(encoding="utf-8"))
+            config = config_from_dict(data.get("config", data))
+            args.seed = data.get("seed", args.seed)
     human = build_human(config, seed=args.seed)
     started = time.perf_counter()
-    results = run(human, args.only)
-    kinds = Counter(row["kind"] for row in human.provenance())
-    report: dict[str, Any] = {
-        "package": "embodied-human 0.1.0",
-        "python": platform.python_version(),
-        "seed": args.seed,
-        "config": config.as_dict(),
-        "parameter_sources": dict(kinds),
-        "wall_seconds": round(time.perf_counter() - started, 2),
-        "results": [r.as_dict() for r in results],
-    }
+    results = run(human, args.only, seed=args.seed)
+    report = make_report(
+        human, results, seed=args.seed, wall_seconds=time.perf_counter() - started
+    )
     width = max((len(r.name) for r in results), default=0)
     for r in results:
         status = "skip" if r.skipped else ("pass" if r.passed else "fail")
@@ -106,11 +128,20 @@ def main(argv: list[str] | None = None) -> int:
             f"{k.split('.', 1)[1]}={v:.3g}" for k, v in r.metrics.items()
         )
         print(f"{r.name:<{width}}  {status:4}  {score:>4}  {values or r.skipped or ''}")
-    print(f"parameters by source: {dict(kinds)}")
+    print(f"parameters by source: {report['parameter_sources']}")
+    print(f"validation by metric: {report['validation_summary']}")
     if args.out:
-        args.out.parent.mkdir(parents=True, exist_ok=True)
-        args.out.write_text(
-            json.dumps(json_safe(report), indent=2, allow_nan=False), encoding="utf-8"
+        write_json(args.out, report)
+    if args.bundle:
+        write_bundle(
+            args.bundle,
+            report,
+            replay={
+                "kind": "benchmark",
+                "config": report["resolved_config"],
+                "benchmarks": [r.name for r in results],
+                "seed": args.seed,
+            },
         )
     return 0
 

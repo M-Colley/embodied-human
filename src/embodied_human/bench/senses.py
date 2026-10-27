@@ -24,6 +24,7 @@ from ..response import Signal
 from ..tasks.load import DRIVING
 from ..vestibular import GRAVITY
 from .benchmarks import Result, benchmark
+from .protocol import protocol_seed
 
 #: Sensation level assumed for the strong vibration of Diederich and
 #: Colonius (2004), dB above threshold.
@@ -69,8 +70,9 @@ def modality_rt(human: Human) -> Result:
                 Signal("visual", 0.0, human.response.visual_latency(0.0)),  # type: ignore[attr-defined]
             ],
         ),
-        "note": "the model's parameters come from other participants "
-        "(Diederich & Colonius, 2015); only the order is compared",
+        "note": "TWIN central parameters use Diederich & Colonius (2015). "
+        "Tactile latency uses the modality difference in the 2004 evaluation "
+        "study. The ordering result is a consistency check.",
     }
     return result
 
@@ -133,7 +135,7 @@ def drt(human: Human) -> Result:
     visual = drt_rt(human, ["head_light"], [DRIVING])
     tactile = drt_rt(human, ["tactile"], [DRIVING])
     older = build_human(
-        Population(human.config, profile=OLDER_ADULTS).typical(), seed=0
+        Population(human.config, profile=OLDER_ADULTS).typical(), seed=protocol_seed()
     )
     tactile_older = drt_rt(older, ["tactile"], [DRIVING])
     result.score_against("response.drt_visual", visual)

@@ -31,6 +31,7 @@ from ..core import Human, HumanConfig, build_human
 from ..population import BASELINE_VARIATIONS, Population, applicable
 from .benchmarks import Result, benchmark
 from .metrics import bootstrap_ci, elasticity
+from .protocol import protocol_seed, protocol_seeds
 
 KMH = 1 / 3.6
 
@@ -89,7 +90,9 @@ def glance_population(
     result = Result(
         "driving.glance_population", ("eyes", "objects", "attention", "estimator")
     )
-    rows = glance_participants(human.config, participants=participants, seconds=seconds)
+    rows = glance_participants(
+        human.config, participants=participants, seconds=seconds, seed=protocol_seed(0)
+    )
     means = [r["mean_s"] for r in rows]
     sds = [r["sd_s"] for r in rows]
     glances = sum(r["glances"] for r in rows)
@@ -142,10 +145,10 @@ def glance_speed(
     means = []
     for speed in speeds_kmh:
         log = simulate_glances(
-            build_human(human.config, seed=0),
+            build_human(human.config, seed=protocol_seed()),
             speed=speed * KMH,
             seconds=seconds,
-            seed=0,
+            seed=protocol_seed(),
         )
         means.append(float(np.mean(log.glance_durations())))
     slope = elasticity(speeds_kmh, means)
@@ -201,8 +204,10 @@ def touch_key_size(
     population = Population(human.config, applicable(human.config, BASELINE_VARIATIONS))
     errors = np.full((participants, len(sizes_mm)), math.nan)
     times = np.full_like(errors, math.nan)
-    for i, person in enumerate(population.participants(participants, seed=0)):
-        participant = build_human(person, seed=i)
+    for i, person in enumerate(
+        population.participants(participants, seed=protocol_seed())
+    ):
+        participant = build_human(person, seed=protocol_seed(i))
         for j, size in enumerate(sizes_mm):
             width = size / 1000.0
             amplitude = KEYPAD_DISTANCE * (size + gap_mm) / 1000.0
@@ -272,7 +277,7 @@ def takeover_modality(human: Human, runs: int = 32) -> Result:
             simulate_takeover(
                 build_human(human.config, seed=seed), signals=signals, seed=seed
             ).takeover_components()
-            for seed in range(runs)
+            for seed in protocol_seeds(runs)
         ]
         medians["+".join(signals)] = {
             key: float(np.nanmedian([p[key] for p in parts])) for key in parts[0]
@@ -314,8 +319,9 @@ def takeover_components(human: Human, runs: int = 64) -> Result:
     straight road. Gold et al. timed the first saccade away from SuRT, the
     first fixation on the road, the hands on the wheel and the first
     braking or steering input; their means are compared with the model's
-    gaze, eyes, hand and engagement times. None of the model's parameters
-    was fitted to these data.
+    gaze, eyes, hand and engagement times. Hand release was fitted to this
+    study's hands outcome. Other outcomes reserve statistics from shared
+    participants, as declared in the validation metadata.
     """
     from ..agents.road import simulate_takeover
 
@@ -327,7 +333,7 @@ def takeover_components(human: Human, runs: int = 64) -> Result:
         simulate_takeover(
             build_human(human.config, seed=seed), speed=120 * KMH, seed=seed
         ).takeover_components()
-        for seed in range(runs)
+        for seed in protocol_seeds(runs)
     ]
     keys = {"gaze": "gaze_s", "road": "eyes_s", "hands": "hand_s"}
     keys["intervention"] = "engaged_s"
@@ -404,7 +410,7 @@ def takeover_motor_readiness(human: Human, runs: int = 64) -> Result:
     base = DriverAgentParameters()
     params = replace(base, hand_release=0.0, icon_position=base.display_position)
     road, hands, engaged = [], [], []
-    for seed in range(runs):
+    for seed in protocol_seeds(runs):
         log = simulate_takeover(
             build_human(human.config, seed=seed),
             speed=120 * KMH,
@@ -463,7 +469,7 @@ def automation_monitoring(human: Human, runs: int = 16) -> Result:
     result = Result("driving.automation_monitoring", ("attention", "eyes", "trust"))
     start, end = 10.0, 70.0
     rows = []
-    for seed in range(runs):
+    for seed in protocol_seeds(runs):
         log = simulate_takeover(
             build_human(human.config, seed=seed),
             speed=120 * KMH,
@@ -543,7 +549,7 @@ def takeover_determinants(human: Human, runs: int = 64) -> Result:
                 params=params,
                 surt=task,
             ).takeover_components()["engaged_s"]
-            for seed in range(runs)
+            for seed in protocol_seeds(runs)
         ]
         means[name] = float(np.nanmean(times))
     base_time = means["tone_icon_surt"]
@@ -610,7 +616,7 @@ def takeover_eyes_by_modality(human: Human, runs: int = 64) -> Result:
     means = {}
     for modality in ("visual", "auditory", "tactile"):
         eyes = []
-        for seed in range(runs):
+        for seed in protocol_seeds(runs):
             log = simulate_takeover(
                 build_human(human.config, seed=seed),
                 signals=(modality,),

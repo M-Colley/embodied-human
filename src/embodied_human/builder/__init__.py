@@ -51,10 +51,17 @@ def catalog() -> dict[str, Any]:
             try:
                 module = create(category, name)
                 params = module.parameters
+                hints = _annotations(type(params)) if params is not None else {}
+                defaults = _jsonable(params) if params else {}
                 choices[category][name] = {
                     "description": (type(module).__doc__ or "").strip(),
-                    "parameters": _jsonable(params) if params else {},
+                    "parameters": defaults,
                     "sources": _jsonable(params.provenance()) if params else [],
+                    "parameter_types": {
+                        key: getattr(annotation, "__name__", str(annotation))
+                        for key, annotation in hints.items()
+                        if key in defaults
+                    },
                 }
             except ImportError as exc:
                 choices[category][name] = {"unavailable": str(exc)}

@@ -1,0 +1,4241 @@
+{
+  "schema_version": 1,
+  "request": {
+    "version": 1,
+    "config": {
+      "eyes": {
+        "name": "main_sequence",
+        "params": {}
+      },
+      "vision": {
+        "name": "foveated",
+        "params": {}
+      },
+      "objects": {
+        "name": "eccentricity_noise",
+        "params": {}
+      },
+      "attention": {
+        "name": "uncertainty_sampler",
+        "params": {}
+      },
+      "memory": {
+        "name": "act_r",
+        "params": {}
+      },
+      "proprioception": {
+        "name": "spindle",
+        "params": {}
+      },
+      "motor": {
+        "name": "ffitts_min_jerk",
+        "params": {}
+      },
+      "estimator": {
+        "name": "lane_kalman",
+        "params": {}
+      },
+      "hearing": {
+        "name": "psychoacoustic",
+        "params": {}
+      },
+      "touch": {
+        "name": "vibrotactile",
+        "params": {}
+      },
+      "vestibular": {
+        "name": "subjective_vertical",
+        "params": {}
+      },
+      "response": {
+        "name": "pyddm",
+        "params": {}
+      },
+      "fatigue": {
+        "name": "three_compartment",
+        "params": {}
+      },
+      "affect": {
+        "name": "appraisal",
+        "params": {}
+      },
+      "risk": {
+        "name": "risk_field",
+        "params": {}
+      },
+      "trust": {
+        "name": "decision_field",
+        "params": {}
+      }
+    },
+    "benchmarks": [
+      "response.choice"
+    ],
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "compare_baseline": false,
+    "sweep": {
+      "category": "response",
+      "parameter": "decision_bound",
+      "values": [
+        0.5,
+        1.0,
+        1.5
+      ]
+    },
+    "sensitivity": null
+  },
+  "rows": [
+    {
+      "case": "sweep_0",
+      "seed": 0,
+      "overrides": {
+        "response.decision_bound": 0.5
+      },
+      "benchmark": "response.choice",
+      "metrics": {
+        "response.choice_accuracy": 0.56,
+        "response.choice_timeout_rate": 0.13616666666666669,
+        "response.choice_mean_rt_s": 0.39707505305807445
+      },
+      "scores": {},
+      "validation": {
+        "response.choice_accuracy": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        },
+        "response.choice_timeout_rate": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        },
+        "response.choice_mean_rt_s": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        }
+      },
+      "references": {},
+      "skipped": null,
+      "details": {
+        "interpretation": "Model demonstration with assumed task settings; independent human evaluation pending.",
+        "protocol": {
+          "drifts": [
+            -1.0,
+            0.0,
+            1.0
+          ],
+          "deadlines": [
+            0.5,
+            2.0
+          ],
+          "trials": 1000
+        },
+        "protocol_sources": [
+          {
+            "parameter": "ChoiceProtocolParameters.drifts",
+            "value": [
+              -1.0,
+              0.0,
+              1.0
+            ],
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "decision units per second; not mapped from sensory Signals"
+          },
+          {
+            "parameter": "ChoiceProtocolParameters.deadlines",
+            "value": [
+              0.5,
+              2.0
+            ],
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "seconds, including the model's nondecision time"
+          },
+          {
+            "parameter": "ChoiceProtocolParameters.trials",
+            "value": 1000,
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "independent draws per condition from the native solver grid"
+          }
+        ],
+        "seed": 0,
+        "conditions": [
+          {
+            "drift": -1.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "lower",
+            "trials": 1000,
+            "accuracy": 0.535,
+            "conditional_accuracy": 0.7348901098901099,
+            "timeout_rate": 0.272,
+            "mean_rt_s": 0.3512980769230769,
+            "predicted_accuracy": 0.5469361160728776,
+            "predicted_timeout_rate": 0.25185733118975306,
+            "predicted_mean_rt_s": 0.34506215592246803,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": -1.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "lower",
+            "trials": 1000,
+            "accuracy": 0.703,
+            "conditional_accuracy": 0.703,
+            "timeout_rate": 0.0,
+            "mean_rt_s": 0.42959,
+            "predicted_accuracy": 0.7310055610880759,
+            "predicted_timeout_rate": 7.252160562609689e-05,
+            "predicted_mean_rt_s": 0.4309311852645165,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 0.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.35,
+            "conditional_accuracy": 0.4827586206896552,
+            "timeout_rate": 0.275,
+            "mean_rt_s": 0.34432413793103445,
+            "predicted_accuracy": 0.35692524518316193,
+            "predicted_timeout_rate": 0.28614950963367614,
+            "predicted_mean_rt_s": 0.3477209732135825,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 0.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.505,
+            "conditional_accuracy": 0.505,
+            "timeout_rate": 0.0,
+            "mean_rt_s": 0.44433000000000006,
+            "predicted_accuracy": 0.49991275476290586,
+            "predicted_timeout_rate": 0.00017449047418827135,
+            "predicted_mean_rt_s": 0.44969362040148414,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 1.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.527,
+            "conditional_accuracy": 0.7219178082191781,
+            "timeout_rate": 0.27,
+            "mean_rt_s": 0.34108219178082194,
+            "predicted_accuracy": 0.5469361160728776,
+            "predicted_timeout_rate": 0.25185733118975306,
+            "predicted_mean_rt_s": 0.34506215592246803,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 1.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.74,
+            "conditional_accuracy": 0.74,
+            "timeout_rate": 0.0,
+            "mean_rt_s": 0.42975,
+            "predicted_accuracy": 0.7310055610880759,
+            "predicted_timeout_rate": 7.252160562609689e-05,
+            "predicted_mean_rt_s": 0.4309311852645165,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          }
+        ],
+        "correct_boundary": "lower for negative drift, upper otherwise; at zero drift upper is an assumed target label without directional evidence",
+        "mean_rt_definition": "mean among answered trials, weighted by response counts",
+        "pathway": "explicit choice API; sensory Signals retain TWIN detection"
+      }
+    },
+    {
+      "case": "sweep_0",
+      "seed": 1,
+      "overrides": {
+        "response.decision_bound": 0.5
+      },
+      "benchmark": "response.choice",
+      "metrics": {
+        "response.choice_accuracy": 0.5661666666666667,
+        "response.choice_timeout_rate": 0.13316666666666668,
+        "response.choice_mean_rt_s": 0.3971572774466448
+      },
+      "scores": {},
+      "validation": {
+        "response.choice_accuracy": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        },
+        "response.choice_timeout_rate": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        },
+        "response.choice_mean_rt_s": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        }
+      },
+      "references": {},
+      "skipped": null,
+      "details": {
+        "interpretation": "Model demonstration with assumed task settings; independent human evaluation pending.",
+        "protocol": {
+          "drifts": [
+            -1.0,
+            0.0,
+            1.0
+          ],
+          "deadlines": [
+            0.5,
+            2.0
+          ],
+          "trials": 1000
+        },
+        "protocol_sources": [
+          {
+            "parameter": "ChoiceProtocolParameters.drifts",
+            "value": [
+              -1.0,
+              0.0,
+              1.0
+            ],
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "decision units per second; not mapped from sensory Signals"
+          },
+          {
+            "parameter": "ChoiceProtocolParameters.deadlines",
+            "value": [
+              0.5,
+              2.0
+            ],
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "seconds, including the model's nondecision time"
+          },
+          {
+            "parameter": "ChoiceProtocolParameters.trials",
+            "value": 1000,
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "independent draws per condition from the native solver grid"
+          }
+        ],
+        "seed": 1,
+        "conditions": [
+          {
+            "drift": -1.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "lower",
+            "trials": 1000,
+            "accuracy": 0.537,
+            "conditional_accuracy": 0.7376373626373627,
+            "timeout_rate": 0.272,
+            "mean_rt_s": 0.3402541208791209,
+            "predicted_accuracy": 0.5469361160728776,
+            "predicted_timeout_rate": 0.25185733118975306,
+            "predicted_mean_rt_s": 0.34506215592246803,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": -1.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "lower",
+            "trials": 1000,
+            "accuracy": 0.733,
+            "conditional_accuracy": 0.733,
+            "timeout_rate": 0.0,
+            "mean_rt_s": 0.42766,
+            "predicted_accuracy": 0.7310055610880759,
+            "predicted_timeout_rate": 7.252160562609689e-05,
+            "predicted_mean_rt_s": 0.4309311852645165,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 0.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.384,
+            "conditional_accuracy": 0.5296551724137931,
+            "timeout_rate": 0.275,
+            "mean_rt_s": 0.34269655172413793,
+            "predicted_accuracy": 0.35692524518316193,
+            "predicted_timeout_rate": 0.28614950963367614,
+            "predicted_mean_rt_s": 0.3477209732135825,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 0.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.485,
+            "conditional_accuracy": 0.485,
+            "timeout_rate": 0.0,
+            "mean_rt_s": 0.44474,
+            "predicted_accuracy": 0.49991275476290586,
+            "predicted_timeout_rate": 0.00017449047418827135,
+            "predicted_mean_rt_s": 0.44969362040148414,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 1.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.55,
+            "conditional_accuracy": 0.7352941176470589,
+            "timeout_rate": 0.252,
+            "mean_rt_s": 0.34732620320855606,
+            "predicted_accuracy": 0.5469361160728776,
+            "predicted_timeout_rate": 0.25185733118975306,
+            "predicted_mean_rt_s": 0.34506215592246803,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 1.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.708,
+            "conditional_accuracy": 0.708,
+            "timeout_rate": 0.0,
+            "mean_rt_s": 0.437255,
+            "predicted_accuracy": 0.7310055610880759,
+            "predicted_timeout_rate": 7.252160562609689e-05,
+            "predicted_mean_rt_s": 0.4309311852645165,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          }
+        ],
+        "correct_boundary": "lower for negative drift, upper otherwise; at zero drift upper is an assumed target label without directional evidence",
+        "mean_rt_definition": "mean among answered trials, weighted by response counts",
+        "pathway": "explicit choice API; sensory Signals retain TWIN detection"
+      }
+    },
+    {
+      "case": "sweep_0",
+      "seed": 2,
+      "overrides": {
+        "response.decision_bound": 0.5
+      },
+      "benchmark": "response.choice",
+      "metrics": {
+        "response.choice_accuracy": 0.566,
+        "response.choice_timeout_rate": 0.1386666666666667,
+        "response.choice_mean_rt_s": 0.40012287151702786
+      },
+      "scores": {},
+      "validation": {
+        "response.choice_accuracy": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        },
+        "response.choice_timeout_rate": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        },
+        "response.choice_mean_rt_s": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        }
+      },
+      "references": {},
+      "skipped": null,
+      "details": {
+        "interpretation": "Model demonstration with assumed task settings; independent human evaluation pending.",
+        "protocol": {
+          "drifts": [
+            -1.0,
+            0.0,
+            1.0
+          ],
+          "deadlines": [
+            0.5,
+            2.0
+          ],
+          "trials": 1000
+        },
+        "protocol_sources": [
+          {
+            "parameter": "ChoiceProtocolParameters.drifts",
+            "value": [
+              -1.0,
+              0.0,
+              1.0
+            ],
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "decision units per second; not mapped from sensory Signals"
+          },
+          {
+            "parameter": "ChoiceProtocolParameters.deadlines",
+            "value": [
+              0.5,
+              2.0
+            ],
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "seconds, including the model's nondecision time"
+          },
+          {
+            "parameter": "ChoiceProtocolParameters.trials",
+            "value": 1000,
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "independent draws per condition from the native solver grid"
+          }
+        ],
+        "seed": 2,
+        "conditions": [
+          {
+            "drift": -1.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "lower",
+            "trials": 1000,
+            "accuracy": 0.551,
+            "conditional_accuracy": 0.7346666666666667,
+            "timeout_rate": 0.25,
+            "mean_rt_s": 0.34746000000000005,
+            "predicted_accuracy": 0.5469361160728776,
+            "predicted_timeout_rate": 0.25185733118975306,
+            "predicted_mean_rt_s": 0.34506215592246803,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": -1.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "lower",
+            "trials": 1000,
+            "accuracy": 0.71,
+            "conditional_accuracy": 0.71,
+            "timeout_rate": 0.0,
+            "mean_rt_s": 0.434085,
+            "predicted_accuracy": 0.7310055610880759,
+            "predicted_timeout_rate": 7.252160562609689e-05,
+            "predicted_mean_rt_s": 0.4309311852645165,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 0.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.352,
+            "conditional_accuracy": 0.5116279069767442,
+            "timeout_rate": 0.31200000000000006,
+            "mean_rt_s": 0.3493386627906977,
+            "predicted_accuracy": 0.35692524518316193,
+            "predicted_timeout_rate": 0.28614950963367614,
+            "predicted_mean_rt_s": 0.3477209732135825,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 0.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.52,
+            "conditional_accuracy": 0.52,
+            "timeout_rate": 0.0,
+            "mean_rt_s": 0.4539349999999999,
+            "predicted_accuracy": 0.49991275476290586,
+            "predicted_timeout_rate": 0.00017449047418827135,
+            "predicted_mean_rt_s": 0.44969362040148414,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 1.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.533,
+            "conditional_accuracy": 0.7301369863013699,
+            "timeout_rate": 0.27,
+            "mean_rt_s": 0.34410273972602745,
+            "predicted_accuracy": 0.5469361160728776,
+            "predicted_timeout_rate": 0.25185733118975306,
+            "predicted_mean_rt_s": 0.34506215592246803,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 1.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.73,
+            "conditional_accuracy": 0.73,
+            "timeout_rate": 0.0,
+            "mean_rt_s": 0.42768,
+            "predicted_accuracy": 0.7310055610880759,
+            "predicted_timeout_rate": 7.252160562609689e-05,
+            "predicted_mean_rt_s": 0.4309311852645165,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          }
+        ],
+        "correct_boundary": "lower for negative drift, upper otherwise; at zero drift upper is an assumed target label without directional evidence",
+        "mean_rt_definition": "mean among answered trials, weighted by response counts",
+        "pathway": "explicit choice API; sensory Signals retain TWIN detection"
+      }
+    },
+    {
+      "case": "sweep_0",
+      "seed": 3,
+      "overrides": {
+        "response.decision_bound": 0.5
+      },
+      "benchmark": "response.choice",
+      "metrics": {
+        "response.choice_accuracy": 0.5676666666666667,
+        "response.choice_timeout_rate": 0.1295,
+        "response.choice_mean_rt_s": 0.4016398621481907
+      },
+      "scores": {},
+      "validation": {
+        "response.choice_accuracy": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        },
+        "response.choice_timeout_rate": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        },
+        "response.choice_mean_rt_s": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        }
+      },
+      "references": {},
+      "skipped": null,
+      "details": {
+        "interpretation": "Model demonstration with assumed task settings; independent human evaluation pending.",
+        "protocol": {
+          "drifts": [
+            -1.0,
+            0.0,
+            1.0
+          ],
+          "deadlines": [
+            0.5,
+            2.0
+          ],
+          "trials": 1000
+        },
+        "protocol_sources": [
+          {
+            "parameter": "ChoiceProtocolParameters.drifts",
+            "value": [
+              -1.0,
+              0.0,
+              1.0
+            ],
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "decision units per second; not mapped from sensory Signals"
+          },
+          {
+            "parameter": "ChoiceProtocolParameters.deadlines",
+            "value": [
+              0.5,
+              2.0
+            ],
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "seconds, including the model's nondecision time"
+          },
+          {
+            "parameter": "ChoiceProtocolParameters.trials",
+            "value": 1000,
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "independent draws per condition from the native solver grid"
+          }
+        ],
+        "seed": 3,
+        "conditions": [
+          {
+            "drift": -1.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "lower",
+            "trials": 1000,
+            "accuracy": 0.561,
+            "conditional_accuracy": 0.7285714285714285,
+            "timeout_rate": 0.22999999999999998,
+            "mean_rt_s": 0.3486688311688312,
+            "predicted_accuracy": 0.5469361160728776,
+            "predicted_timeout_rate": 0.25185733118975306,
+            "predicted_mean_rt_s": 0.34506215592246803,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": -1.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "lower",
+            "trials": 1000,
+            "accuracy": 0.704,
+            "conditional_accuracy": 0.704,
+            "timeout_rate": 0.0,
+            "mean_rt_s": 0.43801999999999996,
+            "predicted_accuracy": 0.7310055610880759,
+            "predicted_timeout_rate": 7.252160562609689e-05,
+            "predicted_mean_rt_s": 0.4309311852645165,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 0.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.367,
+            "conditional_accuracy": 0.5118549511854951,
+            "timeout_rate": 0.28300000000000003,
+            "mean_rt_s": 0.34543933054393305,
+            "predicted_accuracy": 0.35692524518316193,
+            "predicted_timeout_rate": 0.28614950963367614,
+            "predicted_mean_rt_s": 0.3477209732135825,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 0.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.474,
+            "conditional_accuracy": 0.4744744744744745,
+            "timeout_rate": 0.0010000000000000009,
+            "mean_rt_s": 0.4480480480480481,
+            "predicted_accuracy": 0.49991275476290586,
+            "predicted_timeout_rate": 0.00017449047418827135,
+            "predicted_mean_rt_s": 0.44969362040148414,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 1.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.554,
+            "conditional_accuracy": 0.751696065128901,
+            "timeout_rate": 0.263,
+            "mean_rt_s": 0.34585481682496605,
+            "predicted_accuracy": 0.5469361160728776,
+            "predicted_timeout_rate": 0.25185733118975306,
+            "predicted_mean_rt_s": 0.34506215592246803,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 1.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.746,
+            "conditional_accuracy": 0.746,
+            "timeout_rate": 0.0,
+            "mean_rt_s": 0.44109499999999996,
+            "predicted_accuracy": 0.7310055610880759,
+            "predicted_timeout_rate": 7.252160562609689e-05,
+            "predicted_mean_rt_s": 0.4309311852645165,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          }
+        ],
+        "correct_boundary": "lower for negative drift, upper otherwise; at zero drift upper is an assumed target label without directional evidence",
+        "mean_rt_definition": "mean among answered trials, weighted by response counts",
+        "pathway": "explicit choice API; sensory Signals retain TWIN detection"
+      }
+    },
+    {
+      "case": "sweep_0",
+      "seed": 4,
+      "overrides": {
+        "response.decision_bound": 0.5
+      },
+      "benchmark": "response.choice",
+      "metrics": {
+        "response.choice_accuracy": 0.5696666666666667,
+        "response.choice_timeout_rate": 0.13383333333333333,
+        "response.choice_mean_rt_s": 0.39923128728112367
+      },
+      "scores": {},
+      "validation": {
+        "response.choice_accuracy": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        },
+        "response.choice_timeout_rate": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        },
+        "response.choice_mean_rt_s": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        }
+      },
+      "references": {},
+      "skipped": null,
+      "details": {
+        "interpretation": "Model demonstration with assumed task settings; independent human evaluation pending.",
+        "protocol": {
+          "drifts": [
+            -1.0,
+            0.0,
+            1.0
+          ],
+          "deadlines": [
+            0.5,
+            2.0
+          ],
+          "trials": 1000
+        },
+        "protocol_sources": [
+          {
+            "parameter": "ChoiceProtocolParameters.drifts",
+            "value": [
+              -1.0,
+              0.0,
+              1.0
+            ],
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "decision units per second; not mapped from sensory Signals"
+          },
+          {
+            "parameter": "ChoiceProtocolParameters.deadlines",
+            "value": [
+              0.5,
+              2.0
+            ],
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "seconds, including the model's nondecision time"
+          },
+          {
+            "parameter": "ChoiceProtocolParameters.trials",
+            "value": 1000,
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "independent draws per condition from the native solver grid"
+          }
+        ],
+        "seed": 4,
+        "conditions": [
+          {
+            "drift": -1.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "lower",
+            "trials": 1000,
+            "accuracy": 0.53,
+            "conditional_accuracy": 0.7320441988950276,
+            "timeout_rate": 0.276,
+            "mean_rt_s": 0.34859116022099446,
+            "predicted_accuracy": 0.5469361160728776,
+            "predicted_timeout_rate": 0.25185733118975306,
+            "predicted_mean_rt_s": 0.34506215592246803,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": -1.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "lower",
+            "trials": 1000,
+            "accuracy": 0.734,
+            "conditional_accuracy": 0.734,
+            "timeout_rate": 0.0,
+            "mean_rt_s": 0.42478999999999995,
+            "predicted_accuracy": 0.7310055610880759,
+            "predicted_timeout_rate": 7.252160562609689e-05,
+            "predicted_mean_rt_s": 0.4309311852645165,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 0.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.355,
+            "conditional_accuracy": 0.49442896935933145,
+            "timeout_rate": 0.28200000000000003,
+            "mean_rt_s": 0.3465459610027855,
+            "predicted_accuracy": 0.35692524518316193,
+            "predicted_timeout_rate": 0.28614950963367614,
+            "predicted_mean_rt_s": 0.3477209732135825,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 0.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.502,
+            "conditional_accuracy": 0.502,
+            "timeout_rate": 0.0,
+            "mean_rt_s": 0.46104500000000004,
+            "predicted_accuracy": 0.49991275476290586,
+            "predicted_timeout_rate": 0.00017449047418827135,
+            "predicted_mean_rt_s": 0.44969362040148414,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 1.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.571,
+            "conditional_accuracy": 0.7562913907284768,
+            "timeout_rate": 0.245,
+            "mean_rt_s": 0.339158940397351,
+            "predicted_accuracy": 0.5469361160728776,
+            "predicted_timeout_rate": 0.25185733118975306,
+            "predicted_mean_rt_s": 0.34506215592246803,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 1.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.726,
+            "conditional_accuracy": 0.726,
+            "timeout_rate": 0.0,
+            "mean_rt_s": 0.43170500000000006,
+            "predicted_accuracy": 0.7310055610880759,
+            "predicted_timeout_rate": 7.252160562609689e-05,
+            "predicted_mean_rt_s": 0.4309311852645165,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          }
+        ],
+        "correct_boundary": "lower for negative drift, upper otherwise; at zero drift upper is an assumed target label without directional evidence",
+        "mean_rt_definition": "mean among answered trials, weighted by response counts",
+        "pathway": "explicit choice API; sensory Signals retain TWIN detection"
+      }
+    },
+    {
+      "case": "sweep_1",
+      "seed": 0,
+      "overrides": {
+        "response.decision_bound": 1.0
+      },
+      "benchmark": "response.choice",
+      "metrics": {
+        "response.choice_accuracy": 0.412,
+        "response.choice_timeout_rate": 0.453,
+        "response.choice_mean_rt_s": 0.8106291895185863
+      },
+      "scores": {},
+      "validation": {
+        "response.choice_accuracy": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        },
+        "response.choice_timeout_rate": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        },
+        "response.choice_mean_rt_s": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        }
+      },
+      "references": {},
+      "skipped": null,
+      "details": {
+        "interpretation": "Model demonstration with assumed task settings; independent human evaluation pending.",
+        "protocol": {
+          "drifts": [
+            -1.0,
+            0.0,
+            1.0
+          ],
+          "deadlines": [
+            0.5,
+            2.0
+          ],
+          "trials": 1000
+        },
+        "protocol_sources": [
+          {
+            "parameter": "ChoiceProtocolParameters.drifts",
+            "value": [
+              -1.0,
+              0.0,
+              1.0
+            ],
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "decision units per second; not mapped from sensory Signals"
+          },
+          {
+            "parameter": "ChoiceProtocolParameters.deadlines",
+            "value": [
+              0.5,
+              2.0
+            ],
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "seconds, including the model's nondecision time"
+          },
+          {
+            "parameter": "ChoiceProtocolParameters.trials",
+            "value": 1000,
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "independent draws per condition from the native solver grid"
+          }
+        ],
+        "seed": 0,
+        "conditions": [
+          {
+            "drift": -1.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "lower",
+            "trials": 1000,
+            "accuracy": 0.148,
+            "conditional_accuracy": 0.8505747126436781,
+            "timeout_rate": 0.8260000000000001,
+            "mean_rt_s": 0.4209770114942529,
+            "predicted_accuracy": 0.16840884809645987,
+            "predicted_timeout_rate": 0.808799492746854,
+            "predicted_mean_rt_s": 0.4156828873569534,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": -1.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "lower",
+            "trials": 1000,
+            "accuracy": 0.798,
+            "conditional_accuracy": 0.8525641025641025,
+            "timeout_rate": 0.06399999999999995,
+            "mean_rt_s": 0.8464209401709402,
+            "predicted_accuracy": 0.8266916641074713,
+            "predicted_timeout_rate": 0.06142778538119742,
+            "predicted_mean_rt_s": 0.8557180582787056,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 0.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.07,
+            "conditional_accuracy": 0.5035971223021583,
+            "timeout_rate": 0.861,
+            "mean_rt_s": 0.4208273381294964,
+            "predicted_accuracy": 0.06903605733579699,
+            "predicted_timeout_rate": 0.861927885328406,
+            "predicted_mean_rt_s": 0.41725124463097674,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 0.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.438,
+            "conditional_accuracy": 0.49772727272727274,
+            "timeout_rate": 0.12,
+            "mean_rt_s": 0.9485454545454546,
+            "predicted_accuracy": 0.4311158753244447,
+            "predicted_timeout_rate": 0.1377682493511107,
+            "predicted_mean_rt_s": 0.9422617395005903,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 1.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.179,
+            "conditional_accuracy": 0.8817733990147784,
+            "timeout_rate": 0.7969999999999999,
+            "mean_rt_s": 0.4158620689655172,
+            "predicted_accuracy": 0.16840884809645987,
+            "predicted_timeout_rate": 0.808799492746854,
+            "predicted_mean_rt_s": 0.4156828873569534,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 1.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.839,
+            "conditional_accuracy": 0.8831578947368421,
+            "timeout_rate": 0.050000000000000044,
+            "mean_rt_s": 0.8603684210526316,
+            "predicted_accuracy": 0.8266916641074713,
+            "predicted_timeout_rate": 0.06142778538119739,
+            "predicted_mean_rt_s": 0.8557180582787056,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          }
+        ],
+        "correct_boundary": "lower for negative drift, upper otherwise; at zero drift upper is an assumed target label without directional evidence",
+        "mean_rt_definition": "mean among answered trials, weighted by response counts",
+        "pathway": "explicit choice API; sensory Signals retain TWIN detection"
+      }
+    },
+    {
+      "case": "sweep_1",
+      "seed": 1,
+      "overrides": {
+        "response.decision_bound": 1.0
+      },
+      "benchmark": "response.choice",
+      "metrics": {
+        "response.choice_accuracy": 0.41183333333333333,
+        "response.choice_timeout_rate": 0.4601666666666666,
+        "response.choice_mean_rt_s": 0.806724297622723
+      },
+      "scores": {},
+      "validation": {
+        "response.choice_accuracy": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        },
+        "response.choice_timeout_rate": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        },
+        "response.choice_mean_rt_s": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        }
+      },
+      "references": {},
+      "skipped": null,
+      "details": {
+        "interpretation": "Model demonstration with assumed task settings; independent human evaluation pending.",
+        "protocol": {
+          "drifts": [
+            -1.0,
+            0.0,
+            1.0
+          ],
+          "deadlines": [
+            0.5,
+            2.0
+          ],
+          "trials": 1000
+        },
+        "protocol_sources": [
+          {
+            "parameter": "ChoiceProtocolParameters.drifts",
+            "value": [
+              -1.0,
+              0.0,
+              1.0
+            ],
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "decision units per second; not mapped from sensory Signals"
+          },
+          {
+            "parameter": "ChoiceProtocolParameters.deadlines",
+            "value": [
+              0.5,
+              2.0
+            ],
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "seconds, including the model's nondecision time"
+          },
+          {
+            "parameter": "ChoiceProtocolParameters.trials",
+            "value": 1000,
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "independent draws per condition from the native solver grid"
+          }
+        ],
+        "seed": 1,
+        "conditions": [
+          {
+            "drift": -1.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "lower",
+            "trials": 1000,
+            "accuracy": 0.158,
+            "conditional_accuracy": 0.8926553672316384,
+            "timeout_rate": 0.823,
+            "mean_rt_s": 0.4146610169491524,
+            "predicted_accuracy": 0.16840884809645987,
+            "predicted_timeout_rate": 0.808799492746854,
+            "predicted_mean_rt_s": 0.4156828873569534,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": -1.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "lower",
+            "trials": 1000,
+            "accuracy": 0.826,
+            "conditional_accuracy": 0.8824786324786325,
+            "timeout_rate": 0.06399999999999995,
+            "mean_rt_s": 0.8449358974358975,
+            "predicted_accuracy": 0.8266916641074713,
+            "predicted_timeout_rate": 0.06142778538119742,
+            "predicted_mean_rt_s": 0.8557180582787056,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 0.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.079,
+            "conditional_accuracy": 0.47305389221556887,
+            "timeout_rate": 0.833,
+            "mean_rt_s": 0.41922155688622764,
+            "predicted_accuracy": 0.06903605733579699,
+            "predicted_timeout_rate": 0.861927885328406,
+            "predicted_mean_rt_s": 0.41725124463097674,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 0.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.429,
+            "conditional_accuracy": 0.5064935064935064,
+            "timeout_rate": 0.15300000000000002,
+            "mean_rt_s": 0.9397166469893743,
+            "predicted_accuracy": 0.4311158753244447,
+            "predicted_timeout_rate": 0.1377682493511107,
+            "predicted_mean_rt_s": 0.9422617395005903,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 1.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.174,
+            "conditional_accuracy": 0.9405405405405406,
+            "timeout_rate": 0.815,
+            "mean_rt_s": 0.42016216216216223,
+            "predicted_accuracy": 0.16840884809645987,
+            "predicted_timeout_rate": 0.808799492746854,
+            "predicted_mean_rt_s": 0.4156828873569534,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 1.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.805,
+            "conditional_accuracy": 0.8683926645091694,
+            "timeout_rate": 0.07299999999999995,
+            "mean_rt_s": 0.8684412081984897,
+            "predicted_accuracy": 0.8266916641074713,
+            "predicted_timeout_rate": 0.06142778538119739,
+            "predicted_mean_rt_s": 0.8557180582787056,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          }
+        ],
+        "correct_boundary": "lower for negative drift, upper otherwise; at zero drift upper is an assumed target label without directional evidence",
+        "mean_rt_definition": "mean among answered trials, weighted by response counts",
+        "pathway": "explicit choice API; sensory Signals retain TWIN detection"
+      }
+    },
+    {
+      "case": "sweep_1",
+      "seed": 2,
+      "overrides": {
+        "response.decision_bound": 1.0
+      },
+      "benchmark": "response.choice",
+      "metrics": {
+        "response.choice_accuracy": 0.4136666666666667,
+        "response.choice_timeout_rate": 0.45916666666666667,
+        "response.choice_mean_rt_s": 0.8090169491525424
+      },
+      "scores": {},
+      "validation": {
+        "response.choice_accuracy": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        },
+        "response.choice_timeout_rate": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        },
+        "response.choice_mean_rt_s": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        }
+      },
+      "references": {},
+      "skipped": null,
+      "details": {
+        "interpretation": "Model demonstration with assumed task settings; independent human evaluation pending.",
+        "protocol": {
+          "drifts": [
+            -1.0,
+            0.0,
+            1.0
+          ],
+          "deadlines": [
+            0.5,
+            2.0
+          ],
+          "trials": 1000
+        },
+        "protocol_sources": [
+          {
+            "parameter": "ChoiceProtocolParameters.drifts",
+            "value": [
+              -1.0,
+              0.0,
+              1.0
+            ],
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "decision units per second; not mapped from sensory Signals"
+          },
+          {
+            "parameter": "ChoiceProtocolParameters.deadlines",
+            "value": [
+              0.5,
+              2.0
+            ],
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "seconds, including the model's nondecision time"
+          },
+          {
+            "parameter": "ChoiceProtocolParameters.trials",
+            "value": 1000,
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "independent draws per condition from the native solver grid"
+          }
+        ],
+        "seed": 2,
+        "conditions": [
+          {
+            "drift": -1.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "lower",
+            "trials": 1000,
+            "accuracy": 0.169,
+            "conditional_accuracy": 0.9037433155080213,
+            "timeout_rate": 0.813,
+            "mean_rt_s": 0.42414438502673796,
+            "predicted_accuracy": 0.16840884809645987,
+            "predicted_timeout_rate": 0.808799492746854,
+            "predicted_mean_rt_s": 0.4156828873569534,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": -1.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "lower",
+            "trials": 1000,
+            "accuracy": 0.818,
+            "conditional_accuracy": 0.8720682302771855,
+            "timeout_rate": 0.062000000000000055,
+            "mean_rt_s": 0.8550053304904052,
+            "predicted_accuracy": 0.8266916641074713,
+            "predicted_timeout_rate": 0.06142778538119742,
+            "predicted_mean_rt_s": 0.8557180582787056,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 0.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.058,
+            "conditional_accuracy": 0.4393939393939394,
+            "timeout_rate": 0.868,
+            "mean_rt_s": 0.42109848484848483,
+            "predicted_accuracy": 0.06903605733579699,
+            "predicted_timeout_rate": 0.861927885328406,
+            "predicted_mean_rt_s": 0.41725124463097674,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 0.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.447,
+            "conditional_accuracy": 0.5228070175438596,
+            "timeout_rate": 0.14500000000000002,
+            "mean_rt_s": 0.9323040935672514,
+            "predicted_accuracy": 0.4311158753244447,
+            "predicted_timeout_rate": 0.1377682493511107,
+            "predicted_mean_rt_s": 0.9422617395005903,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 1.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.161,
+            "conditional_accuracy": 0.875,
+            "timeout_rate": 0.8160000000000001,
+            "mean_rt_s": 0.41877717391304353,
+            "predicted_accuracy": 0.16840884809645987,
+            "predicted_timeout_rate": 0.808799492746854,
+            "predicted_mean_rt_s": 0.4156828873569534,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 1.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.829,
+            "conditional_accuracy": 0.8735511064278187,
+            "timeout_rate": 0.051000000000000045,
+            "mean_rt_s": 0.8579452054794521,
+            "predicted_accuracy": 0.8266916641074713,
+            "predicted_timeout_rate": 0.06142778538119739,
+            "predicted_mean_rt_s": 0.8557180582787056,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          }
+        ],
+        "correct_boundary": "lower for negative drift, upper otherwise; at zero drift upper is an assumed target label without directional evidence",
+        "mean_rt_definition": "mean among answered trials, weighted by response counts",
+        "pathway": "explicit choice API; sensory Signals retain TWIN detection"
+      }
+    },
+    {
+      "case": "sweep_1",
+      "seed": 3,
+      "overrides": {
+        "response.decision_bound": 1.0
+      },
+      "benchmark": "response.choice",
+      "metrics": {
+        "response.choice_accuracy": 0.4126666666666667,
+        "response.choice_timeout_rate": 0.45549999999999996,
+        "response.choice_mean_rt_s": 0.8036623813896543
+      },
+      "scores": {},
+      "validation": {
+        "response.choice_accuracy": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        },
+        "response.choice_timeout_rate": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        },
+        "response.choice_mean_rt_s": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        }
+      },
+      "references": {},
+      "skipped": null,
+      "details": {
+        "interpretation": "Model demonstration with assumed task settings; independent human evaluation pending.",
+        "protocol": {
+          "drifts": [
+            -1.0,
+            0.0,
+            1.0
+          ],
+          "deadlines": [
+            0.5,
+            2.0
+          ],
+          "trials": 1000
+        },
+        "protocol_sources": [
+          {
+            "parameter": "ChoiceProtocolParameters.drifts",
+            "value": [
+              -1.0,
+              0.0,
+              1.0
+            ],
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "decision units per second; not mapped from sensory Signals"
+          },
+          {
+            "parameter": "ChoiceProtocolParameters.deadlines",
+            "value": [
+              0.5,
+              2.0
+            ],
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "seconds, including the model's nondecision time"
+          },
+          {
+            "parameter": "ChoiceProtocolParameters.trials",
+            "value": 1000,
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "independent draws per condition from the native solver grid"
+          }
+        ],
+        "seed": 3,
+        "conditions": [
+          {
+            "drift": -1.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "lower",
+            "trials": 1000,
+            "accuracy": 0.177,
+            "conditional_accuracy": 0.8894472361809045,
+            "timeout_rate": 0.8009999999999999,
+            "mean_rt_s": 0.4154773869346734,
+            "predicted_accuracy": 0.16840884809645987,
+            "predicted_timeout_rate": 0.808799492746854,
+            "predicted_mean_rt_s": 0.4156828873569534,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": -1.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "lower",
+            "trials": 1000,
+            "accuracy": 0.798,
+            "conditional_accuracy": 0.8617710583153347,
+            "timeout_rate": 0.07399999999999995,
+            "mean_rt_s": 0.8504805615550757,
+            "predicted_accuracy": 0.8266916641074713,
+            "predicted_timeout_rate": 0.06142778538119742,
+            "predicted_mean_rt_s": 0.8557180582787056,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 0.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.091,
+            "conditional_accuracy": 0.5947712418300654,
+            "timeout_rate": 0.847,
+            "mean_rt_s": 0.41882352941176476,
+            "predicted_accuracy": 0.06903605733579699,
+            "predicted_timeout_rate": 0.861927885328406,
+            "predicted_mean_rt_s": 0.41725124463097674,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 0.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.407,
+            "conditional_accuracy": 0.46943483275663206,
+            "timeout_rate": 0.133,
+            "mean_rt_s": 0.9433391003460209,
+            "predicted_accuracy": 0.4311158753244447,
+            "predicted_timeout_rate": 0.1377682493511107,
+            "predicted_mean_rt_s": 0.9422617395005903,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 1.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.169,
+            "conditional_accuracy": 0.8756476683937824,
+            "timeout_rate": 0.8069999999999999,
+            "mean_rt_s": 0.4107512953367876,
+            "predicted_accuracy": 0.16840884809645987,
+            "predicted_timeout_rate": 0.808799492746854,
+            "predicted_mean_rt_s": 0.4156828873569534,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 1.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.834,
+            "conditional_accuracy": 0.8977395048439182,
+            "timeout_rate": 0.07099999999999995,
+            "mean_rt_s": 0.854800861141012,
+            "predicted_accuracy": 0.8266916641074713,
+            "predicted_timeout_rate": 0.06142778538119739,
+            "predicted_mean_rt_s": 0.8557180582787056,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          }
+        ],
+        "correct_boundary": "lower for negative drift, upper otherwise; at zero drift upper is an assumed target label without directional evidence",
+        "mean_rt_definition": "mean among answered trials, weighted by response counts",
+        "pathway": "explicit choice API; sensory Signals retain TWIN detection"
+      }
+    },
+    {
+      "case": "sweep_1",
+      "seed": 4,
+      "overrides": {
+        "response.decision_bound": 1.0
+      },
+      "benchmark": "response.choice",
+      "metrics": {
+        "response.choice_accuracy": 0.4135,
+        "response.choice_timeout_rate": 0.45816666666666667,
+        "response.choice_mean_rt_s": 0.8119732390033837
+      },
+      "scores": {},
+      "validation": {
+        "response.choice_accuracy": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        },
+        "response.choice_timeout_rate": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        },
+        "response.choice_mean_rt_s": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        }
+      },
+      "references": {},
+      "skipped": null,
+      "details": {
+        "interpretation": "Model demonstration with assumed task settings; independent human evaluation pending.",
+        "protocol": {
+          "drifts": [
+            -1.0,
+            0.0,
+            1.0
+          ],
+          "deadlines": [
+            0.5,
+            2.0
+          ],
+          "trials": 1000
+        },
+        "protocol_sources": [
+          {
+            "parameter": "ChoiceProtocolParameters.drifts",
+            "value": [
+              -1.0,
+              0.0,
+              1.0
+            ],
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "decision units per second; not mapped from sensory Signals"
+          },
+          {
+            "parameter": "ChoiceProtocolParameters.deadlines",
+            "value": [
+              0.5,
+              2.0
+            ],
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "seconds, including the model's nondecision time"
+          },
+          {
+            "parameter": "ChoiceProtocolParameters.trials",
+            "value": 1000,
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "independent draws per condition from the native solver grid"
+          }
+        ],
+        "seed": 4,
+        "conditions": [
+          {
+            "drift": -1.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "lower",
+            "trials": 1000,
+            "accuracy": 0.159,
+            "conditional_accuracy": 0.8784530386740331,
+            "timeout_rate": 0.819,
+            "mean_rt_s": 0.4182872928176796,
+            "predicted_accuracy": 0.16840884809645987,
+            "predicted_timeout_rate": 0.808799492746854,
+            "predicted_mean_rt_s": 0.4156828873569534,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": -1.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "lower",
+            "trials": 1000,
+            "accuracy": 0.814,
+            "conditional_accuracy": 0.8668796592119276,
+            "timeout_rate": 0.061000000000000054,
+            "mean_rt_s": 0.8579126730564431,
+            "predicted_accuracy": 0.8266916641074713,
+            "predicted_timeout_rate": 0.06142778538119742,
+            "predicted_mean_rt_s": 0.8557180582787056,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 0.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.064,
+            "conditional_accuracy": 0.4740740740740741,
+            "timeout_rate": 0.865,
+            "mean_rt_s": 0.41322222222222227,
+            "predicted_accuracy": 0.06903605733579699,
+            "predicted_timeout_rate": 0.861927885328406,
+            "predicted_mean_rt_s": 0.41725124463097674,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 0.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.428,
+            "conditional_accuracy": 0.5077105575326216,
+            "timeout_rate": 0.15700000000000003,
+            "mean_rt_s": 0.9446619217081851,
+            "predicted_accuracy": 0.4311158753244447,
+            "predicted_timeout_rate": 0.1377682493511107,
+            "predicted_mean_rt_s": 0.9422617395005903,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 1.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.183,
+            "conditional_accuracy": 0.8433179723502304,
+            "timeout_rate": 0.783,
+            "mean_rt_s": 0.41486175115207374,
+            "predicted_accuracy": 0.16840884809645987,
+            "predicted_timeout_rate": 0.808799492746854,
+            "predicted_mean_rt_s": 0.4156828873569534,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 1.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.833,
+            "conditional_accuracy": 0.8899572649572649,
+            "timeout_rate": 0.06399999999999995,
+            "mean_rt_s": 0.8720886752136752,
+            "predicted_accuracy": 0.8266916641074713,
+            "predicted_timeout_rate": 0.06142778538119739,
+            "predicted_mean_rt_s": 0.8557180582787056,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          }
+        ],
+        "correct_boundary": "lower for negative drift, upper otherwise; at zero drift upper is an assumed target label without directional evidence",
+        "mean_rt_definition": "mean among answered trials, weighted by response counts",
+        "pathway": "explicit choice API; sensory Signals retain TWIN detection"
+      }
+    },
+    {
+      "case": "sweep_2",
+      "seed": 0,
+      "overrides": {
+        "response.decision_bound": 1.5
+      },
+      "benchmark": "response.choice",
+      "metrics": {
+        "response.choice_accuracy": 0.29616666666666663,
+        "response.choice_timeout_rate": 0.6454999999999999,
+        "response.choice_mean_rt_s": 1.1222073342736247
+      },
+      "scores": {},
+      "validation": {
+        "response.choice_accuracy": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        },
+        "response.choice_timeout_rate": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        },
+        "response.choice_mean_rt_s": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        }
+      },
+      "references": {},
+      "skipped": null,
+      "details": {
+        "interpretation": "Model demonstration with assumed task settings; independent human evaluation pending.",
+        "protocol": {
+          "drifts": [
+            -1.0,
+            0.0,
+            1.0
+          ],
+          "deadlines": [
+            0.5,
+            2.0
+          ],
+          "trials": 1000
+        },
+        "protocol_sources": [
+          {
+            "parameter": "ChoiceProtocolParameters.drifts",
+            "value": [
+              -1.0,
+              0.0,
+              1.0
+            ],
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "decision units per second; not mapped from sensory Signals"
+          },
+          {
+            "parameter": "ChoiceProtocolParameters.deadlines",
+            "value": [
+              0.5,
+              2.0
+            ],
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "seconds, including the model's nondecision time"
+          },
+          {
+            "parameter": "ChoiceProtocolParameters.trials",
+            "value": 1000,
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "independent draws per condition from the native solver grid"
+          }
+        ],
+        "seed": 0,
+        "conditions": [
+          {
+            "drift": -1.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "lower",
+            "trials": 1000,
+            "accuracy": 0.026,
+            "conditional_accuracy": 0.896551724137931,
+            "timeout_rate": 0.971,
+            "mean_rt_s": 0.44758620689655165,
+            "predicted_accuracy": 0.02525405406329575,
+            "predicted_timeout_rate": 0.9734886206204892,
+            "predicted_mean_rt_s": 0.4496467124795995,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": -1.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "lower",
+            "trials": 1000,
+            "accuracy": 0.718,
+            "conditional_accuracy": 0.9336801040312094,
+            "timeout_rate": 0.23099999999999998,
+            "mean_rt_s": 1.0964954486345904,
+            "predicted_accuracy": 0.7270821776192598,
+            "predicted_timeout_rate": 0.23671853229455475,
+            "predicted_mean_rt_s": 1.1238904860926975,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 0.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.004,
+            "conditional_accuracy": 0.5,
+            "timeout_rate": 0.992,
+            "mean_rt_s": 0.4475,
+            "predicted_accuracy": 0.006385356559944856,
+            "predicted_timeout_rate": 0.9872292868801102,
+            "predicted_mean_rt_s": 0.45043361572848595,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 0.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.27,
+            "conditional_accuracy": 0.5094339622641509,
+            "timeout_rate": 0.47,
+            "mean_rt_s": 1.2144716981132075,
+            "predicted_accuracy": 0.26308100831964154,
+            "predicted_timeout_rate": 0.4738379833607169,
+            "predicted_mean_rt_s": 1.2104023318009893,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 1.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.023,
+            "conditional_accuracy": 1.0,
+            "timeout_rate": 0.977,
+            "mean_rt_s": 0.4413043478260869,
+            "predicted_accuracy": 0.02525405406329575,
+            "predicted_timeout_rate": 0.9734886206204892,
+            "predicted_mean_rt_s": 0.4496467124795995,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 1.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.736,
+            "conditional_accuracy": 0.9583333333333334,
+            "timeout_rate": 0.23199999999999998,
+            "mean_rt_s": 1.1371744791666667,
+            "predicted_accuracy": 0.7270821776192598,
+            "predicted_timeout_rate": 0.23671853229455478,
+            "predicted_mean_rt_s": 1.1238904860926975,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          }
+        ],
+        "correct_boundary": "lower for negative drift, upper otherwise; at zero drift upper is an assumed target label without directional evidence",
+        "mean_rt_definition": "mean among answered trials, weighted by response counts",
+        "pathway": "explicit choice API; sensory Signals retain TWIN detection"
+      }
+    },
+    {
+      "case": "sweep_2",
+      "seed": 1,
+      "overrides": {
+        "response.decision_bound": 1.5
+      },
+      "benchmark": "response.choice",
+      "metrics": {
+        "response.choice_accuracy": 0.29116666666666663,
+        "response.choice_timeout_rate": 0.6518333333333333,
+        "response.choice_mean_rt_s": 1.128721876495931
+      },
+      "scores": {},
+      "validation": {
+        "response.choice_accuracy": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        },
+        "response.choice_timeout_rate": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        },
+        "response.choice_mean_rt_s": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        }
+      },
+      "references": {},
+      "skipped": null,
+      "details": {
+        "interpretation": "Model demonstration with assumed task settings; independent human evaluation pending.",
+        "protocol": {
+          "drifts": [
+            -1.0,
+            0.0,
+            1.0
+          ],
+          "deadlines": [
+            0.5,
+            2.0
+          ],
+          "trials": 1000
+        },
+        "protocol_sources": [
+          {
+            "parameter": "ChoiceProtocolParameters.drifts",
+            "value": [
+              -1.0,
+              0.0,
+              1.0
+            ],
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "decision units per second; not mapped from sensory Signals"
+          },
+          {
+            "parameter": "ChoiceProtocolParameters.deadlines",
+            "value": [
+              0.5,
+              2.0
+            ],
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "seconds, including the model's nondecision time"
+          },
+          {
+            "parameter": "ChoiceProtocolParameters.trials",
+            "value": 1000,
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "independent draws per condition from the native solver grid"
+          }
+        ],
+        "seed": 1,
+        "conditions": [
+          {
+            "drift": -1.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "lower",
+            "trials": 1000,
+            "accuracy": 0.024,
+            "conditional_accuracy": 1.0,
+            "timeout_rate": 0.976,
+            "mean_rt_s": 0.4539583333333333,
+            "predicted_accuracy": 0.02525405406329575,
+            "predicted_timeout_rate": 0.9734886206204892,
+            "predicted_mean_rt_s": 0.4496467124795995,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": -1.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "lower",
+            "trials": 1000,
+            "accuracy": 0.741,
+            "conditional_accuracy": 0.9561290322580646,
+            "timeout_rate": 0.22499999999999998,
+            "mean_rt_s": 1.1334387096774192,
+            "predicted_accuracy": 0.7270821776192598,
+            "predicted_timeout_rate": 0.23671853229455475,
+            "predicted_mean_rt_s": 1.1238904860926975,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 0.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.006,
+            "conditional_accuracy": 0.4,
+            "timeout_rate": 0.985,
+            "mean_rt_s": 0.4600000000000001,
+            "predicted_accuracy": 0.006385356559944856,
+            "predicted_timeout_rate": 0.9872292868801102,
+            "predicted_mean_rt_s": 0.45043361572848595,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 0.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.252,
+            "conditional_accuracy": 0.490272373540856,
+            "timeout_rate": 0.486,
+            "mean_rt_s": 1.1749416342412453,
+            "predicted_accuracy": 0.26308100831964154,
+            "predicted_timeout_rate": 0.4738379833607169,
+            "predicted_mean_rt_s": 1.2104023318009893,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 1.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.017,
+            "conditional_accuracy": 0.85,
+            "timeout_rate": 0.98,
+            "mean_rt_s": 0.4455,
+            "predicted_accuracy": 0.02525405406329575,
+            "predicted_timeout_rate": 0.9734886206204892,
+            "predicted_mean_rt_s": 0.4496467124795995,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 1.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.707,
+            "conditional_accuracy": 0.9541160593792173,
+            "timeout_rate": 0.259,
+            "mean_rt_s": 1.1455600539811068,
+            "predicted_accuracy": 0.7270821776192598,
+            "predicted_timeout_rate": 0.23671853229455478,
+            "predicted_mean_rt_s": 1.1238904860926975,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          }
+        ],
+        "correct_boundary": "lower for negative drift, upper otherwise; at zero drift upper is an assumed target label without directional evidence",
+        "mean_rt_definition": "mean among answered trials, weighted by response counts",
+        "pathway": "explicit choice API; sensory Signals retain TWIN detection"
+      }
+    },
+    {
+      "case": "sweep_2",
+      "seed": 2,
+      "overrides": {
+        "response.decision_bound": 1.5
+      },
+      "benchmark": "response.choice",
+      "metrics": {
+        "response.choice_accuracy": 0.2953333333333333,
+        "response.choice_timeout_rate": 0.6458333333333333,
+        "response.choice_mean_rt_s": 1.1294658823529413
+      },
+      "scores": {},
+      "validation": {
+        "response.choice_accuracy": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        },
+        "response.choice_timeout_rate": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        },
+        "response.choice_mean_rt_s": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        }
+      },
+      "references": {},
+      "skipped": null,
+      "details": {
+        "interpretation": "Model demonstration with assumed task settings; independent human evaluation pending.",
+        "protocol": {
+          "drifts": [
+            -1.0,
+            0.0,
+            1.0
+          ],
+          "deadlines": [
+            0.5,
+            2.0
+          ],
+          "trials": 1000
+        },
+        "protocol_sources": [
+          {
+            "parameter": "ChoiceProtocolParameters.drifts",
+            "value": [
+              -1.0,
+              0.0,
+              1.0
+            ],
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "decision units per second; not mapped from sensory Signals"
+          },
+          {
+            "parameter": "ChoiceProtocolParameters.deadlines",
+            "value": [
+              0.5,
+              2.0
+            ],
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "seconds, including the model's nondecision time"
+          },
+          {
+            "parameter": "ChoiceProtocolParameters.trials",
+            "value": 1000,
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "independent draws per condition from the native solver grid"
+          }
+        ],
+        "seed": 2,
+        "conditions": [
+          {
+            "drift": -1.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "lower",
+            "trials": 1000,
+            "accuracy": 0.021,
+            "conditional_accuracy": 1.0,
+            "timeout_rate": 0.979,
+            "mean_rt_s": 0.445,
+            "predicted_accuracy": 0.02525405406329575,
+            "predicted_timeout_rate": 0.9734886206204892,
+            "predicted_mean_rt_s": 0.4496467124795995,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": -1.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "lower",
+            "trials": 1000,
+            "accuracy": 0.714,
+            "conditional_accuracy": 0.9394736842105263,
+            "timeout_rate": 0.24,
+            "mean_rt_s": 1.1194342105263158,
+            "predicted_accuracy": 0.7270821776192598,
+            "predicted_timeout_rate": 0.23671853229455475,
+            "predicted_mean_rt_s": 1.1238904860926975,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 0.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.005,
+            "conditional_accuracy": 0.5,
+            "timeout_rate": 0.99,
+            "mean_rt_s": 0.45450000000000007,
+            "predicted_accuracy": 0.006385356559944856,
+            "predicted_timeout_rate": 0.9872292868801102,
+            "predicted_mean_rt_s": 0.45043361572848595,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 0.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.281,
+            "conditional_accuracy": 0.5137111517367459,
+            "timeout_rate": 0.45299999999999996,
+            "mean_rt_s": 1.221873857404022,
+            "predicted_accuracy": 0.26308100831964154,
+            "predicted_timeout_rate": 0.4738379833607169,
+            "predicted_mean_rt_s": 1.2104023318009893,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 1.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.024,
+            "conditional_accuracy": 1.0,
+            "timeout_rate": 0.976,
+            "mean_rt_s": 0.42895833333333333,
+            "predicted_accuracy": 0.02525405406329575,
+            "predicted_timeout_rate": 0.9734886206204892,
+            "predicted_mean_rt_s": 0.4496467124795995,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 1.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.727,
+            "conditional_accuracy": 0.9528178243774574,
+            "timeout_rate": 0.237,
+            "mean_rt_s": 1.1229292267365663,
+            "predicted_accuracy": 0.7270821776192598,
+            "predicted_timeout_rate": 0.23671853229455478,
+            "predicted_mean_rt_s": 1.1238904860926975,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          }
+        ],
+        "correct_boundary": "lower for negative drift, upper otherwise; at zero drift upper is an assumed target label without directional evidence",
+        "mean_rt_definition": "mean among answered trials, weighted by response counts",
+        "pathway": "explicit choice API; sensory Signals retain TWIN detection"
+      }
+    },
+    {
+      "case": "sweep_2",
+      "seed": 3,
+      "overrides": {
+        "response.decision_bound": 1.5
+      },
+      "benchmark": "response.choice",
+      "metrics": {
+        "response.choice_accuracy": 0.2925,
+        "response.choice_timeout_rate": 0.6531666666666666,
+        "response.choice_mean_rt_s": 1.1118044209514657
+      },
+      "scores": {},
+      "validation": {
+        "response.choice_accuracy": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        },
+        "response.choice_timeout_rate": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        },
+        "response.choice_mean_rt_s": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        }
+      },
+      "references": {},
+      "skipped": null,
+      "details": {
+        "interpretation": "Model demonstration with assumed task settings; independent human evaluation pending.",
+        "protocol": {
+          "drifts": [
+            -1.0,
+            0.0,
+            1.0
+          ],
+          "deadlines": [
+            0.5,
+            2.0
+          ],
+          "trials": 1000
+        },
+        "protocol_sources": [
+          {
+            "parameter": "ChoiceProtocolParameters.drifts",
+            "value": [
+              -1.0,
+              0.0,
+              1.0
+            ],
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "decision units per second; not mapped from sensory Signals"
+          },
+          {
+            "parameter": "ChoiceProtocolParameters.deadlines",
+            "value": [
+              0.5,
+              2.0
+            ],
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "seconds, including the model's nondecision time"
+          },
+          {
+            "parameter": "ChoiceProtocolParameters.trials",
+            "value": 1000,
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "independent draws per condition from the native solver grid"
+          }
+        ],
+        "seed": 3,
+        "conditions": [
+          {
+            "drift": -1.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "lower",
+            "trials": 1000,
+            "accuracy": 0.023,
+            "conditional_accuracy": 0.9583333333333334,
+            "timeout_rate": 0.976,
+            "mean_rt_s": 0.43854166666666666,
+            "predicted_accuracy": 0.02525405406329575,
+            "predicted_timeout_rate": 0.9734886206204892,
+            "predicted_mean_rt_s": 0.4496467124795995,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": -1.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "lower",
+            "trials": 1000,
+            "accuracy": 0.698,
+            "conditional_accuracy": 0.9381720430107527,
+            "timeout_rate": 0.256,
+            "mean_rt_s": 1.0999999999999999,
+            "predicted_accuracy": 0.7270821776192598,
+            "predicted_timeout_rate": 0.23671853229455475,
+            "predicted_mean_rt_s": 1.1238904860926975,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 0.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.004,
+            "conditional_accuracy": 0.3333333333333333,
+            "timeout_rate": 0.988,
+            "mean_rt_s": 0.42124999999999996,
+            "predicted_accuracy": 0.006385356559944856,
+            "predicted_timeout_rate": 0.9872292868801102,
+            "predicted_mean_rt_s": 0.45043361572848595,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 0.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.26,
+            "conditional_accuracy": 0.5241935483870968,
+            "timeout_rate": 0.504,
+            "mean_rt_s": 1.1948084677419355,
+            "predicted_accuracy": 0.26308100831964154,
+            "predicted_timeout_rate": 0.4738379833607169,
+            "predicted_mean_rt_s": 1.2104023318009893,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 1.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.03,
+            "conditional_accuracy": 0.967741935483871,
+            "timeout_rate": 0.969,
+            "mean_rt_s": 0.4467741935483871,
+            "predicted_accuracy": 0.02525405406329575,
+            "predicted_timeout_rate": 0.9734886206204892,
+            "predicted_mean_rt_s": 0.4496467124795995,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 1.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.74,
+            "conditional_accuracy": 0.9560723514211886,
+            "timeout_rate": 0.22599999999999998,
+            "mean_rt_s": 1.1281782945736434,
+            "predicted_accuracy": 0.7270821776192598,
+            "predicted_timeout_rate": 0.23671853229455478,
+            "predicted_mean_rt_s": 1.1238904860926975,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          }
+        ],
+        "correct_boundary": "lower for negative drift, upper otherwise; at zero drift upper is an assumed target label without directional evidence",
+        "mean_rt_definition": "mean among answered trials, weighted by response counts",
+        "pathway": "explicit choice API; sensory Signals retain TWIN detection"
+      }
+    },
+    {
+      "case": "sweep_2",
+      "seed": 4,
+      "overrides": {
+        "response.decision_bound": 1.5
+      },
+      "benchmark": "response.choice",
+      "metrics": {
+        "response.choice_accuracy": 0.2925,
+        "response.choice_timeout_rate": 0.6489999999999999,
+        "response.choice_mean_rt_s": 1.1149026590693258
+      },
+      "scores": {},
+      "validation": {
+        "response.choice_accuracy": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        },
+        "response.choice_timeout_rate": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        },
+        "response.choice_mean_rt_s": {
+          "role": "unclassified",
+          "evaluation_data": [],
+          "fitting_data": [],
+          "rationale": "No evaluation data declaration is registered."
+        }
+      },
+      "references": {},
+      "skipped": null,
+      "details": {
+        "interpretation": "Model demonstration with assumed task settings; independent human evaluation pending.",
+        "protocol": {
+          "drifts": [
+            -1.0,
+            0.0,
+            1.0
+          ],
+          "deadlines": [
+            0.5,
+            2.0
+          ],
+          "trials": 1000
+        },
+        "protocol_sources": [
+          {
+            "parameter": "ChoiceProtocolParameters.drifts",
+            "value": [
+              -1.0,
+              0.0,
+              1.0
+            ],
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "decision units per second; not mapped from sensory Signals"
+          },
+          {
+            "parameter": "ChoiceProtocolParameters.deadlines",
+            "value": [
+              0.5,
+              2.0
+            ],
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "seconds, including the model's nondecision time"
+          },
+          {
+            "parameter": "ChoiceProtocolParameters.trials",
+            "value": 1000,
+            "kind": "assumed",
+            "citation": "Assumed choice demonstration protocol",
+            "doi": null,
+            "note": "independent draws per condition from the native solver grid"
+          }
+        ],
+        "seed": 4,
+        "conditions": [
+          {
+            "drift": -1.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "lower",
+            "trials": 1000,
+            "accuracy": 0.024,
+            "conditional_accuracy": 0.96,
+            "timeout_rate": 0.975,
+            "mean_rt_s": 0.442,
+            "predicted_accuracy": 0.02525405406329575,
+            "predicted_timeout_rate": 0.9734886206204892,
+            "predicted_mean_rt_s": 0.4496467124795995,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": -1.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "lower",
+            "trials": 1000,
+            "accuracy": 0.705,
+            "conditional_accuracy": 0.9337748344370861,
+            "timeout_rate": 0.245,
+            "mean_rt_s": 1.1170397350993377,
+            "predicted_accuracy": 0.7270821776192598,
+            "predicted_timeout_rate": 0.23671853229455475,
+            "predicted_mean_rt_s": 1.1238904860926975,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 0.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.007,
+            "conditional_accuracy": 0.875,
+            "timeout_rate": 0.992,
+            "mean_rt_s": 0.44937499999999997,
+            "predicted_accuracy": 0.006385356559944856,
+            "predicted_timeout_rate": 0.9872292868801102,
+            "predicted_mean_rt_s": 0.45043361572848595,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 0.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.264,
+            "conditional_accuracy": 0.5116279069767442,
+            "timeout_rate": 0.484,
+            "mean_rt_s": 1.17828488372093,
+            "predicted_accuracy": 0.26308100831964154,
+            "predicted_timeout_rate": 0.4738379833607169,
+            "predicted_mean_rt_s": 1.2104023318009893,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 1.0,
+            "deadline_s": 0.5,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.033,
+            "conditional_accuracy": 0.9166666666666666,
+            "timeout_rate": 0.964,
+            "mean_rt_s": 0.45472222222222225,
+            "predicted_accuracy": 0.02525405406329575,
+            "predicted_timeout_rate": 0.9734886206204892,
+            "predicted_mean_rt_s": 0.4496467124795995,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          },
+          {
+            "drift": 1.0,
+            "deadline_s": 2.0,
+            "correct_boundary": "upper",
+            "trials": 1000,
+            "accuracy": 0.722,
+            "conditional_accuracy": 0.9425587467362925,
+            "timeout_rate": 0.23399999999999999,
+            "mean_rt_s": 1.1300391644908616,
+            "predicted_accuracy": 0.7270821776192598,
+            "predicted_timeout_rate": 0.23671853229455478,
+            "predicted_mean_rt_s": 1.1238904860926975,
+            "solver_version": "0.9.0",
+            "interpretation": "solver consistency, not human validation"
+          }
+        ],
+        "correct_boundary": "lower for negative drift, upper otherwise; at zero drift upper is an assumed target label without directional evidence",
+        "mean_rt_definition": "mean among answered trials, weighted by response counts",
+        "pathway": "explicit choice API; sensory Signals retain TWIN detection"
+      }
+    }
+  ],
+  "summaries": [
+    {
+      "case": "sweep_0",
+      "benchmark": "response.choice",
+      "metric": "response.choice_accuracy",
+      "validation_role": "unclassified",
+      "validation": {
+        "role": "unclassified",
+        "evaluation_data": [],
+        "fitting_data": [],
+        "rationale": "No evaluation data declaration is registered."
+      },
+      "n": 5,
+      "mean": 0.5659,
+      "ci95": [
+        0.5624,
+        0.5681666666666667
+      ]
+    },
+    {
+      "case": "sweep_0",
+      "benchmark": "response.choice",
+      "metric": "response.choice_timeout_rate",
+      "validation_role": "unclassified",
+      "validation": {
+        "role": "unclassified",
+        "evaluation_data": [],
+        "fitting_data": [],
+        "rationale": "No evaluation data declaration is registered."
+      },
+      "n": 5,
+      "mean": 0.1342666666666667,
+      "ci95": [
+        0.13169999999999998,
+        0.13673333333333335
+      ]
+    },
+    {
+      "case": "sweep_0",
+      "benchmark": "response.choice",
+      "metric": "response.choice_mean_rt_s",
+      "validation_role": "unclassified",
+      "validation": {
+        "role": "unclassified",
+        "evaluation_data": [],
+        "fitting_data": [],
+        "rationale": "No evaluation data declaration is registered."
+      },
+      "n": 5,
+      "mean": 0.3990452702902123,
+      "ci95": [
+        0.39771750650529325,
+        0.4007270390240216
+      ]
+    },
+    {
+      "case": "sweep_1",
+      "benchmark": "response.choice",
+      "metric": "response.choice_accuracy",
+      "validation_role": "unclassified",
+      "validation": {
+        "role": "unclassified",
+        "evaluation_data": [],
+        "fitting_data": [],
+        "rationale": "No evaluation data declaration is registered."
+      },
+      "n": 5,
+      "mean": 0.41273333333333334,
+      "ci95": [
+        0.4120994717292441,
+        0.41340000000000005
+      ]
+    },
+    {
+      "case": "sweep_1",
+      "benchmark": "response.choice",
+      "metric": "response.choice_timeout_rate",
+      "validation_role": "unclassified",
+      "validation": {
+        "role": "unclassified",
+        "evaluation_data": [],
+        "fitting_data": [],
+        "rationale": "No evaluation data declaration is registered."
+      },
+      "n": 5,
+      "mean": 0.4572,
+      "ci95": [
+        0.4545333333333333,
+        0.4591666666666667
+      ]
+    },
+    {
+      "case": "sweep_1",
+      "benchmark": "response.choice",
+      "metric": "response.choice_mean_rt_s",
+      "validation_role": "unclassified",
+      "validation": {
+        "role": "unclassified",
+        "evaluation_data": [],
+        "fitting_data": [],
+        "rationale": "No evaluation data declaration is registered."
+      },
+      "n": 5,
+      "mean": 0.808401211337378,
+      "ci95": [
+        0.8053456781888457,
+        0.810654640830292
+      ]
+    },
+    {
+      "case": "sweep_2",
+      "benchmark": "response.choice",
+      "metric": "response.choice_accuracy",
+      "validation_role": "unclassified",
+      "validation": {
+        "role": "unclassified",
+        "evaluation_data": [],
+        "fitting_data": [],
+        "rationale": "No evaluation data declaration is registered."
+      },
+      "n": 5,
+      "mean": 0.2935333333333333,
+      "ci95": [
+        0.2919666666666666,
+        0.2952666666666667
+      ]
+    },
+    {
+      "case": "sweep_2",
+      "benchmark": "response.choice",
+      "metric": "response.choice_timeout_rate",
+      "validation_role": "unclassified",
+      "validation": {
+        "role": "unclassified",
+        "evaluation_data": [],
+        "fitting_data": [],
+        "rationale": "No evaluation data declaration is registered."
+      },
+      "n": 5,
+      "mean": 0.6490666666666666,
+      "ci95": [
+        0.6466593731817435,
+        0.6518535240809695
+      ]
+    },
+    {
+      "case": "sweep_2",
+      "benchmark": "response.choice",
+      "metric": "response.choice_mean_rt_s",
+      "validation_role": "unclassified",
+      "validation": {
+        "role": "unclassified",
+        "evaluation_data": [],
+        "fitting_data": [],
+        "rationale": "No evaluation data declaration is registered."
+      },
+      "n": 5,
+      "mean": 1.1214204346286578,
+      "ci95": [
+        1.1151242988630417,
+        1.1275677692228718
+      ]
+    }
+  ],
+  "paired_differences": [],
+  "sensitivity": null,
+  "validation_summary": {
+    "consistency": {
+      "metrics": 0,
+      "passed": 0
+    },
+    "calibration": {
+      "metrics": 0,
+      "passed": 0
+    },
+    "held_out": {
+      "metrics": 0,
+      "passed": 0
+    },
+    "unclassified": {
+      "metrics": 0,
+      "passed": 0
+    }
+  },
+  "validation_summary_unit": "scored metric evaluations across cases and seeds",
+  "unique_reference_metrics": [],
+  "unscored_metric_evaluations": 45,
+  "wall_seconds": 1.202,
+  "uncertainty": "BCa 95% intervals across simulation seeds; undefined with fewer than three values or no spread.",
+  "evidence_schema": "experiment_with_base_parameters_and_case_overrides_v1",
+  "resolved_base_parameters": {
+    "resolved_config": {
+      "eyes": {
+        "name": "main_sequence",
+        "params": {
+          "duration_slope": 0.0022,
+          "duration_intercept": 0.021,
+          "latency_median": 0.2,
+          "latency_spread": 0.25,
+          "minimum_amplitude": 0.5
+        }
+      },
+      "vision": {
+        "name": "foveated",
+        "params": {
+          "alpha": 0.106,
+          "e2": 2.3,
+          "ct0": 0.015625,
+          "levels": 7
+        }
+      },
+      "objects": {
+        "name": "eccentricity_noise",
+        "params": {
+          "e2": 2.0,
+          "field_of_view": 90.0
+        }
+      },
+      "attention": {
+        "name": "uncertainty_sampler",
+        "params": {
+          "return_sd": 0.11,
+          "threshold_spread": 1.0,
+          "leave_sd": 0.15,
+          "minimum_road_dwell": 0.3,
+          "maximum_glance": 4.0
+        }
+      },
+      "memory": {
+        "name": "act_r",
+        "params": {
+          "capacity": 4,
+          "decay": 0.5,
+          "threshold": 0.0,
+          "noise": 0.25,
+          "latency_factor": 1.0
+        }
+      },
+      "proprioception": {
+        "name": "spindle",
+        "params": {
+          "velocity_gain": 4.3,
+          "velocity_exponent": 0.6,
+          "length_gain": 2.0,
+          "baseline": 10.0,
+          "joint_noise_deg": 3.0,
+          "delay": 0.025
+        }
+      },
+      "motor": {
+        "name": "ffitts_min_jerk",
+        "params": {
+          "intercept": 0.1477,
+          "slope": 0.105,
+          "absolute_sd": 0.0015,
+          "relative_width_sd": 0.24195499637067505
+        }
+      },
+      "estimator": {
+        "name": "lane_kalman",
+        "params": {
+          "heading_noise": 0.0007,
+          "lateral_noise": 0.001,
+          "initial_sd": [
+            0.1,
+            0.02
+          ]
+        }
+      },
+      "hearing": {
+        "name": "psychoacoustic",
+        "params": {
+          "masking_ratio": 0.4,
+          "latency_gain": 0.00731,
+          "latency_exponent": -0.33,
+          "reference_latency": 0.0439
+        }
+      },
+      "touch": {
+        "name": "vibrotactile",
+        "params": {
+          "latency_gain": 0.1175,
+          "latency_exponent": -0.29,
+          "reference_latency": 0.1166
+        }
+      },
+      "vestibular": {
+        "name": "subjective_vertical",
+        "params": {
+          "accel_gain": 0.1,
+          "rate_gain": 0.8,
+          "rate_feedback": 5.0,
+          "vertical_feedback": 5.0,
+          "accel_feedback": 1.0,
+          "vertical_lag": 5.0,
+          "canal_lag": 7.0,
+          "adaptation_lag": 190.0,
+          "conflict_scale": 0.196,
+          "sickness_lag": 720.0,
+          "max_incidence": 85.0
+        }
+      },
+      "response": {
+        "name": "pyddm",
+        "params": {
+          "central": 0.2171,
+          "facilitation": 0.0204,
+          "window": 0.3588,
+          "visual_latency": 0.1026,
+          "visual_field": 90.0,
+          "decision_bound": 1.0,
+          "decision_noise": 1.0,
+          "nondecision_time": 0.2,
+          "starting_position": 0.0,
+          "decision_dt": 0.005,
+          "decision_dx": 0.005
+        }
+      },
+      "fatigue": {
+        "name": "three_compartment",
+        "params": {
+          "joints": {
+            "ankle": {
+              "fatigue": 0.00589,
+              "recovery": 0.00058
+            },
+            "knee": {
+              "fatigue": 0.015,
+              "recovery": 0.00149
+            },
+            "trunk": {
+              "fatigue": 0.00755,
+              "recovery": 0.00075
+            },
+            "shoulder": {
+              "fatigue": 0.0182,
+              "recovery": 0.00168
+            },
+            "elbow": {
+              "fatigue": 0.00912,
+              "recovery": 0.00094
+            },
+            "hand": {
+              "fatigue": 0.0098,
+              "recovery": 0.00064
+            },
+            "general": {
+              "fatigue": 0.0097,
+              "recovery": 0.00091
+            }
+          },
+          "rest_multiplier": 15.0,
+          "rest_multipliers": {
+            "hand": 30.0
+          },
+          "develop": 10.0,
+          "relax": 10.0
+        }
+      },
+      "affect": {
+        "name": "appraisal",
+        "params": {
+          "learning_rate": 0.1,
+          "discount": 0.9,
+          "exploration": 0.3,
+          "penalty": 0.0049,
+          "penalty_sd": 0.0002,
+          "training_vectors": 400,
+          "emotions": [
+            "happiness",
+            "boredom",
+            "irritation"
+          ]
+        }
+      },
+      "risk": {
+        "name": "risk_field",
+        "params": {
+          "height_gain": 0.0064,
+          "preview": 3.5,
+          "width_rate": 0.001,
+          "inner_steer_rate": 0.0,
+          "outer_steer_rate": 1.3823,
+          "width_at_car": 0.5,
+          "outside_cost": 500.0,
+          "threshold": 100000.0,
+          "wheelbase": 2.7
+        }
+      },
+      "trust": {
+        "name": "decision_field",
+        "params": {
+          "opacity": 2.0,
+          "prior_pull": 50.0,
+          "noise_sd": 0.1,
+          "inertia": 0.5,
+          "threshold": 0.27,
+          "automation_belief": 0.744,
+          "manual_belief": 0.7
+        }
+      }
+    },
+    "parameter_provenance": [
+      {
+        "category": "eyes",
+        "parameter": "EyeParameters.duration_slope",
+        "value": 0.0022,
+        "kind": "measured",
+        "citation": "Carpenter (1988), Movements of the Eyes, 2nd ed.",
+        "doi": null,
+        "note": "D = 2.2 A + 21 ms; Baloh et al. (1975) report a slope of 2.7 ms/deg",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "eyes",
+        "parameter": "EyeParameters.duration_intercept",
+        "value": 0.021,
+        "kind": "measured",
+        "citation": "Carpenter (1988)",
+        "doi": null,
+        "note": "",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "eyes",
+        "parameter": "EyeParameters.latency_median",
+        "value": 0.2,
+        "kind": "measured",
+        "citation": "Saslow (1967)",
+        "doi": "https://doi.org/10.1364/JOSA.57.001024",
+        "note": "step target with the fixation point extinguished; 150 ms (gap) to 250 ms (overlap)",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "eyes",
+        "parameter": "EyeParameters.latency_spread",
+        "value": 0.25,
+        "kind": "assumed",
+        "citation": "model choice",
+        "doi": null,
+        "note": "right-skewed latency; fit to data",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "eyes",
+        "parameter": "EyeParameters.minimum_amplitude",
+        "value": 0.5,
+        "kind": "assumed",
+        "citation": "model choice",
+        "doi": null,
+        "note": "",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "vision",
+        "parameter": "FoveationParameters.alpha",
+        "value": 0.106,
+        "kind": "fitted",
+        "citation": "Geisler & Perry (1998), Proc. SPIE 3299",
+        "doi": "https://doi.org/10.1117/12.320120",
+        "note": "least-squares fit to Robson & Graham (1981) grating thresholds",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "vision",
+        "parameter": "FoveationParameters.e2",
+        "value": 2.3,
+        "kind": "fitted",
+        "citation": "Geisler & Perry (1998)",
+        "doi": "https://doi.org/10.1117/12.320120",
+        "note": "",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "vision",
+        "parameter": "FoveationParameters.ct0",
+        "value": 0.015625,
+        "kind": "fitted",
+        "citation": "Geisler & Perry (1998)",
+        "doi": "https://doi.org/10.1117/12.320120",
+        "note": "1/64 for Robson & Graham; 1/75 and 1/76 for two other datasets",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "vision",
+        "parameter": "FoveationParameters.levels",
+        "value": 7,
+        "kind": "assumed",
+        "citation": "implementation choice",
+        "doi": null,
+        "note": "",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "objects",
+        "parameter": "ObjectParameters.e2",
+        "value": 2.0,
+        "kind": "measured",
+        "citation": "Strasburger, Rentschler & J\u00fcttner (2011), Table 4",
+        "doi": "https://doi.org/10.1167/11.5.13",
+        "note": "letter and Landolt-C acuity E2 1.0-2.6 deg; vernier 0.7; gratings 2.6-3.0",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "objects",
+        "parameter": "ObjectParameters.field_of_view",
+        "value": 90.0,
+        "kind": "assumed",
+        "citation": "model choice",
+        "doi": null,
+        "note": "monocular temporal field is wider",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "attention",
+        "parameter": "SamplerParameters.return_sd",
+        "value": 0.11,
+        "kind": "fitted",
+        "citation": "Kujala & Saariluoma (2011), Table 2; fitted here by ABC",
+        "doi": "https://doi.org/10.1080/00140139.2011.592601",
+        "note": "posterior median, 90% interval 0.06-0.18 m, from the mean glance and within-person SD at 50 km/h (evidence/glance-calibration.json)",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "attention",
+        "parameter": "SamplerParameters.threshold_spread",
+        "value": 1.0,
+        "kind": "fitted",
+        "citation": "Kujala & Saariluoma (2011), Table 2; fitted here by ABC",
+        "doi": "https://doi.org/10.1080/00140139.2011.592601",
+        "note": "posterior median, 90% interval 0.64-1.34",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "attention",
+        "parameter": "SamplerParameters.leave_sd",
+        "value": 0.15,
+        "kind": "assumed",
+        "citation": "model choice",
+        "doi": null,
+        "note": "",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "attention",
+        "parameter": "SamplerParameters.minimum_road_dwell",
+        "value": 0.3,
+        "kind": "assumed",
+        "citation": "model choice",
+        "doi": null,
+        "note": "",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "attention",
+        "parameter": "SamplerParameters.maximum_glance",
+        "value": 4.0,
+        "kind": "assumed",
+        "citation": "model choice",
+        "doi": "https://doi.org/10.1080/00140139.2011.592601",
+        "note": "a bound above the longest in-vehicle glances measured in simulator search tasks, 2.42-3.70 s (Kujala & Saariluoma, 2011, Table 2)",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "memory",
+        "parameter": "MemoryParameters.capacity",
+        "value": 4,
+        "kind": "measured",
+        "citation": "Cowan (2001)",
+        "doi": "https://doi.org/10.1017/S0140525X01003922",
+        "note": "about 4 chunks (3-5) when rehearsal and chunking are prevented",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "memory",
+        "parameter": "MemoryParameters.decay",
+        "value": 0.5,
+        "kind": "fitted",
+        "citation": "Anderson et al. (2004)",
+        "doi": "https://doi.org/10.1037/0033-295X.111.4.1036",
+        "note": "conventional base-level decay",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "memory",
+        "parameter": "MemoryParameters.threshold",
+        "value": 0.0,
+        "kind": "standard",
+        "citation": "ACT-R default (:rt 0)",
+        "doi": null,
+        "note": "",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "memory",
+        "parameter": "MemoryParameters.noise",
+        "value": 0.25,
+        "kind": "assumed",
+        "citation": "Stocco et al. (2024), likelihood primer, Fig. 7",
+        "doi": "https://arxiv.org/abs/2410.18055",
+        "note": "illustrative s = 0.25 setting, not fitted to this simulator's tasks; ACT-R ships with noise off",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "memory",
+        "parameter": "MemoryParameters.latency_factor",
+        "value": 1.0,
+        "kind": "standard",
+        "citation": "ACT-R default (:lf 1.0)",
+        "doi": null,
+        "note": "",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "proprioception",
+        "parameter": "SpindleParameters.velocity_gain",
+        "value": 4.3,
+        "kind": "fitted",
+        "citation": "Prochazka & Gorassini (1998)",
+        "doi": "https://doi.org/10.1111/j.1469-7793.1998.277bu.x",
+        "note": "cat hamstring Ia afferents during treadmill walking",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "proprioception",
+        "parameter": "SpindleParameters.velocity_exponent",
+        "value": 0.6,
+        "kind": "fitted",
+        "citation": "Prochazka & Gorassini (1998)",
+        "doi": "https://doi.org/10.1111/j.1469-7793.1998.277bu.x",
+        "note": "",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "proprioception",
+        "parameter": "SpindleParameters.length_gain",
+        "value": 2.0,
+        "kind": "fitted",
+        "citation": "Prochazka & Gorassini (1998)",
+        "doi": "https://doi.org/10.1111/j.1469-7793.1998.277bu.x",
+        "note": "",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "proprioception",
+        "parameter": "SpindleParameters.baseline",
+        "value": 10.0,
+        "kind": "fitted",
+        "citation": "Malik, Jabakhanji & Jones (2016)",
+        "doi": "https://doi.org/10.3389/fncom.2015.00154",
+        "note": "human wrist; 82 imp/s for cat",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "proprioception",
+        "parameter": "SpindleParameters.joint_noise_deg",
+        "value": 3.0,
+        "kind": "measured",
+        "citation": "Talis & Levik (2016)",
+        "doi": "https://doi.org/10.3389/fnins.2016.00520",
+        "note": "elbow contralateral matching, young adults 3.0 deg absolute error; shoulder 3-6 deg",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "proprioception",
+        "parameter": "SpindleParameters.delay",
+        "value": 0.025,
+        "kind": "measured",
+        "citation": "Pruszynski, Kurtzer, Lillicrap & Scott (2009)",
+        "doi": "https://doi.org/10.1152/jn.00085.2009",
+        "note": "short-latency stretch response 20-45 ms",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "motor",
+        "parameter": "PointingParameters.intercept",
+        "value": 0.1477,
+        "kind": "fitted",
+        "citation": "Bi, Li & Zhai (2013), FFitts law 2-D",
+        "doi": "https://doi.org/10.1145/2470654.2466180",
+        "note": "",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "motor",
+        "parameter": "PointingParameters.slope",
+        "value": 0.105,
+        "kind": "fitted",
+        "citation": "Bi, Li & Zhai (2013), FFitts law 2-D",
+        "doi": "https://doi.org/10.1145/2470654.2466180",
+        "note": "",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "motor",
+        "parameter": "PointingParameters.absolute_sd",
+        "value": 0.0015,
+        "kind": "measured",
+        "citation": "Bi, Li & Zhai (2013)",
+        "doi": "https://doi.org/10.1145/2470654.2466180",
+        "note": "1.5 mm in 2-D tasks, 0.94 mm in 1-D",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "motor",
+        "parameter": "PointingParameters.relative_width_sd",
+        "value": 0.24195499637067505,
+        "kind": "derived",
+        "citation": "Soukoreff & MacKenzie (2004)",
+        "doi": "https://doi.org/10.1016/j.ijhcs.2004.09.001",
+        "note": "effective width We = 4.133 SD",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "estimator",
+        "parameter": "LaneParameters.heading_noise",
+        "value": 0.0007,
+        "kind": "assumed",
+        "citation": "model choice",
+        "doi": null,
+        "note": "puts lateral SD at 0.4 m after 1.2 s without vision at 20 m/s; fit with the glance benchmark",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "estimator",
+        "parameter": "LaneParameters.lateral_noise",
+        "value": 0.001,
+        "kind": "assumed",
+        "citation": "model choice",
+        "doi": null,
+        "note": "",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "estimator",
+        "parameter": "LaneParameters.initial_sd",
+        "value": [
+          0.1,
+          0.02
+        ],
+        "kind": "assumed",
+        "citation": "model choice",
+        "doi": null,
+        "note": "",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "hearing",
+        "parameter": "HearingParameters.masking_ratio",
+        "value": 0.4,
+        "kind": "measured",
+        "citation": "Scharf (1970), as summarised by Yost & Shofner (2009)",
+        "doi": "https://doi.org/10.1121/1.3037232",
+        "note": "relative to the Zwicker critical band, tones in broadband noise",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "hearing",
+        "parameter": "HearingParameters.latency_gain",
+        "value": 0.00731,
+        "kind": "fitted",
+        "citation": "Kohfeld, Santee & Wallace (1981), Fig. 5b",
+        "doi": "https://doi.org/10.3758/BF03207370",
+        "note": "Chocholle (1940), 1 kHz, 10-100 dB SPL; k = 7.31 ms",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "hearing",
+        "parameter": "HearingParameters.latency_exponent",
+        "value": -0.33,
+        "kind": "fitted",
+        "citation": "Kohfeld, Santee & Wallace (1981), Fig. 5b",
+        "doi": "https://doi.org/10.3758/BF03207370",
+        "note": "-0.33 for Chocholle's data; -0.24 to -0.33 over six data sets",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "hearing",
+        "parameter": "HearingParameters.reference_latency",
+        "value": 0.0439,
+        "kind": "fitted",
+        "citation": "Diederich & Colonius (2015), Table 1",
+        "doi": "https://doi.org/10.1037/a0038696",
+        "note": "median 1/lambda_A of 11 participants (TWIN fit)",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "touch",
+        "parameter": "TouchParameters.latency_gain",
+        "value": 0.1175,
+        "kind": "assumed",
+        "citation": "Diederich & Colonius (2004), Table 2; fitted here",
+        "doi": "https://doi.org/10.3758/BF03195006",
+        "note": "tactile RT 218 vs 177 ms for their weakest and strongest vibration, assumed 10 and 30 dB above threshold",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "touch",
+        "parameter": "TouchParameters.latency_exponent",
+        "value": -0.29,
+        "kind": "assumed",
+        "citation": "Kohfeld, Santee & Wallace (1981)",
+        "doi": "https://doi.org/10.3758/BF03207370",
+        "note": "auditory exponent; no vibrotactile fit exists",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "touch",
+        "parameter": "TouchParameters.reference_latency",
+        "value": 0.1166,
+        "kind": "derived",
+        "citation": "Diederich & Colonius (2004, 2015); derived",
+        "doi": "https://doi.org/10.3758/BF03195006",
+        "note": "visual 1/lambda_V of 102.6 ms (2015) plus the 14 ms by which strong tactile RT exceeded visual RT (2004)",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "vestibular",
+        "parameter": "VerticalConflictParameters.accel_gain",
+        "value": 0.1,
+        "kind": "fitted",
+        "citation": "Kamiji, Kurata, Wada & Doi (2007), Table 1; Wada, Fujisawa & Doi (2018), Table 1",
+        "doi": "https://doi.org/10.1109/SICE.2007.4421156",
+        "note": "",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "vestibular",
+        "parameter": "VerticalConflictParameters.rate_gain",
+        "value": 0.8,
+        "kind": "fitted",
+        "citation": "Kamiji, Kurata, Wada & Doi (2007), Table 1; Wada, Fujisawa & Doi (2018), Table 1",
+        "doi": "https://doi.org/10.1109/SICE.2007.4421156",
+        "note": "",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "vestibular",
+        "parameter": "VerticalConflictParameters.rate_feedback",
+        "value": 5.0,
+        "kind": "fitted",
+        "citation": "Kamiji, Kurata, Wada & Doi (2007), Table 1; Wada, Fujisawa & Doi (2018), Table 1",
+        "doi": "https://doi.org/10.1109/SICE.2007.4421156",
+        "note": "",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "vestibular",
+        "parameter": "VerticalConflictParameters.vertical_feedback",
+        "value": 5.0,
+        "kind": "fitted",
+        "citation": "Kamiji, Kurata, Wada & Doi (2007), Table 1; Wada, Fujisawa & Doi (2018), Table 1",
+        "doi": "https://doi.org/10.1109/SICE.2007.4421156",
+        "note": "",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "vestibular",
+        "parameter": "VerticalConflictParameters.accel_feedback",
+        "value": 1.0,
+        "kind": "fitted",
+        "citation": "Kamiji, Kurata, Wada & Doi (2007), Table 1; Wada, Fujisawa & Doi (2018), Table 1",
+        "doi": "https://doi.org/10.1109/SICE.2007.4421156",
+        "note": "",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "vestibular",
+        "parameter": "VerticalConflictParameters.vertical_lag",
+        "value": 5.0,
+        "kind": "measured",
+        "citation": "Wada, Fujisawa & Doi (2018), p. 7; Bos & Bles (2002)",
+        "doi": "https://doi.org/10.1016/j.ergon.2016.11.003",
+        "note": "from vertical perception studies",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "vestibular",
+        "parameter": "VerticalConflictParameters.canal_lag",
+        "value": 7.0,
+        "kind": "fitted",
+        "citation": "Kamiji, Kurata, Wada & Doi (2007), Table 1; Wada, Fujisawa & Doi (2018), Table 1",
+        "doi": "https://doi.org/10.1109/SICE.2007.4421156",
+        "note": "",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "vestibular",
+        "parameter": "VerticalConflictParameters.adaptation_lag",
+        "value": 190.0,
+        "kind": "fitted",
+        "citation": "Kamiji, Kurata, Wada & Doi (2007), Table 1; Wada, Fujisawa & Doi (2018), Table 1",
+        "doi": "https://doi.org/10.1109/SICE.2007.4421156",
+        "note": "",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "vestibular",
+        "parameter": "VerticalConflictParameters.conflict_scale",
+        "value": 0.196,
+        "kind": "fitted",
+        "citation": "O'Hanlon & McCauley (1974), Tables 1-2; fitted here",
+        "doi": "https://archive.org/details/DTIC_AD0768215",
+        "note": "MSI after 2 h at 14 vertical conditions (examples/fit_motion_sickness.py); Wada et al. (2018) used 0.5 for car passengers, Bos & Bles (1998) fitted 0.7 in 1-D",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "vestibular",
+        "parameter": "VerticalConflictParameters.sickness_lag",
+        "value": 720.0,
+        "kind": "fitted",
+        "citation": "Kamiji, Kurata, Wada & Doi (2007), Table 1; Wada, Fujisawa & Doi (2018), Table 1",
+        "doi": "https://doi.org/10.1109/SICE.2007.4421156",
+        "note": "",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "vestibular",
+        "parameter": "VerticalConflictParameters.max_incidence",
+        "value": 85.0,
+        "kind": "fitted",
+        "citation": "Kamiji, Kurata, Wada & Doi (2007), Table 1; Wada, Fujisawa & Doi (2018), Table 1",
+        "doi": "https://doi.org/10.1109/SICE.2007.4421156",
+        "note": "",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "response",
+        "parameter": "PyDDMParameters.central",
+        "value": 0.2171,
+        "kind": "fitted",
+        "citation": "Diederich & Colonius (2015), Table 1",
+        "doi": "https://doi.org/10.1037/a0038696",
+        "note": "median over 11 participants",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "response",
+        "parameter": "PyDDMParameters.facilitation",
+        "value": 0.0204,
+        "kind": "fitted",
+        "citation": "Diederich & Colonius (2015), Table 1",
+        "doi": "https://doi.org/10.1037/a0038696",
+        "note": "median over 11 participants",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "response",
+        "parameter": "PyDDMParameters.window",
+        "value": 0.3588,
+        "kind": "fitted",
+        "citation": "Diederich & Colonius (2015), Table 1",
+        "doi": "https://doi.org/10.1037/a0038696",
+        "note": "median omega_RT",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "response",
+        "parameter": "PyDDMParameters.visual_latency",
+        "value": 0.1026,
+        "kind": "fitted",
+        "citation": "Diederich & Colonius (2015), Table 1",
+        "doi": "https://doi.org/10.1037/a0038696",
+        "note": "median 1/lambda_V",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "response",
+        "parameter": "PyDDMParameters.visual_field",
+        "value": 90.0,
+        "kind": "assumed",
+        "citation": "model choice",
+        "doi": null,
+        "note": "the temporal visual field extends beyond 90 deg; peripheral warning lights are rarely noticed so far out",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "response",
+        "parameter": "PyDDMParameters.decision_bound",
+        "value": 1.0,
+        "kind": "assumed",
+        "citation": "PyDDM illustrative choice protocol",
+        "doi": "https://pyddm.readthedocs.io/en/stable/quickstart.html",
+        "note": "symmetric bounds in decision units; not fitted",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "response",
+        "parameter": "PyDDMParameters.decision_noise",
+        "value": 1.0,
+        "kind": "assumed",
+        "citation": "PyDDM illustrative choice protocol",
+        "doi": "https://pyddm.readthedocs.io/en/stable/quickstart.html",
+        "note": "decision units / sqrt(s); not fitted",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "response",
+        "parameter": "PyDDMParameters.nondecision_time",
+        "value": 0.2,
+        "kind": "assumed",
+        "citation": "PyDDM illustrative choice protocol",
+        "doi": "https://pyddm.readthedocs.io/en/stable/quickstart.html",
+        "note": "seconds; independent of TWIN detection",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "response",
+        "parameter": "PyDDMParameters.starting_position",
+        "value": 0.0,
+        "kind": "assumed",
+        "citation": "PyDDM illustrative choice protocol",
+        "doi": "https://pyddm.readthedocs.io/en/stable/quickstart.html",
+        "note": "fraction of the bound; 0 is centred",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "response",
+        "parameter": "PyDDMParameters.decision_dt",
+        "value": 0.005,
+        "kind": "assumed",
+        "citation": "PyDDM illustrative choice protocol",
+        "doi": "https://pyddm.readthedocs.io/en/stable/quickstart.html",
+        "note": "maximum solver time step in seconds; numerical setting",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "response",
+        "parameter": "PyDDMParameters.decision_dx",
+        "value": 0.005,
+        "kind": "assumed",
+        "citation": "PyDDM illustrative choice protocol",
+        "doi": "https://pyddm.readthedocs.io/en/stable/quickstart.html",
+        "note": "spatial step in decision units; numerical setting",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "fatigue",
+        "parameter": "FatigueParameters.joints",
+        "value": {
+          "ankle": {
+            "fatigue": 0.00589,
+            "recovery": 0.00058
+          },
+          "knee": {
+            "fatigue": 0.015,
+            "recovery": 0.00149
+          },
+          "trunk": {
+            "fatigue": 0.00755,
+            "recovery": 0.00075
+          },
+          "shoulder": {
+            "fatigue": 0.0182,
+            "recovery": 0.00168
+          },
+          "elbow": {
+            "fatigue": 0.00912,
+            "recovery": 0.00094
+          },
+          "hand": {
+            "fatigue": 0.0098,
+            "recovery": 0.00064
+          },
+          "general": {
+            "fatigue": 0.0097,
+            "recovery": 0.00091
+          }
+        },
+        "kind": "fitted",
+        "citation": "Frey-Law, Looft & Heitsman (2012), Table 1",
+        "doi": "https://doi.org/10.1016/j.jbiomech.2012.04.018",
+        "note": "per-second rates",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "fatigue",
+        "parameter": "FatigueParameters.rest_multiplier",
+        "value": 15.0,
+        "kind": "fitted",
+        "citation": "Looft, Herkert & Frey-Law (2018), Tables 2-4",
+        "doi": "https://doi.org/10.1016/j.jbiomech.2018.06.005",
+        "note": "15 for ankle, knee, elbow and the general model; suggested for shoulder and trunk, which had no data",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "fatigue",
+        "parameter": "FatigueParameters.rest_multipliers",
+        "value": {
+          "hand": 30.0
+        },
+        "kind": "fitted",
+        "citation": "Looft, Herkert & Frey-Law (2018), Tables 2-4",
+        "doi": "https://doi.org/10.1016/j.jbiomech.2018.06.005",
+        "note": "30 for hand/grip",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "fatigue",
+        "parameter": "FatigueParameters.develop",
+        "value": 10.0,
+        "kind": "fitted",
+        "citation": "Frey-Law, Looft & Heitsman (2012), Table 1",
+        "doi": "https://doi.org/10.1016/j.jbiomech.2012.04.018",
+        "note": "L = 10 from Xia & Frey-Law (2008)",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "fatigue",
+        "parameter": "FatigueParameters.relax",
+        "value": 10.0,
+        "kind": "fitted",
+        "citation": "Frey-Law, Looft & Heitsman (2012), Table 1",
+        "doi": "https://doi.org/10.1016/j.jbiomech.2012.04.018",
+        "note": "",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "affect",
+        "parameter": "AffectParameters.learning_rate",
+        "value": 0.1,
+        "kind": "fitted",
+        "citation": "Zhang, Hilpert, Broekens & Jokinen (2024)",
+        "doi": "https://doi.org/10.1145/3613904.3641908",
+        "note": "released model settings",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "affect",
+        "parameter": "AffectParameters.discount",
+        "value": 0.9,
+        "kind": "fitted",
+        "citation": "Zhang, Hilpert, Broekens & Jokinen (2024)",
+        "doi": "https://doi.org/10.1145/3613904.3641908",
+        "note": "",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "affect",
+        "parameter": "AffectParameters.exploration",
+        "value": 0.3,
+        "kind": "fitted",
+        "citation": "Zhang, Hilpert, Broekens & Jokinen (2024)",
+        "doi": "https://doi.org/10.1145/3613904.3641908",
+        "note": "",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "affect",
+        "parameter": "AffectParameters.penalty",
+        "value": 0.0049,
+        "kind": "fitted",
+        "citation": "Zhang, Hilpert, Broekens & Jokinen (2024)",
+        "doi": "https://doi.org/10.1145/3613904.3641908",
+        "note": "chosen so that classifier precision matches human emotion recognition (mean 0.626)",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "affect",
+        "parameter": "AffectParameters.penalty_sd",
+        "value": 0.0002,
+        "kind": "fitted",
+        "citation": "Zhang, Hilpert, Broekens & Jokinen (2024)",
+        "doi": "https://doi.org/10.1145/3613904.3641908",
+        "note": "the text says variance 0.0004; the released model draws SD 0.0002",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "affect",
+        "parameter": "AffectParameters.training_vectors",
+        "value": 400,
+        "kind": "fitted",
+        "citation": "Zhang, Hilpert, Broekens & Jokinen (2024)",
+        "doi": "https://doi.org/10.1145/3613904.3641908",
+        "note": "",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "affect",
+        "parameter": "AffectParameters.emotions",
+        "value": [
+          "happiness",
+          "boredom",
+          "irritation"
+        ],
+        "kind": "standard",
+        "citation": "Zhang, Hilpert, Broekens & Jokinen (2024)",
+        "doi": "https://doi.org/10.1145/3613904.3641908",
+        "note": "Scherer (2001) modal emotions",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "risk",
+        "parameter": "RiskFieldParameters.height_gain",
+        "value": 0.0064,
+        "kind": "fitted",
+        "citation": "Kolekar, de Winter & Abbink (2020), Table 1",
+        "doi": "https://doi.org/10.1038/s41467-020-18353-4",
+        "note": "grid search on one driver",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "risk",
+        "parameter": "RiskFieldParameters.preview",
+        "value": 3.5,
+        "kind": "fitted",
+        "citation": "Kolekar, de Winter & Abbink (2020), Table 1",
+        "doi": "https://doi.org/10.1038/s41467-020-18353-4",
+        "note": "",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "risk",
+        "parameter": "RiskFieldParameters.width_rate",
+        "value": 0.001,
+        "kind": "fitted",
+        "citation": "Kolekar, de Winter & Abbink (2020), Table 1",
+        "doi": "https://doi.org/10.1038/s41467-020-18353-4",
+        "note": "",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "risk",
+        "parameter": "RiskFieldParameters.inner_steer_rate",
+        "value": 0.0,
+        "kind": "fitted",
+        "citation": "Kolekar, de Winter & Abbink (2020), Table 1",
+        "doi": "https://doi.org/10.1038/s41467-020-18353-4",
+        "note": "",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "risk",
+        "parameter": "RiskFieldParameters.outer_steer_rate",
+        "value": 1.3823,
+        "kind": "fitted",
+        "citation": "Kolekar, de Winter & Abbink (2020), Table 1",
+        "doi": "https://doi.org/10.1038/s41467-020-18353-4",
+        "note": "unit not reported; radians assumed",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "risk",
+        "parameter": "RiskFieldParameters.width_at_car",
+        "value": 0.5,
+        "kind": "derived",
+        "citation": "Kolekar, de Winter & Abbink (2020), Table 1",
+        "doi": "https://doi.org/10.1038/s41467-020-18353-4",
+        "note": "car width 2 m / 4",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "risk",
+        "parameter": "RiskFieldParameters.outside_cost",
+        "value": 500.0,
+        "kind": "assumed",
+        "citation": "Kolekar, de Winter & Abbink (2020), Table 3",
+        "doi": "https://doi.org/10.1038/s41467-020-18353-4",
+        "note": "C_env, assumed by the authors",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "risk",
+        "parameter": "RiskFieldParameters.threshold",
+        "value": 100000.0,
+        "kind": "assumed",
+        "citation": "model choice",
+        "doi": null,
+        "note": "placeholder; fitted per study (the published 3000 is a grid sum)",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "risk",
+        "parameter": "RiskFieldParameters.wheelbase",
+        "value": 2.7,
+        "kind": "assumed",
+        "citation": "model choice",
+        "doi": null,
+        "note": "not reported in the paper",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "trust",
+        "parameter": "TrustParameters.opacity",
+        "value": 2.0,
+        "kind": "fitted",
+        "citation": "Gao & Lee (2006), Table 1",
+        "doi": "https://doi.org/10.1109/TSMCA.2005.855783",
+        "note": "2 with sound feedback, 10 with noise",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "trust",
+        "parameter": "TrustParameters.prior_pull",
+        "value": 50.0,
+        "kind": "fitted",
+        "citation": "Gao & Lee (2006), Table 1",
+        "doi": "https://doi.org/10.1109/TSMCA.2005.855783",
+        "note": "",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "trust",
+        "parameter": "TrustParameters.noise_sd",
+        "value": 0.1,
+        "kind": "derived",
+        "citation": "Gao & Lee (2006), Table 1",
+        "doi": "https://doi.org/10.1109/TSMCA.2005.855783",
+        "note": "the text gives sigma^2 = 0.1, but its theta = 1.9 sqrt(2 sigma^2) = 0.27 holds only for sigma = 0.1",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "trust",
+        "parameter": "TrustParameters.inertia",
+        "value": 0.5,
+        "kind": "fitted",
+        "citation": "Gao & Lee (2006), Table 1",
+        "doi": "https://doi.org/10.1109/TSMCA.2005.855783",
+        "note": "taken from Lee & Moray (1992) by Gao & Lee",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "trust",
+        "parameter": "TrustParameters.threshold",
+        "value": 0.27,
+        "kind": "fitted",
+        "citation": "Gao & Lee (2006), Table 1",
+        "doi": "https://doi.org/10.1109/TSMCA.2005.855783",
+        "note": "1.9 sqrt(2 sigma^2)",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "trust",
+        "parameter": "TrustParameters.automation_belief",
+        "value": 0.744,
+        "kind": "measured",
+        "citation": "Hergeth, Lorenz, Vilimek & Krems (2016), Results",
+        "doi": "https://doi.org/10.1177/0018720815625744",
+        "note": "self-reported trust of 35 drivers new to highly automated driving at its first use, 74.43% (SD 17.56), on trust's 0-1 scale",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      },
+      {
+        "category": "trust",
+        "parameter": "TrustParameters.manual_belief",
+        "value": 0.7,
+        "kind": "assumed",
+        "citation": "model choice",
+        "doi": null,
+        "note": "",
+        "overridden": false,
+        "source_applies_to": "baseline_default"
+      }
+    ]
+  },
+  "configuration_reconstruction": "Apply each row's overrides to the recorded base configuration. Rows named baseline use resolved_baseline_parameters.",
+  "environment_file": "../experiment-environment.json"
+}

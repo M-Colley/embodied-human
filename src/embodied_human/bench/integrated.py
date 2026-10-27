@@ -14,6 +14,7 @@ import numpy as np
 
 from ..core import Human
 from .benchmarks import Result, benchmark
+from .protocol import protocol_seed, protocol_seeds
 
 
 def _driving_env(scenario: Any) -> Any:
@@ -56,9 +57,11 @@ def surt_glances(human: Human, seconds: float = 60.0, speed: float = 20.0) -> Re
     env = _driving_env(
         Scenario(name="surt", start_speed=speed, target_speed=speed, duration=seconds)
     )
-    agent = AttentiveDriver(human, env, SuRTTask(rng=np.random.default_rng(0)))
-    env.reset(seed=0)
-    agent.reset(seed=0)
+    agent = AttentiveDriver(
+        human, env, SuRTTask(rng=np.random.default_rng(protocol_seed()))
+    )
+    env.reset(seed=protocol_seed())
+    agent.reset(seed=protocol_seed())
     offsets = []
     while True:
         _, _, terminated, truncated, info = env.step(agent.act())
@@ -110,7 +113,7 @@ def takeover(human: Human, runs: int = 8) -> Result:
     env = _driving_env(takeover_request())
     times = []
     components: list[dict[str, float]] = []
-    for seed in range(runs):
+    for seed in protocol_seeds(runs):
         agent = AttentiveDriver(human, env, SuRTTask(rng=np.random.default_rng(seed)))
         env.reset(seed=seed)
         agent.reset(seed=seed)

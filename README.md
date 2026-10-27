@@ -36,41 +36,21 @@ everything else fixed, and show what changes in the integrated behaviour.
 
 ## What is included
 
-- **Modules.** Sixteen categories:
-  - senses: `eyes`, `vision`, `objects`, `hearing`, `touch`, `vestibular`
-    and `proprioception`;
-  - cognition: `attention`, `memory`, `estimator` and `response`;
-  - action: `motor` and `fatigue`;
-  - experience and motivation: `affect`, `risk` and `trust`.
+**Modules.** Sixteen categories cover the senses (`eyes`, `vision`, `objects`, `hearing`, `touch`, `vestibular`, `proprioception`), cognition (`attention`, `memory`, `estimator`, `response`), action (`motor`, `fatigue`) and experience (`affect`, `risk`, `trust`). Each has an interface and a cited baseline. Alternatives include SEEV attention and the ISO motion sickness dose, native [PyACTUp memory and PyDDM choices](docs/model-integrations.md), the [TouchSim afferent pathway](docs/touchsim.md), and [contact maps on the existing MuJoCo body](docs/contact-sensing.md).
 
-  Each has an abstract interface and a cited baseline. Alternatives include
-  SEEV for attention, the ISO 2631-1 dose for motion sickness, and an optional
-  [TouchSim afferent pathway](docs/touchsim.md) for touch.
-- **Sources for every parameter.** 112 parameters: 14 measured, 5 set by
-  standards, 52 fitted, 4 derived and 37 assumed. See
-  [docs/parameters.md](docs/parameters.md).
-- **Tasks.** SuRT (ISO/TS 14198), the detection-response task (ISO
-  17488), delayed digit recall and ISO 9241-411 tapping.
-- **Agents.**
-  - a touchscreen user;
-  - an attentive driver that shares gaze with SuRT and takes over from
-    automation. It runs on a fast straight road or on the MyoSuite full
-    body through myosuite-carla.
-- **Simulated studies.** Simulated participants, parameter inference by
-  approximate Bayesian computation, bootstrap intervals, and traces of
-  every run.
-- **Benchmark.** 28 benchmarks score the model against 49 published human
-  references. Any module can be swapped from the command line. Reports
-  and the fitting scripts' outputs are in [evidence/](evidence/).
-- **Tutorial.** [examples/tutorial_modules.ipynb](examples/tutorial_modules.ipynb)
-  shows how to change parameters, swap implementations, and write,
-  register, test and benchmark a new module.
-- **Local no-code builder.** Drag models into their categories, edit parameters,
-  inspect sources, export JSON or Python, and run a seeded memory preview.
-  Launch `python -m embodied_human.builder`; see [docs/builder.md](docs/builder.md).
+**Parameter sources.** The default human and driver have 112 parameters: 14 measured, 5 set by standards, 52 fitted, 4 derived and 37 assumed. [The generated table](docs/parameters.md) records their sources. Optional adapters expose their own provenance; their additional task and numerical settings are explicitly assumed rather than new fits to human data.
 
-The package contains only published aggregates of human data, and no
-code from the projects listed under [Relation to other work](#relation-to-other-work).
+**Tasks and agents.** SuRT, the detection response task, delayed digit recall and ISO tapping support a touchscreen user and an attentive driver that shares gaze with SuRT and takes over from automation. The driver runs on a fast road surrogate or the MyoSuite body through myosuite-carla. Native cue based serial recall and drift diffusion choice tasks are additional unscored model demonstrations.
+
+**Experiments.** Simulated participants, approximate Bayesian inference, paired comparisons, parameter sweeps, SciPy bootstrap intervals and optional [SALib Morris and Sobol sensitivity analyses](docs/sensitivity.md) make assumptions inspectable. [Run bundles and replay](docs/experiments.md) retain resolved configurations, declared seeds, references, validation roles, dependency versions, source hashes and available traces. Simulation intervals and sensitivity indices are not independent human validation.
+
+**Benchmarks.** The original 28 benchmarks compare the model with 49 published aggregate references. Each result distinguishes consistency, calibration and held out evaluation, with unresolved independence identified explicitly. Module choices can be swapped from the command line. Reports and fitting outputs are in [evidence/](evidence/).
+
+**Local visual builder.** Drag models into categories, edit parameters and inspect sources, then run seeded comparisons, sweeps or sensitivity experiments in a separate worker. The interface provides cancellation, execution limits, tables, plots and downloadable run bundles, alongside JSON or Python configuration export and a seeded memory preview. Launch `python -m embodied_human.builder`; [the guide](docs/builder.md) describes the supported workflows.
+
+**Tutorial.** [The module notebook](examples/tutorial_modules.ipynb) shows how to change parameters, swap implementations, and write, register, test and benchmark a new module.
+
+Human reference data consist of published aggregates. The package includes an attributed MIT subset of MIMo for contact sampling and force allocation; optional PyACTUp, PyDDM, TouchSim and SALib computations use their installed upstream packages. [The licensing description](#relation-to-other-work) identifies that included code and its retained notice.
 
 ## What was replicated
 
@@ -90,7 +70,7 @@ it. There are two kinds.
 | Thresholds in quiet and masking (ISO 226; Zwicker & Terhardt, 1980), Piéron latency (Kohfeld et al., 1981), MoSQITo loudness | `hearing` | threshold table, A-weighting, 4 sone at 60 phon |
 | Time window of integration (Diederich & Colonius, 2015) with a central stage shared as in threaded cognition (Salvucci & Taatgen, 2008) | `response` | redundant-signal facilitation; waiting time d²/2T within 2 ms |
 | Six-degree-of-freedom subjective vertical conflict (Bos & Bles, 1998; Kamiji et al., 2007; Wada et al., 2018); ISO 2631-1 dose | `vestibular` | Kamiji et al.'s closed-form band-pass within 0.5%; Bos & Bles's closed-form sickness for vertical sinusoids within 1%; Wf weighting and dose within 1% |
-| Three-compartment fatigue (Xia & Frey-Law, 2008; Looft et al., 2018); Consumed Endurance (Hincapié-Ramos et al., 2014) | `fatigue` | endurance times per joint, median error 17% |
+| Three-compartment fatigue (Xia & Frey-Law, 2008; Looft et al., 2018); Consumed Endurance (Hincapié-Ramos et al., 2014) | `fatigue` | endurance times per joint, median error 16% |
 | Appraisal-based emotion (Zhang et al., 2024) | `affect` | the published appraisal profiles; ratings fitted at least as well as the original (RMSE 0.098 against 0.13) |
 | Driver's risk field (Kolekar et al., 2020) | `risk` | closed form of lane risk |
 | Extended decision field theory of trust (Gao & Lee, 2006) | `trust` | Eqs. 6-9 and Table 1 against the paper; the closed form of their Eq. 11; inertia and hysteresis |
@@ -109,18 +89,18 @@ it. There are two kinds.
 | Study | Result | Status |
 | --- | --- | --- |
 | Diederich & Colonius (2007) | saccades to lights at 50° and 70° are 39 and 58 ms slower than at 10° | replicated (within 1 ms) |
-| Diederich & Colonius (2004) | a tone is answered faster than a light, a light faster than a vibration | replicated (order) |
+| Diederich & Colonius (2004) | a tone is answered faster than a light, a light faster than a vibration | consistency (the tactile latency uses this study) |
 | Petermeijer et al. (2017) | sound and vibration take-over requests are answered faster than light | replicated (order) |
 | Petermeijer et al. (2017) | eyes on the road 0.37 and 0.50 s later after a light than after a sound or a vibration | **not replicated**: 0.07 and −0.01 s |
 | Gold et al. (2013) | first road fixation after a take-over request | replicated |
 | Gold et al. (2013) | first saccade away from SuRT | **not replicated**: 0.81 s against 0.41–0.54 s |
 | Gold et al. (2013) | hands on the wheel | fitted |
-| Gold et al. (2013) | first braking or steering input | **not replicated**: 1.98 s against 2.10–2.89 s |
-| Zeeb et al. (2015) | first gaze at the road and hands on the wheel with a knob task | **not replicated**: 0.91 s against 0.64–0.74 s; 1.03 s against 1.05–1.23 s |
+| Gold et al. (2013) | first braking or steering input | **not replicated**: 1.97 s against 2.10–2.89 s |
+| Zeeb et al. (2015) | first gaze at the road and hands on the wheel with a knob task | **not replicated**: 0.90 s against 0.64–0.74 s; 1.03 s against 1.05–1.23 s |
 | Hergeth et al. (2016) | monitoring frequency at two levels of trust during automation | fitted |
 | Zeeb et al. (2015) | monitoring during automation: longest look away and share of time on the road | replicated (15.9 s against 8.6–44.4 s; 11.6% against 2.2–12.5%) |
 | Ko et al. (2022) | hands on the wheel after an auditory warning | replicated (1.62 s against 1.87 ± 0.51 s) |
-| Zhang et al. (2019) | take-over time across 520 conditions | replicated (2.44 s against 2.72 ± 1.45 s) |
+| Zhang et al. (2019) | take-over time across 520 conditions | replicated (2.43 s against 2.72 ± 1.45 s) |
 | Zhang et al. (2019) | effects of the request's modality and of a visual task on take-over time | **not replicated**: modality effects a quarter or less of the human ones; the task's effect four times larger |
 | Kujala & Saariluoma (2011) | mean and within-person SD of in-vehicle glances | fitted |
 | Kujala & Saariluoma (2011) | share of glances over 2 s | replicated |
@@ -139,7 +119,7 @@ it. There are two kinds.
 | Liu et al. (2016) | preferred speed by lane width | fitted on two widths; replicated on three held out |
 | Kraus et al. (2020) | trust over a drive | fitted on Study 1; replicated on Study 2 |
 | Kraus et al. (2020) | transient drop in trust after a malfunction | **not replicated** |
-| Zhang et al. (2024) | emotion ratings in three tasks | replicated (RMSE 0.098; the original model 0.13) |
+| Zhang et al. (2024) | emotion ratings in three tasks | unclassified data independence (RMSE 0.098; the original model 0.13) |
 | Kim et al. (2014) | key size beyond which larger touch keys stop helping | replicated (12.5 mm, at the edge of 12.5–22.5 mm) |
 
 The [benchmark table](#benchmark) gives every number and acceptance range,
@@ -148,12 +128,16 @@ and [VALIDATION.md](VALIDATION.md) records each run.
 ## Install
 
 ```bash
-pip install -e .                       # numpy, scipy: every module and module benchmark
-pip install -e ".[experience]"         # scikit-learn (emotion), MoSQITo (loudness)
-pip install -e ../embodied-ui          # touch and button tasks with physical contact
-pip install -e ../myosuite-carla       # driving with the MyoSuite full body
-pip install -r requirements-touchsim.txt  # optional, verified MIT TouchSim revision
+python -m pip install -e .                         # NumPy and SciPy baseline
+python -m pip install -e ".[experience]"          # emotion recognition and loudness
+python -m pip install -e ".[memory,decision]"     # native PyACTUp and PyDDM
+python -m pip install -e ".[analysis,contact]"    # SALib and MuJoCo contact maps
+python -m pip install -e ../embodied-ui             # physical touch and button tasks
+python -m pip install -e ../myosuite-carla           # driving with the MyoSuite body
+python -m pip install -r requirements-touchsim.txt  # pinned MIT TouchSim revision
 ```
+
+Optional libraries load only when their native computation is requested. The package remains importable without embodied-ui, myosuite-carla, MuJoCo, PyACTUp, PyDDM, SALib or TouchSim. TouchSim installation uses Git from a source checkout or unpacked source distribution because that upstream package is not published on PyPI; its pinned requirements file is kept outside the package dependency metadata. [TouchSim instructions](docs/touchsim.md) explain the units, deterministic protocol and installation requirements.
 
 ## Use
 
@@ -166,11 +150,11 @@ for row in human.provenance():                          # every parameter's sour
     print(row["parameter"], row["value"], row["kind"], row["citation"])
 ```
 
-The memory baseline reimplements selected ACT-R equations; it is not an
-installed ACT-R release. [Memory models and newer alternatives](docs/memory-models.md)
-reviews the maintained ACT-R architecture, the 2024 Oberauer–Lin interference
-model and adaptive forgetting work published in 2026, with the interface and
-calibration changes needed to integrate them faithfully.
+The memory baseline implements selected ACT-R equations. The optional `memory=pyactup` backend adds native feature cues, partial matching and numeric blending through PyACTUp, while the baseline focus policy stays explicit. [Native memory and choice examples](docs/model-integrations.md) describe the interfaces and seeded task demonstrations. [Memory models and newer alternatives](docs/memory-models.md) reviews the maintained ACT-R architecture, the 2024 Oberauer and Lin interference model and adaptive forgetting work published in 2026. PyACTUp is not an implementation of those distinct newer theories, and none of these added demonstrations is claimed as a fitted human replication.
+
+The optional `response=pyddm` backend adds an explicit choice and response time API with supplied drift and deadlines. Its inherited TWIN detection path keeps its existing parameters. Choosing it does not infer evidence from sensory signals or automatically change DRT and takeover predictions. The `touch=contact_map` backend reads body contact forces, while `touch=touchsim` accepts explicit indentation traces; a contact mechanics model and a validated perceptual decoder are still needed to connect those pathways scientifically.
+
+Use [the visual experiment interface](docs/builder.md) or [the experiment CLI](docs/experiments.md) to run matching seeds across alternatives, compare with the baseline, and retain reports for replay. Matching a model to the reference used to set its parameters remains a consistency check. Optional sensitivity estimates depend on the declared parameter bounds and seed protocol.
 
 The [26 October repository review](docs/repository-review.md) records bug fixes,
 integration limits and priorities for further work. Benchmark JSON uses `null`
@@ -290,35 +274,35 @@ python -m embodied_human.bench --import my_modules --replace attention=my_sample
 ```
 
 Results of the baseline (seed 0; [report](evidence/benchmark-baseline.json)).
-Seventeen of twenty-eight benchmarks pass:
+Seventeen of twenty-eight benchmarks meet every scored acceptance criterion. The report counts consistency, calibration and held out metric evaluations separately:
 
 | Benchmark | Measured | Human reference (acceptance range) | Kind of check |
 | --- | --- | --- | --- |
 | `eyes.main_sequence` | 2.2 ms/deg, 21 ms | 2.2–2.7 ms/deg (2.0–3.7); 21 ms (13–37) | consistency |
-| `eyes.latency` | median 201 ms | 150–250 ms (Saslow, 1967) | consistency |
+| `eyes.latency` | median 203 ms | 150–250 ms (Saslow, 1967) | consistency |
 | `objects.peripheral_acuity` | E2 = 1.98° | 1.0–2.6° (letters, Landolt C) | consistency |
 | `vision.foveation` | E2 = 2.3° | 1.0–3.0° | consistency |
 | `memory.span` | 4 items | 3–5 chunks (Cowan, 2001) | consistency |
 | `motor.touch_tapping` | 6.28 bits/s; 104 ms/bit | 6.95 bits/s (5.5–8.5; MacKenzie, 2015); 105 ms/bit (75–135; Bi et al., 2013) | **through physical contact** |
 | `driving.surt_glances` | Full body at 72 km/h: mean off-road glance 0.93 s; 2.2% over 2 s | NHTSA (2013) criteria: pass. Human in-vehicle glances, mean 0.8–1.2 s: pass; 3–13% over 2 s: just below (score 0.98) | **held out** (fitted on a straight road at 50 km/h) |
-| `driving.takeover` | chime and icon: first input after 2.44 s, SD 0.84 s (8 runs); median response 0.58 s, gaze leaves SuRT 0.94 s, eyes on the road 0.85 s, hand on the wheel 1.59 s, driving 2.35 s | 2.72 ± 1.45 s across 520 conditions (Zhang et al., 2019): pass | **held out** |
-| `driving.takeover_components` | at 120 km/h, means of 64 runs: gaze leaves SuRT 0.81 s, first road fixation 0.91 s, hands on 1.63 s, first input 1.98 s | Gold et al. (2013), between their 5 and 7 s budgets: gaze 0.41–0.54 s: **fail**; road 0.69–0.94 s: pass; hands 1.45–1.79 s: fitted to the midpoint; first input 2.10–2.89 s: **fail** | **held out**; hands fitted |
-| `driving.takeover_motor_readiness` | task worked through a knob, icon in its display: first road fixation 0.91 s, hands on 1.03 s | Zeeb et al. (2015): 0.69 s (0.64–0.74): **fail**; 1.14 s (1.05–1.23): **fail** | **held out** |
+| `driving.takeover` | chime and icon: first input after 2.43 s, SD 0.83 s (8 runs); median response 0.57 s, gaze leaves SuRT 0.92 s, eyes on the road 0.84 s, hand on the wheel 1.58 s, driving 2.34 s | 2.72 ± 1.45 s across 520 conditions (Zhang et al., 2019): pass | **held out** |
+| `driving.takeover_components` | at 120 km/h, means of 64 runs: gaze leaves SuRT 0.81 s, first road fixation 0.90 s, hands on 1.63 s, first input 1.97 s | Gold et al. (2013), between their 5 and 7 s budgets: gaze 0.41–0.54 s: **fail**; road 0.69–0.94 s: pass; hands 1.45–1.79 s: fitted to the midpoint; first input 2.10–2.89 s: **fail** | **held out**; hands fitted |
+| `driving.takeover_motor_readiness` | task worked through a knob, icon in its display: first road fixation 0.90 s, hands on 1.03 s | Zeeb et al. (2015): 0.69 s (0.64–0.74): **fail**; 1.14 s (1.05–1.23): **fail** | **held out** |
 | `driving.takeover_determinants` | log ratio of first-input times: icon alone against tone and icon +0.05; vibration added −0.01; SuRT against no task +0.50 | Zhang et al. (2019), mixed-effects model of 129 studies: +0.21 (0.13–0.29), −0.18 (−0.27 to −0.09), +0.10 (0.04–0.16): **fail all** | **held out** |
 | `driving.automation_monitoring` | a visual task during automation at 120 km/h, trust 0.74: longest look away from the road 15.9 s in a minute; eyes on the road 11.6% of the time; 8.4 road glances a minute | Zeeb et al. (2015), between their low- and high-risk groups: 8.6–44.4 s and 2.2–12.5%: pass | **held out** (checking rate fitted to Hergeth et al., 2016) |
 | `driving.takeover_eyes_by_modality` | single-modality requests, LEDs beside the display: eyes on the road 0.07 s later after a light than a sound, 0.01 s earlier than after a vibration | Petermeijer et al. (2017): 0.37 s (0.10–0.64) and 0.50 s (0.18–0.82): **fail** | **held out** |
 | `driving.takeover_modality` | median response: sound 0.36 s, vibration 0.44 s, light 0.58 s; hand on the wheel after chime and icon, mean 1.62 s | sound and touch faster than light (Petermeijer et al., 2017): pass. Grabbing the wheel 1.87 s (1.36–2.38; Ko et al., 2022): pass | **held out** |
-| `response.drt_load` | DRT cost of driving +28 ms; tactile DRT cost of an auditory 2-back +290 ms, of SuRT +371 ms | +51 ms (31–70; Conti et al., 2014), predicted from threaded cognition: just below. Cooper et al. (2020) on the road, tactile responses from their raw data: 2-back +294 ms (261–328): pass; SuRT +193 ms (162–223): **fail** | driving and Cooper held out; chunks fitted to Conti |
-| `response.modality_rt` | tone 252 ms < light 319 ms < vibration 335 ms | same order (Diederich & Colonius, 2004) | order only |
+| `response.drt_load` | DRT cost of driving +28 ms; tactile DRT cost of an auditory 2-back +297 ms, of SuRT +367 ms | +51 ms (31–70; Conti et al., 2014), predicted from threaded cognition: just below. Cooper et al. (2020) on the road, tactile responses from their raw data: 2-back +294 ms (261–328): pass; SuRT +193 ms (162–223): **fail** | driving and Cooper held out; chunks fitted to Conti |
+| `response.modality_rt` | tone < light < vibration | same order (Diederich & Colonius, 2004) | consistency; tactile latency uses this study |
 | `response.eccentricity` | a light at 50° and 70° answered 40 and 59 ms later than at 10° | saccades 39 and 58 ms later (Diederich & Colonius, 2007), RMS error ≤ 10 ms: pass | **held out**; 70° extrapolated |
-| `response.drt` | while driving: head-mounted light 383 ms (358 ms without driving); vibration 377 ms; older drivers 1.31× slower | head-mounted light 326–362 ms (Conti et al., 2014; 293 ms without driving): **fail**; vibration on the road 523 ms (490–556; Cooper et al., 2020, from their raw data): **fail**; ageing 1.20–1.41×: pass | **emergent** |
+| `response.drt` | while driving: head-mounted light 383 ms (358 ms without driving); vibration 380 ms; older drivers 1.30× slower | head-mounted light 326–362 ms (Conti et al., 2014; 293 ms without driving): **fail**; vibration on the road 523 ms (490–556; Cooper et al., 2020, from their raw data): **fail**; ageing 1.20–1.41×: pass | **emergent** |
 | `vestibular.vertical_sickness` | RMS error 7.5 % points, r = 0.93 (19.7 with the published conflict scale) | 2 h vertical oscillation (O'Hanlon & McCauley, 1974): ≤ 10 | fitted (one parameter) |
 | `vestibular.sickness_time_course` | RMS error 14.8 % points, r = 0.76 over 43 points | sickness over time at nine other conditions (McCauley et al., 1976), ≤ 10: **fail**; their descriptive model: 6.3. `--replace vestibular=iso_2631`: 12.4 | **held out** |
 | `vestibular.roll_compensation` | 30 min of lateral oscillation with roll that cancels the lateral force at the seat: MSI rises from 0.05 to 0.2 Hz and falls from 0.315 to 0.8 Hz; at 0.315 Hz compensation halves MSI | Donohew & Griffin (2009): all five significant differences between frequencies: pass; compensation made people sicker at 0.315 Hz: **fail** | **held out** |
-| `fatigue.endurance` | median error 17% | endurance times per joint (Frey-Law & Avin, 2010) | consistency |
+| `fatigue.endurance` | median error 16% | endurance times per joint (Frey-Law & Avin, 2010) | consistency |
 | `risk.lane_width` | 56.2, 68.7 and 85.1 km/h on 2.85, 3.25 and 3.75 m lanes; mean error 2.1 km/h | 56.2, 65.5 and 81.9 km/h (Liu et al., 2016), error ≤ 9.4: pass | threshold and width growth fitted on 3.0 and 3.5 m; three held out |
 | `trust.kraus_dynamics` | trust over a drive: RMS error 0.29 points; malfunction dip +0.20 | Kraus et al. (2020), Study 2 low transparency: error ≤ 0.3: pass; dip −0.47 (−0.94 to −0.10): **fail** | fitted on Study 1, Study 2 held out |
-| `affect.emotion_study` | RMSE 0.098, R² 0.84 | normalised emotion ratings in three tasks (Zhang et al., 2024); the original model: 0.13, 0.78 | **reproduction** |
+| `affect.emotion_study` | RMSE 0.098, R² 0.84 | normalised emotion ratings in three tasks (Zhang et al., 2024); the original model: 0.13, 0.78 | unclassified data independence |
 | `driving.glance_population` | 20 participants: mean 1.13 s (95% CI 1.08–1.19), within-person SD 0.58 s (0.54–0.64), 7.9% over 2 s | Kujala & Saariluoma (2011): 1.06–1.20 s, 0.48–0.66 s, 5.7–10% | fitted (mean, SD); held out (long glances) |
 | `driving.glance_speed` | elasticity of glance duration on speed −0.45 (40–120 km/h) | occlusion −0.72 to −0.53 (Senders et al., 1967); in-car search 0 (Jokinen et al., 2021): **fail both** | **counterfactual** |
 | `design.touch_key_size` | gains stop at 12.5 mm (30 simulated participants, paired t-tests as in the study) | 17.5 mm (12.5–22.5; Kim et al., 2014) | **application**, physical contact |
@@ -343,14 +327,7 @@ real test:
   noticing the request, the driver drops the task: the eyes go to the road
   and, in parallel, the hand returns to the wheel. It acts only after the
   hand is back and the road scene has been assessed.
-  - **Reaction.** The request finds the central stage busy with SuRT,
-    whose chunk was fitted to Conti et al.'s DRT data, so the reaction
-    waits 0.36 s on average. Without being fitted to Gold et al. (2013),
-    this puts the first road fixation between their means for 5 and 7 s
-    budgets. The first saccade away from SuRT comes too late (0.81 s
-    against 0.41–0.54 s): absorbed in the task during automation, the
-    driver no longer happens to look up just after the request, and the
-    reaction plus saccade latency is too slow.
+  - **Reaction.** SuRT occupies the central stage when the request arrives. Its chunk duration is fitted to Conti et al.'s DRT data. The reaction waits approximately 0.36 s. First road fixation falls between Gold et al.'s means for 5 and 7 s budgets. Hand release uses their hands outcome for fitting, so these outcomes share participants with calibration. The first saccade away from SuRT occurs too late (0.81 s against 0.41–0.54 s). The combined response and saccade delays exceed the observed gaze reaction time.
   - **Hands.** The time to let go of the task grows with its manual load.
     It is fitted to Gold et al.'s touchscreen SuRT. That predicts Ko et
     al.'s laptop game (a mean of 1.62 s against 1.87 ± 0.51 s). Assuming no
@@ -433,15 +410,11 @@ and are the first candidates for fitting.
 
 ## Relation to other work
 
-The new senses, responses, fatigue, emotion, risk and trust modules
-reimplement published models; none of their code is copied. Code that was
-released without a licence (Zhang et al.'s emotion model and Jang et
-al.'s fatigue model) was not used. TouchSim now has an MIT licence and is
-supported through an [optional adapter](docs/touchsim.md), with a pinned
-licensed revision and no vendored code. MIMo (MIT) models full-body touch in
-MuJoCo, but its pinned dependencies (MuJoCo 3.3, NumPy 2.0) conflict with
-this package, so its approach is a candidate for a `touch` module rather
-than a dependency.
+The baseline senses, responses, fatigue, emotion, risk and trust modules reimplement published equations. Code released without a licence, including Zhang et al.'s emotion model and Jang et al.'s fatigue model, was not used. PyACTUp and PyDDM are optional native MIT backends, and SALib supplies optional sensitivity methods under its own MIT licence. Their task and protocol assumptions are documented separately from published human reference values.
+
+TouchSim's verified MIT revision is supported through an [optional adapter](docs/touchsim.md), with no vendored TouchSim code. The [contact map implementation](docs/contact-sensing.md) includes an adapted NumPy subset of MIMo's geometry sampling and linear force scaling from commit `040b0ae4914cbfb26afdf830aa81775b90922f3f`. The full [MIMo MIT notice](src/embodied_human/_vendor/MIMO_LICENSE.txt) is retained in source and wheel distributions. Original package code remains under Apache 2.0, the adapted subset remains under MIT, and distribution metadata records `Apache-2.0 AND MIT`.
+
+The complete MIMo package pins MuJoCo 3.3.0 and SciPy 1.13.1, which conflict with this package's MuJoCo extras and SciPy requirement. Its NumPy 2.0.2 pin alone does not conflict with the core requirement. The adapted contact subset avoids those pins and binds the existing body rather than replacing it. Its force conservation and coordinate checks verify the implementation; they do not establish a human skin mechanics or receptor model.
 
 - **User-in-the-Box** (Ikkala et al., 2022) couples MuJoCo biomechanics,
   perception and RL for interaction tasks.
@@ -456,7 +429,7 @@ than a dependency.
   image source, and embodied-ui's CARLA and Unity cameras supply driver
   views.
 
-No code from these projects is included.
+These comparisons provide research context. The included third party code is the attributed MIT subset of MIMo described above; the other native backends remain separate installed dependencies.
 
 ## Limitations and next steps
 
@@ -471,11 +444,7 @@ No code from these projects is included.
   position sense) is measured. The older-adult profile also slows the
   central response stage and widens the integration window (Diederich et
   al., 2008); other shifts are still missing.
-- **Senses:** touch has vibration thresholds at twelve sites and an optional
-  TouchSim pathway for indentation-driven afferent spikes. A validated
-  spike-to-perception decoder and whole-body receptor placement remain future
-  work. Hearing handles tones in
-  broadband noise, not speech or spatial sound.
+- **Senses:** touch has vibration thresholds at twelve sites, optional TouchSim indentation responses and configurable contact force maps on existing MuJoCo bodies. Contact sensor placement is geometric and assumed rather than an anatomical receptor distribution. Force to indentation conversion and a validated spike to perception decoder remain future work. Hearing handles tones in broadband noise, not speech or spatial sound.
 - **Load:** chunks of concurrent tasks are fitted per task; deriving them
   from the task models (rules, retrievals, fixations) would make them
   predictions too. Hit rates under load are not modelled.
@@ -506,9 +475,6 @@ python examples/cooper_drt_aggregates.py drt.csv --out evidence/cooper-drt-aggre
 python examples/parameter_table.py                      # regenerates docs/parameters.md
 ```
 
-`pip install -e ".[test]"` also installs what the tests need to execute
-the tutorial notebook. Continuous integration runs the tests, including
-the notebook but without MyoSuite, then ruff, mypy and the build on
-Python 3.10, 3.12 and 3.14.
+`python -m pip install -e ".[test]"` also installs the dependencies needed to execute the tutorial notebook. Core continuous integration runs the offline tests and notebook, Ruff, mypy and the build on Python 3.10, 3.12 and 3.14. An additional job on Python 3.10 and 3.12 installs PyACTUp, PyDDM, SALib, TouchSim and MuJoCo and runs their native integration tests, then checks the built distributions for the retained MIMo licence and source attribution. MyoSuite body tests run when the optional model and assets are installed and remain skipped in CI.
 
-Apache-2.0.
+Original code: [Apache 2.0](LICENSE). Adapted MIMo subset: [MIT](src/embodied_human/_vendor/MIMO_LICENSE.txt). Distribution expression: `Apache-2.0 AND MIT`.

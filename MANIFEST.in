@@ -1,5 +1,6 @@
 include requirements-touchsim.txt
 include VALIDATION.md
+include CITATION.cff
 recursive-include docs *.md
-recursive-include examples *.py *.ipynb
+recursive-include examples *.py *.ipynb *.json
 recursive-include evidence *.json *.xml

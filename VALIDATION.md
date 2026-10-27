@@ -1,5 +1,52 @@
 # Validation
 
+## 2026-10-27, native models and reproducible experiments (Windows, CPU)
+
+The package includes native PyACTUp memory, native PyDDM choice distributions, an attributed MIT contact sensing subset from MIMo, SALib sensitivity analysis and a local experiment runner. The interface provides metric cards, confidence intervals, paired comparisons, sensitivity graphics and downloadable bundles. Memory and choice protocols use assumed task settings. Independent human evaluation remains pending.
+
+The final Python 3.12 environment used Python 3.12.13, NumPy 2.5.4, SciPy 1.18.1, PyACTUp 2.2.5, PyDDM 0.9.0, SALib 1.6.0, MuJoCo 3.17.0 and TouchSim 0.1.2. Pytest 9.1.1, Ruff 0.17.2, mypy 2.4.0 and build 1.6.1 provided the checks. MyoSuite 3.0.0, myosuite-carla 0.1.0, embodied-ui 0.1.0 and myo-sim 0.2.3 supplied the optional physical integration. [The environment record](evidence/experiment-environment.json) contains exact versions, package source hashes, editable dependency identities and the pinned TouchSim Git commit.
+
+The complete offline baseline meets every acceptance criterion in 17 of 28 protocols. Eleven protocols fail and none are skipped. The full run took 514.40 s under concurrent validation load. Driving uses the seeded myosuite-carla vehicle surrogate and the existing MyoSuite body. A targeted verification refresh checks the corrected vision, trust and risk implementation paths. Default trust and risk predictions match the former implementation exactly. Vision now measures the cutoff field returned by `perceive`.
+
+| Declared role | Scored metric evaluations | Within acceptance range |
+| --- | ---: | ---: |
+| Consistency | 9 | 9 |
+| Calibration | 5 | 5 |
+| Held out | 38 | 19 |
+| Unclassified | 1 | 1 |
+
+These counts contain repeated reference metrics across protocols. The baseline uses 49 unique published aggregate references. Held out statistics can share participants with calibration. The modality ordering result is a consistency check because tactile latency uses the same study. Throughput uses MacKenzie's separate smartphone experiment. Emotion data independence remains unclassified. [The report](evidence/benchmark-baseline.json) includes data identifiers, conditions and the rationale for each role.
+
+The DRT fitter returned central task chunks of 0.757758 s for 0 back, 1.127573 s for 2 back and 1.762292 s for SuRT. The committed constants use 0.758 s, 1.128 s and 1.762 s. The motion sickness refit returned a conflict scale of 0.196237 m/s², which retains the rounded default of 0.196. Its fitted endpoint RMSE is 7.463 percentage points. Held out time course RMSE is 14.758 percentage points and still fails its range. The generated parameter table retains 112 human and driver entries. Glance sampler coefficients retain the earlier fit.
+
+```powershell
+.venv/Scripts/python.exe examples/parameter_table.py
+.venv/Scripts/python.exe examples/fit_drt_load.py --out evidence/drt-load-fit.json
+.venv/Scripts/python.exe examples/fit_motion_sickness.py --out evidence/motion-sickness-fit.json
+.venv/Scripts/python.exe -m embodied_human.bench --out evidence/benchmark-baseline.json --bundle artifacts/baseline-run
+.venv/Scripts/python.exe -m pytest tests -x -q --junitxml=evidence/tests.xml
+.venv/Scripts/python.exe -m ruff check src tests examples
+.venv/Scripts/python.exe -m mypy src/embodied_human --ignore-missing-imports
+node --check src/embodied_human/builder/builder.js
+.venv/Scripts/python.exe -m build
+```
+
+The final complete suite passed 344 tests in 272.07 s. All optional native pathways ran. Nine warnings concern upstream MuJoCo model prefixes and Windows Jupyter event loop integration. Ruff, mypy and JavaScript syntax checks passed. The Windows progress file race has two actual file locking regressions. Atomic JSON replacement retries transient reader locks and preserves the previous file when the bounded wait is exhausted. An additional reporting check verifies that installing a previously absent optional dependency requires an explicit replay comparison override.
+
+Python 3.10.20 compatibility used NumPy 2.2.6 and SciPy 1.15.3. The complete compatibility run passed 290 tests and skipped 20 unavailable optional integrations. Final focused checks passed 92 tests covering reporting, trust, risk, vision, experiments and builder jobs. Native PyACTUp, PyDDM and SALib execute in that environment. The optional CI job explicitly installs the native integrations on Python 3.10 and 3.12. The existing core matrix remains Python 3.10, 3.12 and 3.14.
+
+Four [request files](examples/experiments/) produced the committed [experiment evidence](evidence/experiments/). Serial recall compares two configurations across five seeds (10 protocol runs). The choice example sweeps three bounds across five seeds (15 runs). Morris evaluates two DRT factors using eight trajectories and three seeds (72 runs). Sobol evaluates two eye parameters with 64 base samples (256 runs). The evidence retains all rows, design order, seed outputs and base parameters. Per case overrides reconstruct each configuration without repeating its provenance. Full bundles also retain per case resolved configurations and source archives.
+
+The DRT Morris absolute effects are 150.0 ms for the central stage range and 69.448 ms for the tactile latency range. These effects depend on the declared bounds. The eye Sobol estimates are S1 = 1.0183 and ST = 1.0169 for duration slope. The intercept effect is numerically zero. Values above one remain visible as finite sample estimation error. The eye example measures consistency with its own coefficients. Human parameter distributions require separate empirical estimation.
+
+Native serial recall replay used the following command without comparison overrides. Its request, every result row, summaries and paired differences matched exactly.
+
+```powershell
+.venv/Scripts/python.exe -m embodied_human.experiments --replay artifacts/serial-recall/manifest.json --out artifacts/serial-recall-replay
+```
+
+The wheel and source distribution include the MIMo licence and exact source attribution. A core environment installed the wheel with NumPy and SciPy. It constructed all 16 categories and every lazy adapter, listed 30 protocols, served the builder, ran the memory preview and wrote a checked bundle. PyACTUp, PyDDM, SALib, MuJoCo, MyoSuite, embodied-ui, TouchSim and scikit-learn were absent. Browser verification covered native recall and choice, Morris indices with recorded units, cancellation, retained jobs after reload and actual bundle downloads. Responsive summaries retain exact values in expandable tables. External dependency checkouts and assets require separate retention, as documented in [the experiment guide](docs/experiments.md).
+
 ## 2026-10-26, repository review and optional TouchSim (Windows, CPU)
 
 All commands below used the isolated `.venv` interpreter, Python 3.12.13,

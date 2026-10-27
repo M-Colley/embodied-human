@@ -28,12 +28,31 @@
       <section class="composition"><div class="panel-heading"><div><h2>Your composition</h2><p class="hint">Select a category to inspect its parameters.</p></div><span class="tiny-label">ONE MODEL PER CATEGORY</span></div><div id="slots" class="slots"></div></section>
       <aside class="inspector panel"><div class="panel-heading"><h2>Parameter inspector</h2><span class="live-dot" aria-hidden="true"></span></div><div id="inspector"></div></aside>
     </div>
+    <section class="experiment panel" aria-labelledby="experiment-title">
+      <div class="preview-heading"><div><p class="eyebrow">REPRODUCIBLE EXPERIMENTS</p><h2 id="experiment-title">Run benchmarks and model demonstrations</h2><p class="hint">Each selected protocol runs in a separate seeded human. Full baseline runs can require several minutes.</p></div></div>
+      <form id="experiment-form">
+        <div class="experiment-grid">
+          <fieldset class="benchmark-field"><legend>Benchmarks</legend><div class="benchmark-actions"><button id="bench-all" type="button">Select all</button><button id="bench-clear" type="button">Clear</button></div><div id="benchmarks" class="benchmark-list"><p class="hint">Loading benchmarks…</p></div></fieldset>
+          <div class="experiment-controls">
+            <label for="experiment-method">Analysis<select id="experiment-method"><option value="benchmarks">Benchmark comparison or sweep</option><option value="morris">Morris sensitivity screening</option><option value="sobol">Sobol sensitivity indices</option></select></label>
+            <div class="control-pair"><label for="experiment-seeds">Seed repetitions<input id="experiment-seeds" type="number" value="3" min="1" max="20" step="1" required></label><label for="experiment-timeout">Time limit (seconds)<input id="experiment-timeout" type="number" value="900" min="1" max="3600" step="1" required></label></div>
+            <p class="hint">Seeds start at the random seed above. Every compared configuration receives identical seeds.</p>
+            <label class="check-label"><input id="experiment-compare" type="checkbox" checked>Compare the current configuration with the baseline</label>
+            <fieldset><legend>Parameter sweep</legend><label for="sweep-category">Category<select id="sweep-category"><option value="">No sweep</option></select></label><div id="sweep-settings" hidden><label for="sweep-parameter">Parameter<select id="sweep-parameter"></select></label><label for="sweep-values">Values, separated by commas<input id="sweep-values" type="text" placeholder="1, 2, 3, 4"></label><p class="hint">Enter at most 32 finite values. Each value replaces one parameter in the current configuration.</p></div></fieldset>
+            <fieldset id="sensitivity-controls" hidden><legend>Sensitivity analysis</legend><label for="sensitivity-benchmark">Benchmark<select id="sensitivity-benchmark"></select></label><label for="sensitivity-metric">Metric<select id="sensitivity-metric"></select></label><label for="sensitivity-samples">Design size<input id="sensitivity-samples" type="number" min="4" max="128" step="1" value="8"></label><p class="hint">Morris uses this many trajectories. Sobol requires a power of two. Every design point uses the selected seeds.</p><div id="sensitivity-factors"></div><button id="sensitivity-add" type="button">Add parameter</button><p class="hint">Specify bounds for at most eight continuous parameters. Bounds require scientific justification.</p></fieldset>
+            <button id="experiment-start" class="primary" type="submit">Start experiment</button>
+          </div>
+        </div>
+      </form>
+      <div id="experiment-status" role="status" aria-live="polite" class="job-status">No experiment has started.</div>
+      <div id="experiment-jobs" class="experiment-jobs"></div>
+    </section>
     <section class="preview panel">
       <div class="preview-heading"><div><p class="eyebrow">TRY YOUR MEMORY MODEL</p><h2>Delayed digit recall</h2><p class="hint">24 spoken digits per level. Recall the digit presented 0–5 positions earlier.</p></div><button id="preview" class="primary">Run seeded preview <span aria-hidden="true">↗</span></button></div>
-      <p class="preview-note">This is a task demonstration, not validation against human data. Only the memory module affects these results; all selected modules are constructed.</p>
+      <p class="preview-note">Task demonstration with assumed settings. Memory determines the results. All selected modules are constructed.</p>
       <div id="preview-results"><p class="empty-state">Your preview will appear here.</p></div>
     </section>
-    <footer>embodied-human <span>·</span> Configurations select registered module implementations. They do not define arbitrary connections between models.</footer>
+    <footer>embodied-human <span>·</span> Configurations select one registered implementation per category.</footer>
   </main>
 </body>
 </html>

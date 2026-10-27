@@ -1,4 +1,5 @@
 {
+  "schema_version": 1,
   "package": "embodied-human 0.1.0",
   "python": "3.12.13",
   "seed": 0,
@@ -68,6 +69,1186 @@
       "params": {}
     }
   },
+  "resolved_config": {
+    "eyes": {
+      "name": "main_sequence",
+      "params": {
+        "duration_slope": 0.0022,
+        "duration_intercept": 0.021,
+        "latency_median": 0.2,
+        "latency_spread": 0.25,
+        "minimum_amplitude": 0.5
+      }
+    },
+    "vision": {
+      "name": "foveated",
+      "params": {
+        "alpha": 0.106,
+        "e2": 2.3,
+        "ct0": 0.015625,
+        "levels": 7
+      }
+    },
+    "objects": {
+      "name": "eccentricity_noise",
+      "params": {
+        "e2": 2.0,
+        "field_of_view": 90.0
+      }
+    },
+    "attention": {
+      "name": "uncertainty_sampler",
+      "params": {
+        "return_sd": 0.11,
+        "threshold_spread": 1.0,
+        "leave_sd": 0.15,
+        "minimum_road_dwell": 0.3,
+        "maximum_glance": 4.0
+      }
+    },
+    "memory": {
+      "name": "act_r",
+      "params": {
+        "capacity": 4,
+        "decay": 0.5,
+        "threshold": 0.0,
+        "noise": 0.25,
+        "latency_factor": 1.0
+      }
+    },
+    "proprioception": {
+      "name": "spindle",
+      "params": {
+        "velocity_gain": 4.3,
+        "velocity_exponent": 0.6,
+        "length_gain": 2.0,
+        "baseline": 10.0,
+        "joint_noise_deg": 3.0,
+        "delay": 0.025
+      }
+    },
+    "motor": {
+      "name": "ffitts_min_jerk",
+      "params": {
+        "intercept": 0.1477,
+        "slope": 0.105,
+        "absolute_sd": 0.0015,
+        "relative_width_sd": 0.24195499637067505
+      }
+    },
+    "estimator": {
+      "name": "lane_kalman",
+      "params": {
+        "heading_noise": 0.0007,
+        "lateral_noise": 0.001,
+        "initial_sd": [
+          0.1,
+          0.02
+        ]
+      }
+    },
+    "hearing": {
+      "name": "psychoacoustic",
+      "params": {
+        "masking_ratio": 0.4,
+        "latency_gain": 0.00731,
+        "latency_exponent": -0.33,
+        "reference_latency": 0.0439
+      }
+    },
+    "touch": {
+      "name": "vibrotactile",
+      "params": {
+        "latency_gain": 0.1175,
+        "latency_exponent": -0.29,
+        "reference_latency": 0.1166
+      }
+    },
+    "vestibular": {
+      "name": "subjective_vertical",
+      "params": {
+        "accel_gain": 0.1,
+        "rate_gain": 0.8,
+        "rate_feedback": 5.0,
+        "vertical_feedback": 5.0,
+        "accel_feedback": 1.0,
+        "vertical_lag": 5.0,
+        "canal_lag": 7.0,
+        "adaptation_lag": 190.0,
+        "conflict_scale": 0.196,
+        "sickness_lag": 720.0,
+        "max_incidence": 85.0
+      }
+    },
+    "response": {
+      "name": "twin",
+      "params": {
+        "central": 0.2171,
+        "facilitation": 0.0204,
+        "window": 0.3588,
+        "visual_latency": 0.1026,
+        "visual_field": 90.0
+      }
+    },
+    "fatigue": {
+      "name": "three_compartment",
+      "params": {
+        "joints": {
+          "ankle": {
+            "fatigue": 0.00589,
+            "recovery": 0.00058
+          },
+          "knee": {
+            "fatigue": 0.015,
+            "recovery": 0.00149
+          },
+          "trunk": {
+            "fatigue": 0.00755,
+            "recovery": 0.00075
+          },
+          "shoulder": {
+            "fatigue": 0.0182,
+            "recovery": 0.00168
+          },
+          "elbow": {
+            "fatigue": 0.00912,
+            "recovery": 0.00094
+          },
+          "hand": {
+            "fatigue": 0.0098,
+            "recovery": 0.00064
+          },
+          "general": {
+            "fatigue": 0.0097,
+            "recovery": 0.00091
+          }
+        },
+        "rest_multiplier": 15.0,
+        "rest_multipliers": {
+          "hand": 30.0
+        },
+        "develop": 10.0,
+        "relax": 10.0
+      }
+    },
+    "affect": {
+      "name": "appraisal",
+      "params": {
+        "learning_rate": 0.1,
+        "discount": 0.9,
+        "exploration": 0.3,
+        "penalty": 0.0049,
+        "penalty_sd": 0.0002,
+        "training_vectors": 400,
+        "emotions": [
+          "happiness",
+          "boredom",
+          "irritation"
+        ]
+      }
+    },
+    "risk": {
+      "name": "risk_field",
+      "params": {
+        "height_gain": 0.0064,
+        "preview": 3.5,
+        "width_rate": 0.001,
+        "inner_steer_rate": 0.0,
+        "outer_steer_rate": 1.3823,
+        "width_at_car": 0.5,
+        "outside_cost": 500.0,
+        "threshold": 100000.0,
+        "wheelbase": 2.7
+      }
+    },
+    "trust": {
+      "name": "decision_field",
+      "params": {
+        "opacity": 2.0,
+        "prior_pull": 50.0,
+        "noise_sd": 0.1,
+        "inertia": 0.5,
+        "threshold": 0.27,
+        "automation_belief": 0.744,
+        "manual_belief": 0.7
+      }
+    }
+  },
+  "parameter_provenance": [
+    {
+      "category": "eyes",
+      "parameter": "EyeParameters.duration_slope",
+      "value": 0.0022,
+      "kind": "measured",
+      "citation": "Carpenter (1988), Movements of the Eyes, 2nd ed.",
+      "doi": null,
+      "note": "D = 2.2 A + 21 ms; Baloh et al. (1975) report a slope of 2.7 ms/deg",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "eyes",
+      "parameter": "EyeParameters.duration_intercept",
+      "value": 0.021,
+      "kind": "measured",
+      "citation": "Carpenter (1988)",
+      "doi": null,
+      "note": "",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "eyes",
+      "parameter": "EyeParameters.latency_median",
+      "value": 0.2,
+      "kind": "measured",
+      "citation": "Saslow (1967)",
+      "doi": "https://doi.org/10.1364/JOSA.57.001024",
+      "note": "step target with the fixation point extinguished; 150 ms (gap) to 250 ms (overlap)",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "eyes",
+      "parameter": "EyeParameters.latency_spread",
+      "value": 0.25,
+      "kind": "assumed",
+      "citation": "model choice",
+      "doi": null,
+      "note": "right-skewed latency; fit to data",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "eyes",
+      "parameter": "EyeParameters.minimum_amplitude",
+      "value": 0.5,
+      "kind": "assumed",
+      "citation": "model choice",
+      "doi": null,
+      "note": "",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "vision",
+      "parameter": "FoveationParameters.alpha",
+      "value": 0.106,
+      "kind": "fitted",
+      "citation": "Geisler & Perry (1998), Proc. SPIE 3299",
+      "doi": "https://doi.org/10.1117/12.320120",
+      "note": "least-squares fit to Robson & Graham (1981) grating thresholds",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "vision",
+      "parameter": "FoveationParameters.e2",
+      "value": 2.3,
+      "kind": "fitted",
+      "citation": "Geisler & Perry (1998)",
+      "doi": "https://doi.org/10.1117/12.320120",
+      "note": "",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "vision",
+      "parameter": "FoveationParameters.ct0",
+      "value": 0.015625,
+      "kind": "fitted",
+      "citation": "Geisler & Perry (1998)",
+      "doi": "https://doi.org/10.1117/12.320120",
+      "note": "1/64 for Robson & Graham; 1/75 and 1/76 for two other datasets",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "vision",
+      "parameter": "FoveationParameters.levels",
+      "value": 7,
+      "kind": "assumed",
+      "citation": "implementation choice",
+      "doi": null,
+      "note": "",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "objects",
+      "parameter": "ObjectParameters.e2",
+      "value": 2.0,
+      "kind": "measured",
+      "citation": "Strasburger, Rentschler & J\u00fcttner (2011), Table 4",
+      "doi": "https://doi.org/10.1167/11.5.13",
+      "note": "letter and Landolt-C acuity E2 1.0-2.6 deg; vernier 0.7; gratings 2.6-3.0",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "objects",
+      "parameter": "ObjectParameters.field_of_view",
+      "value": 90.0,
+      "kind": "assumed",
+      "citation": "model choice",
+      "doi": null,
+      "note": "monocular temporal field is wider",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "attention",
+      "parameter": "SamplerParameters.return_sd",
+      "value": 0.11,
+      "kind": "fitted",
+      "citation": "Kujala & Saariluoma (2011), Table 2; fitted here by ABC",
+      "doi": "https://doi.org/10.1080/00140139.2011.592601",
+      "note": "posterior median, 90% interval 0.06-0.18 m, from the mean glance and within-person SD at 50 km/h (evidence/glance-calibration.json)",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "attention",
+      "parameter": "SamplerParameters.threshold_spread",
+      "value": 1.0,
+      "kind": "fitted",
+      "citation": "Kujala & Saariluoma (2011), Table 2; fitted here by ABC",
+      "doi": "https://doi.org/10.1080/00140139.2011.592601",
+      "note": "posterior median, 90% interval 0.64-1.34",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "attention",
+      "parameter": "SamplerParameters.leave_sd",
+      "value": 0.15,
+      "kind": "assumed",
+      "citation": "model choice",
+      "doi": null,
+      "note": "",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "attention",
+      "parameter": "SamplerParameters.minimum_road_dwell",
+      "value": 0.3,
+      "kind": "assumed",
+      "citation": "model choice",
+      "doi": null,
+      "note": "",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "attention",
+      "parameter": "SamplerParameters.maximum_glance",
+      "value": 4.0,
+      "kind": "assumed",
+      "citation": "model choice",
+      "doi": "https://doi.org/10.1080/00140139.2011.592601",
+      "note": "a bound above the longest in-vehicle glances measured in simulator search tasks, 2.42-3.70 s (Kujala & Saariluoma, 2011, Table 2)",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "memory",
+      "parameter": "MemoryParameters.capacity",
+      "value": 4,
+      "kind": "measured",
+      "citation": "Cowan (2001)",
+      "doi": "https://doi.org/10.1017/S0140525X01003922",
+      "note": "about 4 chunks (3-5) when rehearsal and chunking are prevented",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "memory",
+      "parameter": "MemoryParameters.decay",
+      "value": 0.5,
+      "kind": "fitted",
+      "citation": "Anderson et al. (2004)",
+      "doi": "https://doi.org/10.1037/0033-295X.111.4.1036",
+      "note": "conventional base-level decay",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "memory",
+      "parameter": "MemoryParameters.threshold",
+      "value": 0.0,
+      "kind": "standard",
+      "citation": "ACT-R default (:rt 0)",
+      "doi": null,
+      "note": "",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "memory",
+      "parameter": "MemoryParameters.noise",
+      "value": 0.25,
+      "kind": "assumed",
+      "citation": "Stocco et al. (2024), likelihood primer, Fig. 7",
+      "doi": "https://arxiv.org/abs/2410.18055",
+      "note": "illustrative s = 0.25 setting, not fitted to this simulator's tasks; ACT-R ships with noise off",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "memory",
+      "parameter": "MemoryParameters.latency_factor",
+      "value": 1.0,
+      "kind": "standard",
+      "citation": "ACT-R default (:lf 1.0)",
+      "doi": null,
+      "note": "",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "proprioception",
+      "parameter": "SpindleParameters.velocity_gain",
+      "value": 4.3,
+      "kind": "fitted",
+      "citation": "Prochazka & Gorassini (1998)",
+      "doi": "https://doi.org/10.1111/j.1469-7793.1998.277bu.x",
+      "note": "cat hamstring Ia afferents during treadmill walking",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "proprioception",
+      "parameter": "SpindleParameters.velocity_exponent",
+      "value": 0.6,
+      "kind": "fitted",
+      "citation": "Prochazka & Gorassini (1998)",
+      "doi": "https://doi.org/10.1111/j.1469-7793.1998.277bu.x",
+      "note": "",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "proprioception",
+      "parameter": "SpindleParameters.length_gain",
+      "value": 2.0,
+      "kind": "fitted",
+      "citation": "Prochazka & Gorassini (1998)",
+      "doi": "https://doi.org/10.1111/j.1469-7793.1998.277bu.x",
+      "note": "",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "proprioception",
+      "parameter": "SpindleParameters.baseline",
+      "value": 10.0,
+      "kind": "fitted",
+      "citation": "Malik, Jabakhanji & Jones (2016)",
+      "doi": "https://doi.org/10.3389/fncom.2015.00154",
+      "note": "human wrist; 82 imp/s for cat",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "proprioception",
+      "parameter": "SpindleParameters.joint_noise_deg",
+      "value": 3.0,
+      "kind": "measured",
+      "citation": "Talis & Levik (2016)",
+      "doi": "https://doi.org/10.3389/fnins.2016.00520",
+      "note": "elbow contralateral matching, young adults 3.0 deg absolute error; shoulder 3-6 deg",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "proprioception",
+      "parameter": "SpindleParameters.delay",
+      "value": 0.025,
+      "kind": "measured",
+      "citation": "Pruszynski, Kurtzer, Lillicrap & Scott (2009)",
+      "doi": "https://doi.org/10.1152/jn.00085.2009",
+      "note": "short-latency stretch response 20-45 ms",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "motor",
+      "parameter": "PointingParameters.intercept",
+      "value": 0.1477,
+      "kind": "fitted",
+      "citation": "Bi, Li & Zhai (2013), FFitts law 2-D",
+      "doi": "https://doi.org/10.1145/2470654.2466180",
+      "note": "",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "motor",
+      "parameter": "PointingParameters.slope",
+      "value": 0.105,
+      "kind": "fitted",
+      "citation": "Bi, Li & Zhai (2013), FFitts law 2-D",
+      "doi": "https://doi.org/10.1145/2470654.2466180",
+      "note": "",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "motor",
+      "parameter": "PointingParameters.absolute_sd",
+      "value": 0.0015,
+      "kind": "measured",
+      "citation": "Bi, Li & Zhai (2013)",
+      "doi": "https://doi.org/10.1145/2470654.2466180",
+      "note": "1.5 mm in 2-D tasks, 0.94 mm in 1-D",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "motor",
+      "parameter": "PointingParameters.relative_width_sd",
+      "value": 0.24195499637067505,
+      "kind": "derived",
+      "citation": "Soukoreff & MacKenzie (2004)",
+      "doi": "https://doi.org/10.1016/j.ijhcs.2004.09.001",
+      "note": "effective width We = 4.133 SD",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "estimator",
+      "parameter": "LaneParameters.heading_noise",
+      "value": 0.0007,
+      "kind": "assumed",
+      "citation": "model choice",
+      "doi": null,
+      "note": "puts lateral SD at 0.4 m after 1.2 s without vision at 20 m/s; fit with the glance benchmark",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "estimator",
+      "parameter": "LaneParameters.lateral_noise",
+      "value": 0.001,
+      "kind": "assumed",
+      "citation": "model choice",
+      "doi": null,
+      "note": "",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "estimator",
+      "parameter": "LaneParameters.initial_sd",
+      "value": [
+        0.1,
+        0.02
+      ],
+      "kind": "assumed",
+      "citation": "model choice",
+      "doi": null,
+      "note": "",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "hearing",
+      "parameter": "HearingParameters.masking_ratio",
+      "value": 0.4,
+      "kind": "measured",
+      "citation": "Scharf (1970), as summarised by Yost & Shofner (2009)",
+      "doi": "https://doi.org/10.1121/1.3037232",
+      "note": "relative to the Zwicker critical band, tones in broadband noise",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "hearing",
+      "parameter": "HearingParameters.latency_gain",
+      "value": 0.00731,
+      "kind": "fitted",
+      "citation": "Kohfeld, Santee & Wallace (1981), Fig. 5b",
+      "doi": "https://doi.org/10.3758/BF03207370",
+      "note": "Chocholle (1940), 1 kHz, 10-100 dB SPL; k = 7.31 ms",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "hearing",
+      "parameter": "HearingParameters.latency_exponent",
+      "value": -0.33,
+      "kind": "fitted",
+      "citation": "Kohfeld, Santee & Wallace (1981), Fig. 5b",
+      "doi": "https://doi.org/10.3758/BF03207370",
+      "note": "-0.33 for Chocholle's data; -0.24 to -0.33 over six data sets",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "hearing",
+      "parameter": "HearingParameters.reference_latency",
+      "value": 0.0439,
+      "kind": "fitted",
+      "citation": "Diederich & Colonius (2015), Table 1",
+      "doi": "https://doi.org/10.1037/a0038696",
+      "note": "median 1/lambda_A of 11 participants (TWIN fit)",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "touch",
+      "parameter": "TouchParameters.latency_gain",
+      "value": 0.1175,
+      "kind": "assumed",
+      "citation": "Diederich & Colonius (2004), Table 2; fitted here",
+      "doi": "https://doi.org/10.3758/BF03195006",
+      "note": "tactile RT 218 vs 177 ms for their weakest and strongest vibration, assumed 10 and 30 dB above threshold",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "touch",
+      "parameter": "TouchParameters.latency_exponent",
+      "value": -0.29,
+      "kind": "assumed",
+      "citation": "Kohfeld, Santee & Wallace (1981)",
+      "doi": "https://doi.org/10.3758/BF03207370",
+      "note": "auditory exponent; no vibrotactile fit exists",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "touch",
+      "parameter": "TouchParameters.reference_latency",
+      "value": 0.1166,
+      "kind": "derived",
+      "citation": "Diederich & Colonius (2004, 2015); derived",
+      "doi": "https://doi.org/10.3758/BF03195006",
+      "note": "visual 1/lambda_V of 102.6 ms (2015) plus the 14 ms by which strong tactile RT exceeded visual RT (2004)",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "vestibular",
+      "parameter": "VerticalConflictParameters.accel_gain",
+      "value": 0.1,
+      "kind": "fitted",
+      "citation": "Kamiji, Kurata, Wada & Doi (2007), Table 1; Wada, Fujisawa & Doi (2018), Table 1",
+      "doi": "https://doi.org/10.1109/SICE.2007.4421156",
+      "note": "",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "vestibular",
+      "parameter": "VerticalConflictParameters.rate_gain",
+      "value": 0.8,
+      "kind": "fitted",
+      "citation": "Kamiji, Kurata, Wada & Doi (2007), Table 1; Wada, Fujisawa & Doi (2018), Table 1",
+      "doi": "https://doi.org/10.1109/SICE.2007.4421156",
+      "note": "",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "vestibular",
+      "parameter": "VerticalConflictParameters.rate_feedback",
+      "value": 5.0,
+      "kind": "fitted",
+      "citation": "Kamiji, Kurata, Wada & Doi (2007), Table 1; Wada, Fujisawa & Doi (2018), Table 1",
+      "doi": "https://doi.org/10.1109/SICE.2007.4421156",
+      "note": "",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "vestibular",
+      "parameter": "VerticalConflictParameters.vertical_feedback",
+      "value": 5.0,
+      "kind": "fitted",
+      "citation": "Kamiji, Kurata, Wada & Doi (2007), Table 1; Wada, Fujisawa & Doi (2018), Table 1",
+      "doi": "https://doi.org/10.1109/SICE.2007.4421156",
+      "note": "",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "vestibular",
+      "parameter": "VerticalConflictParameters.accel_feedback",
+      "value": 1.0,
+      "kind": "fitted",
+      "citation": "Kamiji, Kurata, Wada & Doi (2007), Table 1; Wada, Fujisawa & Doi (2018), Table 1",
+      "doi": "https://doi.org/10.1109/SICE.2007.4421156",
+      "note": "",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "vestibular",
+      "parameter": "VerticalConflictParameters.vertical_lag",
+      "value": 5.0,
+      "kind": "measured",
+      "citation": "Wada, Fujisawa & Doi (2018), p. 7; Bos & Bles (2002)",
+      "doi": "https://doi.org/10.1016/j.ergon.2016.11.003",
+      "note": "from vertical perception studies",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "vestibular",
+      "parameter": "VerticalConflictParameters.canal_lag",
+      "value": 7.0,
+      "kind": "fitted",
+      "citation": "Kamiji, Kurata, Wada & Doi (2007), Table 1; Wada, Fujisawa & Doi (2018), Table 1",
+      "doi": "https://doi.org/10.1109/SICE.2007.4421156",
+      "note": "",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "vestibular",
+      "parameter": "VerticalConflictParameters.adaptation_lag",
+      "value": 190.0,
+      "kind": "fitted",
+      "citation": "Kamiji, Kurata, Wada & Doi (2007), Table 1; Wada, Fujisawa & Doi (2018), Table 1",
+      "doi": "https://doi.org/10.1109/SICE.2007.4421156",
+      "note": "",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "vestibular",
+      "parameter": "VerticalConflictParameters.conflict_scale",
+      "value": 0.196,
+      "kind": "fitted",
+      "citation": "O'Hanlon & McCauley (1974), Tables 1-2; fitted here",
+      "doi": "https://archive.org/details/DTIC_AD0768215",
+      "note": "MSI after 2 h at 14 vertical conditions (examples/fit_motion_sickness.py); Wada et al. (2018) used 0.5 for car passengers, Bos & Bles (1998) fitted 0.7 in 1-D",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "vestibular",
+      "parameter": "VerticalConflictParameters.sickness_lag",
+      "value": 720.0,
+      "kind": "fitted",
+      "citation": "Kamiji, Kurata, Wada & Doi (2007), Table 1; Wada, Fujisawa & Doi (2018), Table 1",
+      "doi": "https://doi.org/10.1109/SICE.2007.4421156",
+      "note": "",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "vestibular",
+      "parameter": "VerticalConflictParameters.max_incidence",
+      "value": 85.0,
+      "kind": "fitted",
+      "citation": "Kamiji, Kurata, Wada & Doi (2007), Table 1; Wada, Fujisawa & Doi (2018), Table 1",
+      "doi": "https://doi.org/10.1109/SICE.2007.4421156",
+      "note": "",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "response",
+      "parameter": "TwinParameters.central",
+      "value": 0.2171,
+      "kind": "fitted",
+      "citation": "Diederich & Colonius (2015), Table 1",
+      "doi": "https://doi.org/10.1037/a0038696",
+      "note": "median over 11 participants",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "response",
+      "parameter": "TwinParameters.facilitation",
+      "value": 0.0204,
+      "kind": "fitted",
+      "citation": "Diederich & Colonius (2015), Table 1",
+      "doi": "https://doi.org/10.1037/a0038696",
+      "note": "median over 11 participants",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "response",
+      "parameter": "TwinParameters.window",
+      "value": 0.3588,
+      "kind": "fitted",
+      "citation": "Diederich & Colonius (2015), Table 1",
+      "doi": "https://doi.org/10.1037/a0038696",
+      "note": "median omega_RT",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "response",
+      "parameter": "TwinParameters.visual_latency",
+      "value": 0.1026,
+      "kind": "fitted",
+      "citation": "Diederich & Colonius (2015), Table 1",
+      "doi": "https://doi.org/10.1037/a0038696",
+      "note": "median 1/lambda_V",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "response",
+      "parameter": "TwinParameters.visual_field",
+      "value": 90.0,
+      "kind": "assumed",
+      "citation": "model choice",
+      "doi": null,
+      "note": "the temporal visual field extends beyond 90 deg; peripheral warning lights are rarely noticed so far out",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "fatigue",
+      "parameter": "FatigueParameters.joints",
+      "value": {
+        "ankle": {
+          "fatigue": 0.00589,
+          "recovery": 0.00058
+        },
+        "knee": {
+          "fatigue": 0.015,
+          "recovery": 0.00149
+        },
+        "trunk": {
+          "fatigue": 0.00755,
+          "recovery": 0.00075
+        },
+        "shoulder": {
+          "fatigue": 0.0182,
+          "recovery": 0.00168
+        },
+        "elbow": {
+          "fatigue": 0.00912,
+          "recovery": 0.00094
+        },
+        "hand": {
+          "fatigue": 0.0098,
+          "recovery": 0.00064
+        },
+        "general": {
+          "fatigue": 0.0097,
+          "recovery": 0.00091
+        }
+      },
+      "kind": "fitted",
+      "citation": "Frey-Law, Looft & Heitsman (2012), Table 1",
+      "doi": "https://doi.org/10.1016/j.jbiomech.2012.04.018",
+      "note": "per-second rates",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "fatigue",
+      "parameter": "FatigueParameters.rest_multiplier",
+      "value": 15.0,
+      "kind": "fitted",
+      "citation": "Looft, Herkert & Frey-Law (2018), Tables 2-4",
+      "doi": "https://doi.org/10.1016/j.jbiomech.2018.06.005",
+      "note": "15 for ankle, knee, elbow and the general model; suggested for shoulder and trunk, which had no data",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "fatigue",
+      "parameter": "FatigueParameters.rest_multipliers",
+      "value": {
+        "hand": 30.0
+      },
+      "kind": "fitted",
+      "citation": "Looft, Herkert & Frey-Law (2018), Tables 2-4",
+      "doi": "https://doi.org/10.1016/j.jbiomech.2018.06.005",
+      "note": "30 for hand/grip",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "fatigue",
+      "parameter": "FatigueParameters.develop",
+      "value": 10.0,
+      "kind": "fitted",
+      "citation": "Frey-Law, Looft & Heitsman (2012), Table 1",
+      "doi": "https://doi.org/10.1016/j.jbiomech.2012.04.018",
+      "note": "L = 10 from Xia & Frey-Law (2008)",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "fatigue",
+      "parameter": "FatigueParameters.relax",
+      "value": 10.0,
+      "kind": "fitted",
+      "citation": "Frey-Law, Looft & Heitsman (2012), Table 1",
+      "doi": "https://doi.org/10.1016/j.jbiomech.2012.04.018",
+      "note": "",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "affect",
+      "parameter": "AffectParameters.learning_rate",
+      "value": 0.1,
+      "kind": "fitted",
+      "citation": "Zhang, Hilpert, Broekens & Jokinen (2024)",
+      "doi": "https://doi.org/10.1145/3613904.3641908",
+      "note": "released model settings",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "affect",
+      "parameter": "AffectParameters.discount",
+      "value": 0.9,
+      "kind": "fitted",
+      "citation": "Zhang, Hilpert, Broekens & Jokinen (2024)",
+      "doi": "https://doi.org/10.1145/3613904.3641908",
+      "note": "",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "affect",
+      "parameter": "AffectParameters.exploration",
+      "value": 0.3,
+      "kind": "fitted",
+      "citation": "Zhang, Hilpert, Broekens & Jokinen (2024)",
+      "doi": "https://doi.org/10.1145/3613904.3641908",
+      "note": "",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "affect",
+      "parameter": "AffectParameters.penalty",
+      "value": 0.0049,
+      "kind": "fitted",
+      "citation": "Zhang, Hilpert, Broekens & Jokinen (2024)",
+      "doi": "https://doi.org/10.1145/3613904.3641908",
+      "note": "chosen so that classifier precision matches human emotion recognition (mean 0.626)",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "affect",
+      "parameter": "AffectParameters.penalty_sd",
+      "value": 0.0002,
+      "kind": "fitted",
+      "citation": "Zhang, Hilpert, Broekens & Jokinen (2024)",
+      "doi": "https://doi.org/10.1145/3613904.3641908",
+      "note": "the text says variance 0.0004; the released model draws SD 0.0002",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "affect",
+      "parameter": "AffectParameters.training_vectors",
+      "value": 400,
+      "kind": "fitted",
+      "citation": "Zhang, Hilpert, Broekens & Jokinen (2024)",
+      "doi": "https://doi.org/10.1145/3613904.3641908",
+      "note": "",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "affect",
+      "parameter": "AffectParameters.emotions",
+      "value": [
+        "happiness",
+        "boredom",
+        "irritation"
+      ],
+      "kind": "standard",
+      "citation": "Zhang, Hilpert, Broekens & Jokinen (2024)",
+      "doi": "https://doi.org/10.1145/3613904.3641908",
+      "note": "Scherer (2001) modal emotions",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "risk",
+      "parameter": "RiskFieldParameters.height_gain",
+      "value": 0.0064,
+      "kind": "fitted",
+      "citation": "Kolekar, de Winter & Abbink (2020), Table 1",
+      "doi": "https://doi.org/10.1038/s41467-020-18353-4",
+      "note": "grid search on one driver",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "risk",
+      "parameter": "RiskFieldParameters.preview",
+      "value": 3.5,
+      "kind": "fitted",
+      "citation": "Kolekar, de Winter & Abbink (2020), Table 1",
+      "doi": "https://doi.org/10.1038/s41467-020-18353-4",
+      "note": "",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "risk",
+      "parameter": "RiskFieldParameters.width_rate",
+      "value": 0.001,
+      "kind": "fitted",
+      "citation": "Kolekar, de Winter & Abbink (2020), Table 1",
+      "doi": "https://doi.org/10.1038/s41467-020-18353-4",
+      "note": "",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "risk",
+      "parameter": "RiskFieldParameters.inner_steer_rate",
+      "value": 0.0,
+      "kind": "fitted",
+      "citation": "Kolekar, de Winter & Abbink (2020), Table 1",
+      "doi": "https://doi.org/10.1038/s41467-020-18353-4",
+      "note": "",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "risk",
+      "parameter": "RiskFieldParameters.outer_steer_rate",
+      "value": 1.3823,
+      "kind": "fitted",
+      "citation": "Kolekar, de Winter & Abbink (2020), Table 1",
+      "doi": "https://doi.org/10.1038/s41467-020-18353-4",
+      "note": "unit not reported; radians assumed",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "risk",
+      "parameter": "RiskFieldParameters.width_at_car",
+      "value": 0.5,
+      "kind": "derived",
+      "citation": "Kolekar, de Winter & Abbink (2020), Table 1",
+      "doi": "https://doi.org/10.1038/s41467-020-18353-4",
+      "note": "car width 2 m / 4",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "risk",
+      "parameter": "RiskFieldParameters.outside_cost",
+      "value": 500.0,
+      "kind": "assumed",
+      "citation": "Kolekar, de Winter & Abbink (2020), Table 3",
+      "doi": "https://doi.org/10.1038/s41467-020-18353-4",
+      "note": "C_env, assumed by the authors",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "risk",
+      "parameter": "RiskFieldParameters.threshold",
+      "value": 100000.0,
+      "kind": "assumed",
+      "citation": "model choice",
+      "doi": null,
+      "note": "placeholder; fitted per study (the published 3000 is a grid sum)",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "risk",
+      "parameter": "RiskFieldParameters.wheelbase",
+      "value": 2.7,
+      "kind": "assumed",
+      "citation": "model choice",
+      "doi": null,
+      "note": "not reported in the paper",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "trust",
+      "parameter": "TrustParameters.opacity",
+      "value": 2.0,
+      "kind": "fitted",
+      "citation": "Gao & Lee (2006), Table 1",
+      "doi": "https://doi.org/10.1109/TSMCA.2005.855783",
+      "note": "2 with sound feedback, 10 with noise",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "trust",
+      "parameter": "TrustParameters.prior_pull",
+      "value": 50.0,
+      "kind": "fitted",
+      "citation": "Gao & Lee (2006), Table 1",
+      "doi": "https://doi.org/10.1109/TSMCA.2005.855783",
+      "note": "",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "trust",
+      "parameter": "TrustParameters.noise_sd",
+      "value": 0.1,
+      "kind": "derived",
+      "citation": "Gao & Lee (2006), Table 1",
+      "doi": "https://doi.org/10.1109/TSMCA.2005.855783",
+      "note": "the text gives sigma^2 = 0.1, but its theta = 1.9 sqrt(2 sigma^2) = 0.27 holds only for sigma = 0.1",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "trust",
+      "parameter": "TrustParameters.inertia",
+      "value": 0.5,
+      "kind": "fitted",
+      "citation": "Gao & Lee (2006), Table 1",
+      "doi": "https://doi.org/10.1109/TSMCA.2005.855783",
+      "note": "taken from Lee & Moray (1992) by Gao & Lee",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "trust",
+      "parameter": "TrustParameters.threshold",
+      "value": 0.27,
+      "kind": "fitted",
+      "citation": "Gao & Lee (2006), Table 1",
+      "doi": "https://doi.org/10.1109/TSMCA.2005.855783",
+      "note": "1.9 sqrt(2 sigma^2)",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "trust",
+      "parameter": "TrustParameters.automation_belief",
+      "value": 0.744,
+      "kind": "measured",
+      "citation": "Hergeth, Lorenz, Vilimek & Krems (2016), Results",
+      "doi": "https://doi.org/10.1177/0018720815625744",
+      "note": "self-reported trust of 35 drivers new to highly automated driving at its first use, 74.43% (SD 17.56), on trust's 0-1 scale",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    },
+    {
+      "category": "trust",
+      "parameter": "TrustParameters.manual_belief",
+      "value": 0.7,
+      "kind": "assumed",
+      "citation": "model choice",
+      "doi": null,
+      "note": "",
+      "overridden": false,
+      "source_applies_to": "baseline_default"
+    }
+  ],
   "parameter_sources": {
     "measured": 11,
     "assumed": 18,
@@ -75,7 +1256,27 @@
     "standard": 3,
     "derived": 4
   },
-  "wall_seconds": 495.26,
+  "wall_seconds": 514.397,
+  "validation_summary": {
+    "consistency": {
+      "metrics": 9,
+      "passed": 9
+    },
+    "calibration": {
+      "metrics": 5,
+      "passed": 5
+    },
+    "held_out": {
+      "metrics": 38,
+      "passed": 19
+    },
+    "unclassified": {
+      "metrics": 1,
+      "passed": 1
+    }
+  },
+  "validation_summary_unit": "scored metric evaluations",
+  "validation_policy": "Roles describe declared baseline data use. Held out statistics can share participants with calibration data. User fitting requires updated declarations.",
   "results": [
     {
       "name": "eyes.main_sequence",
@@ -93,6 +1294,28 @@
         "eyes.duration_slope": 1.0,
         "eyes.duration_intercept": 1.0
       },
+      "validation": {
+        "eyes.duration_slope": {
+          "role": "consistency",
+          "evaluation_data": [
+            "carpenter1988.main_sequence"
+          ],
+          "fitting_data": [
+            "carpenter1988.main_sequence"
+          ],
+          "rationale": "The source also sets the main sequence coefficients."
+        },
+        "eyes.duration_intercept": {
+          "role": "consistency",
+          "evaluation_data": [
+            "carpenter1988.main_sequence"
+          ],
+          "fitting_data": [
+            "carpenter1988.main_sequence"
+          ],
+          "rationale": "The source also sets the main sequence coefficients."
+        }
+      },
       "references": {
         "eyes.duration_slope": {
           "value": 2.2,
@@ -102,7 +1325,8 @@
           ],
           "unit": "ms/deg",
           "citation": "Carpenter (1988) 2.2; Baloh et al. (1975) 2.7; other fits up to 3.66",
-          "doi": "https://doi.org/10.1212/wnl.25.11.1065"
+          "doi": "https://doi.org/10.1212/wnl.25.11.1065",
+          "conditions": "horizontal visually guided saccades in healthy adults"
         },
         "eyes.duration_intercept": {
           "value": 21.0,
@@ -112,7 +1336,8 @@
           ],
           "unit": "ms",
           "citation": "Carpenter (1988) 21 ms; other fits 14 ms",
-          "doi": null
+          "doi": null,
+          "conditions": "duration of a vanishing saccade from linear main-sequence fits"
         }
       },
       "details": {
@@ -147,10 +1372,22 @@
       "score": 1.0,
       "skipped": null,
       "metrics": {
-        "eyes.latency_median": 201.45303584142837
+        "eyes.latency_median": 203.00954005463723
       },
       "scores": {
         "eyes.latency_median": 1.0
+      },
+      "validation": {
+        "eyes.latency_median": {
+          "role": "consistency",
+          "evaluation_data": [
+            "saslow1967.latency"
+          ],
+          "fitting_data": [
+            "saslow1967.latency"
+          ],
+          "rationale": "The source sets median latency."
+        }
       },
       "references": {
         "eyes.latency_median": {
@@ -161,15 +1398,16 @@
           ],
           "unit": "ms",
           "citation": "Saslow (1967)",
-          "doi": "https://doi.org/10.1364/JOSA.57.001024"
+          "doi": "https://doi.org/10.1364/JOSA.57.001024",
+          "conditions": "step target: 150 ms with a gap, 200 ms simultaneous, 250 ms with overlap"
         }
       },
       "details": {
         "latency_percentiles_ms": {
           "5": 133.356034414782,
-          "25": 171.00335811113433,
-          "50": 201.45303584142837,
-          "75": 235.37742175518162,
+          "25": 171.3612277018317,
+          "50": 203.00954005463723,
+          "75": 238.1910489048904,
           "95": 296.7658905095639
         }
       }
@@ -188,6 +1426,18 @@
       "scores": {
         "objects.e2": 1.0
       },
+      "validation": {
+        "objects.e2": {
+          "role": "consistency",
+          "evaluation_data": [
+            "strasburger2011.acuity"
+          ],
+          "fitting_data": [
+            "strasburger2011.acuity"
+          ],
+          "rationale": "The reference sets eccentricity scaling."
+        }
+      },
       "references": {
         "objects.e2": {
           "value": 2.0,
@@ -197,7 +1447,8 @@
           ],
           "unit": "deg",
           "citation": "Strasburger, Rentschler & J\u00fcttner (2011), Table 4",
-          "doi": "https://doi.org/10.1167/11.5.13"
+          "doi": "https://doi.org/10.1167/11.5.13",
+          "conditions": "letter and Landolt-C acuity; vernier 0.7, gratings 2.6-3.0"
         }
       },
       "details": {
@@ -224,6 +1475,18 @@
       "scores": {
         "vision.e2": 1.0
       },
+      "validation": {
+        "vision.e2": {
+          "role": "consistency",
+          "evaluation_data": [
+            "geisler_perry1998.foveation"
+          ],
+          "fitting_data": [
+            "geisler_perry1998.foveation"
+          ],
+          "rationale": "The reference sets E2."
+        }
+      },
       "references": {
         "vision.e2": {
           "value": 2.3,
@@ -233,7 +1496,8 @@
           ],
           "unit": "deg",
           "citation": "Strasburger et al. (2011), Table 4; Geisler & Perry (1998) 2.3",
-          "doi": "https://doi.org/10.1167/11.5.13"
+          "doi": "https://doi.org/10.1167/11.5.13",
+          "conditions": "eccentricity halving the resolvable frequency; letters to gratings"
         }
       },
       "details": {
@@ -244,6 +1508,13 @@
           "10": 7.3365785333082085,
           "20": 4.046633002676725,
           "40": 2.1333313465647987
+        },
+        "interpretation": "Consistency of the cutoff field returned by perceive. Independent image transfer evaluation remains pending.",
+        "sampling": {
+          "pixels_per_degree": 100.0,
+          "maximum_eccentricity_deg": 40.0,
+          "source": "assumed numerical sampling protocol",
+          "half_resolution_reached": true
         }
       }
     },
@@ -261,6 +1532,18 @@
       "scores": {
         "memory.span": 1.0
       },
+      "validation": {
+        "memory.span": {
+          "role": "consistency",
+          "evaluation_data": [
+            "cowan2001.capacity"
+          ],
+          "fitting_data": [
+            "cowan2001.capacity"
+          ],
+          "rationale": "Focus capacity is set from this source."
+        }
+      },
       "references": {
         "memory.span": {
           "value": 4.0,
@@ -270,7 +1553,8 @@
           ],
           "unit": "items",
           "citation": "Cowan (2001)",
-          "doi": "https://doi.org/10.1017/S0140525X01003922"
+          "doi": "https://doi.org/10.1017/S0140525X01003922",
+          "conditions": "capacity with rehearsal and chunking prevented"
         }
       },
       "details": {
@@ -304,6 +1588,28 @@
         "motor.touch_throughput": 1.0,
         "motor.touch_slope": 1.0
       },
+      "validation": {
+        "motor.touch_throughput": {
+          "role": "held_out",
+          "evaluation_data": [
+            "mackenzie2015.smartphone_throughput"
+          ],
+          "fitting_data": [
+            "bi2013.touch_pointing"
+          ],
+          "rationale": "MacKenzie reports a separate smartphone experiment with 16 participants. Task and throughput aggregation differ from the coefficient study."
+        },
+        "motor.touch_slope": {
+          "role": "consistency",
+          "evaluation_data": [
+            "bi2013.touch_pointing"
+          ],
+          "fitting_data": [
+            "bi2013.touch_pointing"
+          ],
+          "rationale": "The source sets the pointing coefficients."
+        }
+      },
       "references": {
         "motor.touch_throughput": {
           "value": 6.95,
@@ -313,7 +1619,8 @@
           ],
           "unit": "bits/s",
           "citation": "MacKenzie (2015)",
-          "doi": "https://doi.org/10.1007/978-3-319-20916-6_23"
+          "doi": "https://doi.org/10.1007/978-3-319-20916-6_23",
+          "conditions": "smartphone touch, 16 participants; method differences between studies"
         },
         "motor.touch_slope": {
           "value": 105.0,
@@ -323,7 +1630,8 @@
           ],
           "unit": "ms/bit",
           "citation": "Bi, Li & Zhai (2013), FFitts 2-D fit",
-          "doi": "https://doi.org/10.1145/2470654.2466180"
+          "doi": "https://doi.org/10.1145/2470654.2466180",
+          "conditions": "2-D finger touch; acceptance +-30%"
         }
       },
       "details": {
@@ -404,6 +1712,48 @@
         "driving.human_mean_glance": 1.0,
         "driving.human_long_glance_share": 0.9222222222222223
       },
+      "validation": {
+        "driving.mean_offroad_glance": {
+          "role": "held_out",
+          "evaluation_data": [
+            "nhtsa2013.glance_criteria"
+          ],
+          "fitting_data": [
+            "kujala_saariluoma2011.mean_and_sd"
+          ],
+          "rationale": "Design criteria are separate from glance fitting statistics."
+        },
+        "driving.long_glance_share": {
+          "role": "held_out",
+          "evaluation_data": [
+            "nhtsa2013.glance_criteria"
+          ],
+          "fitting_data": [
+            "kujala_saariluoma2011.mean_and_sd"
+          ],
+          "rationale": "Design criteria are separate from glance fitting statistics."
+        },
+        "driving.human_mean_glance": {
+          "role": "calibration",
+          "evaluation_data": [
+            "kujala_saariluoma2011.mean_and_sd"
+          ],
+          "fitting_data": [
+            "kujala_saariluoma2011.mean_and_sd"
+          ],
+          "rationale": "ABC fitted return tolerance and spread to these statistics."
+        },
+        "driving.human_long_glance_share": {
+          "role": "held_out",
+          "evaluation_data": [
+            "kujala_saariluoma2011.long_glance_share"
+          ],
+          "fitting_data": [
+            "kujala_saariluoma2011.mean_and_sd"
+          ],
+          "rationale": "A held out statistic from the same study; participants are shared."
+        }
+      },
       "references": {
         "driving.mean_offroad_glance": {
           "value": 2.0,
@@ -413,7 +1763,8 @@
           ],
           "unit": "s",
           "citation": "NHTSA (2013) guideline criterion (b)",
-          "doi": "https://www.federalregister.gov/documents/2013/04/26/2013-09883"
+          "doi": "https://www.federalregister.gov/documents/2013/04/26/2013-09883",
+          "conditions": "mean glance away from the road per task; a design criterion, not a human mean"
         },
         "driving.long_glance_share": {
           "value": 0.15,
@@ -423,7 +1774,8 @@
           ],
           "unit": "fraction",
           "citation": "NHTSA (2013) guideline criterion (a)",
-          "doi": "https://www.federalregister.gov/documents/2013/04/26/2013-09883"
+          "doi": "https://www.federalregister.gov/documents/2013/04/26/2013-09883",
+          "conditions": "share of off-road glances longer than 2 s"
         },
         "driving.human_mean_glance": {
           "value": 1.1,
@@ -433,7 +1785,8 @@
           ],
           "unit": "s",
           "citation": "Kujala & Saariluoma (2011), Table 2; Jokinen, Kujala & Oulasvirta (2021), Appendix B",
-          "doi": "https://doi.org/10.1080/00140139.2011.592601"
+          "doi": "https://doi.org/10.1080/00140139.2011.592601",
+          "conditions": "simulator, in-vehicle visual search; means 1.06-1.20 s over four interfaces (transitions included) and 1.0 +- 0.2 s by condition"
         },
         "driving.human_long_glance_share": {
           "value": 0.08,
@@ -443,7 +1796,8 @@
           ],
           "unit": "fraction",
           "citation": "Kujala & Saariluoma (2011); Tivesten & Dozza (2014)",
-          "doi": "https://doi.org/10.1016/j.trf.2014.08.004"
+          "doi": "https://doi.org/10.1016/j.trf.2014.08.004",
+          "conditions": "glances over 2 s: 5.7-10% in simulator search tasks; naturalistic phone tasks median 3.4%, mean 12.8%"
         }
       },
       "details": {
@@ -489,10 +1843,23 @@
       "score": 1.0,
       "skipped": null,
       "metrics": {
-        "driving.takeover_time": 2.4424999999998236
+        "driving.takeover_time": 2.4349999999998237
       },
       "scores": {
         "driving.takeover_time": 1.0
+      },
+      "validation": {
+        "driving.takeover_time": {
+          "role": "held_out",
+          "evaluation_data": [
+            "zhang2019.meta_analysis"
+          ],
+          "fitting_data": [
+            "gold2013.hands",
+            "hergeth2016.monitoring"
+          ],
+          "rationale": "The meta analysis may include component studies used for calibration."
+        }
       },
       "references": {
         "driving.takeover_time": {
@@ -503,28 +1870,29 @@
           ],
           "unit": "s",
           "citation": "Zhang, de Winter, Varotto, Happee & Martens (2019)",
-          "doi": "https://doi.org/10.1016/j.trf.2019.04.020"
+          "doi": "https://doi.org/10.1016/j.trf.2019.04.020",
+          "conditions": "mean of 520 study-condition means, SD 1.45 s; range is mean +- 1 SD"
         }
       },
       "details": {
         "takeover_times_s": [
-          3.219999999999807,
+          3.1999999999998074,
           1.6999999999998394,
           3.359999999999804,
           2.0599999999998317,
-          3.3799999999998036,
+          3.359999999999804,
           1.3199999999998475,
           1.6999999999998394,
-          2.799999999999816
+          2.7799999999998164
         ],
-        "sd_s": 0.841932301316424,
+        "sd_s": 0.8349337013884731,
         "missed": 0,
         "median_components_s": {
-          "response_s": 0.5799999999998633,
-          "gaze_s": 0.9370329066734246,
-          "hand_s": 1.5859403199567659,
-          "eyes_s": 0.8499999999998575,
-          "engaged_s": 2.3499999999998256
+          "response_s": 0.5699999999998635,
+          "gaze_s": 0.9170329066734251,
+          "hand_s": 1.575940319956766,
+          "eyes_s": 0.8399999999998577,
+          "engaged_s": 2.3399999999998258
         },
         "scenario": "myosuite-carla takeover_request: automation at 12 m/s, request at 10 s, 7 s budget"
       }
@@ -541,13 +1909,47 @@
       "skipped": null,
       "metrics": {
         "response.drt_driving_cost": 28.312052134831163,
-        "response.drt_2back_cost": 290.4336168600792,
-        "response.drt_surt_cost": 371.0965921108995
+        "response.drt_2back_cost": 297.0260648248014,
+        "response.drt_surt_cost": 367.3475071888989
       },
       "scores": {
         "response.drt_driving_cost": 0.9200013506432945,
         "response.drt_2back_cost": 1.0,
         "response.drt_surt_cost": 0.0
+      },
+      "validation": {
+        "response.drt_driving_cost": {
+          "role": "held_out",
+          "evaluation_data": [
+            "conti2014.driving_baseline"
+          ],
+          "fitting_data": [
+            "conti2014.secondary_task_costs"
+          ],
+          "rationale": "Secondary task costs were fitted; driving baseline and cost were reserved."
+        },
+        "response.drt_2back_cost": {
+          "role": "held_out",
+          "evaluation_data": [
+            "cooper2020.tactile_drt"
+          ],
+          "fitting_data": [
+            "conti2014.secondary_task_costs",
+            "diederich2008.age_parameters"
+          ],
+          "rationale": ""
+        },
+        "response.drt_surt_cost": {
+          "role": "held_out",
+          "evaluation_data": [
+            "cooper2020.tactile_drt"
+          ],
+          "fitting_data": [
+            "conti2014.secondary_task_costs",
+            "diederich2008.age_parameters"
+          ],
+          "rationale": ""
+        }
       },
       "references": {
         "response.drt_driving_cost": {
@@ -558,7 +1960,8 @@
           ],
           "unit": "ms",
           "citation": "Conti, Dlugosch & Bengler (2014), Table 3",
-          "doi": "https://www.hfes-europe.org/wp-content/uploads/2014/06/Conti.pdf"
+          "doi": "https://www.hfes-europe.org/wp-content/uploads/2014/06/Conti.pdf",
+          "conditions": "head-mounted visual DRT while driving minus alone, pooled over four groups (N = 71); range is a 95% CI from the SDs, treating the conditions as independent (derived, conservative)"
         },
         "response.drt_2back_cost": {
           "value": 294.4,
@@ -568,7 +1971,8 @@
           ],
           "unit": "ms",
           "citation": "Cooper et al. (2020), raw data; examples/cooper_drt_aggregates.py",
-          "doi": "https://doi.org/10.3389/fpsyg.2020.01154"
+          "doi": "https://doi.org/10.3389/fpsyg.2020.01154",
+          "conditions": "tactile DRT with an auditory 2-back minus driving only, drivers aged 21-36 on the road; paired within 65 participants, range is the 95% CI"
         },
         "response.drt_surt_cost": {
           "value": 192.5,
@@ -578,7 +1982,8 @@
           ],
           "unit": "ms",
           "citation": "Cooper et al. (2020), raw data; examples/cooper_drt_aggregates.py",
-          "doi": "https://doi.org/10.3389/fpsyg.2020.01154"
+          "doi": "https://doi.org/10.3389/fpsyg.2020.01154",
+          "conditions": "tactile DRT with SuRT on an iPad (stimuli while it was in use) minus driving only, as above"
         }
       },
       "details": {
@@ -586,9 +1991,9 @@
         "conti_model_ms": {
           "alone": 355.09875225243223,
           "driving": 383.4108043872634,
-          "0-back": 510.0370773784911,
-          "2-back": 676.7969305186058,
-          "surt": 784.1987248157135
+          "0-back": 515.0668423479707,
+          "2-back": 683.0280198055297,
+          "surt": 780.508996682249
         },
         "conti_human_ms": {
           "alone": 293.4,
@@ -599,22 +2004,22 @@
         },
         "conti_fitted_costs_ms": {
           "0-back": {
-            "model": 126.62627299122772,
+            "model": 131.6560379607073,
             "human": 135.0
           },
           "2-back": {
-            "model": 293.3861261313424,
+            "model": 299.61721541826626,
             "human": 292.5
           },
           "surt": {
-            "model": 400.7879204284501,
+            "model": 397.09819229498555,
             "human": 385.1
           }
         },
         "cooper_model_ms": {
           "driving": 379.0592911192602,
-          "2-back": 669.4929079793394,
-          "surt": 750.1558832301597
+          "2-back": 676.0853559440616,
+          "surt": 746.4067983081591
         },
         "cooper_human_ms": {
           "driving": 523.0,
@@ -637,6 +2042,18 @@
       "scores": {
         "fatigue.endurance_error": 1.0
       },
+      "validation": {
+        "fatigue.endurance_error": {
+          "role": "consistency",
+          "evaluation_data": [
+            "frey_law_avin2010.endurance"
+          ],
+          "fitting_data": [
+            "frey_law_avin2010.endurance"
+          ],
+          "rationale": "Published fatigue rates were fitted to these endurance curves."
+        }
+      },
       "references": {
         "fatigue.endurance_error": {
           "value": 0.0,
@@ -646,7 +2063,8 @@
           ],
           "unit": "|ln ratio|",
           "citation": "Frey-Law & Avin (2010), Table 2",
-          "doi": "https://doi.org/10.1080/00140130903389068"
+          "doi": "https://doi.org/10.1080/00140130903389068",
+          "conditions": "median log ratio of endurance times to the joint-specific power models at 20-80% MVC; acceptance (about 28%) assumed"
         }
       },
       "details": {
@@ -795,6 +2213,18 @@
       "scores": {
         "risk.lane_width_speed_error": 1.0
       },
+      "validation": {
+        "risk.lane_width_speed_error": {
+          "role": "held_out",
+          "evaluation_data": [
+            "liu2016.widths_2.85_3.25_3.75"
+          ],
+          "fitting_data": [
+            "liu2016.widths_3.0_3.5"
+          ],
+          "rationale": "Conditions share the study but use different lane widths."
+        }
+      },
       "references": {
         "risk.lane_width_speed_error": {
           "value": 0.0,
@@ -804,7 +2234,8 @@
           ],
           "unit": "km/h",
           "citation": "Liu, Wang & Fu (2016), Table 2",
-          "doi": "https://doi.org/10.3390/ijerph13101010"
+          "doi": "https://doi.org/10.3390/ijerph13101010",
+          "conditions": "simulator speeds at lane widths 2.85-3.75 m, n = 24; acceptance is the mean between-driver SD"
         }
       },
       "details": {
@@ -812,6 +2243,17 @@
           3.0,
           3.5
         ],
+        "calibration_widths_m": [
+          3.0,
+          3.5
+        ],
+        "fitted_parameters": [
+          "width_rate",
+          "threshold"
+        ],
+        "requested_risk_parameters": {},
+        "risk_module": "risk_field",
+        "protocol_seed": 0,
         "threshold": 3632.6809857293943,
         "width_rate": 0.005020007707795355,
         "published_width_rate": 0.001,
@@ -837,7 +2279,8 @@
             "human": 81.92
           }
         },
-        "kendall_tau": 0.9999999999999999
+        "kendall_tau": 0.9999999999999999,
+        "protocol": "Only unspecified width_rate and threshold parameters are calibrated on the 3.0 and 3.5 m lanes. Explicit overrides remain fixed. The scored error uses only the other three reserved lane widths."
       }
     },
     {
@@ -854,6 +2297,18 @@
       "scores": {
         "affect.emotion_rmse": 1.0
       },
+      "validation": {
+        "affect.emotion_rmse": {
+          "role": "unclassified",
+          "evaluation_data": [
+            "zhang2024.experiment1.ratings"
+          ],
+          "fitting_data": [
+            "zhang2024.model_settings"
+          ],
+          "rationale": "Settings and evaluation share a publication. Independent data use is unverified."
+        }
+      },
       "references": {
         "affect.emotion_rmse": {
           "value": 0.0,
@@ -863,7 +2318,8 @@
           ],
           "unit": "intensity",
           "citation": "Zhang, Hilpert, Broekens & Jokinen (2024), Experiment 1",
-          "doi": "https://doi.org/10.1145/3613904.3641908"
+          "doi": "https://doi.org/10.1145/3613904.3641908",
+          "conditions": "normalised happiness, boredom and irritation ratings in three tasks, n = 27; acceptance is the original model's RMSE"
         }
       },
       "details": {
@@ -905,7 +2361,9 @@
         "original_model": {
           "r_squared": 0.78,
           "rmse": 0.13
-        }
+        },
+        "affect_module": "appraisal",
+        "learner": "selected appraisal implementation"
       }
     },
     {
@@ -924,6 +2382,28 @@
         "trust.study2_rmse": 1.0,
         "trust.malfunction_dip": 0.6459646573880458
       },
+      "validation": {
+        "trust.study2_rmse": {
+          "role": "held_out",
+          "evaluation_data": [
+            "kraus2020.study2"
+          ],
+          "fitting_data": [
+            "kraus2020.study1"
+          ],
+          "rationale": ""
+        },
+        "trust.malfunction_dip": {
+          "role": "held_out",
+          "evaluation_data": [
+            "kraus2020.study2"
+          ],
+          "fitting_data": [
+            "kraus2020.study1"
+          ],
+          "rationale": ""
+        }
+      },
       "references": {
         "trust.study2_rmse": {
           "value": 0.0,
@@ -933,7 +2413,8 @@
           ],
           "unit": "scale points",
           "citation": "Kraus, Scholz, Stiegemeier & Baumann (2020), Table 7",
-          "doi": "https://doi.org/10.1177/0018720819853686"
+          "doi": "https://doi.org/10.1177/0018720819853686",
+          "conditions": "trust (1-7) at t0-t8 in the two low-transparency groups (n = 13, 11), predicted after fitting Study 1; acceptance is about one standard error of a group mean (assumed)"
         },
         "trust.malfunction_dip": {
           "value": -0.47,
@@ -943,7 +2424,8 @@
           ],
           "unit": "scale points",
           "citation": "Kraus, Scholz, Stiegemeier & Baumann (2020), Table 7",
-          "doi": "https://doi.org/10.1177/0018720819853686"
+          "doi": "https://doi.org/10.1177/0018720819853686",
+          "conditions": "change in trust from t3 to t4 across the malfunction, low transparency (n = 11); the dip recovered by t5. Range: a dip of at least 0.1 and at most twice the observed one (assumed)"
         }
       },
       "details": {
@@ -951,8 +2433,8 @@
           "ok": 0.8236250993128701,
           "tor": 0.46948644962702235,
           "malfunction": 0.887060248196748,
-          "opacity": 2.4130439585947494,
-          "study1_rmse": 0.20774976266514353
+          "study1_rmse": 0.20774976266514353,
+          "opacity": 2.4130439585947494
         },
         "study2_model": {
           "MF-/LT": [
@@ -1053,7 +2535,16 @@
             5.9,
             5.9
           ]
-        }
+        },
+        "trust_module": "decision_field",
+        "requested_trust_parameters": {},
+        "study1_fitted_parameters": [
+          "ok",
+          "tor",
+          "malfunction",
+          "opacity"
+        ],
+        "protocol": "Condition on observed initial trust and disable noise only when those settings are supported and not explicitly overridden. Other requested parameters remain fixed. Opacity is refitted only when supported and not explicitly overridden. Study 2 outcomes are reserved; group simulations use derived protocol seeds."
       }
     },
     {
@@ -1072,6 +2563,19 @@
       "scores": {
         "response.modality_order": 1.0
       },
+      "validation": {
+        "response.modality_order": {
+          "role": "consistency",
+          "evaluation_data": [
+            "diederich_colonius2004.modality"
+          ],
+          "fitting_data": [
+            "diederich_colonius2015.twin",
+            "diederich_colonius2004.tactile_latency"
+          ],
+          "rationale": "The tactile latency uses the modality difference from this evaluation study."
+        }
+      },
       "references": {
         "response.modality_order": {
           "value": 1.0,
@@ -1081,22 +2585,23 @@
           ],
           "unit": "fraction",
           "citation": "Diederich & Colonius (2004), Table 2",
-          "doi": "https://doi.org/10.3758/BF03195006"
+          "doi": "https://doi.org/10.3758/BF03195006",
+          "conditions": "simple RT, same 4 people: tone (90 dB) 132 ms < light 163 ms < strong vibration 177 ms; share of the three orderings reproduced"
         }
       },
       "details": {
         "model_ms": {
-          "auditory": 252.34815729601956,
-          "visual": 317.7828221341222,
-          "tactile": 330.5380626829121
+          "auditory": 253.83729928889164,
+          "visual": 318.04195287128925,
+          "tactile": 336.1914322067144
         },
         "human_ms": {
           "auditory": 132.0,
           "visual": 163.0,
           "tactile": 177.0
         },
-        "redundant_av_ms": 223.94990637601438,
-        "note": "the model's parameters come from other participants (Diederich & Colonius, 2015); only the order is compared"
+        "redundant_av_ms": 223.9144777020263,
+        "note": "TWIN central parameters use Diederich & Colonius (2015). Tactile latency uses the modality difference in the 2004 evaluation study. The ordering result is a consistency check."
       }
     },
     {
@@ -1113,6 +2618,18 @@
       "scores": {
         "response.eccentricity_rmse": 1.0
       },
+      "validation": {
+        "response.eccentricity_rmse": {
+          "role": "held_out",
+          "evaluation_data": [
+            "diederich_colonius2007.eccentricity"
+          ],
+          "fitting_data": [
+            "osaka1976.visual_latency"
+          ],
+          "rationale": ""
+        }
+      },
       "references": {
         "response.eccentricity_rmse": {
           "value": 0.0,
@@ -1122,7 +2639,8 @@
           ],
           "unit": "ms",
           "citation": "Diederich & Colonius (2007), Table 8",
-          "doi": "https://doi.org/10.3758/BF03194453"
+          "doi": "https://doi.org/10.3758/BF03194453",
+          "conditions": "saccades to a light alone, 3 people: 39 and 58 ms slower at 50 and 70 deg than at 10 deg; RMS error of the two increases, tolerance a quarter of the 50 deg increase (assumed)"
         }
       },
       "details": {
@@ -1151,17 +2669,51 @@
         "touch"
       ],
       "passed": false,
-      "score": 0.4747153433411792,
+      "score": 0.47291881601104846,
       "skipped": null,
       "metrics": {
-        "response.drt_visual": 382.73074291915265,
-        "response.drt_tactile": 377.2546145314541,
-        "response.older_slowing": 1.3088184692551645
+        "response.drt_visual": 382.92476787080676,
+        "response.drt_tactile": 380.2974551537188,
+        "response.older_slowing": 1.2983463350048574
       },
       "scores": {
-        "response.drt_visual": 0.42414603002353757,
+        "response.drt_visual": 0.4187564480331455,
         "response.drt_tactile": 0.0,
         "response.older_slowing": 1.0
+      },
+      "validation": {
+        "response.drt_visual": {
+          "role": "held_out",
+          "evaluation_data": [
+            "conti2014.driving_baseline"
+          ],
+          "fitting_data": [
+            "conti2014.secondary_task_costs"
+          ],
+          "rationale": "Secondary task costs were fitted; driving baseline and cost were reserved."
+        },
+        "response.drt_tactile": {
+          "role": "held_out",
+          "evaluation_data": [
+            "cooper2020.tactile_drt"
+          ],
+          "fitting_data": [
+            "conti2014.secondary_task_costs",
+            "diederich2008.age_parameters"
+          ],
+          "rationale": ""
+        },
+        "response.older_slowing": {
+          "role": "held_out",
+          "evaluation_data": [
+            "cooper2020.tactile_drt"
+          ],
+          "fitting_data": [
+            "conti2014.secondary_task_costs",
+            "diederich2008.age_parameters"
+          ],
+          "rationale": ""
+        }
       },
       "references": {
         "response.drt_visual": {
@@ -1172,7 +2724,8 @@
           ],
           "unit": "ms",
           "citation": "Conti, Dlugosch & Bengler (2014), Table 3",
-          "doi": "https://www.hfes-europe.org/wp-content/uploads/2014/06/Conti.pdf"
+          "doi": "https://www.hfes-europe.org/wp-content/uploads/2014/06/Conti.pdf",
+          "conditions": "head-mounted visual DRT while driving a simulator, n = 71; range over instruction groups"
         },
         "response.drt_tactile": {
           "value": 523.0,
@@ -1182,7 +2735,8 @@
           ],
           "unit": "ms",
           "citation": "Cooper et al. (2020), raw data; examples/cooper_drt_aggregates.py",
-          "doi": "https://doi.org/10.3389/fpsyg.2020.01154"
+          "doi": "https://doi.org/10.3389/fpsyg.2020.01154",
+          "conditions": "tactile DRT (a vibration under the collarbone) on the road, drivers aged 21-36 without a secondary task; mean of 65 participants' means, range its 95% CI; computed here from the authors' data, which pooled it with a light in their Table 4"
         },
         "response.older_slowing": {
           "value": 1.301,
@@ -1192,15 +2746,16 @@
           ],
           "unit": "ratio",
           "citation": "Cooper et al. (2020), raw data; examples/cooper_drt_aggregates.py",
-          "doi": "https://doi.org/10.3389/fpsyg.2020.01154"
+          "doi": "https://doi.org/10.3389/fpsyg.2020.01154",
+          "conditions": "tactile DRT on the road, drivers aged 55-75 (n = 63) over 21-36 (n = 65), no secondary task; range is a participant bootstrap 95% interval"
         }
       },
       "details": {
-        "visual_ms": 382.73074291915265,
-        "tactile_ms": 377.2546145314541,
+        "visual_ms": 382.92476787080676,
+        "tactile_ms": 380.2974551537188,
         "tactile_older_ms": 493.75780711050487,
-        "visual_alone_ms": 358.0296855244085,
-        "windshield_light_ms": 359.8670781687252,
+        "visual_alone_ms": 355.9223200341921,
+        "windshield_light_ms": 360.9334656402864,
         "windshield_light_human_ms": {
           "mean": 557.3,
           "ci95": [
@@ -1225,6 +2780,18 @@
       "scores": {
         "vestibular.vertical_msi_error": 1.0
       },
+      "validation": {
+        "vestibular.vertical_msi_error": {
+          "role": "calibration",
+          "evaluation_data": [
+            "ohanlon_mccauley1974.vertical_endpoints"
+          ],
+          "fitting_data": [
+            "ohanlon_mccauley1974.vertical_endpoints"
+          ],
+          "rationale": "Conflict scale was fitted to these endpoint conditions."
+        }
+      },
       "references": {
         "vestibular.vertical_msi_error": {
           "value": 0.0,
@@ -1234,7 +2801,8 @@
           ],
           "unit": "% points",
           "citation": "O'Hanlon & McCauley (1973/1974), Tables 1-2",
-          "doi": "https://archive.org/details/DTIC_AD0768215"
+          "doi": "https://archive.org/details/DTIC_AD0768215",
+          "conditions": "RMS error of MSI after 2 h of vertical oscillation, 14 conditions at 0.083-0.5 Hz; acceptance is an assumed tolerance (the descriptive fit of McCauley et al. 1976 reached 6.1)"
         }
       },
       "details": {
@@ -1341,6 +2909,18 @@
       "scores": {
         "vestibular.time_course_msi_error": 0.5247670948058163
       },
+      "validation": {
+        "vestibular.time_course_msi_error": {
+          "role": "held_out",
+          "evaluation_data": [
+            "mccauley1976.time_course"
+          ],
+          "fitting_data": [
+            "ohanlon_mccauley1974.vertical_endpoints"
+          ],
+          "rationale": ""
+        }
+      },
       "references": {
         "vestibular.time_course_msi_error": {
           "value": 0.0,
@@ -1350,7 +2930,8 @@
           ],
           "unit": "% points",
           "citation": "McCauley, Royal, Wylie, O'Hanlon & Mackie (1976), Appendix B",
-          "doi": "https://archive.org/details/DTIC_ADA024709"
+          "doi": "https://archive.org/details/DTIC_ADA024709",
+          "conditions": "cumulative MSI at 5-115 min, 43 points at nine vertical conditions (0.18-0.7 Hz) outside the 2-hour set; the authors' own descriptive fit has an RMS error of 6.1 over all 99 points; acceptance assumed"
         }
       },
       "details": {
@@ -1465,6 +3046,28 @@
         "vestibular.roll_frequency_order": 1.0,
         "vestibular.roll_compensation_effect": 0.9435525490619201
       },
+      "validation": {
+        "vestibular.roll_frequency_order": {
+          "role": "held_out",
+          "evaluation_data": [
+            "donohew_griffin2009.roll"
+          ],
+          "fitting_data": [
+            "ohanlon_mccauley1974.vertical_endpoints"
+          ],
+          "rationale": ""
+        },
+        "vestibular.roll_compensation_effect": {
+          "role": "held_out",
+          "evaluation_data": [
+            "donohew_griffin2009.roll"
+          ],
+          "fitting_data": [
+            "ohanlon_mccauley1974.vertical_endpoints"
+          ],
+          "rationale": ""
+        }
+      },
       "references": {
         "vestibular.roll_frequency_order": {
           "value": 1.0,
@@ -1474,7 +3077,8 @@
           ],
           "unit": "fraction",
           "citation": "Donohew & Griffin (2009), Results",
-          "doi": "https://doi.org/10.3357/ASEM.2345.2009"
+          "doi": "https://doi.org/10.3357/ASEM.2345.2009",
+          "conditions": "30 min of fully roll-compensated lateral oscillation, 20 males per frequency: illness rose from 0.08, 0.125 and 0.05 to 0.2 Hz and from 0.125 to 0.16 Hz, and fell from 0.315 to 0.8 Hz (p < 0.05); share of these five differences reproduced"
         },
         "vestibular.roll_compensation_effect": {
           "value": 3.707,
@@ -1484,7 +3088,8 @@
           ],
           "unit": "ratio",
           "citation": "Donohew & Griffin (2009), Tables II-III",
-          "doi": "https://doi.org/10.3357/ASEM.2345.2009"
+          "doi": "https://doi.org/10.3357/ASEM.2345.2009",
+          "conditions": "MSI with full roll compensation over MSI without, 0.315 Hz: people were sicker with compensation (p = 0.009; relative risk of mild nausea 3.7); range is any increase up to tenfold"
         }
       },
       "details": {
@@ -1537,6 +3142,58 @@
         "driving.mean_offroad_glance": 1.0,
         "driving.long_glance_share": 1.0
       },
+      "validation": {
+        "driving.human_mean_glance": {
+          "role": "calibration",
+          "evaluation_data": [
+            "kujala_saariluoma2011.mean_and_sd"
+          ],
+          "fitting_data": [
+            "kujala_saariluoma2011.mean_and_sd"
+          ],
+          "rationale": "ABC fitted return tolerance and spread to these statistics."
+        },
+        "driving.human_glance_sd": {
+          "role": "calibration",
+          "evaluation_data": [
+            "kujala_saariluoma2011.mean_and_sd"
+          ],
+          "fitting_data": [
+            "kujala_saariluoma2011.mean_and_sd"
+          ],
+          "rationale": "ABC fitted return tolerance and spread to these statistics."
+        },
+        "driving.human_long_glance_share": {
+          "role": "held_out",
+          "evaluation_data": [
+            "kujala_saariluoma2011.long_glance_share"
+          ],
+          "fitting_data": [
+            "kujala_saariluoma2011.mean_and_sd"
+          ],
+          "rationale": "A held out statistic from the same study; participants are shared."
+        },
+        "driving.mean_offroad_glance": {
+          "role": "held_out",
+          "evaluation_data": [
+            "nhtsa2013.glance_criteria"
+          ],
+          "fitting_data": [
+            "kujala_saariluoma2011.mean_and_sd"
+          ],
+          "rationale": "Design criteria are separate from glance fitting statistics."
+        },
+        "driving.long_glance_share": {
+          "role": "held_out",
+          "evaluation_data": [
+            "nhtsa2013.glance_criteria"
+          ],
+          "fitting_data": [
+            "kujala_saariluoma2011.mean_and_sd"
+          ],
+          "rationale": "Design criteria are separate from glance fitting statistics."
+        }
+      },
       "references": {
         "driving.human_mean_glance": {
           "value": 1.1,
@@ -1546,7 +3203,8 @@
           ],
           "unit": "s",
           "citation": "Kujala & Saariluoma (2011), Table 2; Jokinen, Kujala & Oulasvirta (2021), Appendix B",
-          "doi": "https://doi.org/10.1080/00140139.2011.592601"
+          "doi": "https://doi.org/10.1080/00140139.2011.592601",
+          "conditions": "simulator, in-vehicle visual search; means 1.06-1.20 s over four interfaces (transitions included) and 1.0 +- 0.2 s by condition"
         },
         "driving.human_glance_sd": {
           "value": 0.57,
@@ -1556,7 +3214,8 @@
           ],
           "unit": "s",
           "citation": "Kujala & Saariluoma (2011), Table 2",
-          "doi": "https://doi.org/10.1080/00140139.2011.592601"
+          "doi": "https://doi.org/10.1080/00140139.2011.592601",
+          "conditions": "mean within-person SD of in-vehicle glance durations over four interfaces, simulator at 40-60 km/h, n = 10 per interface"
         },
         "driving.human_long_glance_share": {
           "value": 0.08,
@@ -1566,7 +3225,8 @@
           ],
           "unit": "fraction",
           "citation": "Kujala & Saariluoma (2011); Tivesten & Dozza (2014)",
-          "doi": "https://doi.org/10.1016/j.trf.2014.08.004"
+          "doi": "https://doi.org/10.1016/j.trf.2014.08.004",
+          "conditions": "glances over 2 s: 5.7-10% in simulator search tasks; naturalistic phone tasks median 3.4%, mean 12.8%"
         },
         "driving.mean_offroad_glance": {
           "value": 2.0,
@@ -1576,7 +3236,8 @@
           ],
           "unit": "s",
           "citation": "NHTSA (2013) guideline criterion (b)",
-          "doi": "https://www.federalregister.gov/documents/2013/04/26/2013-09883"
+          "doi": "https://www.federalregister.gov/documents/2013/04/26/2013-09883",
+          "conditions": "mean glance away from the road per task; a design criterion, not a human mean"
         },
         "driving.long_glance_share": {
           "value": 0.15,
@@ -1586,7 +3247,8 @@
           ],
           "unit": "fraction",
           "citation": "NHTSA (2013) guideline criterion (a)",
-          "doi": "https://www.federalregister.gov/documents/2013/04/26/2013-09883"
+          "doi": "https://www.federalregister.gov/documents/2013/04/26/2013-09883",
+          "conditions": "share of off-road glances longer than 2 s"
         }
       },
       "details": {
@@ -2107,6 +3769,28 @@
         "driving.occlusion_speed_elasticity": 0.5961563508821551,
         "driving.incar_glance_speed_elasticity": 0.0
       },
+      "validation": {
+        "driving.occlusion_speed_elasticity": {
+          "role": "held_out",
+          "evaluation_data": [
+            "senders1967.occlusion"
+          ],
+          "fitting_data": [
+            "kujala_saariluoma2011.mean_and_sd"
+          ],
+          "rationale": ""
+        },
+        "driving.incar_glance_speed_elasticity": {
+          "role": "held_out",
+          "evaluation_data": [
+            "jokinen2021.speed_effect"
+          ],
+          "fitting_data": [
+            "kujala_saariluoma2011.mean_and_sd"
+          ],
+          "rationale": ""
+        }
+      },
       "references": {
         "driving.occlusion_speed_elasticity": {
           "value": -0.64,
@@ -2116,7 +3800,8 @@
           ],
           "unit": "1",
           "citation": "Senders et al. (1967), Table 5 (elasticities derived here)",
-          "doi": "https://onlinepubs.trb.org/Onlinepubs/hrr/1967/195/195-002.pdf"
+          "doi": "https://onlinepubs.trb.org/Onlinepubs/hrr/1967/195/195-002.pdf",
+          "conditions": "voluntary occlusion on a freeway at 22-60 mph, three drivers; log-log slope of occlusion time on speed per driver"
         },
         "driving.incar_glance_speed_elasticity": {
           "value": 0.0,
@@ -2126,7 +3811,8 @@
           ],
           "unit": "1",
           "citation": "Jokinen, Kujala & Oulasvirta (2021), Appendix B, Table 6",
-          "doi": "https://doi.org/10.1177/0018720820927687"
+          "doi": "https://doi.org/10.1177/0018720820927687",
+          "conditions": "in-car search glances at 60 vs 120 km/h: speed coefficient -0.0 s (n.s.) at a 1.0 s intercept, 12 drivers; the range (+-0.1 s per doubling of speed) is an assumed tolerance"
         }
       },
       "details": {
@@ -2161,6 +3847,18 @@
       "scores": {
         "design.touch_key_asymptote": 1.0
       },
+      "validation": {
+        "design.touch_key_asymptote": {
+          "role": "held_out",
+          "evaluation_data": [
+            "kim2014.key_size"
+          ],
+          "fitting_data": [
+            "bi2013.touch_pointing"
+          ],
+          "rationale": ""
+        }
+      },
       "references": {
         "design.touch_key_asymptote": {
           "value": 17.5,
@@ -2170,7 +3868,8 @@
           ],
           "unit": "mm",
           "citation": "Kim, Kwon, Heo, Lee & Chung (2014)",
-          "doi": "https://doi.org/10.1016/j.apergo.2013.05.006"
+          "doi": "https://doi.org/10.1016/j.apergo.2013.05.006",
+          "conditions": "5-digit entry on in-vehicle touch keys of 7.5-27.5 mm in 5 mm steps, 30 drivers; usability and safety stopped improving at 17.5 mm; the range spans the neighbouring sizes"
         }
       },
       "details": {
@@ -2281,11 +3980,33 @@
       "skipped": null,
       "metrics": {
         "driving.takeover_modality_order": 1.0,
-        "driving.takeover_hands_auditory": 1.623440319956765
+        "driving.takeover_hands_auditory": 1.6196903199567652
       },
       "scores": {
         "driving.takeover_modality_order": 1.0,
         "driving.takeover_hands_auditory": 1.0
+      },
+      "validation": {
+        "driving.takeover_modality_order": {
+          "role": "held_out",
+          "evaluation_data": [
+            "petermeijer2017.modality"
+          ],
+          "fitting_data": [
+            "gold2013.hands"
+          ],
+          "rationale": ""
+        },
+        "driving.takeover_hands_auditory": {
+          "role": "held_out",
+          "evaluation_data": [
+            "ko2022.hands"
+          ],
+          "fitting_data": [
+            "gold2013.hands"
+          ],
+          "rationale": ""
+        }
       },
       "references": {
         "driving.takeover_modality_order": {
@@ -2296,7 +4017,8 @@
           ],
           "unit": "fraction",
           "citation": "Petermeijer, Doubek & de Winter (2017), abstract",
-          "doi": "https://doi.org/10.1109/SMC.2017.8122827"
+          "doi": "https://doi.org/10.1109/SMC.2017.8122827",
+          "conditions": "101 drivers: auditory and tactile take-over requests were answered faster than visual ones; share of the two orderings reproduced"
         },
         "driving.takeover_hands_auditory": {
           "value": 1.87,
@@ -2306,7 +4028,8 @@
           ],
           "unit": "s",
           "citation": "Ko, Sanghavi, Zhang & Jeon (2022), Fig. 4",
-          "doi": "https://doi.org/10.1016/j.trf.2022.08.008"
+          "doi": "https://doi.org/10.1016/j.trf.2022.08.008",
+          "conditions": "mean time to grab the wheel after an auditory warning with a visual text, game on a laptop on the centre console, lap 3 (M = 1.875 s, SD 0.513), n = 21; range is +-1 between-person SD"
         }
       },
       "details": {
@@ -2315,7 +4038,7 @@
             "response_s": 0.5799999999998633,
             "gaze_s": 0.6728402613024116,
             "hand_s": 1.5859403199567659,
-            "eyes_s": 0.7599999999998595,
+            "eyes_s": 0.7499999999998597,
             "engaged_s": 2.009999999999833
           },
           "auditory": {
@@ -2342,32 +4065,32 @@
         },
         "mean_components_s": {
           "visual": {
-            "response_s": 0.7381249999998599,
-            "gaze_s": 0.9101997438929736,
-            "hand_s": 1.7440653199567624,
-            "eyes_s": 1.005624999999854,
-            "engaged_s": 2.104999999999831
+            "response_s": 0.73437499999986,
+            "gaze_s": 0.9069739374413607,
+            "hand_s": 1.7403153199567627,
+            "eyes_s": 1.0018749999998544,
+            "engaged_s": 2.1012499999998306
           },
           "auditory": {
-            "response_s": 0.6531249999998617,
-            "gaze_s": 0.8449911795165189,
-            "hand_s": 1.6590653199567642,
-            "eyes_s": 0.9187499999998561,
-            "engaged_s": 2.0149999999998327
+            "response_s": 0.6493749999998618,
+            "gaze_s": 0.8416578461831856,
+            "hand_s": 1.6553153199567645,
+            "eyes_s": 0.9143749999998562,
+            "engaged_s": 2.010624999999833
           },
           "tactile": {
-            "response_s": 0.6987499999998608,
-            "gaze_s": 0.8513446038797344,
-            "hand_s": 1.7046903199567633,
-            "eyes_s": 0.9637499999998551,
-            "engaged_s": 2.0606249999998316
+            "response_s": 0.6949999999998608,
+            "gaze_s": 0.8468039724205777,
+            "hand_s": 1.7009403199567634,
+            "eyes_s": 0.9593749999998552,
+            "engaged_s": 2.0562499999998316
           },
           "auditory+visual": {
-            "response_s": 0.6174999999998625,
-            "gaze_s": 0.8123598844255872,
-            "hand_s": 1.623440319956765,
-            "eyes_s": 0.8862499999998568,
-            "engaged_s": 1.9824999999998334
+            "response_s": 0.6137499999998626,
+            "gaze_s": 0.809026551092254,
+            "hand_s": 1.6196903199567652,
+            "eyes_s": 0.8824999999998568,
+            "engaged_s": 1.9787499999998335
           }
         },
         "runs": 32
@@ -2383,19 +4106,61 @@
         "motor"
       ],
       "passed": false,
-      "score": 0.7107397151898207,
+      "score": 0.7095530063290613,
       "skipped": null,
       "metrics": {
-        "driving.takeover_gaze": 0.8100870008366292,
-        "driving.takeover_road": 0.9049999999998564,
-        "driving.takeover_hands": 1.6331278199567647,
-        "driving.takeover_intervention": 1.9759374999998336
+        "driving.takeover_gaze": 0.8068841563416499,
+        "driving.takeover_road": 0.9012499999998564,
+        "driving.takeover_hands": 1.6300028199567649,
+        "driving.takeover_intervention": 1.9721874999998337
       },
       "scores": {
         "driving.takeover_gaze": 0.0,
         "driving.takeover_road": 1.0,
         "driving.takeover_hands": 1.0,
-        "driving.takeover_intervention": 0.842958860759283
+        "driving.takeover_intervention": 0.8382120253162451
+      },
+      "validation": {
+        "driving.takeover_gaze": {
+          "role": "held_out",
+          "evaluation_data": [
+            "gold2013.gaze_and_intervention"
+          ],
+          "fitting_data": [
+            "gold2013.hands"
+          ],
+          "rationale": "Other outcomes from the same study; participants are shared."
+        },
+        "driving.takeover_road": {
+          "role": "held_out",
+          "evaluation_data": [
+            "gold2013.gaze_and_intervention"
+          ],
+          "fitting_data": [
+            "gold2013.hands"
+          ],
+          "rationale": "Other outcomes from the same study; participants are shared."
+        },
+        "driving.takeover_hands": {
+          "role": "calibration",
+          "evaluation_data": [
+            "gold2013.hands"
+          ],
+          "fitting_data": [
+            "gold2013.hands"
+          ],
+          "rationale": "Hand release time was fitted to these outcomes."
+        },
+        "driving.takeover_intervention": {
+          "role": "held_out",
+          "evaluation_data": [
+            "gold2013.gaze_and_intervention"
+          ],
+          "fitting_data": [
+            "gold2013.hands"
+          ],
+          "rationale": "Other outcomes from the same study; participants are shared."
+        }
       },
       "references": {
         "driving.takeover_gaze": {
@@ -2406,7 +4171,8 @@
           ],
           "unit": "s",
           "citation": "Gold, Damb\u00f6ck, Lorenz & Bengler (2013), Fig. 3",
-          "doi": "https://doi.org/10.1177/1541931213571433"
+          "doi": "https://doi.org/10.1177/1541931213571433",
+          "conditions": "first saccade away from SuRT; tone with an icon in the cluster, SuRT during automation at 120 km/h; group means with 5 s (n = 15) and 7 s (n = 13) to collision; the model has no time budget, so the range spans the two"
         },
         "driving.takeover_road": {
           "value": 0.94,
@@ -2416,7 +4182,8 @@
           ],
           "unit": "s",
           "citation": "Gold, Damb\u00f6ck, Lorenz & Bengler (2013), Fig. 3",
-          "doi": "https://doi.org/10.1177/1541931213571433"
+          "doi": "https://doi.org/10.1177/1541931213571433",
+          "conditions": "first fixation on the road scene; tone with an icon in the cluster, SuRT during automation at 120 km/h; group means with 5 s (n = 15) and 7 s (n = 13) to collision; the model has no time budget, so the range spans the two"
         },
         "driving.takeover_hands": {
           "value": 1.79,
@@ -2426,7 +4193,8 @@
           ],
           "unit": "s",
           "citation": "Gold, Damb\u00f6ck, Lorenz & Bengler (2013), Fig. 3",
-          "doi": "https://doi.org/10.1177/1541931213571433"
+          "doi": "https://doi.org/10.1177/1541931213571433",
+          "conditions": "hands on the wheel; tone with an icon in the cluster, SuRT during automation at 120 km/h; group means with 5 s (n = 15) and 7 s (n = 13) to collision; the model has no time budget, so the range spans the two"
         },
         "driving.takeover_intervention": {
           "value": 2.89,
@@ -2436,35 +4204,36 @@
           ],
           "unit": "s",
           "citation": "Gold, Damb\u00f6ck, Lorenz & Bengler (2013), Fig. 3",
-          "doi": "https://doi.org/10.1177/1541931213571433"
+          "doi": "https://doi.org/10.1177/1541931213571433",
+          "conditions": "first braking or steering input; tone with an icon in the cluster, SuRT during automation at 120 km/h; group means with 5 s (n = 15) and 7 s (n = 13) to collision; the model has no time budget, so the range spans the two"
         }
       },
       "details": {
         "model_mean_s": {
-          "gaze": 0.8100870008366292,
-          "road": 0.9049999999998564,
-          "hands": 1.6331278199567647,
-          "intervention": 1.9759374999998336
+          "gaze": 0.8068841563416499,
+          "road": 0.9012499999998564,
+          "hands": 1.6300028199567649,
+          "intervention": 1.9721874999998337
         },
         "model_ci95_s": {
           "gaze": [
-            0.6949572659935445,
-            0.9530294397484717
+            0.6934219478310477,
+            0.9488260421869581
           ],
           "road": [
-            0.782499999999859,
-            1.058213424504858
+            0.78072301673741,
+            1.0536792552989678
           ],
           "hands": [
-            1.508969559206412,
-            1.7851744125498674
+            1.5071903199567676,
+            1.781903474490089
           ],
           "intervention": [
-            1.8316098024064944,
-            2.139814948558374
+            1.828615301537547,
+            2.133924214225917
           ]
         },
-        "model_response_s": 0.6271874999998623,
+        "model_response_s": 0.6240624999998623,
         "runs": 64,
         "runs_with_eyes_on_task": 61,
         "gold_mean_s": {
@@ -2514,15 +4283,39 @@
         "motor"
       ],
       "passed": false,
-      "score": 0.44966061099104915,
+      "score": 0.44098005543549407,
       "skipped": null,
       "metrics": {
-        "driving.zeeb_road": 0.906545454545311,
-        "driving.zeeb_hands": 1.0318778199567777
+        "driving.zeeb_road": 0.902545454545311,
+        "driving.zeeb_hands": 1.028752819956778
       },
       "scores": {
         "driving.zeeb_road": 0.0,
-        "driving.zeeb_hands": 0.8993212219820983
+        "driving.zeeb_hands": 0.8819601108709881
+      },
+      "validation": {
+        "driving.zeeb_road": {
+          "role": "held_out",
+          "evaluation_data": [
+            "zeeb2015.takeover_and_monitoring"
+          ],
+          "fitting_data": [
+            "gold2013.hands",
+            "hergeth2016.monitoring"
+          ],
+          "rationale": ""
+        },
+        "driving.zeeb_hands": {
+          "role": "held_out",
+          "evaluation_data": [
+            "zeeb2015.takeover_and_monitoring"
+          ],
+          "fitting_data": [
+            "gold2013.hands",
+            "hergeth2016.monitoring"
+          ],
+          "rationale": ""
+        }
       },
       "references": {
         "driving.zeeb_road": {
@@ -2533,7 +4326,8 @@
           ],
           "unit": "s",
           "citation": "Zeeb, Buchner & Schrauf (2015), Section 3.3",
-          "doi": "https://doi.org/10.1016/j.aap.2015.02.023"
+          "doi": "https://doi.org/10.1016/j.aap.2015.02.023",
+          "conditions": "first gaze at the road after a tone with an icon in the head unit, visual task through a rotary knob during automation, 120 km/h; 0.69 (SD 0.2) s, n = 62; range is the 95% CI of the mean"
         },
         "driving.zeeb_hands": {
           "value": 1.14,
@@ -2543,13 +4337,14 @@
           ],
           "unit": "s",
           "citation": "Zeeb, Buchner & Schrauf (2015), Section 3.3",
-          "doi": "https://doi.org/10.1016/j.aap.2015.02.023"
+          "doi": "https://doi.org/10.1016/j.aap.2015.02.023",
+          "conditions": "first contact with the wheel after a tone with an icon in the head unit, visual task through a rotary knob during automation, 120 km/h; 1.14 (SD 0.45) s, n = 88; range is the 95% CI of the mean"
         }
       },
       "details": {
         "runs": 64,
         "runs_eyes_off_road": 55,
-        "model_engaged_s": 1.9615624999998338,
+        "model_engaged_s": 1.9578124999998339,
         "human_braking_by_group_s": {
           "high-risk": [
             2.31,
@@ -2596,6 +4391,30 @@
         "driving.automation_max_offroad": 1.0,
         "driving.automation_road_share": 1.0
       },
+      "validation": {
+        "driving.automation_max_offroad": {
+          "role": "held_out",
+          "evaluation_data": [
+            "zeeb2015.takeover_and_monitoring"
+          ],
+          "fitting_data": [
+            "gold2013.hands",
+            "hergeth2016.monitoring"
+          ],
+          "rationale": ""
+        },
+        "driving.automation_road_share": {
+          "role": "held_out",
+          "evaluation_data": [
+            "zeeb2015.takeover_and_monitoring"
+          ],
+          "fitting_data": [
+            "gold2013.hands",
+            "hergeth2016.monitoring"
+          ],
+          "rationale": ""
+        }
+      },
       "references": {
         "driving.automation_max_offroad": {
           "value": 21.6,
@@ -2605,7 +4424,8 @@
           ],
           "unit": "s",
           "citation": "Zeeb, Buchner & Schrauf (2015), Table 1",
-          "doi": "https://doi.org/10.1016/j.aap.2015.02.023"
+          "doi": "https://doi.org/10.1016/j.aap.2015.02.023",
+          "conditions": "longest eyes-off-road time in the minute before a take-over request, visual task during automation, 89 drivers; value is the n-weighted mean (derived), range the low- and high-risk groups' means"
         },
         "driving.automation_road_share": {
           "value": 7.4,
@@ -2615,7 +4435,8 @@
           ],
           "unit": "%",
           "citation": "Zeeb, Buchner & Schrauf (2015), Table 1",
-          "doi": "https://doi.org/10.1016/j.aap.2015.02.023"
+          "doi": "https://doi.org/10.1016/j.aap.2015.02.023",
+          "conditions": "share of that minute looking through the windshield; value is the n-weighted mean (derived), range the high- and low-risk groups' means"
         }
       },
       "details": {
@@ -2672,17 +4493,49 @@
         "motor"
       ],
       "passed": false,
-      "score": 0.3336741995998141,
+      "score": 0.33299745718836726,
       "skipped": null,
       "metrics": {
-        "driving.zhang_no_auditory": 0.051625360076360115,
-        "driving.zhang_vibrotactile": -0.007939069961870346,
-        "driving.zhang_visual_task": 0.5042051708331383
+        "driving.zhang_no_auditory": 0.05172102733030334,
+        "driving.zhang_vibrotactile": -0.007475183913601032,
+        "driving.zhang_visual_task": 0.5023055343587645
       },
       "scores": {
-        "driving.zhang_no_auditory": 0.4786415194706335,
-        "driving.zhang_vibrotactile": 0.5223810793288088,
+        "driving.zhang_no_auditory": 0.4792470084196413,
+        "driving.zhang_vibrotactile": 0.5197453631454605,
         "driving.zhang_visual_task": 0.0
+      },
+      "validation": {
+        "driving.zhang_no_auditory": {
+          "role": "held_out",
+          "evaluation_data": [
+            "zhang2019.meta_analysis_effects"
+          ],
+          "fitting_data": [
+            "gold2013.hands"
+          ],
+          "rationale": "The meta analysis may include calibration studies."
+        },
+        "driving.zhang_vibrotactile": {
+          "role": "held_out",
+          "evaluation_data": [
+            "zhang2019.meta_analysis_effects"
+          ],
+          "fitting_data": [
+            "gold2013.hands"
+          ],
+          "rationale": "The meta analysis may include calibration studies."
+        },
+        "driving.zhang_visual_task": {
+          "role": "held_out",
+          "evaluation_data": [
+            "zhang2019.meta_analysis_effects"
+          ],
+          "fitting_data": [
+            "gold2013.hands"
+          ],
+          "rationale": "The meta analysis may include calibration studies."
+        }
       },
       "references": {
         "driving.zhang_no_auditory": {
@@ -2693,7 +4546,8 @@
           ],
           "unit": "ln ratio",
           "citation": "Zhang, de Winter, Varotto, Happee & Martens (2019), Table 5",
-          "doi": "https://doi.org/10.1016/j.trf.2019.04.020"
+          "doi": "https://doi.org/10.1016/j.trf.2019.04.020",
+          "conditions": "take-over request without a sound: effect on the log of mean take-over time in a mixed-effects model of 520 means from 129 studies; range is the 95% CI from the estimate and its t value"
         },
         "driving.zhang_vibrotactile": {
           "value": -0.1801,
@@ -2703,7 +4557,8 @@
           ],
           "unit": "ln ratio",
           "citation": "Zhang, de Winter, Varotto, Happee & Martens (2019), Table 5",
-          "doi": "https://doi.org/10.1016/j.trf.2019.04.020"
+          "doi": "https://doi.org/10.1016/j.trf.2019.04.020",
+          "conditions": "take-over request with a vibration: effect on the log of mean take-over time in a mixed-effects model of 520 means from 129 studies; range is the 95% CI from the estimate and its t value"
         },
         "driving.zhang_visual_task": {
           "value": 0.0975,
@@ -2713,14 +4568,15 @@
           ],
           "unit": "ln ratio",
           "citation": "Zhang, de Winter, Varotto, Happee & Martens (2019), Table 5",
-          "doi": "https://doi.org/10.1016/j.trf.2019.04.020"
+          "doi": "https://doi.org/10.1016/j.trf.2019.04.020",
+          "conditions": "a visual non-driving task: effect on the log of mean take-over time in a mixed-effects model of 520 means from 129 studies; range is the 95% CI from the estimate and its t value"
         }
       },
       "details": {
         "model_mean_first_input_s": {
-          "tone_icon_surt": 1.9759374999998336,
-          "icon_surt": 2.080624999999831,
-          "tone_icon_vibration_surt": 1.960312499999834,
+          "tone_icon_surt": 1.9721874999998337,
+          "icon_surt": 2.0768749999998315,
+          "tone_icon_vibration_surt": 1.957499999999834,
           "tone_icon_no_task": 1.1934374999998503
         },
         "human_baseline_s": 2.15,
@@ -2743,15 +4599,37 @@
         "eyes"
       ],
       "passed": false,
-      "score": 0.8246106902356893,
+      "score": 0.8264730639730631,
       "skipped": null,
       "metrics": {
-        "driving.petermeijer_visual_vs_auditory": 0.06981818181818067,
-        "driving.petermeijer_visual_vs_tactile": -0.008727272727272584
+        "driving.petermeijer_visual_vs_auditory": 0.07090909090908981,
+        "driving.petermeijer_visual_vs_tactile": -0.007636363636363441
       },
       "scores": {
-        "driving.petermeijer_visual_vs_auditory": 0.944107744107742,
-        "driving.petermeijer_visual_vs_tactile": 0.7051136363636366
+        "driving.petermeijer_visual_vs_auditory": 0.946127946127944,
+        "driving.petermeijer_visual_vs_tactile": 0.706818181818182
+      },
+      "validation": {
+        "driving.petermeijer_visual_vs_auditory": {
+          "role": "held_out",
+          "evaluation_data": [
+            "petermeijer2017.eyes"
+          ],
+          "fitting_data": [
+            "gold2013.hands"
+          ],
+          "rationale": ""
+        },
+        "driving.petermeijer_visual_vs_tactile": {
+          "role": "held_out",
+          "evaluation_data": [
+            "petermeijer2017.eyes"
+          ],
+          "fitting_data": [
+            "gold2013.hands"
+          ],
+          "rationale": ""
+        }
       },
       "references": {
         "driving.petermeijer_visual_vs_auditory": {
@@ -2762,7 +4640,8 @@
           ],
           "unit": "s",
           "citation": "Petermeijer, Doubek & de Winter (2017), Table II",
-          "doi": "https://doi.org/10.1109/SMC.2017.8122827"
+          "doi": "https://doi.org/10.1109/SMC.2017.8122827",
+          "conditions": "eyes on the road after a visual minus after an auditory take-over request, 67 drivers reading or watching a video on a tablet, 120 km/h; range is the 95% CI derived from the paired p value (.008)"
         },
         "driving.petermeijer_visual_vs_tactile": {
           "value": 0.5,
@@ -2772,14 +4651,15 @@
           ],
           "unit": "s",
           "citation": "Petermeijer, Doubek & de Winter (2017), Table II",
-          "doi": "https://doi.org/10.1109/SMC.2017.8122827"
+          "doi": "https://doi.org/10.1109/SMC.2017.8122827",
+          "conditions": "eyes on the road after a visual minus after a tactile take-over request, 67 drivers reading or watching a video on a tablet, 120 km/h; range is the 95% CI derived from the paired p value (.003)"
         }
       },
       "details": {
         "model_mean_eyes_on_road_s": {
-          "visual": 0.9934545454544,
-          "auditory": 0.9236363636362194,
-          "tactile": 1.0021818181816726
+          "visual": 0.990181818181673,
+          "auditory": 0.9192727272725831,
+          "tactile": 0.9978181818180364
         },
         "human_mean_sd_s": {
           "eyes_on_road": {
@@ -2818,5 +4698,14 @@
         "note": "the study's scenarios were not urgent (more than 10 s to collision), and its absolute times are about twice the model's"
       }
     }
-  ]
+  ],
+  "verification_refresh": {
+    "benchmarks": [
+      "vision.foveation",
+      "trust.kraus_dynamics",
+      "risk.lane_width"
+    ],
+    "wall_seconds": 1.388,
+    "reason": "Verify selected implementation paths after the complete offline run"
+  }
 }

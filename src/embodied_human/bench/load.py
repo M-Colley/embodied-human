@@ -32,6 +32,7 @@ from ..core import Human
 from ..response import CentralTask, Signal
 from ..tasks.load import DRIVING, n_back, surt
 from .benchmarks import Result, benchmark
+from .protocol import protocol_seed
 
 #: Head-mounted DRT light relative to straight ahead, deg (ISO 17488,
 #: 6.3.2.1: 20 deg left, 10 deg up).
@@ -61,7 +62,7 @@ def display_share(human: Human, seconds: float = 60.0) -> float:
     from ..agents.driver import DISPLAY
     from ..agents.road import simulate_glances
 
-    log = simulate_glances(human, speed=80 / 3.6, seconds=seconds, seed=0)
+    log = simulate_glances(human, speed=80 / 3.6, seconds=seconds, seed=protocol_seed())
     return float(np.mean([area == DISPLAY for area in log.areas]))
 
 

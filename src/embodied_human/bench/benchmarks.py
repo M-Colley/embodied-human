@@ -18,6 +18,7 @@ import numpy as np
 
 from ..core import Human
 from .references import REFERENCES
+from .validation import evaluation_for
 
 
 def json_safe(value: Any) -> Any:
@@ -59,6 +60,7 @@ class Result:
     scores: dict[str, float] = field(default_factory=dict)
     details: dict[str, Any] = field(default_factory=dict)
     skipped: str | None = None
+    validation: dict[str, Any] = field(default_factory=dict)
 
     @property
     def passed(self) -> bool:
@@ -78,6 +80,7 @@ class Result:
         """Record ``value`` under ``reference`` and score it."""
         self.metrics[reference] = float(value)
         self.scores[reference] = REFERENCES[reference].score(float(value))
+        self.validation[reference] = evaluation_for(reference).as_dict()
 
     def as_dict(self) -> dict[str, Any]:
         """JSON-serializable result with the references used."""
@@ -90,6 +93,12 @@ class Result:
                 "skipped": self.skipped,
                 "metrics": self.metrics,
                 "scores": self.scores,
+                "validation": {
+                    metric: self.validation.get(
+                        metric, evaluation_for(metric).as_dict()
+                    )
+                    for metric in self.metrics
+                },
                 "references": {
                     k: {
                         "value": REFERENCES[k].value,
@@ -97,6 +106,7 @@ class Result:
                         "unit": REFERENCES[k].unit,
                         "citation": REFERENCES[k].citation,
                         "doi": REFERENCES[k].doi,
+                        "conditions": REFERENCES[k].conditions,
                     }
                     for k in self.scores
                 },
@@ -200,16 +210,42 @@ def peripheral_acuity(human: Human) -> Result:
 
 @benchmark("vision.foveation")
 def foveation_resolution(human: Human) -> Result:
-    """Eccentricity at which the visible spatial frequency halves."""
-    vision = human.vision
+    """Half resolution eccentricity from the selected perception cutoff field."""
+    vision: Any = human.vision
     result = Result("vision.foveation", ("vision",))
-    params: Any = vision.parameters
-    eccentricities = np.linspace(0.0, 30.0, 3001)
-    cutoff = params.cutoff(eccentricities)
-    half = float(np.interp(-cutoff[0] / 2, -cutoff, eccentricities))
+    eccentricities = np.linspace(0.0, 40.0, 4001)
+    image = (np.arange(len(eccentricities)) % 2)[None, :].astype(float)
+    percept = vision.perceive(image, (0.0, 0.0), pixels_per_degree=100.0)
+    field = getattr(percept, "cutoff", None)
+    if field is None:
+        result.skipped = "selected vision does not expose a per-pixel cutoff field"
+        return result
+    cutoff = np.asarray(field, dtype=float)
+    if cutoff.shape != image.shape or not np.isfinite(cutoff).all():
+        raise ValueError("vision cutoff field must match the image and be finite")
+    cutoff = cutoff[0]
+    if np.any(cutoff <= 0) or np.any(np.diff(cutoff) > 1e-10):
+        raise ValueError(
+            "vision cutoff must be positive and decrease with eccentricity"
+        )
+    half = (
+        float(np.interp(-cutoff[0] / 2, -cutoff, eccentricities))
+        if cutoff[-1] <= cutoff[0] / 2
+        else math.inf
+    )
     result.score_against("vision.e2", half)
     result.details["cutoff_cycles_per_deg"] = {
-        f"{e:g}": float(params.cutoff(e)) for e in (0, 2, 5, 10, 20, 40)
+        f"{e:g}": float(cutoff[round(e * 100)]) for e in (0, 2, 5, 10, 20, 40)
+    }
+    result.details["interpretation"] = (
+        "Consistency of the cutoff field returned by perceive. "
+        "Independent image transfer evaluation remains pending."
+    )
+    result.details["sampling"] = {
+        "pixels_per_degree": 100.0,
+        "maximum_eccentricity_deg": 40.0,
+        "source": "assumed numerical sampling protocol",
+        "half_resolution_reached": math.isfinite(half),
     }
     return result
 
@@ -266,7 +302,9 @@ def touch_tapping(human: Human) -> Result:
     return result
 
 
-def run(human: Human, names: list[str] | None = None) -> list[Result]:
+def run(
+    human: Human, names: list[str] | None = None, *, seed: int | None = None
+) -> list[Result]:
     """Run the named benchmarks (all by default), in registration order."""
     from . import integrated, load, motivation, senses, studies  # noqa: F401
 
@@ -276,4 +314,13 @@ def run(human: Human, names: list[str] | None = None) -> list[Result]:
         raise ValueError(
             f"unknown benchmarks {sorted(unknown)}; known: {sorted(BENCHMARKS)}"
         )
-    return [BENCHMARKS[name](human) for name in chosen]
+    if seed is None:
+        return [BENCHMARKS[name](human) for name in chosen]
+    from .protocol import benchmark_seed
+
+    results = []
+    with benchmark_seed(seed):
+        for name in chosen:
+            human.reset(seed)
+            results.append(BENCHMARKS[name](human))
+    return results

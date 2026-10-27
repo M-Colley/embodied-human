@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "config": {"memory": {"name": "pyactup", "params": {"capacity": 0, "threshold": -5.0}}},
+  "benchmarks": ["memory.serial_recall"],
+  "seeds": [0, 1, 2, 3, 4],
+  "compare_baseline": true
+}

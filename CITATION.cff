@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "Please cite this software and the model publications relevant to your experiment."
+title: "embodied-human: Modular human simulation"
+type: software
+authors:
+  - family-names: Colley
+    given-names: Mark
+version: 0.1.0
+license:
+  - Apache-2.0
+  - MIT
+repository-code: "https://github.com/M-Colley/embodied-human"
+url: "https://github.com/M-Colley/embodied-human"

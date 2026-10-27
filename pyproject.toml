@@ -9,8 +9,8 @@ description = "A modular simulated human (senses, attention, memory, motor, fati
 authors = [{ name = "Mark Colley" }]
 readme = "README.md"
 requires-python = ">=3.10"
-license = "Apache-2.0"
-license-files = ["LICENSE"]
+license = "Apache-2.0 AND MIT"
+license-files = ["LICENSE", "src/embodied_human/_vendor/MIMO_LICENSE.txt"]
 dependencies = ["numpy>=1.24", "scipy>=1.15"]
 keywords = ["simulated users", "computational rationality", "driver model", "eye movements", "mujoco", "myosuite", "benchmark"]
 
@@ -26,6 +26,10 @@ driving = ["myosuite-carla>=0.1", "embodied-ui>=0.1"]
 # Emotion recognition (scikit-learn) and loudness of waveforms (MoSQITo,
 # which imports matplotlib without declaring it).
 experience = ["scikit-learn>=1.3", "mosqito>=1.2", "matplotlib>=3.7"]
+memory = ["pyactup>=2.2.5,<2.3"]
+decision = ["pyddm>=0.9,<0.10"]
+analysis = ["SALib>=1.6,<2"]
+contact = ["mujoco>=3.7"]
 test = [
     "pytest>=8",
     "build>=1",
@@ -43,12 +47,13 @@ lint = ["mypy>=1.15", "ruff>=0.11"]
 [project.scripts]
 embodied-human-bench = "embodied_human.bench.__main__:main"
 embodied-human-builder = "embodied_human.builder.__main__:main"
+embodied-human-experiment = "embodied_human.experiments:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.setuptools.package-data]
-embodied_human = ["py.typed", "builder/*.html", "builder/*.js", "builder/*.css"]
+embodied_human = ["py.typed", "builder/*.html", "builder/*.js", "builder/*.css", "bench/*.json", "_vendor/*LICENSE*", "_vendor/*.md"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
