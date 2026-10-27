@@ -1,6 +1,11 @@
 include requirements-touchsim.txt
 include VALIDATION.md
 include CITATION.cff
+include CONTRIBUTING.md
+include AGENTS.md
+include .github/requirements-benchmarks.txt
+include .github/requirements-benchmarks-full.txt
+recursive-include .github/workflows *.yml
 recursive-include docs *.md
 recursive-include examples *.py *.ipynb *.json
-recursive-include evidence *.json *.xml
+recursive-include evidence *.json *.xml *.md

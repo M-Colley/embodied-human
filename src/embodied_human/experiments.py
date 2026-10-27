@@ -11,13 +11,13 @@ import time
 from collections import defaultdict
 from collections.abc import Callable
 from html import escape
-from importlib.resources import files
 from pathlib import Path
 from typing import Any
 
 import numpy as np
 
 from .bench.benchmarks import BENCHMARKS, json_safe, run
+from .bench.catalog import protocol_catalog
 from .bench.metrics import bootstrap_ci
 from .bench.validation import evaluation_for, validation_summary
 from .builder import config_from_dict
@@ -31,9 +31,7 @@ def experiment_catalog() -> dict[str, Any]:
     from .bench import integrated, load, motivation, senses, studies  # noqa: F401
     from .experiment_protocols import CATALOG
 
-    protocols = json.loads(
-        files("embodied_human.bench").joinpath("protocols.json").read_text()
-    )
+    protocols = protocol_catalog()
     return {
         "version": 1,
         "benchmarks": [

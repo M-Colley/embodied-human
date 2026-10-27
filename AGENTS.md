@@ -31,8 +31,7 @@ driver) as optional dependencies; keep it importable without them.
   - After changing the vestibular or response modules, rerun
     `examples/fit_motion_sickness.py` and `examples/fit_drt_load.py` and
     update the fitted constants they report.
-- **CI.** `.github/workflows/tests.yml` runs the offline suite, ruff, mypy
-  and the build on Python 3.10 and 3.12; MyoSuite tests are skipped there.
+- **CI.** `.github/workflows/tests.yml` runs the offline suite, ruff, mypy and the build on Python 3.10, 3.12 and 3.14; MyoSuite tests are skipped there. `.github/workflows/benchmarks.yml` compares the 21 protocol core profile on pull requests and main pushes. Its manual full profile runs all 28 protocols with the offline MyoSuite driver. Compare both code revisions with the same dependencies, profile and seed. Preserve known empirical failures and report new regressions, skips and changes to reference or validation declarations.
 - **Records.** Record what was run, with versions, in VALIDATION.md.
 - Keep commit authorship with the human owner. Do not add AI co-author
   trailers.

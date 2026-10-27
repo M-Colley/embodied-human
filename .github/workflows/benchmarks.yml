@@ -1,0 +1,229 @@
+name: benchmarks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      suite:
+        description: Core protocols or the complete offline physical benchmark
+        type: choice
+        options: [core, full]
+        default: core
+      baseline_ref:
+        description: Optional baseline commit or ref (defaults to the first parent)
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+
+concurrency:
+  group: benchmarks-${{ github.event.pull_request.number || github.ref }}-${{ inputs.suite || 'core' }}
+  cancel-in-progress: true
+
+jobs:
+  compare:
+    name: Matched ${{ matrix.suite }} benchmarks
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ matrix.suite == 'full' && 60 || 30 }}
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: ${{ fromJSON(github.event_name == 'workflow_dispatch' && inputs.suite == 'full' && '["full"]' || '["core"]') }}
+    defaults:
+      run:
+        working-directory: head
+        shell: bash
+    env:
+      BENCHMARK_SUITE: ${{ matrix.suite }}
+      MPLBACKEND: Agg
+      PYTHONHASHSEED: "0"
+      OMP_NUM_THREADS: "1"
+      OPENBLAS_NUM_THREADS: "1"
+      MKL_NUM_THREADS: "1"
+      NUMBA_NUM_THREADS: "1"
+      HF_HUB_OFFLINE: "1"
+      HF_DATASETS_OFFLINE: "1"
+    steps:
+      - name: Check out head
+        uses: actions/checkout@v7
+        with:
+          path: head
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: |
+            head/pyproject.toml
+            head/.github/requirements-benchmarks*.txt
+      - name: Select matching baseline revision
+        id: revision
+        env:
+          REQUESTED_BASE: ${{ inputs.baseline_ref }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          PUSH_BASE: ${{ github.event.before }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import subprocess
+          from pathlib import Path
+
+          def revision(ref):
+              result = subprocess.run(
+                  ["git", "rev-parse", "--verify", "--end-of-options", ref + "^{commit}"],
+                  text=True, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+              )
+              return result.stdout.strip() if result.returncode == 0 else None
+
+          requested = os.environ.get("REQUESTED_BASE", "")
+          previous_push = os.environ.get("PUSH_BASE", "")
+          if requested:
+              base = revision(requested) or revision("origin/" + requested)
+              if base is None:
+                  raise SystemExit("The requested baseline ref cannot be resolved")
+              reason = "requested baseline ref"
+          elif os.environ.get("PR_BASE"):
+              base = revision(os.environ["PR_BASE"])
+              reason = "pull request base commit"
+          elif previous_push and set(previous_push) != {"0"}:
+              base = revision(previous_push)
+              reason = "commit before this push"
+          else:
+              base = revision("HEAD^") or revision("HEAD")
+              reason = "first parent, or initial commit when no parent exists"
+          if base is None:
+              raise SystemExit("The comparison baseline cannot be resolved")
+          artifacts = Path(os.environ["GITHUB_WORKSPACE"]) / "benchmark-results" / os.environ["BENCHMARK_SUITE"]
+          artifacts.mkdir(parents=True, exist_ok=True)
+          context = {
+              "head_sha": revision("HEAD"), "base_sha": base,
+              "baseline_selection": reason, "seed": 0,
+              "profile": os.environ["BENCHMARK_SUITE"],
+              "comparison": "same runner, Python interpreter and dependency installation",
+          }
+          (artifacts / "comparison-context.json").write_text(json.dumps(context, indent=2))
+          with open(os.environ["GITHUB_OUTPUT"], "a") as output:
+              output.write("sha=" + base + "\n")
+          PY
+      - name: Check out baseline
+        uses: actions/checkout@v7
+        with:
+          path: base
+          ref: ${{ steps.revision.outputs.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Install matched numerical dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [[ "$BENCHMARK_SUITE" == full ]]; then
+            python -m pip install -r .github/requirements-benchmarks-full.txt -e ".[experience]"
+          else
+            python -m pip install -r .github/requirements-benchmarks.txt -e ".[experience]"
+          fi
+      - name: Verify offline physical model
+        if: matrix.suite == 'full'
+        run: |
+          python - <<'PY'
+          from myosuite_carla.driving_env import make_driving_env
+          from myosuite_carla.scenario import Scenario
+          from myosuite_carla.vehicle_model import SurrogateVehicle
+
+          env = make_driving_env(Scenario(name="ci_preflight", duration=0.1))
+          try:
+              assert isinstance(env.vehicle, SurrogateVehicle)
+              env.reset(seed=0)
+          finally:
+              env.close()
+          PY
+      - name: Capture head profile and dependency versions
+        run: |
+          artifacts="$GITHUB_WORKSPACE/benchmark-results/$BENCHMARK_SUITE"
+          python -m embodied_human.bench --list --profile "$BENCHMARK_SUITE" > "$artifacts/head-benchmarks.txt"
+          cp src/embodied_human/bench/protocols.json "$artifacts/head-protocols.json"
+          python -m pip freeze --all > "$artifacts/dependencies-head.txt"
+      - name: Install baseline source without changing dependencies
+        run: python -m pip install --no-deps -e "$GITHUB_WORKSPACE/base"
+      - name: Run baseline with matching profile
+        id: baseline
+        env:
+          PYTHONPATH: ${{ github.workspace }}/base/src
+        run: |
+          artifacts="$GITHUB_WORKSPACE/benchmark-results/$BENCHMARK_SUITE"
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          from importlib.util import find_spec
+          from embodied_human.bench import integrated, load, motivation, senses, studies
+          from embodied_human.bench.benchmarks import BENCHMARKS
+
+          workspace = Path(os.environ["GITHUB_WORKSPACE"])
+          artifacts = workspace / "benchmark-results" / os.environ["BENCHMARK_SUITE"]
+          path = workspace / "base/src/embodied_human/bench/protocols.json"
+          base_metadata = json.loads(path.read_text()) if path.is_file() else {}
+          head_metadata = json.loads((artifacts / "head-protocols.json").read_text())
+          # Historical revisions predate explicit ci_profile metadata.
+          historical_full = {
+              "driving.surt_glances", "driving.takeover", "motor.touch_tapping",
+              "design.touch_key_size", "vestibular.vertical_sickness",
+              "vestibular.sickness_time_course", "vestibular.roll_compensation",
+          }
+          selected = []
+          for name in BENCHMARKS:
+              profile = base_metadata.get(name, {}).get("ci_profile")
+              profile = profile or head_metadata.get(name, {}).get("ci_profile")
+              profile = profile or ("full" if name in historical_full else "core")
+              if profile not in {"core", "full"}:
+                  raise SystemExit("Invalid baseline CI profile for " + name)
+              if os.environ["BENCHMARK_SUITE"] == "full" or profile == "core":
+                  selected.append(name)
+          if not selected:
+              raise SystemExit("The baseline has no benchmarks for this profile")
+          (artifacts / "base-benchmarks.txt").write_text("\n".join(selected) + "\n")
+          if find_spec("embodied_human.reporting") is not None:
+              from embodied_human.reporting import environment_record
+              (artifacts / "base-environment.json").write_text(
+                  json.dumps(environment_record(), indent=2)
+              )
+          PY
+          mapfile -t selected < "$artifacts/base-benchmarks.txt"
+          python -m pip freeze --all > "$artifacts/dependencies-base.txt"
+          python -m embodied_human.bench --seed 0 --only "${selected[@]}" --out "$artifacts/base.json" 2>&1 | tee "$artifacts/base.log"
+      - name: Restore head source without changing dependencies
+        id: restore
+        if: ${{ !cancelled() }}
+        run: python -m pip install --no-deps -e .
+      - name: Run head and gate new regressions
+        if: ${{ !cancelled() && steps.baseline.outcome == 'success' && steps.restore.outcome == 'success' }}
+        env:
+          PYTHONPATH: ${{ github.workspace }}/head/src
+        run: |
+          artifacts="$GITHUB_WORKSPACE/benchmark-results/$BENCHMARK_SUITE"
+          if [[ ! -f "$artifacts/base.json" ]]; then
+            echo "No baseline report was produced; a matched comparison cannot run."
+            exit 1
+          fi
+          python -m embodied_human.bench --seed 0 --profile "$BENCHMARK_SUITE" --out "$artifacts/head.json" --bundle "$artifacts/head-bundle" --compare "$artifacts/base.json" --summary "$artifacts/summary.md" --fail-on-regression --fail-on-skip 2>&1 | tee "$artifacts/head.log"
+      - name: Publish comparison summary
+        if: always()
+        run: |
+          artifacts="$GITHUB_WORKSPACE/benchmark-results/$BENCHMARK_SUITE"
+          if [[ -f "$artifacts/summary.md" ]]; then
+            cat "$artifacts/summary.md" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Benchmark comparison did not complete. Inspect the uploaded reports and logs." >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Retain benchmark evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: benchmark-${{ matrix.suite }}-${{ github.run_attempt }}
+          path: benchmark-results/${{ matrix.suite }}/
+          if-no-files-found: warn
+          retention-days: 14

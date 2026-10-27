@@ -5,6 +5,8 @@ python -m embodied_human.bench --only eyes.main_sequence memory.span
 python -m embodied_human.bench --replace attention=seev --out seev.json
 python -m embodied_human.bench --replace attention=uncertainty_sampler:return_sd=0.8
 python -m embodied_human.bench --import my_modules --replace attention=my_sampler
+python -m embodied_human.bench --profile core --list
+python -m embodied_human.bench --compare baseline.json --fail-on-regression
 
 A replacement is ``category=name`` with optional ``:key=value,...``
 parameters (numbers, ``true``/``false`` or text). ``--import`` loads Python
@@ -64,8 +66,16 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
-    parser.add_argument(
+    selection = parser.add_mutually_exclusive_group()
+    selection.add_argument(
         "--only", nargs="*", help=f"benchmarks to run; known: {', '.join(BENCHMARKS)}"
+    )
+    selection.add_argument(
+        "--profile", choices=("core", "full"),
+        help="declared packaged benchmark profile",
+    )
+    parser.add_argument(
+        "--list", action="store_true", help="list selected protocol names"
     )
     parser.add_argument(
         "--replace", nargs="*", default=[], help="category=name module swaps"
@@ -84,7 +94,26 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--replay", type=Path, help="replay a checked run manifest")
     parser.add_argument("--allow-source-mismatch", action="store_true")
     parser.add_argument("--allow-environment-mismatch", action="store_true")
+    parser.add_argument(
+        "--compare", type=Path, help="compare with a baseline JSON report"
+    )
+    parser.add_argument("--summary", type=Path, help="write a Markdown result summary")
+    parser.add_argument("--fail-on-regression", action="store_true")
+    parser.add_argument("--fail-on-skip", action="store_true")
+    parser.add_argument(
+        "--regression-tolerance", type=float, default=1e-9,
+        help="nonnegative tolerance for normalized reference error increases",
+    )
     args = parser.parse_args(argv)
+
+    if not math.isfinite(args.regression_tolerance) or args.regression_tolerance < 0:
+        parser.error("--regression-tolerance must be finite and nonnegative")
+    if args.fail_on_regression and args.compare is None:
+        parser.error("--fail-on-regression requires --compare")
+    if args.compare and args.only == []:
+        parser.error("benchmark comparisons require a nonempty selection")
+    if args.replay and (args.only is not None or args.profile is not None):
+        parser.error("the replay manifest selects its benchmark protocols")
 
     if args.bundle and args.imports:
         parser.error(
@@ -94,6 +123,20 @@ def main(argv: list[str] | None = None) -> int:
 
     for name in args.imports:
         importlib.import_module(name)
+    selected = args.only
+    if args.profile:
+        from .catalog import benchmark_names
+
+        selected = benchmark_names(args.profile)
+    if args.list:
+        if any((args.compare, args.summary, args.out, args.bundle, args.replay)):
+            parser.error("--list cannot write or compare benchmark runs")
+        unknown = set(selected or []) - set(BENCHMARKS)
+        if unknown:
+            parser.error(f"unknown benchmarks: {', '.join(sorted(unknown))}")
+        for name in list(BENCHMARKS) if selected is None else selected:
+            print(name)
+        return 0
     config = _config(args.replace)
     if args.config and args.replay:
         parser.error("choose either --config or --replay")
@@ -109,14 +152,14 @@ def main(argv: list[str] | None = None) -> int:
             if replay.get("kind") != "benchmark":
                 parser.error("manifest does not contain a benchmark run")
             config = config_from_dict(replay["config"])
-            args.only, args.seed = replay["benchmarks"], replay["seed"]
+            selected, args.seed = replay["benchmarks"], replay["seed"]
         else:
             data = json.loads(args.config.read_text(encoding="utf-8"))
             config = config_from_dict(data.get("config", data))
             args.seed = data.get("seed", args.seed)
     human = build_human(config, seed=args.seed)
     started = time.perf_counter()
-    results = run(human, args.only, seed=args.seed)
+    results = run(human, selected, seed=args.seed)
     report = make_report(
         human, results, seed=args.seed, wall_seconds=time.perf_counter() - started
     )
@@ -130,6 +173,37 @@ def main(argv: list[str] | None = None) -> int:
         print(f"{r.name:<{width}}  {status:4}  {score:>4}  {values or r.skipped or ''}")
     print(f"parameters by source: {report['parameter_sources']}")
     print(f"validation by metric: {report['validation_summary']}")
+    comparison = None
+    comparison_error = None
+    baseline_text = None
+    if args.compare:
+        from .comparison import compare_reports
+
+        try:
+            baseline_text = args.compare.read_bytes().decode("utf-8")
+            baseline = json.loads(baseline_text)
+            comparison = compare_reports(
+                report, baseline, names=args.only, tolerance=args.regression_tolerance
+            )
+        except (OSError, ValueError) as exc:
+            comparison_error = str(exc)
+            report["comparison_error"] = comparison_error
+        if comparison is not None:
+            report["comparison"] = comparison
+            print(
+                f"comparison: {len(comparison['regressions'])} regressions; "
+                f"{len(comparison['incomparable'])} incomparable results"
+            )
+    summary_text = None
+    if args.summary or args.compare:
+        from .comparison import markdown_summary
+
+        summary_text = markdown_summary(report, comparison)
+    extra_files = {}
+    if summary_text is not None:
+        extra_files["summary.md"] = summary_text
+    if baseline_text is not None:
+        extra_files["comparison-baseline.json"] = baseline_text
     if args.out:
         write_json(args.out, report)
     if args.bundle:
@@ -142,8 +216,18 @@ def main(argv: list[str] | None = None) -> int:
                 "benchmarks": [r.name for r in results],
                 "seed": args.seed,
             },
+            extra_files=extra_files,
         )
-    return 0
+    if args.summary and summary_text is not None:
+        args.summary.parent.mkdir(parents=True, exist_ok=True)
+        args.summary.write_text(summary_text, encoding="utf-8", newline="")
+    if comparison_error is not None:
+        parser.error(f"cannot compare benchmark reports: {comparison_error}")
+    regression = args.fail_on_regression and comparison is not None and (
+        comparison["regressions"] or comparison["incomparable"]
+    )
+    skipped = args.fail_on_skip and any(result.skipped for result in results)
+    return 1 if regression or skipped else 0
 
 
 if __name__ == "__main__":

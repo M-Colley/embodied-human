@@ -459,7 +459,7 @@ def write_bundle(
             "package-source.zip",
         ):
             raise ValueError("bundle files must use plain filenames")
-        (output / name).write_text(content, encoding="utf-8")
+        (output / name).write_text(content, encoding="utf-8", newline="")
     module = (
         "embodied_human.bench"
         if replay.get("kind") == "benchmark"

@@ -132,7 +132,7 @@ def test_a_replaced_module_changes_the_benchmark():
 def test_unknown_benchmarks_are_rejected():
     with pytest.raises(ValueError):
         run(eh.build_human(seed=0), ["nope"])
-    assert "driving.takeover" in BENCHMARKS or True
+    assert "driving.takeover" in BENCHMARKS
 
 
 def test_cli_replacements_accept_parameters():

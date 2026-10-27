@@ -123,6 +123,8 @@ def benchmark(name: str) -> Callable[[Benchmark], Benchmark]:
     """Decorator: register a benchmark by name."""
 
     def decorator(function: Benchmark) -> Benchmark:
+        if name in BENCHMARKS:
+            raise ValueError(f"benchmark {name!r} is already registered")
         BENCHMARKS[name] = function
         return function
 

@@ -1,0 +1,7 @@
+# Numerical environment for the matched Python 3.12 CI comparison.
+# These CI pins do not change the package's supported runtime minimums.
+numpy==2.5.4
+scipy==1.18.1
+scikit-learn==1.9.1
+matplotlib==3.11.2
+mosqito==1.2.1

@@ -50,6 +50,8 @@ everything else fixed, and show what changes in the integrated behaviour.
 
 **Tutorial.** [The module notebook](examples/tutorial_modules.ipynb) shows how to change parameters, swap implementations, and write, register, test and benchmark a new module.
 
+**Contributing.** [The contributor guide](CONTRIBUTING.md) covers module interfaces, parameter sources, tests, scientific evaluation roles, optional backends and automated benchmark comparisons.
+
 Human reference data consist of published aggregates. The package includes an attributed MIT subset of MIMo for contact sampling and force allocation; optional PyACTUp, PyDDM, TouchSim and SALib computations use their installed upstream packages. [The licensing description](#relation-to-other-work) identifies that included code and its retained notice.
 
 ## What was replicated
@@ -475,6 +477,8 @@ python examples/cooper_drt_aggregates.py drt.csv --out evidence/cooper-drt-aggre
 python examples/parameter_table.py                      # regenerates docs/parameters.md
 ```
 
-`python -m pip install -e ".[test]"` also installs the dependencies needed to execute the tutorial notebook. Core continuous integration runs the offline tests and notebook, Ruff, mypy and the build on Python 3.10, 3.12 and 3.14. An additional job on Python 3.10 and 3.12 installs PyACTUp, PyDDM, SALib, TouchSim and MuJoCo and runs their native integration tests, then checks the built distributions for the retained MIMo licence and source attribution. MyoSuite body tests run when the optional model and assets are installed and remain skipped in CI.
+`python -m pip install -e ".[test]"` also installs the dependencies needed to execute the tutorial notebook. Core continuous integration runs the offline tests and notebook, Ruff, mypy and the build on Python 3.10, 3.12 and 3.14. An additional job on Python 3.10 and 3.12 installs PyACTUp, PyDDM, SALib, TouchSim and MuJoCo and runs their native integration tests, then checks the built distributions for the retained MIMo licence and source attribution. The regular test matrix skips MyoSuite body tests when its model and assets are absent.
+
+The [benchmark workflow](.github/workflows/benchmarks.yml) compares 21 core protocols on pull requests and main pushes. Base and proposed revisions run with identical dependencies and seeds. Existing model discrepancies remain visible. New regressions, lost coverage and incomparable reference declarations fail the comparison. Its manual `full` profile runs all 28 protocols with pinned physical dependencies and the offline vehicle surrogate. [The contributor guide](CONTRIBUTING.md#run-automated-benchmark-comparisons) describes local commands, GitHub execution and retained evidence.
 
 Original code: [Apache 2.0](LICENSE). Adapted MIMo subset: [MIT](src/embodied_human/_vendor/MIMO_LICENSE.txt). Distribution expression: `Apache-2.0 AND MIT`.

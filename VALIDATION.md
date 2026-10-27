@@ -1,5 +1,23 @@
 # Validation
 
+## 2026-10-27, contribution guide and automated benchmark comparisons
+
+The contribution guide includes an executable module, tests, provenance requirements, calibration triggers, catalogue declarations and local or hosted benchmark commands. The new benchmark workflow runs the 21 protocol core profile on pull requests and main pushes. Its manual full profile runs all 28 protocols with pinned physical dependencies. Both revisions use one numerical environment and seed zero. Reports, summaries, dependency records and logs are retained for 14 days. The workflow uses read access to repository contents and the ordinary pull request event.
+
+The automated full evaluation ran all 28 protocols in 185.861 s with no skips. All 53 scored metric evaluations match the committed baseline exactly. The regression gate returned exit code 0. Existing acceptance results remain 17 passing protocols and 11 failing protocols. The [retained report](evidence/benchmark-automation.json), [summary](evidence/benchmark-automation.md) and [analysis environment](evidence/benchmark-automation-environment.json) record the results. The final comparison presentation was regenerated from the retained numerical report after the output formatting changes.
+
+```powershell
+.venv/Scripts/python.exe -m embodied_human.bench --profile full --compare evidence/benchmark-baseline.json --fail-on-regression --fail-on-skip --out artifacts/automated-full/report.json --summary artifacts/automated-full/summary.md --bundle artifacts/automated-full
+```
+
+A negative control set `memory=act_r:capacity=2` and selected `memory.span`. Its span changed from four to two. The gate reported one regression and returned exit code 1. JSON, Markdown and the bundle were preserved. Comparator tests also verify increases beyond the zero floor of existing scores, lost metrics, undefined scores, changed units, changed reference conditions, changed validation declarations and numerical tolerances. Invalid comparisons retain diagnostics and return exit code 2.
+
+The complete Python 3.12.13 suite passed 399 tests in 103.01 s. Nine upstream MuJoCo and Jupyter warnings remain. After the experiment runner adopted the validated catalogue, its focused tests and the new comparison and CLI tests passed 113 cases. Python 3.10.20 passed 92 focused automation, experiment and reporting tests in 13.38 s. Ruff passed for source, tests and examples. Mypy passed for all 60 source files. The guide's extracted module example passed four tests, Ruff and mypy. Its core profile examples executed 21 protocols twice with no skips or regressions.
+
+The numerical environment remains NumPy 2.5.4, SciPy 1.18.1 and the optional package versions recorded in the preceding native model validation. Test and build tools remain pytest 9.1.1, Ruff 0.17.2, mypy 2.4.0 and build 1.6.1. The Python 3.10 checks use NumPy 2.2.6 and SciPy 1.15.3. No model equations or numerical defaults changed. The source distribution includes the guide, package instructions, workflow and pinned benchmark requirements. Workflow YAML, embedded Python and all nine Bash steps were syntax checked. Linux Python 3.12 dependency resolution succeeded for the full pinned requirements. The local physical preflight constructed the offline MyoSuite surrogate successfully. Hosted workflow execution remains a separate verification step after publication.
+
+An isolated environment installed only the core CI numerical requirements and this package. MuJoCo, MyoSuite, myosuite-carla and embodied-ui were absent. The 21 protocol core profile ran in 205.015 s with no skips. All 41 of its scored metric evaluations match the corresponding committed baseline values exactly. The final catalogue guard also loads builtin registrations and requires metadata for packaged protocols outside the bench namespace. Its focused CLI, comparison, experiment and builder checks passed 109 tests. Core and full workflow executions use separate concurrency groups.
+
 ## 2026-10-27, native models and reproducible experiments (Windows, CPU)
 
 The package includes native PyACTUp memory, native PyDDM choice distributions, an attributed MIT contact sensing subset from MIMo, SALib sensitivity analysis and a local experiment runner. The interface provides metric cards, confidence intervals, paired comparisons, sensitivity graphics and downloadable bundles. Memory and choice protocols use assumed task settings. Independent human evaluation remains pending.

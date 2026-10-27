@@ -1,0 +1,9 @@
+-r requirements-benchmarks.txt
+
+# Offline physical models and the vehicle surrogate, at verified revisions.
+mujoco==3.17.0
+gymnasium==1.2.3
+myo-sim==0.2.3
+embodied-ui @ git+https://github.com/M-Colley/embodied-ui.git@605862bd551401bfce91afb4afcf280b2bef98fd
+myosuite-carla @ git+https://github.com/M-Colley/myosuite-carla.git@85983b16cb2d0a5b70e29c7a5cd107d2214a5a9b
+MyoSuite @ git+https://github.com/MyoHub/myosuite.git@c0af9c656de2aa1807924e63d0d5320d77aa1ebd
