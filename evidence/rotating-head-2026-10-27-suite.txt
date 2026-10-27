@@ -3,8 +3,8 @@
 ............................s.s.....................ssssss.............. [ 45%]
 ........................................................................ [ 60%]
 .............................................sssssss.................... [ 75%]
-....s................................................................... [ 91%]
-.....................ss.........s.........                               [100%]
+....s................................................................... [ 90%]
+.......................ss.........s.........                             [100%]
 ============================== warnings summary ===============================
 tests/test_driving.py::test_attentive_driver_shares_gaze_with_surt
 tests/test_driving.py::test_takeover_time_emerges_from_the_modules
@@ -24,4 +24,4 @@ tests/test_touch_contact.py::test_existing_myosuite_fullbody_can_be_sensed_witho
     body = _body_spec(config).compile()
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-450 passed, 24 skipped, 8 warnings in 76.66s (0:01:16)
+452 passed, 24 skipped, 8 warnings in 76.53s (0:01:16)

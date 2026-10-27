@@ -19,16 +19,16 @@
     "tested": "37c8b863fe448f8fff2b29eb62a53a269b79d16f"
   },
   "bridge_base": "b5330baacc923b385f4d9a434df45d1a96d22b1f",
-  "human_base": "d4eaf219d453f5e2ea518414b4645a9807db1fac",
+  "human_base": "ff631bf40a8feaee653966cdde6cd032ad3d1495",
   "embodied_ui": "605862bd551401bfce91afb4afcf280b2bef98fd",
   "bridge_suite": {
     "name": "pytest",
     "errors": "0",
     "failures": "0",
     "skipped": "4",
-    "tests": "421",
-    "time": "105.381",
-    "timestamp": "2026-10-27T17:46:09.009735+00:00",
+    "tests": "423",
+    "time": "104.684",
+    "timestamp": "2026-10-27T17:58:29.855447+00:00",
     "hostname": "DESKTOP-0AVO5Q3"
   },
   "human_suite": {
@@ -36,9 +36,9 @@
     "errors": "0",
     "failures": "0",
     "skipped": "24",
-    "tests": "474",
-    "time": "76.530",
-    "timestamp": "2026-10-27T17:46:08.824039+00:00",
+    "tests": "476",
+    "time": "76.407",
+    "timestamp": "2026-10-27T17:58:29.653370+00:00",
     "hostname": "DESKTOP-0AVO5Q3"
   },
   "source_sha256": {
@@ -58,7 +58,7 @@
       "ngsim.py": "1949d1b1b750037816bbd2b19d9a72f922c24a25b9e6f50d494272628012bbca",
       "presets.py": "4aa83c28ad9d03ca65fa5bbd9cacabded29b7be3e54e1fa6b4265642b28cd299",
       "recording.py": "dacf9e721223a051c8b628c124b5558ff566505e773771f2572ac640a92d2c20",
-      "scenario.py": "dc7c8da9475ca94af9a16a3a3204a009436b8fb6e3943ce4085696fdc8322696",
+      "scenario.py": "9dcb19e7564d556bcc39fc8779070921e47eb8ec4d6794f809d5400d7d84ab64",
       "session.py": "a966ce76657169588ced6a20d44e607123c2d4633f4d9bbcd6a5261d42161401",
       "training.py": "a91c1417c7c413f75635c1c8d836ffc2f0e4d585c19c351ec393557d4012d97d",
       "training_sb3.py": "1d8ea0014ef443e5f94033ebabee6caac5397c25a9a65de4fceb1bb87c5edb03",
@@ -68,12 +68,12 @@
       "wrapper.py": "f359e974a2ad0b34d10d5313957c7b0fd950f218416435c18c5772fa23cfb388"
     },
     "embodied_human": {
-      "__init__.py": "6149f7f60e5dd74cb62162c36094043be68ac3496336da67b727de2d18256bc1",
+      "__init__.py": "dacf04a875139a261b8b17d79cb9db074532d13e1000f57216cfc8db92c0cfed",
       "_vendor/__init__.py": "7978743d28a106a8570eeb5385da1bfceda41911138f1451e3503c7160fcf1f6",
       "_vendor/mimo_touch.py": "aa2cf6eb5597b12330c2caa6be0fdccc70b345d64dee5fc8f4f98a2e9af106bb",
       "affect.py": "23fd7758570e41854bba6d68b0e20027cf951f198cd7e5291ce867cd043d1c33",
       "agents/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "agents/body.py": "af50dbc7627fd6019e9f4950a3e0d8dcb029cabd096a256abf8f908cd05d84a6",
+      "agents/body.py": "702bc4b53edf7d68c3f15a0b6b055330c55e5fdf7d9ea94f6698549b43d457f3",
       "agents/driver.py": "8cfaee8befb607165b4bb967fc6880bcc60bf7d56042a5e0cd220f9880d08d81",
       "agents/pointer.py": "dec7742da3ed0f134ea74cc2ea3c08a163bcd576af5d924418e69f3c7216b121",
       "agents/road.py": "16240f986d2759c8b2781740b034fc9d35c09019a912b5a84faf80b5fcb3b078",
@@ -121,7 +121,7 @@
       "tasks/surt.py": "6c51cf558b2f13127c03deda2382ae18e5e92f894953b5f562ed05fba80f2e57",
       "tasks/tapping.py": "0d224055d6ed4a2da41b24b2a5cf8a2532bc352a8034affd519585f767e6cb2d",
       "touch.py": "193b3962b2edb1797bd08ed2a144b4e773034808435d8421f2a67218d61005bb",
-      "touch_contact.py": "59a21bc13a75690aa54f6854cebddb0f3857dba5f6f9457e08b3335bc967acd5",
+      "touch_contact.py": "a033951885ece5a259317c6b7b3dc15a3ffce92e41df7e40b066605cc5062979",
       "trust.py": "13fb56608ce90490a1a24a70d62be2d437b577b3b5c7a14b5529841d635598c7",
       "vestibular.py": "66400cf6c1bbf22a3237618283bb93088911531b5a014fa2a9a0fd3cd58d5227",
       "vision/__init__.py": "a99359f4f0516b5a8d5dcf9cd0b550dcdce7af3d615e10c391cd84e5c10c867f",
@@ -130,5 +130,6 @@
       "vision/objects.py": "3c95b9552cf0bb094f6d270c67d577d306486c321ae811019bcede03486877bb"
     }
   },
-  "live_carla_pass": false
+  "live_carla_pass": false,
+  "human_tested_revision": "fbeb05c384e8526d1723bfa9748503ba170b88f9"
 }
