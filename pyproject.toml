@@ -42,12 +42,13 @@ lint = ["mypy>=1.15", "ruff>=0.11"]
 
 [project.scripts]
 embodied-human-bench = "embodied_human.bench.__main__:main"
+embodied-human-builder = "embodied_human.builder.__main__:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.setuptools.package-data]
-embodied_human = ["py.typed"]
+embodied_human = ["py.typed", "builder/*.html", "builder/*.js", "builder/*.css"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

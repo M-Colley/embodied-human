@@ -1,0 +1,151 @@
+{
+  "package": "embodied-human 0.1.0",
+  "python": "3.12.13",
+  "seed": 0,
+  "config": {
+    "eyes": {
+      "name": "main_sequence",
+      "params": {}
+    },
+    "vision": {
+      "name": "foveated",
+      "params": {}
+    },
+    "objects": {
+      "name": "eccentricity_noise",
+      "params": {}
+    },
+    "attention": {
+      "name": "uncertainty_sampler",
+      "params": {}
+    },
+    "memory": {
+      "name": "act_r",
+      "params": {}
+    },
+    "proprioception": {
+      "name": "spindle",
+      "params": {}
+    },
+    "motor": {
+      "name": "ffitts_min_jerk",
+      "params": {}
+    },
+    "estimator": {
+      "name": "lane_kalman",
+      "params": {}
+    },
+    "hearing": {
+      "name": "psychoacoustic",
+      "params": {}
+    },
+    "touch": {
+      "name": "vibrotactile",
+      "params": {}
+    },
+    "vestibular": {
+      "name": "subjective_vertical",
+      "params": {}
+    },
+    "response": {
+      "name": "twin",
+      "params": {}
+    },
+    "fatigue": {
+      "name": "three_compartment",
+      "params": {}
+    },
+    "affect": {
+      "name": "appraisal",
+      "params": {}
+    },
+    "risk": {
+      "name": "risk_field",
+      "params": {}
+    },
+    "trust": {
+      "name": "decision_field",
+      "params": {}
+    }
+  },
+  "parameter_sources": {
+    "measured": 11,
+    "assumed": 18,
+    "fitted": 49,
+    "standard": 3,
+    "derived": 4
+  },
+  "wall_seconds": 69.27,
+  "results": [
+    {
+      "name": "affect.emotion_study",
+      "categories": [
+        "affect"
+      ],
+      "passed": true,
+      "score": 1.0,
+      "skipped": null,
+      "metrics": {
+        "affect.emotion_rmse": 0.09795064541135827
+      },
+      "scores": {
+        "affect.emotion_rmse": 1.0
+      },
+      "references": {
+        "affect.emotion_rmse": {
+          "value": 0.0,
+          "range": [
+            0.0,
+            0.13
+          ],
+          "unit": "intensity",
+          "citation": "Zhang, Hilpert, Broekens & Jokinen (2024), Experiment 1",
+          "doi": "https://doi.org/10.1145/3613904.3641908"
+        }
+      },
+      "details": {
+        "model": {
+          "happiness": {
+            "boredom": 0.19105176267665672,
+            "happiness": 0.7690627681897436,
+            "irritation": 0.03988546913359986
+          },
+          "boredom": {
+            "boredom": 0.5155657371214646,
+            "happiness": 0.30501360668746635,
+            "irritation": 0.17942065619106923
+          },
+          "irritation": {
+            "boredom": 0.15248232518502097,
+            "happiness": 0.03399728698152527,
+            "irritation": 0.8135203878334539
+          }
+        },
+        "human": {
+          "happiness": {
+            "happiness": 0.825,
+            "boredom": 0.164,
+            "irritation": 0.01
+          },
+          "boredom": {
+            "happiness": 0.383,
+            "boredom": 0.487,
+            "irritation": 0.13
+          },
+          "irritation": {
+            "happiness": 0.193,
+            "boredom": 0.204,
+            "irritation": 0.603
+          }
+        },
+        "r_squared": 0.8434344538489956,
+        "original_model": {
+          "r_squared": 0.78,
+          "rmse": 0.13
+        },
+        "affect_module": "appraisal",
+        "learner": "selected appraisal implementation"
+      }
+    }
+  ]
+}

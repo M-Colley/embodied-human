@@ -26,7 +26,7 @@ choice to fit or replace).
 | memory | `MemoryParameters.capacity` | 4 | measured | [Cowan (2001)](https://doi.org/10.1017/S0140525X01003922) | about 4 chunks (3-5) when rehearsal and chunking are prevented |
 | memory | `MemoryParameters.decay` | 0.5 | fitted | [Anderson et al. (2004)](https://doi.org/10.1037/0033-295X.111.4.1036) | conventional base-level decay |
 | memory | `MemoryParameters.threshold` | 0.0 | standard | ACT-R default (:rt 0) |  |
-| memory | `MemoryParameters.noise` | 0.25 | fitted | Stocco et al. (2024) example value | ACT-R ships with noise off |
+| memory | `MemoryParameters.noise` | 0.25 | assumed | [Stocco et al. (2024), likelihood primer, Fig. 7](https://arxiv.org/abs/2410.18055) | illustrative s = 0.25 setting, not fitted to this simulator's tasks; ACT-R ships with noise off |
 | memory | `MemoryParameters.latency_factor` | 1.0 | standard | ACT-R default (:lf 1.0) |  |
 | proprioception | `SpindleParameters.velocity_gain` | 4.3 | fitted | [Prochazka & Gorassini (1998)](https://doi.org/10.1111/j.1469-7793.1998.277bu.x) | cat hamstring Ia afferents during treadmill walking |
 | proprioception | `SpindleParameters.velocity_exponent` | 0.6 | fitted | [Prochazka & Gorassini (1998)](https://doi.org/10.1111/j.1469-7793.1998.277bu.x) |  |
@@ -120,4 +120,4 @@ choice to fit or replace).
 | agents.driver | `DriverAgentParameters.monitoring_gain` | 0.62 | fitted | [Hergeth, Lorenz, Vilimek & Krems (2016), Results; examples/fit_monitoring.py](https://doi.org/10.1177/0018720815625744) | median monitoring frequency 0.13/s at a mean trust of 74% and 0.097/s at 82%, SuRT during automation; both give about 0.52/s times one minus trust |
 | agents.driver | `DriverAgentParameters.monitoring_dwell` | 0.6 | measured | [Zeeb, Buchner & Schrauf (2015), Section 4.1](https://doi.org/10.1016/j.aap.2015.02.023) | mean road glance during automation with a visual task |
 
-Counts: assumed 36, derived 4, fitted 53, measured 14, standard 5
+Counts: assumed 37, derived 4, fitted 52, measured 14, standard 5

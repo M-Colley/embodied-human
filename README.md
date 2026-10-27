@@ -43,11 +43,11 @@ everything else fixed, and show what changes in the integrated behaviour.
   - action: `motor` and `fatigue`;
   - experience and motivation: `affect`, `risk` and `trust`.
 
-  Each has an abstract interface and a cited baseline. Two have
-  alternatives: SEEV for attention and the ISO 2631-1 dose for motion
-  sickness.
+  Each has an abstract interface and a cited baseline. Alternatives include
+  SEEV for attention, the ISO 2631-1 dose for motion sickness, and an optional
+  [TouchSim afferent pathway](docs/touchsim.md) for touch.
 - **Sources for every parameter.** 112 parameters: 14 measured, 5 set by
-  standards, 53 fitted, 4 derived and 36 assumed. See
+  standards, 52 fitted, 4 derived and 37 assumed. See
   [docs/parameters.md](docs/parameters.md).
 - **Tasks.** SuRT (ISO/TS 14198), the detection-response task (ISO
   17488), delayed digit recall and ISO 9241-411 tapping.
@@ -65,6 +65,9 @@ everything else fixed, and show what changes in the integrated behaviour.
 - **Tutorial.** [examples/tutorial_modules.ipynb](examples/tutorial_modules.ipynb)
   shows how to change parameters, swap implementations, and write,
   register, test and benchmark a new module.
+- **Local no-code builder.** Drag models into their categories, edit parameters,
+  inspect sources, export JSON or Python, and run a seeded memory preview.
+  Launch `python -m embodied_human.builder`; see [docs/builder.md](docs/builder.md).
 
 The package contains only published aggregates of human data, and no
 code from the projects listed under [Relation to other work](#relation-to-other-work).
@@ -149,6 +152,7 @@ pip install -e .                       # numpy, scipy: every module and module b
 pip install -e ".[experience]"         # scikit-learn (emotion), MoSQITo (loudness)
 pip install -e ../embodied-ui          # touch and button tasks with physical contact
 pip install -e ../myosuite-carla       # driving with the MyoSuite full body
+pip install -r requirements-touchsim.txt  # optional, verified MIT TouchSim revision
 ```
 
 ## Use
@@ -161,6 +165,16 @@ human = eh.build_human(eh.HumanConfig().replace("attention", "seev"))
 for row in human.provenance():                          # every parameter's source
     print(row["parameter"], row["value"], row["kind"], row["citation"])
 ```
+
+The memory baseline reimplements selected ACT-R equations; it is not an
+installed ACT-R release. [Memory models and newer alternatives](docs/memory-models.md)
+reviews the maintained ACT-R architecture, the 2024 Oberauer–Lin interference
+model and adaptive forgetting work published in 2026, with the interface and
+calibration changes needed to integrate them faithfully.
+
+The [26 October repository review](docs/repository-review.md) records bug fixes,
+integration limits and priorities for further work. Benchmark JSON uses `null`
+for undefined or nonfinite measurements, so strict JSON readers can load it.
 
 Each category has an abstract interface. Implement it and register the
 implementation. The tutorial notebook
@@ -421,8 +435,10 @@ and are the first candidates for fitting.
 
 The new senses, responses, fatigue, emotion, risk and trust modules
 reimplement published models; none of their code is copied. Code that was
-released without a licence (Zhang et al.'s emotion model, TouchSim, Jang et
-al.'s fatigue model) was not used. MIMo (MIT) models full-body touch in
+released without a licence (Zhang et al.'s emotion model and Jang et
+al.'s fatigue model) was not used. TouchSim now has an MIT licence and is
+supported through an [optional adapter](docs/touchsim.md), with a pinned
+licensed revision and no vendored code. MIMo (MIT) models full-body touch in
 MuJoCo, but its pinned dependencies (MuJoCo 3.3, NumPy 2.0) conflict with
 this package, so its approach is a candidate for a `touch` module rather
 than a dependency.
@@ -455,9 +471,10 @@ No code from these projects is included.
   position sense) is measured. The older-adult profile also slows the
   central response stage and widens the integration window (Diederich et
   al., 2008); other shifts are still missing.
-- **Senses:** touch has thresholds for vibration only, at twelve sites; full
-  skin with receptor types (TouchSim, once licensed) or sensor density per
-  body part (as in MIMo) would replace it. Hearing handles tones in
+- **Senses:** touch has vibration thresholds at twelve sites and an optional
+  TouchSim pathway for indentation-driven afferent spikes. A validated
+  spike-to-perception decoder and whole-body receptor placement remain future
+  work. Hearing handles tones in
   broadband noise, not speech or spatial sound.
 - **Load:** chunks of concurrent tasks are fitted per task; deriving them
   from the task models (rules, retrievals, fixations) would make them

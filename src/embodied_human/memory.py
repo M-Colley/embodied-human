@@ -16,6 +16,7 @@ from __future__ import annotations
 import math
 from collections import OrderedDict
 from dataclasses import dataclass
+from numbers import Integral
 from typing import Any, ClassVar
 
 import numpy as np
@@ -33,6 +34,21 @@ class MemoryParameters(Parameters):
     noise: float = 0.25
     latency_factor: float = 1.0
 
+    def __post_init__(self) -> None:
+        if (
+            isinstance(self.capacity, bool)
+            or not isinstance(self.capacity, Integral)
+            or self.capacity < 0
+        ):
+            raise ValueError("capacity must be a non-negative integer")
+        for name in ("decay", "threshold", "noise", "latency_factor"):
+            if not math.isfinite(getattr(self, name)):
+                raise ValueError(f"{name} must be finite")
+        if self.decay < 0 or self.noise < 0:
+            raise ValueError("decay and noise must be non-negative")
+        if self.latency_factor <= 0:
+            raise ValueError("latency_factor must be positive")
+
     SOURCES: ClassVar = {
         "capacity": Source(
             "Cowan (2001)",
@@ -48,9 +64,10 @@ class MemoryParameters(Parameters):
         ),
         "threshold": Source("ACT-R default (:rt 0)", None, "standard"),
         "noise": Source(
-            "Stocco et al. (2024) example value",
-            None,
-            "fitted",
+            "Stocco et al. (2024), likelihood primer, Fig. 7",
+            "https://arxiv.org/abs/2410.18055",
+            "assumed",
+            "illustrative s = 0.25 setting, not fitted to this simulator's tasks; "
             "ACT-R ships with noise off",
         ),
         "latency_factor": Source("ACT-R default (:lf 1.0)", None, "standard"),
@@ -88,8 +105,6 @@ class ActRMemory(Memory):
     def __init__(self, **params: Any) -> None:
         super().__init__()
         self.params = MemoryParameters(**params)
-        if self.params.capacity < 0:
-            raise ValueError("capacity must be non-negative")
         self.reset()
 
     def reset(self, rng: np.random.Generator | None = None) -> None:
@@ -97,8 +112,17 @@ class ActRMemory(Memory):
         self._values: dict[str, Any] = {}
         self._presentations: dict[str, list[float]] = {}
         self.focus: OrderedDict[str, Any] = OrderedDict()
+        self._last_encoding_time = -math.inf
+
+    def _check_time(self, time: float) -> None:
+        if not math.isfinite(time):
+            raise ValueError("time must be finite")
+        if time < self._last_encoding_time:
+            raise ValueError("time must not precede the latest encoding; reset first")
 
     def encode(self, key: str, value: Any, time: float) -> None:
+        self._check_time(time)
+        self._last_encoding_time = float(time)
         self._values[key] = value
         self._presentations.setdefault(key, []).append(float(time))
         self.focus.pop(key, None)
@@ -107,13 +131,34 @@ class ActRMemory(Memory):
             self.focus.popitem(last=False)
 
     def base_level(self, key: str, time: float) -> float:
-        """Noise-free base-level activation of ``key`` at ``time``."""
+        """Noise-free activation at or after the most recent encoding.
+
+        Only strictly positive trace ages contribute, as the power law is
+        singular at zero age. Historical queries require a separate snapshot.
+        """
+        self._check_time(time)
         ages = [time - t for t in self._presentations.get(key, ()) if time > t]
         if not ages:
             return -math.inf
-        return math.log(sum(age ** (-self.params.decay) for age in ages))
+        if self.params.decay == 0:
+            return math.log(len(ages))
+        # Sum in log space: direct powers can underflow to zero or overflow.
+        terms = [-self.params.decay * math.log(age) for age in ages]
+        largest = max(terms)
+        if not math.isfinite(largest):
+            return largest
+        return largest + math.log(sum(math.exp(term - largest) for term in terms))
+
+    def _latency(self, activation: float) -> float:
+        # Combining the scale with activation before exponentiation also
+        # avoids overflow where F * exp(-A) would still be representable.
+        try:
+            return math.exp(math.log(self.params.latency_factor) - activation)
+        except OverflowError:
+            return math.inf
 
     def retrieve(self, key: str, time: float) -> Retrieval:
+        self._check_time(time)
         p = self.params
         if key in self.focus:
             return Retrieval(self.focus[key], True, 0.0, math.inf)
@@ -125,22 +170,25 @@ class ActRMemory(Memory):
             return Retrieval(
                 self._values[key],
                 True,
-                p.latency_factor * math.exp(-activation),
+                self._latency(activation),
                 activation,
             )
         return Retrieval(
-            None, False, p.latency_factor * math.exp(-p.threshold), activation
+            None, False, self._latency(p.threshold), activation
         )
 
     def recall_probability(self, key: str, time: float) -> float:
         """Probability that a retrieval succeeds (logistic in activation)."""
+        self._check_time(time)
         if key in self.focus:
             return 1.0
         activation = self.base_level(key, time)
-        if not math.isfinite(activation):
+        if activation == -math.inf:
             return 0.0
         if self.params.noise == 0:
             return float(activation > self.params.threshold)
-        return 1.0 / (
-            1.0 + math.exp(-(activation - self.params.threshold) / self.params.noise)
-        )
+        z = (activation - self.params.threshold) / self.params.noise
+        if z >= 0:
+            return 1.0 / (1.0 + math.exp(-z))
+        odds = math.exp(z)
+        return odds / (1.0 + odds)

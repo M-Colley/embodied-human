@@ -1,0 +1,5 @@
+include requirements-touchsim.txt
+include VALIDATION.md
+recursive-include docs *.md
+recursive-include examples *.py *.ipynb
+recursive-include evidence *.json *.xml

@@ -1,0 +1,4 @@
+# Optional upstream integration; install from a source checkout or sdist with:
+# python -m pip install -r requirements-touchsim.txt
+# This exact revision includes the verified MIT licence.
+touchsim @ git+https://github.com/hsaal/touchsim.git@c7ece893c1ec75f2de10ade34422e0090a3093b9

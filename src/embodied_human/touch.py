@@ -32,16 +32,17 @@ latency follows the same Piéron form as hearing; no Piéron fit of
 vibrotactile intensity exists, so the gain is set from the tactile
 reaction times of Diederich and Colonius (2004) under an assumed mapping
 of their weakest and strongest stimuli to 10 and 30 dB above threshold.
-Full-body touch with sensor density per body part, as in MIMo (Lopez et
-al., 2024), and afferent-level models such as TouchSim (Saal et al.,
-2017) are natural replacements.
+The optional :class:`TouchSimTouch` adds afferent-level indentation responses
+(Saal et al., 2017) while retaining these aggregate perceptual equations.
 """
 
 from __future__ import annotations
 
 import math
+from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import ClassVar
+from importlib import import_module
+from typing import Any, ClassVar
 
 import numpy as np
 
@@ -476,9 +477,24 @@ class VibrotactileTouch(Touch):
     def __init__(self, **params: float) -> None:
         super().__init__()
         self.params = TouchParameters(**params)
+        p = self.params
+        if (
+            not math.isfinite(p.latency_gain)
+            or p.latency_gain < 0
+            or not math.isfinite(p.latency_exponent)
+            or p.latency_exponent > 0
+            or not math.isfinite(p.reference_latency)
+            or p.reference_latency < 0
+        ):
+            raise ValueError(
+                "latency parameters must be finite with non-negative gain and "
+                "reference_latency and a non-positive exponent"
+            )
 
     def threshold(self, frequency: float, site: str) -> float:
         """Perception threshold, m/s^2 r.m.s., interpolated in log-log."""
+        if not math.isfinite(frequency) or frequency <= 0:
+            raise ValueError("frequency must be finite and positive")
         try:
             points = np.array(THRESHOLDS[site])
         except KeyError:
@@ -495,6 +511,8 @@ class VibrotactileTouch(Touch):
     def sensation_level(
         self, amplitude: float, frequency: float, site: str, contact: bool = True
     ) -> float:
+        if not math.isfinite(amplitude):
+            raise ValueError("amplitude must be finite")
         if not contact or amplitude <= 0:
             return -math.inf
         return 20 * math.log10(amplitude / self.threshold(frequency, site))
@@ -502,6 +520,8 @@ class VibrotactileTouch(Touch):
     def perceived_intensity(
         self, amplitude: float, frequency: float, site: str
     ) -> float:
+        if not math.isfinite(amplitude):
+            raise ValueError("amplitude must be finite")
         try:
             growth = np.array(SENSATION_GROWTH[site])
         except KeyError:
@@ -519,10 +539,222 @@ class VibrotactileTouch(Touch):
 
     def latency(self, sensation_level: float) -> float:
         p = self.params
+        if math.isnan(sensation_level):
+            raise ValueError("sensation_level must not be NaN")
 
         def pieron(sl: float) -> float:
-            return p.latency_gain * (10 ** (sl / 20)) ** p.latency_exponent
+            # Combine exponents before evaluating: the intermediate amplitude
+            # ratio can overflow even though the final latency is bounded.
+            if p.latency_exponent == 0:
+                return p.latency_gain
+            return p.latency_gain * 10 ** (sl * (p.latency_exponent / 20))
 
         if sensation_level <= 0:
             return math.inf
         return max(0.005, p.reference_latency + pieron(sensation_level) - pieron(30.0))
+
+
+_TOUCHSIM_SOURCE = (
+    "https://github.com/hsaal/touchsim/blob/"
+    "c7ece893c1ec75f2de10ade34422e0090a3093b9/"
+)
+
+
+@dataclass(frozen=True)
+class TouchSimParameters(TouchParameters):
+    """Psychophysical baseline plus a deterministic TouchSim stimulus protocol.
+
+    These protocol choices are not fitted human perceptual parameters. Native
+    TouchSim membrane noise is disabled because its parallel Numba random
+    streams cannot be controlled by this module's NumPy Generator.
+    """
+
+    sample_rate: float = 5000.0
+    pin_radius: float = 0.5
+    model_index: int = 0
+    afferent_classes: tuple[str, ...] = ("SA1", "RA", "PC")
+
+    SOURCES: ClassVar = {
+        **TouchParameters.SOURCES,
+        "sample_rate": Source(
+            "TouchSim implementation: internal neural sampling rate",
+            _TOUCHSIM_SOURCE + "touchsim/transduction.py",
+            "derived",
+            "Hz; matches the upstream fixed 5000 Hz neural integration",
+        ),
+        "pin_radius": Source(
+            "TouchSim stimulus-generator default",
+            _TOUCHSIM_SOURCE + "touchsim/generators.py",
+            "assumed",
+            "mm; experimental probe geometry, not a human constant",
+        ),
+        "model_index": Source(
+            "Deterministic model-selection convention",
+            None,
+            "assumed",
+            "first published fitted neuron of each class; not a population fit",
+        ),
+        "afferent_classes": Source(
+            "TouchSim supported afferent classes",
+            _TOUCHSIM_SOURCE + "touchsim/classes.py",
+            "assumed",
+            "one of each class per supplied location, not anatomical density",
+        ),
+    }
+
+
+@dataclass(frozen=True)
+class AfferentResponse:
+    """One indentation trial's afferent spikes (s) and average rates (Hz)."""
+
+    spikes: tuple[np.ndarray, ...]
+    afferent_classes: tuple[str, ...]
+    locations: np.ndarray
+    duration: float
+
+    @property
+    def rates(self) -> np.ndarray:
+        """Spike counts divided by trial duration, one per afferent."""
+        return np.array([spikes.size / self.duration for spikes in self.spikes])
+
+
+@register("touch", "touchsim")
+class TouchSimTouch(VibrotactileTouch):
+    """Vibrotactile psychophysics with an optional TouchSim afferent pathway.
+
+    ``sensation_level``, ``latency`` and ``perceived_intensity`` retain the
+    published aggregate baseline. Only ``afferent_response`` invokes TouchSim;
+    there is no validated decoder from spikes to those perceptual quantities.
+    Importing or constructing this module does not import TouchSim.
+    """
+
+    params: TouchSimParameters
+
+    def __init__(self, **params: Any) -> None:
+        super().__init__(
+            **{
+                key: value
+                for key, value in params.items()
+                if key in TouchParameters.SOURCES
+            }
+        )
+        self.params = TouchSimParameters(**params)
+        p = self.params
+        if not math.isfinite(p.sample_rate) or p.sample_rate <= 0:
+            raise ValueError("sample_rate must be finite and positive")
+        if not math.isfinite(p.pin_radius) or p.pin_radius <= 0:
+            raise ValueError("pin_radius must be finite and positive")
+        if (
+            isinstance(p.model_index, bool)
+            or not isinstance(p.model_index, int)
+            or p.model_index < 0
+        ):
+            raise ValueError("model_index must be a non-negative integer")
+        if (
+            not p.afferent_classes
+            or isinstance(p.afferent_classes, str)
+            or any(c not in ("SA1", "RA", "PC") for c in p.afferent_classes)
+            or len(set(p.afferent_classes)) != len(p.afferent_classes)
+        ):
+            raise ValueError(
+                "afferent_classes must select unique SA1, RA or PC classes"
+            )
+
+    def afferent_response(
+        self,
+        trace: np.ndarray | Sequence[float] | Sequence[Sequence[float]],
+        *,
+        pin_locations: np.ndarray | Sequence[Sequence[float]],
+        afferent_locations: np.ndarray | Sequence[Sequence[float]],
+    ) -> AfferentResponse:
+        """Simulate indentation of a flat skin patch, using millimetres.
+
+        ``trace`` has shape (pins, samples), or (samples,) for one pin, and
+        contains at least three displacement samples in mm, not acceleration
+        or force. Both location
+        arrays have shape (n, 2), in mm on the same flat patch. Each afferent
+        location gets one neuron per configured class. Trials are independent;
+        neural state does not persist between calls. Noise is disabled and model
+        indices fixed, so results repeat without touching global random streams.
+        """
+        indentation = np.atleast_2d(np.asarray(trace, dtype=float))
+        pins = np.asarray(pin_locations, dtype=float)
+        locations = np.asarray(afferent_locations, dtype=float)
+        if (
+            indentation.ndim != 2
+            or indentation.shape[0] == 0
+            or indentation.shape[1] < 3
+            or not np.isfinite(indentation).all()
+        ):
+            raise ValueError(
+                "trace must be a finite (pins, samples) array with at least 3 samples"
+            )
+        for name, points in (
+            ("pin_locations", pins), ("afferent_locations", locations)
+        ):
+            if (
+                points.ndim != 2
+                or points.shape[0] == 0
+                or points.shape[1] != 2
+                or not np.isfinite(points).all()
+            ):
+                raise ValueError(f"{name} must be a finite nonempty (n, 2) array")
+        if pins.shape[0] != indentation.shape[0]:
+            raise ValueError("trace must contain one row per pin location")
+        if np.unique(pins, axis=0).shape[0] != pins.shape[0]:
+            raise ValueError("pin locations must be distinct")
+        p = self.params
+        if round(indentation.shape[1] / p.sample_rate * 5000) < 3:
+            raise ValueError(
+                "trace must span at least 3 samples at TouchSim's 5000 Hz neural rate"
+            )
+        if pins.shape[0] > 1:
+            distances = np.linalg.norm(pins[:, None] - pins[None, :], axis=2)
+            np.fill_diagonal(distances, np.inf)
+            if 2 * p.pin_radius > float(distances.min()):
+                raise ValueError("pin discs must not overlap; reduce pin_radius")
+
+        # Upstream changes NumPy error modes internally. Restore the caller's
+        # settings even when importing or evaluating TouchSim raises an error.
+        with np.errstate():
+            try:
+                ts = import_module("touchsim")
+            except ModuleNotFoundError as exc:
+                if exc.name != "touchsim":
+                    raise
+                raise ImportError(
+                    "TouchSim afferent responses require the optional dependency: "
+                    "from a source checkout or sdist, run "
+                    "python -m pip install -r requirements-touchsim.txt "
+                    "(see docs/touchsim.md)"
+                ) from exc
+            for affclass in p.afferent_classes:
+                if p.model_index >= len(ts.Afferent.affparams[affclass]):
+                    raise ValueError(f"model_index is out of range for {affclass}")
+            afferents = [
+                ts.Afferent(
+                    affclass,
+                    location=location.copy(),
+                    idx=p.model_index,
+                    noisy=False,
+                    delay=False,
+                )
+                for location in locations
+                for affclass in p.afferent_classes
+            ]
+            population = ts.AfferentPopulation(*afferents)
+            stimulus = ts.Stimulus(
+                trace=indentation.copy(),
+                location=pins.copy(),
+                fs=p.sample_rate,
+                pin_radius=p.pin_radius,
+            )
+            response = population.response(stimulus)
+        return AfferentResponse(
+            tuple(
+                np.array(spikes, dtype=float, copy=True) for spikes in response.spikes
+            ),
+            tuple(affclass for _ in locations for affclass in p.afferent_classes),
+            np.repeat(locations, len(p.afferent_classes), axis=0),
+            indentation.shape[1] / p.sample_rate,
+        )

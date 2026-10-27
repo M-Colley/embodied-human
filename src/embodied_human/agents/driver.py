@@ -759,7 +759,7 @@ class AttentiveDriver:
             automation_capability=p.request_capability, manual_capability=None
         )
         self.log.trust.append((before, trust.trust))  # type: ignore[attr-defined]
-        return reaction.time if math.isfinite(reaction.time) else 7.0
+        return reaction.time
 
     def _engaged_now(self, t: float, uncertainty: float) -> bool:
         if self.log.request_at is None:

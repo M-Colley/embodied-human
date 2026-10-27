@@ -60,7 +60,7 @@ def _config(replacements: list[str]) -> HumanConfig:
 
 def main(argv: list[str] | None = None) -> int:
     from . import integrated, load, motivation, senses, studies  # noqa: F401
-    from .benchmarks import BENCHMARKS, run
+    from .benchmarks import BENCHMARKS, json_safe, run
 
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
@@ -98,7 +98,7 @@ def main(argv: list[str] | None = None) -> int:
         "wall_seconds": round(time.perf_counter() - started, 2),
         "results": [r.as_dict() for r in results],
     }
-    width = max(len(r.name) for r in results)
+    width = max((len(r.name) for r in results), default=0)
     for r in results:
         status = "skip" if r.skipped else ("pass" if r.passed else "fail")
         score = "" if math.isnan(r.score) else f"{r.score:.2f}"
@@ -109,7 +109,9 @@ def main(argv: list[str] | None = None) -> int:
     print(f"parameters by source: {dict(kinds)}")
     if args.out:
         args.out.parent.mkdir(parents=True, exist_ok=True)
-        args.out.write_text(json.dumps(report, indent=2, default=float))
+        args.out.write_text(
+            json.dumps(json_safe(report), indent=2, allow_nan=False), encoding="utf-8"
+        )
     return 0
 
 

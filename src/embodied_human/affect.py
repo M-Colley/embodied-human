@@ -31,7 +31,7 @@ from typing import Any, ClassVar
 
 import numpy as np
 
-from .core import Module, Parameters, Source, register
+from .core import Module, ModuleChoice, Parameters, Source, create, register
 
 _CHI = (
     "Zhang, Hilpert, Broekens & Jokinen (2024)",
@@ -287,7 +287,7 @@ class AppraisalAffect(Affect):
         appraisals: list[Appraisal] = []
         state = task.start
         while True:
-            action = forced.get(state) or self.choose(state, task)
+            action = forced[state] if state in forced else self.choose(state, task)
             if state in task.absorbing:
                 self.learn_step(
                     state, action, task.absorbing[state], state, task, terminal=True
@@ -453,15 +453,30 @@ EMOTION_STUDY_APPRAISALS = {
 
 
 def emotion_study(
-    seed: int = 0, classifiers: int = 27, runs: int = 1, episodes: int = 20000
+    seed: int = 0,
+    classifiers: int = 27,
+    runs: int = 1,
+    episodes: int = 20000,
+    choice: ModuleChoice | None = None,
 ) -> dict[str, dict[str, float]]:
     """Simulate Experiment 1 of Zhang et al. (2024).
 
     For each task, train a fresh learner, run the appraisal episode with
     ``a1`` forced, and recognise emotions with ``classifiers`` simulated
     participants (SVMs with penalties drawn per person). Returns the mean
-    intensities per task, averaged over ``runs`` learners.
+    intensities per task, averaged over ``runs`` learners. ``choice`` selects
+    the registered affect implementation and its parameter overrides for
+    each participant. Appraisal-based implementations also supply the
+    learner; other classifiers receive appraisals from a baseline learner.
     """
+    choice = choice or ModuleChoice("appraisal")
+
+    def participant() -> Affect:
+        module = create("affect", choice.name, **dict(choice.params))
+        if not isinstance(module, Affect):
+            raise TypeError("the selected affect module must implement Affect")
+        return module
+
     rng = np.random.default_rng(seed)
     stories = emotion_study_tasks(appraisal=True)
     results: dict[str, dict[str, float]] = {}
@@ -469,14 +484,17 @@ def emotion_study(
         transition, alpha = EMOTION_STUDY_APPRAISALS[name]
         totals: dict[str, float] = defaultdict(float)
         for _ in range(runs):
-            learner = AppraisalAffect()
+            selected = participant()
+            learner = (
+                selected if isinstance(selected, AppraisalAffect) else AppraisalAffect()
+            )
             learner.reset(np.random.default_rng(int(rng.integers(2**32))))
             learner.train(task, episodes)
             (appraisal,) = learner.run_episode(
                 stories[name], forced={"S1": "a1"}, appraise_at={transition: alpha}
             )
             for _ in range(classifiers):
-                person = AppraisalAffect()
+                person = participant()
                 person.reset(np.random.default_rng(int(rng.integers(2**32))))
                 for emotion, value in person.emotions(appraisal).items():
                     totals[emotion] += value / (classifiers * runs)

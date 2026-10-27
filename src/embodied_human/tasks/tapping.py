@@ -77,19 +77,44 @@ def throughput(
         endpoints: Selection points, N x 2.
         times: Movement times, s.
         width: Nominal target width, for the error rate.
+
+    At least two finite movements with positive times, width and task-axis
+    lengths are required. Zero endpoint spread gives no finite effective-width
+    estimate; in that case ``effective_id`` and ``throughput`` are NaN. They
+    are also NaN when the mean projected amplitude is non-positive. The other
+    descriptive measures remain available for those degenerate observations.
     """
     starts, targets, endpoints = (
         np.asarray(a, dtype=float) for a in (starts, targets, endpoints)
     )
-    axis = targets - starts
-    length = np.linalg.norm(axis, axis=1)
+    times = np.asarray(times, dtype=float)
+    if starts.ndim != 2 or starts.shape[1] != 2 or starts.shape[0] < 2:
+        raise ValueError("starts must have shape (N, 2) with at least two movements")
+    if targets.shape != starts.shape or endpoints.shape != starts.shape:
+        raise ValueError(
+            "starts, targets and endpoints must have the same (N, 2) shape"
+        )
+    if times.shape != (starts.shape[0],):
+        raise ValueError("times must have shape (N,), one per movement")
+    if not all(np.isfinite(a).all() for a in (starts, targets, endpoints, times)):
+        raise ValueError("movement coordinates and times must be finite")
+    if np.any(times <= 0) or not math.isfinite(width) or width <= 0:
+        raise ValueError("movement times and target width must be positive and finite")
+    with np.errstate(over="ignore", invalid="ignore"):
+        axis = targets - starts
+        length = np.linalg.norm(axis, axis=1)
+    if not np.isfinite(length).all() or np.any(length <= 0):
+        raise ValueError("each task axis must have a positive finite length")
     unit = axis / length[:, None]
     # Signed overshoot along the task axis and projected movement distance.
-    dx = np.einsum("ij,ij->i", endpoints - targets, unit)
-    distance = length + dx
-    we = 4.133 * float(np.std(dx, ddof=1))
-    ae = float(np.mean(distance))
-    ide = math.log2(ae / we + 1.0)
-    mt = float(np.mean(times))
-    misses = np.linalg.norm(endpoints - targets, axis=1) > width / 2
+    with np.errstate(over="ignore", invalid="ignore"):
+        dx = np.einsum("ij,ij->i", endpoints - targets, unit)
+        distance = length + dx
+        we = 4.133 * float(np.std(dx, ddof=1))
+        ae = float(np.mean(distance))
+        mt = float(np.mean(times))
+        misses = np.linalg.norm(endpoints - targets, axis=1) > width / 2
+    if not all(math.isfinite(value) for value in (we, ae, mt)):
+        raise ValueError("measurements exceed the finite range of effective estimates")
+    ide = math.log2(ae / we + 1.0) if we > 0 and ae > 0 else math.nan
     return Throughput(mt, we, ae, ide, ide / mt, float(np.mean(misses)))

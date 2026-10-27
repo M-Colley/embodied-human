@@ -135,15 +135,22 @@ EMOTION_RATINGS = {
 def emotion_study(human: Human, runs: int = 3) -> Result:
     """Happiness, boredom and irritation tasks, appraised and classified by
     27 simulated participants per learner, averaged over ``runs`` learners."""
+    from ..affect import AppraisalAffect
     from ..affect import emotion_study as simulate
 
     result = Result("affect.emotion_study", ("affect",))
     try:
-        import sklearn  # noqa: F401
+        model = simulate(seed=0, runs=runs, choice=human.config.affect)
     except ImportError as error:
-        result.skipped = f"needs scikit-learn: {error}"
+        result.skipped = f"needs the affect module's optional dependencies: {error}"
         return result
-    model = simulate(seed=0, runs=runs)
+    required = {"happiness", "boredom", "irritation"}
+    if any(not required <= set(values) for values in model.values()):
+        result.skipped = (
+            "this study requires classifier outputs for happiness, boredom "
+            "and irritation; the selected affect module has different labels"
+        )
+        return result
     predicted, observed = [], []
     for task, ratings in EMOTION_RATINGS.items():
         for emotion, value in zip(("happiness", "boredom", "irritation"), ratings):
@@ -160,6 +167,12 @@ def emotion_study(human: Human, runs: int = 3) -> Result:
         },
         "r_squared": float(1 - np.sum((o - p) ** 2) / np.sum((o - o.mean()) ** 2)),
         "original_model": {"r_squared": 0.78, "rmse": 0.13},
+        "affect_module": human.config.affect.name,
+        "learner": (
+            "selected appraisal implementation"
+            if isinstance(human.affect, AppraisalAffect)
+            else "baseline AppraisalAffect; selected module classifies appraisals"
+        ),
     }
     return result
 

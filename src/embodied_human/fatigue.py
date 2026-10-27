@@ -140,6 +140,10 @@ class ThreeCompartment(Fatigue):
             raise KeyError(f"no fatigue rates for {joint!r}; known: {known}") from None
 
     def step(self, dt: float, loads: dict[str, float]) -> dict[str, float]:
+        if not math.isfinite(dt) or dt < 0:
+            raise ValueError("dt must be finite and non-negative")
+        if any(not math.isfinite(load) for load in loads.values()):
+            raise ValueError("loads must be finite")
         p = self.params
         capacity = {}
         for joint, load in loads.items():
@@ -176,6 +180,12 @@ class ThreeCompartment(Fatigue):
     ) -> float:
         """Seconds a constant load (fraction of MVC) can be held from rest;
         ``inf`` if it can be held for ``limit`` seconds."""
+        if not math.isfinite(dt) or dt <= 0:
+            raise ValueError("dt must be finite and positive")
+        if not math.isfinite(limit) or limit <= 0:
+            raise ValueError("limit must be finite and positive")
+        if not math.isfinite(load) or not 0 <= load <= 1:
+            raise ValueError("load must be finite and lie in [0, 1]")
         saved = dict(self.state)
         self.state.pop(joint, None)
         time = 0.0

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Embodied Human · Module builder</title>
+  <link rel="stylesheet" href="/builder.css">
+  <script src="/builder.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-icon" aria-hidden="true">e<span>h</span></span><div><strong>embodied human</strong><small>COMPUTATIONAL HUMAN MODELLING</small></div></div>
+    <span class="local-badge">LOCAL WORKSPACE</span>
+  </header>
+  <main>
+    <section class="intro">
+      <div><p class="eyebrow">COMPOSE / INSPECT / EXPLORE</p><h1>Build a simulated human.</h1><p>Choose one model for each part of the human. Inspect its assumptions, adjust parameters, and export a reproducible configuration.</p></div>
+      <div class="intro-note"><span class="tiny-label">YOUR MODEL</span><strong id="model-count">16 module categories</strong><span>Offline. Seeded. Sources attached.</span></div>
+    </section>
+    <div class="toolbar">
+      <div class="seed-control"><label for="seed">Random seed</label><input id="seed" type="number" min="0" max="4294967295" step="1" value="0"></div>
+      <div class="actions"><button id="reset">Reset baseline</button><button id="import">Import JSON</button><button id="export">Export JSON</button><button id="python">Export Python</button><button id="validate" class="primary">Validate model</button></div>
+      <input id="file" type="file" accept=".json,application/json" hidden>
+    </div>
+    <p id="status" role="status" aria-live="polite">Loading registered models…</p>
+    <div class="workspace">
+      <aside class="palette panel"><div class="panel-heading"><h2>Model library</h2><span id="library-count"></span></div><p class="hint">Drag a model into its category, or choose it with the selection menu.</p><label class="sr-only" for="search">Filter model library</label><input id="search" type="search" placeholder="Find a model…"><div id="palette"></div></aside>
+      <section class="composition"><div class="panel-heading"><div><h2>Your composition</h2><p class="hint">Select a category to inspect its parameters.</p></div><span class="tiny-label">ONE MODEL PER CATEGORY</span></div><div id="slots" class="slots"></div></section>
+      <aside class="inspector panel"><div class="panel-heading"><h2>Parameter inspector</h2><span class="live-dot" aria-hidden="true"></span></div><div id="inspector"></div></aside>
+    </div>
+    <section class="preview panel">
+      <div class="preview-heading"><div><p class="eyebrow">TRY YOUR MEMORY MODEL</p><h2>Delayed digit recall</h2><p class="hint">24 spoken digits per level. Recall the digit presented 0–5 positions earlier.</p></div><button id="preview" class="primary">Run seeded preview <span aria-hidden="true">↗</span></button></div>
+      <p class="preview-note">This is a task demonstration, not validation against human data. Only the memory module affects these results; all selected modules are constructed.</p>
+      <div id="preview-results"><p class="empty-state">Your preview will appear here.</p></div>
+    </section>
+    <footer>embodied-human <span>·</span> Configurations select registered module implementations. They do not define arbitrary connections between models.</footer>
+  </main>
+</body>
+</html>

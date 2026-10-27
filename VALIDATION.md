@@ -1,5 +1,101 @@
 # Validation
 
+## 2026-10-26, repository review and optional TouchSim (Windows, CPU)
+
+All commands below used the isolated `.venv` interpreter, Python 3.12.13,
+unless a different environment is named. Versions: NumPy 2.5.4, SciPy 1.18.1,
+pytest 9.1.1, Ruff 0.17.2, mypy 2.4.0, build 1.6.1, setuptools 84.2.1,
+MuJoCo 3.17.0, scikit-learn 1.9.1, MoSQITo 1.2.1, nbformat 5.11.1,
+nbclient 0.11.0 and ipykernel 7.4.0. Optional dependencies:
+
+- embodied-ui 0.1.0, local checkout `605862b`;
+- myosuite-carla 0.1.0, local checkout `85983b1`;
+- MyoSuite 3.0.0, local checkout `c0af9c6`, and myo-sim 0.2.3;
+- TouchSim 0.1.2 at verified MIT commit
+  `c7ece893c1ec75f2de10ade34422e0090a3093b9`, Numba 0.68.0 and
+  scikit-image 0.26.0.
+
+The [review](docs/repository-review.md) records the changes and remaining
+model limitations. Numeric baseline defaults are unchanged. Memory noise
+`0.25` is now honestly classified as assumed, rather than fitted, with a verified
+source. `python examples/parameter_table.py` regenerated the parameter table:
+112 entries including the driver, with 14 measured, 5 standard, 52 fitted,
+4 derived and 37 assumed. The default human alone has 85 entries.
+
+### Benchmark and interpretation
+
+```powershell
+.venv/Scripts/python.exe examples/parameter_table.py
+.venv/Scripts/python.exe -m embodied_human.bench --out evidence/benchmark-baseline.json
+```
+
+The full seeded baseline run completed in 495.26 s: **17 of 28 pass, 11 fail,
+none skipped**. Integrated driving ran offline on myosuite-carla's fitted
+vehicle surrogate with MyoSuite's full body; no CARLA server was used. The
+overall pass count matches the prior baseline. Key outcomes remain takeover
+2.44 s, emotion RMSE 0.098, fitted vertical sickness RMSE 7.47 and held-out
+sickness time-course RMSE 14.8. The latter still fails its acceptance range.
+Existing takeover modality, gaze, glance-speed, DRT-load and compensated-roll
+misses remain visible in the report.
+
+Fitted/source-parameter matches remain consistency checks. In particular,
+the memory span checks its own capacity source; vertical sickness fit-set
+performance is separate from held-out time-course performance. No new fitted
+scientific constants were introduced. Attention, estimator, eye, vestibular
+and response module source files were not changed, so the module-specific
+refitting triggers did not apply. A no-detected-warning takeover now stays
+unanswered rather than receiving an invented seven-second response.
+
+### Additional verification
+
+- Final full suite:
+  `.venv/Scripts/python.exe -m pytest tests -q --junitxml=evidence/tests.xml`
+  passed **185 tests, none skipped**, in 126.68 s, including actual optional
+  TouchSim, offline full-body driving and tutorial execution. Seven upstream
+  warnings concerned MuJoCo spec prefixes and Windows/Jupyter event-loop
+  integration; no test failed. [JUnit report](evidence/tests.xml).
+- Python 3.10.20 compatibility used a separate `.venv-py310` with NumPy 2.2.6,
+  SciPy 1.15.3 and pytest 9.1.1, without optional physics/TouchSim dependencies.
+  Running `tests/test_modules.py`, `test_memory_robustness.py`,
+  `test_regressions.py`, `test_report_json.py`, `test_builder.py`,
+  `test_tapping_robustness.py`, `test_affect_regressions.py` and `test_touchsim.py`
+  passed **122 tests, 3 skipped**, in 2.66 s. This caught and corrected a Python
+  3.10 bare-`ClassVar` annotation issue in the builder. Builder tests separately
+  passed all 19 cases on both Python 3.10 and Python 3.12 after that correction.
+- TouchSim tests execute the actual upstream package, including repeatability,
+  optional import behaviour, units/shapes and invalid-input handling. A final
+  independent review reproduced upstream NaN derivatives on two-sample traces;
+  the adapter now requires three original and internal-rate samples. The final
+  TouchSim-focused run passed **26 tests**.
+- The affect study now uses the configured implementation and overrides.
+  A before/after seeded comparison (`seed=7`, two classifiers, one run,
+  50 training episodes) preserved all nine baseline predictions exactly.
+  Replacement classifiers/parameters and falsy forced actions have regression
+  coverage. A separate default study rerun checks the selected-module path.
+  `python -m embodied_human.bench --only affect.emotion_study --out artifacts/affect-review.json`
+  returned the same default metrics as the complete baseline; a copy of that
+  report is [evidence/affect-module-review.json](evidence/affect-module-review.json).
+- `python -m ruff check src tests examples` and
+  `python -m mypy src/embodied_human --ignore-missing-imports` passed.
+  JavaScript syntax passed with Node 24.16.0 using
+  `node --check src/embodied_human/builder/builder.js`.
+- `python -m build` produced a wheel and source distribution. Wheel assets
+  include the builder HTML, CSS and JavaScript; the source distribution includes
+  the separately pinned TouchSim requirement, documentation, evidence and the
+  tutorial notebook needed by its included tests. No direct Git dependency is
+  included in package metadata, preserving PyPI compatibility.
+- A clean `.venv-core` installed the wheel with only NumPy and SciPy.
+  Importing/building all 16 modules, selecting lazy TouchSim, constructing the
+  builder server, listing its registry and running the memory preview succeeded
+  with TouchSim, MuJoCo, MyoSuite, embodied-ui and scikit-learn all absent.
+- Browser QA used the local server: dragging SEEV onto attention, click/menu
+  selection, editing memory capacity, source/override display, module validation,
+  seeded preview and actual JSON download succeeded. The pointer-drag fallback
+  was added after native HTML5 dragging failed in the first browser check.
+  JSON/Python round trips, structured dataclass restoration, invalid imports and
+  HTTP origin/path handling are also covered by automated tests. The memory
+  preview is a demonstration; only memory affects its results.
+
 ## 2026-10-24, first PC (Windows 11, CPU)
 
 Python 3.12.13, NumPy 2.5.4, SciPy 1.17.1 and MuJoCo 3.17.0, with these

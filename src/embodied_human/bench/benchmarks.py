@@ -8,8 +8,9 @@ whose metrics are scored against :mod:`references`. Swap one module in
 
 from __future__ import annotations
 
+import dataclasses
 import math
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -17,6 +18,26 @@ import numpy as np
 
 from ..core import Human
 from .references import REFERENCES
+
+
+def json_safe(value: Any) -> Any:
+    """Convert report values to strict JSON; undefined measurements become null."""
+    if dataclasses.is_dataclass(value) and not isinstance(value, type):
+        return json_safe(dataclasses.asdict(value))
+    if isinstance(value, Mapping):
+        return {key: json_safe(item) for key, item in value.items()}
+    if isinstance(value, np.ndarray):
+        return json_safe(value.tolist())
+    if isinstance(value, (list, tuple)):
+        return [json_safe(item) for item in value]
+    if isinstance(value, np.floating):
+        # longdouble.item() can return another NumPy scalar, not a Python float.
+        return json_safe(float(value))
+    if isinstance(value, np.generic):
+        return json_safe(value.item())
+    if isinstance(value, float) and not math.isfinite(value):
+        return None
+    return value
 
 
 @dataclass
@@ -42,7 +63,11 @@ class Result:
     @property
     def passed(self) -> bool:
         """Whether every scored metric lies within its reference range."""
-        return self.skipped is None and all(s == 1.0 for s in self.scores.values())
+        return (
+            self.skipped is None
+            and bool(self.scores)
+            and all(s == 1.0 for s in self.scores.values())
+        )
 
     @property
     def score(self) -> float:
@@ -56,26 +81,28 @@ class Result:
 
     def as_dict(self) -> dict[str, Any]:
         """JSON-serializable result with the references used."""
-        return {
-            "name": self.name,
-            "categories": list(self.categories),
-            "passed": self.passed,
-            "score": self.score,
-            "skipped": self.skipped,
-            "metrics": self.metrics,
-            "scores": self.scores,
-            "references": {
-                k: {
-                    "value": REFERENCES[k].value,
-                    "range": [REFERENCES[k].low, REFERENCES[k].high],
-                    "unit": REFERENCES[k].unit,
-                    "citation": REFERENCES[k].citation,
-                    "doi": REFERENCES[k].doi,
-                }
-                for k in self.scores
-            },
-            "details": self.details,
-        }
+        return json_safe(
+            {
+                "name": self.name,
+                "categories": list(self.categories),
+                "passed": self.passed,
+                "score": self.score,
+                "skipped": self.skipped,
+                "metrics": self.metrics,
+                "scores": self.scores,
+                "references": {
+                    k: {
+                        "value": REFERENCES[k].value,
+                        "range": [REFERENCES[k].low, REFERENCES[k].high],
+                        "unit": REFERENCES[k].unit,
+                        "citation": REFERENCES[k].citation,
+                        "doi": REFERENCES[k].doi,
+                    }
+                    for k in self.scores
+                },
+                "details": self.details,
+            }
+        )
 
 
 Benchmark = Callable[[Human], Result]
@@ -243,7 +270,7 @@ def run(human: Human, names: list[str] | None = None) -> list[Result]:
     """Run the named benchmarks (all by default), in registration order."""
     from . import integrated, load, motivation, senses, studies  # noqa: F401
 
-    chosen = names or list(BENCHMARKS)
+    chosen = list(BENCHMARKS) if names is None else names
     unknown = set(chosen) - set(BENCHMARKS)
     if unknown:
         raise ValueError(

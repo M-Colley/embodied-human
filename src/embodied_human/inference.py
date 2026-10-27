@@ -28,9 +28,15 @@ class Prior:
     log: bool = False
 
     def __post_init__(self) -> None:
-        if not self.low < self.high or (self.log and self.low <= 0):
+        if (
+            not math.isfinite(self.low)
+            or not math.isfinite(self.high)
+            or not self.low < self.high
+            or (self.log and self.low <= 0)
+        ):
             raise ValueError(
-                f"prior {self.name}: need low < high, and low > 0 for log priors"
+                f"prior {self.name}: need finite low < high, "
+                "and low > 0 for log priors"
             )
 
     def scale(self, unit: np.ndarray) -> np.ndarray:
@@ -39,7 +45,7 @@ class Prior:
             return np.exp(
                 np.log(self.low) + unit * (np.log(self.high) - np.log(self.low))
             )
-        return self.low + unit * (self.high - self.low)
+        return (1.0 - unit) * self.low + unit * self.high
 
 
 @dataclass(frozen=True)
@@ -69,6 +75,8 @@ class Posterior:
 
     def interval(self, level: float = 0.9) -> dict[str, tuple[float, float]]:
         """Central credible interval per parameter."""
+        if not 0 < level < 1:
+            raise ValueError("level must lie in (0, 1)")
         tail = (1 - level) / 2 * 100
         return {
             n: (
@@ -105,11 +113,23 @@ def distance(
     """Euclidean distance of scaled summary differences (NaN counts as far)."""
     total = 0.0
     for key, value in observed.items():
+        scale = scales[key]
+        if not math.isfinite(value):
+            raise ValueError(f"observed summary {key!r} must be finite")
+        if not math.isfinite(scale) or scale <= 0:
+            raise ValueError(f"scale for {key!r} must be finite and positive")
         x = float(simulated.get(key, math.nan))
         if not math.isfinite(x):
             return math.inf
-        total += ((x - value) / scales[key]) ** 2
-    return math.sqrt(total)
+        # hypot avoids overflow for large, finite scaled discrepancies.
+        difference = x - value
+        discrepancy = (
+            difference / scale
+            if math.isfinite(difference)
+            else x / scale - value / scale
+        )
+        total = math.hypot(total, discrepancy)
+    return total
 
 
 def abc_rejection(
@@ -140,15 +160,31 @@ def abc_rejection(
 
     if not 0 < accept <= 1:
         raise ValueError("accept must be in (0, 1]")
+    if isinstance(samples, bool) or not isinstance(samples, int) or samples < 1:
+        raise ValueError("samples must be a positive integer")
+    if not priors or len({p.name for p in priors}) != len(priors):
+        raise ValueError("priors must have at least one parameter and unique names")
+    if not observed:
+        raise ValueError("observed must contain at least one summary")
+    # Fail before running an expensive simulator when observations are invalid.
+    distance(observed, observed, scales)
     names = tuple(p.name for p in priors)
     exponent = int(math.ceil(math.log2(max(samples, 2))))
     unit = qmc.Sobol(len(priors), scramble=True, rng=seed).random_base2(exponent)
     draws = np.column_stack([p.scale(unit[:, i]) for i, p in enumerate(priors)])
     settings = [dict(zip(names, values.tolist())) for values in draws]
     summaries = [dict(s) for s in mapper(simulate, settings)]
+    if len(summaries) != len(draws):
+        raise ValueError("mapper must return one summary per parameter set, in order")
     distances = np.array([distance(s, observed, scales) for s in summaries])
     keep = max(1, int(round(accept * len(draws))))
-    order = np.argsort(distances)[:keep]
+    finite = np.flatnonzero(np.isfinite(distances))
+    if len(finite) < keep:
+        raise ValueError(
+            f"need {keep} finite simulations for the requested acceptance fraction; "
+            f"only {len(finite)} of {len(draws)} succeeded"
+        )
+    order = finite[np.argsort(distances[finite])[:keep]]
     return Posterior(
         names,
         draws[order],

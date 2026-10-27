@@ -132,6 +132,7 @@ def register(category: str, name: str) -> Callable[[_M], _M]:
 
 def create(category: str, name: str, **params: Any) -> Module:
     """Instantiate a registered module; keyword arguments go to its parameters."""
+    _load_builtins()
     try:
         factory = REGISTRY[category][name]
     except KeyError:
@@ -145,6 +146,8 @@ def create(category: str, name: str, **params: Any) -> Module:
 def available(category: str | None = None) -> dict[str, list[str]]:
     """Return registered module names, per category."""
     _load_builtins()
+    if category is not None and category not in CATEGORIES:
+        raise ValueError(f"unknown category {category!r}")
     categories = [category] if category else list(CATEGORIES)
     return {c: sorted(REGISTRY[c]) for c in categories}
 
@@ -176,6 +179,10 @@ class ModuleChoice:
     name: str
     params: Mapping[str, Any] = field(default_factory=dict)
 
+    def __post_init__(self) -> None:
+        # A caller's override dictionary must not mutate an existing config.
+        object.__setattr__(self, "params", dict(self.params))
+
 
 @dataclass(frozen=True)
 class HumanConfig:
@@ -185,22 +192,34 @@ class HumanConfig:
     module with everything else held constant.
     """
 
-    eyes: ModuleChoice = ModuleChoice("main_sequence")
-    vision: ModuleChoice = ModuleChoice("foveated")
-    objects: ModuleChoice = ModuleChoice("eccentricity_noise")
-    attention: ModuleChoice = ModuleChoice("uncertainty_sampler")
-    memory: ModuleChoice = ModuleChoice("act_r")
-    proprioception: ModuleChoice = ModuleChoice("spindle")
-    motor: ModuleChoice = ModuleChoice("ffitts_min_jerk")
-    estimator: ModuleChoice = ModuleChoice("lane_kalman")
-    hearing: ModuleChoice = ModuleChoice("psychoacoustic")
-    touch: ModuleChoice = ModuleChoice("vibrotactile")
-    vestibular: ModuleChoice = ModuleChoice("subjective_vertical")
-    response: ModuleChoice = ModuleChoice("twin")
-    fatigue: ModuleChoice = ModuleChoice("three_compartment")
-    affect: ModuleChoice = ModuleChoice("appraisal")
-    risk: ModuleChoice = ModuleChoice("risk_field")
-    trust: ModuleChoice = ModuleChoice("decision_field")
+    eyes: ModuleChoice = field(default_factory=lambda: ModuleChoice("main_sequence"))
+    vision: ModuleChoice = field(default_factory=lambda: ModuleChoice("foveated"))
+    objects: ModuleChoice = field(
+        default_factory=lambda: ModuleChoice("eccentricity_noise")
+    )
+    attention: ModuleChoice = field(
+        default_factory=lambda: ModuleChoice("uncertainty_sampler")
+    )
+    memory: ModuleChoice = field(default_factory=lambda: ModuleChoice("act_r"))
+    proprioception: ModuleChoice = field(
+        default_factory=lambda: ModuleChoice("spindle")
+    )
+    motor: ModuleChoice = field(default_factory=lambda: ModuleChoice("ffitts_min_jerk"))
+    estimator: ModuleChoice = field(default_factory=lambda: ModuleChoice("lane_kalman"))
+    hearing: ModuleChoice = field(
+        default_factory=lambda: ModuleChoice("psychoacoustic")
+    )
+    touch: ModuleChoice = field(default_factory=lambda: ModuleChoice("vibrotactile"))
+    vestibular: ModuleChoice = field(
+        default_factory=lambda: ModuleChoice("subjective_vertical")
+    )
+    response: ModuleChoice = field(default_factory=lambda: ModuleChoice("twin"))
+    fatigue: ModuleChoice = field(
+        default_factory=lambda: ModuleChoice("three_compartment")
+    )
+    affect: ModuleChoice = field(default_factory=lambda: ModuleChoice("appraisal"))
+    risk: ModuleChoice = field(default_factory=lambda: ModuleChoice("risk_field"))
+    trust: ModuleChoice = field(default_factory=lambda: ModuleChoice("decision_field"))
 
     def replace(self, category: str, name: str, **params: Any) -> HumanConfig:
         """Return a copy with one category swapped."""

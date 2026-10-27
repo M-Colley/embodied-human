@@ -8,6 +8,7 @@ the window is repeated. The standard prescribes no baseline response time.
 
 from __future__ import annotations
 
+import math
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 from typing import Any
@@ -22,6 +23,22 @@ class DRTConfig:
     interval: tuple[float, float] = (3.0, 5.0)
     duration: float = 1.0
     window: tuple[float, float] = (0.1, 2.5)
+
+    def __post_init__(self) -> None:
+        if (
+            len(self.interval) != 2
+            or not all(math.isfinite(x) for x in self.interval)
+            or not 0 < self.interval[0] <= self.interval[1]
+        ):
+            raise ValueError("interval must contain finite, positive ordered bounds")
+        if (
+            len(self.window) != 2
+            or not all(math.isfinite(x) for x in self.window)
+            or not 0 <= self.window[0] < self.window[1] < self.interval[0]
+        ):
+            raise ValueError("response window must end before the next stimulus")
+        if not math.isfinite(self.duration) or not 0 < self.duration <= self.window[1]:
+            raise ValueError("duration must be positive and within the response window")
 
 
 @dataclass
@@ -76,29 +93,33 @@ class DRTTask:
 
     def step(self, time: float) -> bool:
         """Advance the schedule; return whether the stimulus is on."""
-        low, high = self.config.window
-        if self._onset is not None and time - self._onset > high:
-            if not self._responded:
-                self.result.misses += 1
-            self._onset = None
-        if (
-            self.on
-            and self._onset is not None
-            and time - self._onset >= self.config.duration
-        ):
+        if not math.isfinite(time):
+            raise ValueError("time must be finite")
+        _, high = self.config.window
+        # Process every scheduled stimulus even when the caller skips frames.
+        while True:
+            if self._onset is not None and time - self._onset > high:
+                if not self._responded:
+                    self.result.misses += 1
+                self._onset = None
+                self.on = False
+            if self._onset is None and time >= self._next:
+                self._onset = self._next
+                self.result.onsets.append(self._onset)
+                self._responded = False
+                self.on = True
+                self._next = self._onset + self.rng.uniform(*self.config.interval)
+                continue
+            break
+        if self._onset is not None and time - self._onset >= self.config.duration:
             self.on = False
-        if self._onset is None and time >= self._next:
-            self._onset = self._next
-            self.result.onsets.append(self._onset)
-            self._responded = False
-            self.on = True
-            self._next = self._onset + self.rng.uniform(*self.config.interval)
         return self.on
 
     def respond(self, time: float) -> str:
         """Classify a response at ``time``."""
+        self.step(time)
         low, high = self.config.window
-        if self._onset is None or time - self._onset > high:
+        if self._onset is None or time < self._onset:
             return "false_alarm"
         latency = time - self._onset
         if latency < low:
