@@ -233,6 +233,8 @@ to be fitted or replaced, and the benchmark tells you which matter.
   - The log keeps the vehicle's motion for the vestibular module, so the
     same run predicts motion sickness.
 
+`BodySensing` composes head motion with the vehicle motion at the head's centre of mass. The calculation includes angular acceleration, centripetal acceleration, Coriolis acceleration and relative head acceleration. The configured seat offset locates the vehicle reference point. Install myosuite-carla 0.1.1 or newer alongside this package for driving. `examples/validate_head_kinematics.py` compares the earlier approximation with the corrected calculation and checks a seeded replay.
+
 ## Simulated participants, inference and studies
 
 ```python

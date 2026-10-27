@@ -9,6 +9,26 @@ The original failure was reproduced on Ubuntu 24.04 with Python 3.12.3, NumPy 2.
 The hosted benchmark workflow failed because its comparison against `9d38317` retained the seven core metric regressions and two declaration changes already documented in the failure audit. Its original [reports, summary, comparison context and dependency records](evidence/ci-audit-core/) are preserved before the hosted artifact expires. The new correction uses `d4eaf21` as the push baseline. All 41 core metric values exactly match the corrected baseline locally. The strict regression, missing coverage, skip and declaration gates remain active. A manual comparison against the older scientific model revision still reports the documented differences.
 
 The failed hosted runs are [tests](https://github.com/M-Colley/embodied-human/actions/runs/40518585560) and [benchmarks](https://github.com/M-Colley/embodied-human/actions/runs/40518585599). The new hosted run must verify the correction across Linux Python 3.10, 3.12 and 3.14, both optional integration jobs, and the matched core benchmark job.
+## 2026-10-27, rotational head kinematics
+
+Version 0.1.1 computes head acceleration at the head centre of mass. The calculation composes vehicle reference acceleration, tangential acceleration, centripetal acceleration, Coriolis acceleration and relative head acceleration. The configured seat offset locates the vehicle reference point. `VehicleMotion.acceleration_at` in myosuite-carla supplies the shared calculation. The driving extra requires myosuite-carla 0.1.1 or newer.
+
+Analytic tests cover constant yaw, angular acceleration, head centre of mass offset, seat offset, relative translation, relative acceleration and head rotation. The combined bridge and human analytic set reports 16 passed. Minimum MuJoCo 3.6 vehicle motion checks report 10 passed. The final isolated package suite reports **452 passed and 24 optional tests skipped** ([output](evidence/rotating-head-2026-10-27-suite.txt), [JUnit](evidence/rotating-head-2026-10-27-suite.xml)). Ruff, mypy across 60 source files and both distribution builds pass.
+
+The numerical environment uses Windows, Python 3.12.13, NumPy 2.5.4, SciPy 1.17.1 and MuJoCo 3.17.0. The final suite follows the contact geometry correction at main `ff631bf40a8feaee653966cdde6cd032ad3d1495`. The earlier isolated suite at `d4eaf219` passed 450 tests and skipped 24. MyoSuite uses current dev `230f198458b501c423a0892b78da60419ffc49a3` with the fatigue reset correction in `37c8b863fe448f8fff2b29eb62a53a269b79d16f`. The bridge source includes the accompanying footprint and shared source grouping corrections. The [environment record](evidence/rotating-head-2026-10-27-environment.json) retains dependency versions and source hashes. An isolated worktree excludes unrelated concurrent edits from these results.
+
+The seeded 60 second `driving.surt_glances` comparison preserves every gaze metric and its existing empirical failure. Predicted motion sickness changes from 0.004700732733718765% to 0.004700891359970552%. The corrected replay is identical. The [comparison](evidence/rotating-head-2026-10-27-benchmark.json) retains before, after and replay results. Parameter defaults, reference values and validation roles retain the benchmark audit revision.
+
+Commands from the isolated package worktree:
+
+```powershell
+$env:PYTHONPATH = (Resolve-Path '../myosuite-dev-review').Path
+../myosuite-carla/.venv/Scripts/python.exe -m pytest tests -q --junitxml=test-results/rotating-head-suite.xml
+../myosuite-carla/.venv/Scripts/python.exe -m ruff check src tests examples
+../myosuite-carla/.venv/Scripts/python.exe -m mypy src/embodied_human --ignore-missing-imports
+../myosuite-carla/.venv/Scripts/python.exe examples/validate_head_kinematics.py
+../myosuite-carla/.venv/Scripts/python.exe -m build
+```
 
 ## 2026-10-27, benchmark failure audit
 
