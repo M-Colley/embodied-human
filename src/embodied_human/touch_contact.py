@@ -286,24 +286,26 @@ class ContactMapTouch(VibrotactileTouch):
     def _sample_geom(
         self, model: Any, mujoco: Any, geom_id: int
     ) -> tuple[np.ndarray, np.ndarray | None]:
-        kind, size = model.geom_type[geom_id], model.geom_size[geom_id]
+        # Native enum equality with NumPy scalars can depend on operand order
+        # and platform. Compare Python integer codes throughout dispatch.
+        kind, size = int(model.geom_type[geom_id]), model.geom_size[geom_id]
         spacing, limit = self.params.sensor_spacing, self.params.max_sensors_per_body
         geom = mujoco.mjtGeom
-        if kind == geom.mjGEOM_BOX:
+        if kind == int(geom.mjGEOM_BOX):
             return box_points(spacing, size, limit)
-        if kind == geom.mjGEOM_SPHERE:
+        if kind == int(geom.mjGEOM_SPHERE):
             return sphere_points(spacing, np.repeat(size[0], 3), limit)
-        if kind == geom.mjGEOM_ELLIPSOID:
+        if kind == int(geom.mjGEOM_ELLIPSOID):
             return sphere_points(spacing, size, limit)
-        if kind in (geom.mjGEOM_CAPSULE, geom.mjGEOM_CYLINDER):
+        if kind in (int(geom.mjGEOM_CAPSULE), int(geom.mjGEOM_CYLINDER)):
             return cylinder_points(
                 spacing,
                 2 * size[1],
                 size[0],
                 limit,
-                capsule=kind == geom.mjGEOM_CAPSULE,
+                capsule=kind == int(geom.mjGEOM_CAPSULE),
             )
-        if kind == geom.mjGEOM_MESH:
+        if kind == int(geom.mjGEOM_MESH):
             mesh_id = model.geom_dataid[geom_id]
             start, count = model.mesh_vertadr[mesh_id], model.mesh_vertnum[mesh_id]
             if count > limit:

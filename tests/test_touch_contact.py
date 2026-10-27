@@ -1,6 +1,7 @@
 import math
 import subprocess
 import sys
+from types import SimpleNamespace
 
 import numpy as np
 import pytest
@@ -170,6 +171,46 @@ def test_mimo_primitive_maps_follow_existing_geom_pose_and_surface(kind, size):
     np.testing.assert_allclose(on_surface, 1)
     assert reading.contacts == ()
     np.testing.assert_equal(reading.sensor_forces["skin"], 0)
+
+
+@pytest.mark.parametrize("kind", ["mjGEOM_CAPSULE", "mjGEOM_CYLINDER"])
+def test_primitive_dispatch_handles_asymmetric_native_enum_equality(kind):
+    # Some MuJoCo bindings accept Python ints in enum.__eq__ but return
+    # False for NumPy integers. Tuple membership calls the enum's equality
+    # first, unlike the NumPy scalar comparisons in the other branches.
+    class IntegerEnum:
+        def __init__(self, value):
+            self.value = value
+
+        def __int__(self):
+            return self.value
+
+        def __eq__(self, other):
+            if isinstance(other, IntegerEnum):
+                return self.value == other.value
+            return type(other) is int and self.value == other
+
+    enums = SimpleNamespace(**{
+        name: IntegerEnum(value) for name, value in (
+            ("mjGEOM_SPHERE", 2), ("mjGEOM_CAPSULE", 3),
+            ("mjGEOM_ELLIPSOID", 4), ("mjGEOM_CYLINDER", 5),
+            ("mjGEOM_BOX", 6), ("mjGEOM_MESH", 7),
+        )
+    })
+    native = getattr(enums, kind)
+    scalar = np.int32(int(native))
+    assert scalar == native
+    assert not native == scalar
+    assert scalar not in (enums.mjGEOM_CAPSULE, enums.mjGEOM_CYLINDER)
+    model = SimpleNamespace(
+        geom_type=np.array([scalar]), geom_size=np.array([[0.03, 0.06, 0.0]]),
+    )
+    points, normals = ContactMapTouch()._sample_geom(
+        model, SimpleNamespace(mjtGeom=enums), 0,
+    )
+    expected_half_height = 0.09 if kind == "mjGEOM_CAPSULE" else 0.06
+    assert np.abs(points[:, 2]).max() == pytest.approx(expected_half_height)
+    np.testing.assert_allclose(np.linalg.norm(normals, axis=1), 1.0)
 
 
 def test_existing_mesh_vertices_and_numeric_body_ids_are_supported():

@@ -1,0 +1,8 @@
+{
+  "head_sha": "d4eaf219d453f5e2ea518414b4645a9807db1fac",
+  "base_sha": "9d38317ec9f0e07c5a393212ab5d8fae210f5ac8",
+  "baseline_selection": "commit before this push",
+  "seed": 0,
+  "profile": "core",
+  "comparison": "same runner, Python interpreter and dependency installation"
+}
