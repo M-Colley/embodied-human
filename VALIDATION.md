@@ -2,6 +2,16 @@
 
 ## Physical closed loop calibration on 2026-10-28
 
+The physical calibration completed 141 full episodes without a collision, road departure, numerical failure, or incomplete window. Validation selected candidate 3. Its validation objective decreased from 1.23025 to 1.12046. On the six fresh test tracks, normalized trajectory MSE increased from 1.03338 to 1.16906 (13.13%). The paired change was +0.13568 (95% bootstrap interval [−0.02073, 0.30352]). The interval includes zero. The predeclared acceptance rule rejected the candidate. Model defaults remain unchanged.
+
+| Test metric | Baseline | Fitted candidate |
+| --- | --- | --- |
+| Mean source speed RMSE | 0.98997 m/s | 1.03742 m/s |
+| Mean source bumper gap RMSE | 4.44644 m | 4.95188 m |
+| Mean source acceleration RMSE | 0.99246 m/s² | 1.00335 m/s² |
+
+The [summary](evidence/closed-loop-calibration-2026-10-28/summary.json) retains the measured outcome and file hashes. The [report archive](evidence/closed-loop-calibration-2026-10-28/reports.zip) contains all 141 episodes, candidate draws, objective calls, validation scores, source exclusions, exact code, and provenance. The [comparison figure](evidence/closed-loop-calibration-2026-10-28/closed-loop-comparison.png) shows all six test pairs. The design and source code were [published](https://github.com/M-Colley/embodied-human/commit/cbb05bf934005e25dff01af9023bcfa5b9446cb2) before test evaluation. The [bridge source](https://github.com/M-Colley/myosuite-carla/commit/c09b2cf0882e27cb3e9141cff33afb1655b32213) was also published before that stage. Runtime source hashes remained identical throughout execution. An independent calculation reproduced all training and validation distances, the selected candidate, and the paired test interval.
+
 The calibration objective now runs the complete attentive driver, MyoSuite body, and fitted vehicle surrogate for every parameter candidate. Recorded leader motion drives the scene. Recorded follower speed and gap initialize the episode. Subsequent follower motion comes from the model. The physical protocol reuses one body and caches exact parameter, source, trial, and simulation seed combinations.
 
 The experiment excludes all 96 tracks inspected in the previous empirical campaign and one additional track used for a runtime measurement. A seeded selection supplies 15 fresh tracks. Six train the candidate, three select it, and six evaluate it. These assignments, priors, normalization constants, and acceptance criteria are written before physical execution. Each source contributes one complete 20 second window. The fit seed is 17. The evaluation seed is 117. Source specific seeds derive from the source identity and trial index.
@@ -13,6 +23,8 @@ The primary objective averages squared normalized RMSE across speed, bumper gap,
 The physical experiment uses the fitted CARLA 0.10 Nissan Patrol surrogate. Recorded NGSIM vehicles have heterogeneous dynamics. Fitted controller values can absorb vehicle and actuator mismatch. The experiment uses one training seed and one distinct evaluation seed. Additional independent tracks and repeated simulation seeds are required to assess generalization. Live CARLA validation remains a separate requirement.
 
 The complete human suite passed 541 tests and skipped 24 optional tests in 87.13 seconds. The complete bridge suite passed 454 tests and skipped four live tests in 118.06 seconds. Ruff and mypy passed for both packages. Mypy checked 67 human source files and 24 bridge source files. Focused tests cover source exclusions, seed and cache identities, infeasible episodes, matched scoring, fixed partitions, single source acceptance guards, and preservation of existing evidence.
+
+Wheel and source builds passed for both packages. Hosted human tests and the matched core benchmark comparison passed for source revision `cbb05bf`. Hosted bridge integration and all Linux and Windows jobs passed for source revision `c09b2cf`. The opt in live job remained skipped. The source distributions retain the new examples and evidence. NGSIM attribution and its recorded CC BY-SA 3.0 licence are retained in the report archive and summary.
 
 Commands ran from `myosuite-carla`:
 
