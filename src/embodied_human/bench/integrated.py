@@ -77,7 +77,7 @@ def surt_glances(human: Human, seconds: float = 60.0, speed: float = 20.0) -> Re
     result.score_against(
         "driving.human_long_glance_share", metrics["long_glance_share"]
     )
-    assert agent.task is not None
+    assert isinstance(agent.task, SuRTTask)
     result.details = {
         **metrics,
         "lane_offset_sd_m": float(np.std(offsets)),

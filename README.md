@@ -463,6 +463,53 @@ These comparisons provide research context. The included third party code is the
 - **Next benchmarks:**
   - Occlusion distance on highways: mean 15.5 m (Kujala et al., 2016).
 
+## Empirical driving data
+
+The empirical campaign imports six driving datasets and records their measurement coverage. Participant partitions precede fitting and aggregation. Calibration uses training participants. Validation participants select the candidate. Fresh simulation seeds evaluate the selected candidate on the locked test participants. Reports retain source checksums, configurations, missing observations, and paired source bootstrap intervals.
+
+| Dataset | Scientific role |
+| --- | --- |
+| [Lehtonen 2018](https://doi.org/10.6084/m9.figshare.5572636) | Fixed target gaze comparison with the actual attentive driver. The in vehicle conditions support a contextual attention fit. |
+| [RightGazeUrban](https://doi.org/10.5281/zenodo.20717040) | Coded gaze allocation during test track turns. The existing SEEV model supplies contextual area probabilities. |
+| [ExpertDrivingDataset](https://doi.org/10.6084/m9.figshare.29664056) | Urban telemetry and gaze references. Clock alignment, actuator calibration, and scene geometry remain required for a matched control comparison. |
+| [NGSIM](https://catalog.data.gov/dataset/next-generation-simulation-ngsim-vehicle-trajectories-and-supporting-data) | IDM acceleration comparison against recorded states, followed by an independent closed loop replay through the MyoSuite body. Groups identify vehicle tracks. |
+| [DriveDNA Controlled](https://huggingface.co/datasets/HenryYHW/DriveDNA-Controlled) | Participant grouped vehicle telemetry. Access requires the provider's approval and applicable research licence. |
+| [MPDB](https://doi.org/10.6084/m9.figshare.22192831.v3) | Event relative simulator EMG references. Units, anatomical correspondence, and amplitude normalization require verification before muscle force comparison. |
+
+Install the optional dependencies and enter local dataset paths in a copy of [the input registry](examples/driving_data_inputs.json). Paths are resolved relative to the registry file. The physical following evaluation requires MyoSuite from its development branch and the current source checkout of `myosuite-carla`. Install both before running the campaign. The bridge must provide `myosuite_carla.empirical_following`.
+
+```shell
+python -m pip install -e ".[empirical,driving]"
+python -m pip install -e ../myosuite-dev -e ../myosuite-carla
+python examples/evaluate_driving_data.py --inputs examples/driving_data_inputs.json --out artifacts/empirical-driving --fit --samples 64 --seconds 30 --max-following-groups 96 --closed-loop-trials 6
+```
+
+The command attempts every dataset and saves a separate report for each source. Missing access leaves the campaign partial and returns exit code 2. Processing failures return exit code 1. An evaluated report records computational completion. Its errors and coverage determine empirical adequacy. Candidate profiles retain their test regressions and remain separate from the package defaults.
+
+Profiles preserve the human, attentive driver, and reflex settings together. `driving_profiles.resolve_profile(report, context=...)` restores the selected parameters for an explicitly matching task context. Its resolved object provides `build_human`, `make_driver_parameters`, and `make_reflex_config`. The profile retains its fitted provenance alongside the original baseline source labels. [VALIDATION.md](VALIDATION.md) records the measured campaign outcomes.
+
+### Physical closed loop calibration
+
+The actuation comparison evaluates a correction to the physical acceleration interface. Its three fixed configurations separate the actuator correction from the IDM parameter fit. The command selects a configuration on previously inspected development sources and evaluates it once on fresh test sources. Each worker owns one CPU body and vehicle. Reports preserve the complete controller configuration for profile application and verified video replay.
+
+The completed comparison selected corrected actuation with default IDM on 32 development sources. The independent test used 24 fresh source tracks and two matched seeds. Mean normalized trajectory error decreased from 0.7686 to 0.6987. The paired source change was −0.0699 (95% bootstrap CI [−0.1655, 0.0212]). Speed and acceleration RMSE decreased, while gap RMSE increased. The result remains inconclusive, and package defaults remain unchanged. [The retained evidence](evidence/actuation-improvement-2026-10-28/summary.json) includes the experimental profile and an archive of all 192 episodes, source windows, configurations, and checks.
+
+Actuator settings change the physical trajectories scored during human parameter fitting. Calibrate the vehicle and pedal interface before estimating following parameters. Profiles must retain the complete controller and vehicle configuration. The attentive driver estimates lateral state and supplies exact longitudinal telemetry to the reflex controller. At a 0.02 s timestep, the study's 0.02 s reflex history setting adds zero history lag. The [bridge integration contract](https://github.com/M-Colley/myosuite-carla/blob/e849e9afa0b0bea820cca89477218d2fb664fe9a/COMPATIBILITY.md#acceleration-control-and-empirical-profiles) records these assumptions and the configuration restoration API. Speed, gap and acceleration errors remain separate acceptance evidence.
+
+```shell
+python examples/evaluate_actuation_improvement.py --source ../myosuite-carla/artifacts/ngsim/ngsim-i80-cars.csv --component-report ../myosuite-carla/evidence/empirical-driving-2026-10-28/ngsim.json --development-report ../myosuite-carla/evidence/empirical-driving-2026-10-28/ngsim.json --development-report ../myosuite-carla/artifacts/closed-loop-calibration-2026-10-28/run/fullreport.json --development-report ../myosuite-carla/artifacts/closed-loop-benchmark.json --out artifacts/actuation-improvement
+```
+
+The closed loop calibration scores trajectories generated by the attentive driver, MyoSuite muscles, and vehicle surrogate for every candidate. Recorded follower speed and gap initialize each episode. The model generates the subsequent follower motion. Recorded leader trajectories supply the traffic input.
+
+```shell
+python examples/calibrate_closed_loop_following.py --source ../myosuite-carla/artifacts/ngsim/ngsim-i80-cars.csv --exclude-report ../myosuite-carla/evidence/empirical-driving-2026-10-28/ngsim.json --out artifacts/closed-loop-calibration
+```
+
+The default pilot uses 16 Sobol candidates, six training tracks, three validation tracks, and six test tracks. Earlier inspected source tracks are excluded before selection. The command writes the fixed design before simulation and records objective calls as they finish. Each candidate uses complete 20 second episodes. The normalized objective includes speed, bumper gap, and acceleration errors with fixed scales of 1 m/s, 5 m, and 1 m/s². Collisions, road departures, incomplete windows, and numerical failures make the candidate infeasible. A source paired bootstrap evaluates the selected candidate against the baseline. Contextual acceptance requires safe and complete test pairs with a 95% upper error change below zero. Global defaults retain their original values.
+
+The fitted parameters describe the complete model and the Nissan Patrol surrogate under these conditions. Vehicle differences in NGSIM can affect those estimates. Sixteen draws and one evaluation seed provide a pilot. Larger source samples and repeated simulation seeds are needed for population parameter inference.
+
 ## Development
 
 ```bash

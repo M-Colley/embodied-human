@@ -1,5 +1,137 @@
 # Validation
 
+## Actuator correction and independent evaluation on 2026-10-28
+
+The corrected actuator interface reduced mean test normalized trajectory MSE from 0.7686406859 to 0.6987135337 (9.10%). The paired change was −0.0699271523 (95% source bootstrap interval [−0.1654942475, 0.02120664355]). The interval includes zero. The result is `inconclusive_contextual_candidate`. Global defaults remain unchanged.
+
+| Mean source test metric | Legacy actuator interface | Corrected actuator interface |
+| --- | --- | --- |
+| Speed RMSE | 0.88229290 m/s | 0.83071484 m/s |
+| Bumper gap RMSE | 3.41394387 m | 3.59434404 m |
+| Acceleration RMSE | 0.85608742 m/s² | 0.75578731 m/s² |
+
+The experiment compared three fixed configurations on 32 development tracks sampled from the 112 previously inspected tracks. Arm A used legacy actuation and the baseline IDM. Arm B used the vehicle inverse and measured pedal feedback with the same IDM parameters. Arm C combined corrected actuation with the earlier component IDM fit. Development objective values were 1.03503493, 1.00556169, and 1.10160000, respectively. Development selection therefore chose B. The selected configuration was stored before test jobs began.
+
+The independent test used 24 fresh tracks outside all 112 inspected identities. Each track had one complete 20 second window and two common simulation seeds (117 and 118). The test contained 48 matched seed pairs and 96 physical episodes. Development contributed 96 episodes. All 192 episodes completed without collision, road departure, numerical failure, or incomplete coverage. Each worker reused one 114 muscle MyoSuite body. All worker protocols and surrogate vehicles were closed after execution.
+
+The primary score first averages metric RMSE across seeds within each source. It then squares normalized errors across speed, bumper gap, and acceleration. The fixed normalization scales remain 1 m/s, 5 m, and 1 m/s². Sources receive equal weights. The paired source bootstrap uses 5,000 resamples. Complete safe pairs and an upper 95% error change below zero are required for contextual acceptance. An independent audit reproduced all development distances, the selected arm, every episode RMSE, and the test interval.
+
+The engineering reference grid contained nine conditions per interface (18 trials). Initial speeds were 5, 10, and 15 m/s. Acceleration demands were −1, 0, and +1 m/s². Both interfaces were scored at common times after two seconds. Feasible reference acceleration becomes zero after the reference vehicle stops. Mean reference grid tracking RMSE decreased from 0.54323634 to 0.08542668 m/s². This metric was computed from the 18 saved traces after physical execution. The traces remained unchanged. This consistency check uses the same fitted vehicle model for inverse control and simulation.
+
+The comparison design was fixed before its simulation calls. Development selection was written at 16:17:36 UTC. Test workers started at approximately 16:17:37 UTC. Human source revision `e938e90b7d38638fe2c588e5e7f7a6621e41eec2` and bridge source revision `d545099dd1766c0f044cab74810620ff39e0381c` were committed at 16:17:46 UTC. The first completed test result was written at 16:17:47 UTC. The source commits occurred during the transition to testing. Runtime model source hashes remained unchanged throughout execution.
+
+The [fixed design](evidence/actuation-improvement-2026-10-28/design.json) and [study evidence archive](evidence/actuation-improvement-2026-10-28/study-evidence.zip) retain source assignments, configurations, all episodes, selection records, commands, and provenance. The local montage is `../myosuite-carla/artifacts/actuation-improvement-videos/held-out-trials.mp4`. Its two illustrative sources, `ngsim:1136:2` and `ngsim:1193:2`, were chosen by ascending test source identifier. These videos show verified offline replays.
+
+The completed full suites passed 513 bridge tests with four live tests skipped and 561 human tests with 24 optional tests skipped. Ten targeted tracking and video checks also passed. Ruff and mypy passed for both packages. Formatting checks passed for the changed Python files. Wheel and source builds passed. The environment used Python 3.12.13, MuJoCo 3.17.0, NumPy 2.5.4, and SciPy 1.17.1. MyoSuite used development revision `37c8b863fe448f8fff2b29eb62a53a269b79d16f`.
+
+The longitudinal controller receives exact vehicle telemetry in this experiment. The human estimator covers lateral state. Recorded vehicles differ from the fitted Nissan Patrol surrogate. Perception error, vehicle heterogeneity, and broader driving conditions require further evaluation. Live CARLA validation of this correction remains pending.
+
+The configured reflex delay was 0.02 s at a 0.02 s control timestep. The history stores `max(1, round(perception_delay / dt))` observations and appends the current observation before reading its oldest entry. This setting adds zero history lag. The preserved timing is relevant when interpreting human response times.
+
+Hosted CI passed for the final evidence commits. [Bridge CI at `fedb997`](https://github.com/M-Colley/myosuite-carla/actions/runs/40729055945) passed its offline and integration jobs. [Human tests at `db886b3`](https://github.com/M-Colley/embodied-human/actions/runs/40729056025) and the [matched core benchmarks](https://github.com/M-Colley/embodied-human/actions/runs/40729056192) passed. The bridge live job was skipped.
+
+Commands ran from the standalone `myosuite-carla` repository:
+
+```powershell
+$env:PYTHONPATH = (Resolve-Path '../embodied-human/src').Path + [IO.Path]::PathSeparator + (Resolve-Path '../myosuite-dev-review').Path
+.venv/Scripts/python.exe examples/check_acceleration_tracking.py --out artifacts/actuation-improvement-2026-10-28/acceleration-tracking.json
+.venv/Scripts/python.exe ../embodied-human/examples/evaluate_actuation_improvement.py --source artifacts/ngsim/ngsim-i80-cars.csv --component-report evidence/empirical-driving-2026-10-28/ngsim.json --development-report evidence/empirical-driving-2026-10-28/ngsim.json --development-report artifacts/closed-loop-calibration-2026-10-28/run/fullreport.json --development-report artifacts/closed-loop-benchmark.json --out artifacts/actuation-improvement-2026-10-28/run --development-sources 32 --test-sources 24 --seed 20261029 --development-seed 17 --test-seeds 117 118 --seconds 20 --desired-speed 16 --bootstrap 5000 --workers 3
+.venv/Scripts/python.exe examples/record_empirical_trials.py --source artifacts/ngsim/ngsim-i80-cars.csv --report artifacts/actuation-improvement-2026-10-28/run/fullreport.json --out artifacts/actuation-improvement-videos --groups ngsim:1136:2 ngsim:1193:2 --base-seed 117
+.venv/Scripts/python.exe -m pytest tests -q
+.venv/Scripts/python.exe -m pytest ../embodied-human/tests -q
+```
+
+
+## Physical closed loop calibration on 2026-10-28
+
+The physical calibration completed 141 full episodes without a collision, road departure, numerical failure, or incomplete window. Validation selected candidate 3. Its validation objective decreased from 1.23025 to 1.12046. On the six fresh test tracks, normalized trajectory MSE increased from 1.03338 to 1.16906 (13.13%). The paired change was +0.13568 (95% bootstrap interval [−0.02073, 0.30352]). The interval includes zero. The predeclared acceptance rule rejected the candidate. Model defaults remain unchanged.
+
+| Test metric | Baseline | Fitted candidate |
+| --- | --- | --- |
+| Mean source speed RMSE | 0.98997 m/s | 1.03742 m/s |
+| Mean source bumper gap RMSE | 4.44644 m | 4.95188 m |
+| Mean source acceleration RMSE | 0.99246 m/s² | 1.00335 m/s² |
+
+The [summary](evidence/closed-loop-calibration-2026-10-28/summary.json) retains the measured outcome and file hashes. The [report archive](evidence/closed-loop-calibration-2026-10-28/reports.zip) contains all 141 episodes, candidate draws, objective calls, validation scores, source exclusions, exact code, and provenance. The [comparison figure](evidence/closed-loop-calibration-2026-10-28/closed-loop-comparison.png) shows all six test pairs. The design and source code were [published](https://github.com/M-Colley/embodied-human/commit/cbb05bf934005e25dff01af9023bcfa5b9446cb2) before test evaluation. The [bridge source](https://github.com/M-Colley/myosuite-carla/commit/c09b2cf0882e27cb3e9141cff33afb1655b32213) was also published before that stage. Runtime source hashes remained identical throughout execution. An independent calculation reproduced all training and validation distances, the selected candidate, and the paired test interval.
+
+The calibration objective now runs the complete attentive driver, MyoSuite body, and fitted vehicle surrogate for every parameter candidate. Recorded leader motion drives the scene. Recorded follower speed and gap initialize the episode. Subsequent follower motion comes from the model. The physical protocol reuses one body and caches exact parameter, source, trial, and simulation seed combinations.
+
+The experiment excludes all 96 tracks inspected in the previous empirical campaign and one additional track used for a runtime measurement. A seeded selection supplies 15 fresh tracks. Six train the candidate, three select it, and six evaluate it. These assignments, priors, normalization constants, and acceptance criteria are written before physical execution. Each source contributes one complete 20 second window. The fit seed is 17. The evaluation seed is 117. Source specific seeds derive from the source identity and trial index.
+
+Sixteen Sobol draws explore four IDM parameters. The assumed search ranges are 0.6 to 2.6 seconds for time headway, 0.5 to 4 m for minimum gap, 0.5 to 2 m/s² for maximum acceleration, and 0.8 to 3 m/s² for comfortable deceleration. Desired speed remains 16 m/s. The baseline competes with the four accepted draws on validation data. This finite search supplies a contextual calibration pilot. Accepted draw intervals describe the search. Human parameter uncertainty remains unevaluated.
+
+The primary objective averages squared normalized RMSE across speed, bumper gap, and acceleration. The fixed scales are 1 m/s, 5 m, and 1 m/s². These scales are assumed normalization constants. Trial RMSE is averaged within each source before normalization and squaring. Sources receive equal weights. A collision, road departure, numerical failure, or incomplete episode makes a candidate infeasible. Contextual acceptance requires complete safe test pairs and a paired source bootstrap upper 95% error change below zero. The bootstrap uses 2,000 resamples. All component errors remain visible. Global defaults retain their original values and citations.
+
+The physical experiment uses the fitted CARLA 0.10 Nissan Patrol surrogate. Recorded NGSIM vehicles have heterogeneous dynamics. Fitted controller values can absorb vehicle and actuator mismatch. The experiment uses one training seed and one distinct evaluation seed. Additional independent tracks and repeated simulation seeds are required to assess generalization. Live CARLA validation remains a separate requirement.
+
+The complete human suite passed 541 tests and skipped 24 optional tests in 87.13 seconds. The complete bridge suite passed 454 tests and skipped four live tests in 118.06 seconds. Ruff and mypy passed for both packages. Mypy checked 67 human source files and 24 bridge source files. Focused tests cover source exclusions, seed and cache identities, infeasible episodes, matched scoring, fixed partitions, single source acceptance guards, and preservation of existing evidence.
+
+Wheel and source builds passed for both packages. Hosted human tests and the matched core benchmark comparison passed for source revision `cbb05bf`. Hosted bridge integration and all Linux and Windows jobs passed for source revision `c09b2cf`. The opt in live job remained skipped. The source distributions retain the new examples and evidence. NGSIM attribution and its recorded CC BY-SA 3.0 licence are retained in the report archive and summary.
+
+Commands ran from `myosuite-carla`:
+
+```powershell
+$env:PYTHONPATH = (Resolve-Path '../embodied-human/src').Path + [IO.Path]::PathSeparator + (Resolve-Path '../myosuite-dev-review').Path
+.venv/Scripts/python.exe ../embodied-human/examples/calibrate_closed_loop_following.py --source artifacts/ngsim/ngsim-i80-cars.csv --out artifacts/closed-loop-calibration-2026-10-28/run --exclude-report evidence/empirical-driving-2026-10-28/ngsim.json --exclude-report artifacts/closed-loop-benchmark.json --samples 16 --train-sources 6 --validation-sources 3 --test-sources 6 --seconds 20 --trials-per-source 1 --seed 20261028 --fit-seed 17 --evaluation-seed 117 --accept 0.25 --bootstrap 2000 --desired-speed 16
+.venv/Scripts/python.exe -m pytest ../embodied-human/tests -q
+.venv/Scripts/python.exe -m pytest tests -q
+```
+
+## Empirical driving campaign on 2026-10-28
+
+Five public datasets completed processing. DriveDNA Controlled remains access pending after the provider returned HTTP 403 with `GatedRepo`. The owner confirmed that access is pending. All six adapters are implemented. The campaign exits with code 2 while access is pending. No dataset processing failure remains in the retained campaign.
+
+All three contextual fits were rejected after evaluation. Package defaults and their cited source labels remain unchanged. The rejection rule is a conservative post hoc release review. Test observations were never used to retune a candidate. A subsequent fit requires a new evaluation design because these test results have now been inspected.
+
+| Source | Coverage | Outcome |
+| --- | --- | --- |
+| Lehtonen 2018 | 14 participants after the authors' exclusions; 12 eligible for the in vehicle fixation protocol; partitions 7, 2, and 3 | Test mean glance duration MAE increased from 0.498 to 0.966 seconds. All three test metrics regressed. |
+| RightGazeUrban | 34 participants, 539 trials, and 1,109,163 aligned samples; partitions 20, 7, and 7 | Road allocation MAE decreased from 0.0603 to 0.0200. Rear mirror and right shoulder errors increased. The SEEV candidate was rejected. |
+| ExpertDrivingDataset | 20 participants, 280 CAN trials, and 609,597 vehicle samples; eye records from 8 participants | Telemetry and gaze references were computed. Clock alignment, actuator calibration, and matched scene geometry remain required for control comparison. |
+| NGSIM | 4,346 source tracks and 8,878 following windows; 96 seeded tracks selected before partitions of 58, 19, and 19 | Mean trial acceleration RMSE decreased from 2.823 to 1.348 m/s² against recorded states. Closed loop speed and gap errors increased. |
+| DriveDNA Controlled | Provider approval pending | Evaluation remains pending. |
+| MPDB | All 35 participants, 6,953 processed epochs, four channels, and 27,812 channel epochs | There were 10,457 detected, 649 left censored, and 16,706 right censored onsets. Anatomical channel correspondence and source units remain unverified. |
+
+The NGSIM physical comparison ran six paired 20 second held out leader replays through `AttentiveDriver`, one cached MyoSuite body with 114 muscles, and the fitted CARLA 0.10 Nissan Patrol surrogate. All 12 episodes completed without a collision or road departure. Speed RMSE increased from 0.8803 to 1.0177 m/s. Gap RMSE increased from 3.6497 to 4.5717 m. The paired source mean increase in speed RMSE was 0.1374 m/s (95% bootstrap interval [0.0133, 0.2789]). These runs used the offline surrogate. UE5.8 live validation remains pending.
+
+The fixation fit uses a fixed visual target task in the actual attentive driver. Target geometry is estimated from training participants. Its two degree area extent is an assumption. RightGaze fits the existing SEEV allocation component. Its coded areas retain the source ambiguity around zero event identifiers. MPDB reports event relative EMG onset with a trailing 50 ms RMS window, a baseline from −0.40 to −0.05 seconds, a median plus three scaled MAD threshold, and 50 ms sustained detection. Competing events and censoring are retained. Activation onset has no established mapping to reaction time or absolute muscle force.
+
+Original source groups remain intact through splitting, aggregation, paired comparison, and bootstrap resampling. Seeds are averaged within trials. Trials are averaged within source groups. Sources receive equal weights. The source groups in NGSIM identify vehicle tracks. Participant identifiers are unavailable there. Reports preserve the original observations, selected configurations, assumptions, checksums, and provenance. Profiles require an explicitly matching context. The original SuRT default trace remains identical over 3,000 seeded steps.
+
+The [evidence summary](evidence/empirical-driving-2026-10-28/summary.json) lists outcomes and retained file hashes. The [report archive](evidence/empirical-driving-2026-10-28/reports.zip) contains all six reports, the acquisition manifest, and the campaign manifest. It contains derived observations and configuration records. Bulk dataset files remain in the local artifact cache. The [paired replay figure](evidence/empirical-driving-2026-10-28/closed-loop-comparison.png) shows every physical trial. Dataset attribution and licences remain in the source reports.
+
+The environment used Python 3.12.13, NumPy 2.5.4, SciPy 1.17.1, pandas 3.0.6, and MuJoCo 3.17.0. MyoSuite used development base `230f198458b501c423a0892b78da60419ffc49a3` with fatigue correction `37c8b863fe448f8fff2b29eb62a53a269b79d16f`. The campaign records actual import paths and source hashes separately from installed distribution metadata. This distinguishes the `PYTHONPATH` development checkout from the installed MyoSuite checkout.
+
+The complete human suite passed 512 tests and skipped 24 optional tests in 116.49 seconds. The subsequent campaign provenance checks passed all 16 focused tests. The bridge suite passed 434 tests and skipped four live tests. Ruff, mypy, wheel builds, and source builds passed for both packages. The source distributions include the input registry, campaign examples, and retained evidence. The new task and empirical support preserve lazy optional imports.
+
+Commands ran from `myosuite-carla` with the local human and MyoSuite development sources:
+
+```powershell
+$env:PYTHONPATH = (Resolve-Path '../embodied-human/src').Path + [IO.Path]::PathSeparator + (Resolve-Path '../myosuite-dev-review').Path
+.venv/Scripts/python.exe ../embodied-human/examples/evaluate_driving_data.py --inputs artifacts/empirical-driving-2026-10-28/inputs.json --out artifacts/empirical-driving-2026-10-28/final --fit --samples 64 --seconds 30 --max-following-groups 96 --closed-loop-trials 6
+.venv/Scripts/python.exe -m pytest ../embodied-human/tests -q
+.venv/Scripts/python.exe -m pytest tests -q
+.venv/Scripts/python.exe ../embodied-human/examples/plot_driving_comparison.py artifacts/empirical-driving-2026-10-28/release/campaign-datasets/ngsim.json --out artifacts/empirical-driving-2026-10-28/closed-loop-comparison.png
+```
+
+The release evidence adds actual runtime import provenance. It reuses the completed fixation evaluation from the fresh campaign after checking its observations, contexts, source fingerprint, numerical dependencies, partitions, settings, and sample count. It reruns every other source and all 12 physical episodes. The evidence archive retains both the fresh fixation evaluation and the exact release command. No fitting data or parameter changed between these runs.
+
+## 2026-10-28, local rotating frame head sensing snapshot
+
+The local driving source composes head acceleration with vehicle rotation at the head centre of mass. Six analytic tests cover centripetal acceleration, the seat offset, Coriolis acceleration, relative acceleration, a rotating head centre of mass, and head orientation. The driving dependency requires myosuite-carla 0.1.1. This source was used for the live CARLA 0.10.0 recordings documented in [myosuite-carla](https://github.com/M-Colley/myosuite-carla/blob/70457a8b83041fd1d48ba04a14a00582d5179d3f/VALIDATION.md).
+
+The complete suite passed 452 tests and skipped 24 optional tests in 88.85 seconds ([output](evidence/rotating-head-local-2026-10-28-suite.txt), [JUnit](evidence/rotating-head-local-2026-10-28-suite.xml)). Tests loaded the source from the original local embodied-human checkout. The environment used Python 3.12.13, MuJoCo 3.17.0, NumPy 2.5.4, and MyoSuite development base `230f198458b501c423a0892b78da60419ffc49a3` with the fatigue correction in `37c8b863fe448f8fff2b29eb62a53a269b79d16f`. Ruff passed. Mypy passed all 60 source files. Wheel and source builds passed. The existing [head sensing PR](https://github.com/M-Colley/embodied-human/pull/1) contains the same model correction and its seeded benchmark comparison.
+
+Commands ran from the embodied-human repository:
+
+```powershell
+$env:PYTHONPATH = (Resolve-Path 'src').Path + [IO.Path]::PathSeparator + (Resolve-Path '../myosuite-dev-review').Path
+../myosuite-carla/.venv/Scripts/python.exe -m pytest tests -q --junitxml=../myosuite-carla/artifacts/embodied-human-live/human-final-snapshot-tests.xml
+../myosuite-carla/.venv/Scripts/python.exe -m ruff check src tests
+../myosuite-carla/.venv/Scripts/python.exe -m mypy src/embodied_human --ignore-missing-imports
+../myosuite-carla/.venv/Scripts/python.exe -m build
+```
+
 ## 2026-10-27, Linux contact geometry CI correction
 
 The hosted test workflow for `d4eaf21` failed in all five jobs on the capsule and cylinder contact map cases. MuJoCo 3.17.0 enum equality is asymmetric with NumPy integer scalars on Linux. `scalar == enum` returns true, while `enum == scalar` returns false. Tuple membership uses the latter comparison and therefore skipped both supported geometry types. Windows bindings accept both operand orders. Geometry dispatch now converts the model type and enum constants to Python integer codes. Two regression cases reproduce the Linux equality behavior on either platform. No module defaults or human reference ranges changed.
