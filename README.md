@@ -492,6 +492,8 @@ Profiles preserve the human, attentive driver, and reflex settings together. `dr
 
 The actuation comparison evaluates a correction to the physical acceleration interface. Its three fixed configurations separate the actuator correction from the IDM parameter fit. The command selects a configuration on previously inspected development sources and evaluates it once on fresh test sources. Each worker owns one CPU body and vehicle. Reports preserve the complete controller configuration for profile application and verified video replay.
 
+The completed comparison selected corrected actuation with default IDM on 32 development sources. The independent test used 24 fresh source tracks and two matched seeds. Mean normalized trajectory error decreased from 0.7686 to 0.6987. The paired source change was −0.0699 (95% bootstrap CI [−0.1655, 0.0212]). Speed and acceleration RMSE decreased, while gap RMSE increased. The result remains inconclusive, and package defaults remain unchanged. [The retained evidence](evidence/actuation-improvement-2026-10-28/summary.json) includes the experimental profile and an archive of all 192 episodes, source windows, configurations, and checks.
+
 ```shell
 python examples/evaluate_actuation_improvement.py --source ../myosuite-carla/artifacts/ngsim/ngsim-i80-cars.csv --component-report ../myosuite-carla/evidence/empirical-driving-2026-10-28/ngsim.json --development-report ../myosuite-carla/evidence/empirical-driving-2026-10-28/ngsim.json --development-report ../myosuite-carla/artifacts/closed-loop-calibration-2026-10-28/run/fullreport.json --development-report ../myosuite-carla/artifacts/closed-loop-benchmark.json --out artifacts/actuation-improvement
 ```
