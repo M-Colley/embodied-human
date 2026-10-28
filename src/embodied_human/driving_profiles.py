@@ -54,9 +54,11 @@ def _version(value: Mapping[str, Any]) -> None:
         raise ValueError("unsupported driving profile schema version")
 
 
-def _parameters(value: Any, name: str) -> dict[str, float]:
+def _parameters(
+    value: Any, name: str, *, allow_empty: bool = False
+) -> dict[str, float]:
     source = _mapping(value, name)
-    if not source or any(
+    if (not source and not allow_empty) or any(
         not key.strip() or isinstance(item, bool) or not isinstance(item, Real)
         for key, item in source.items()
     ):
@@ -111,18 +113,11 @@ class ResolvedDrivingProfile:
             raise ValueError(
                 "this profile does not specify a physical reflex controller"
             )
-        from myosuite_carla.driver_models import (
-            IdmConfig,
-            ReflexDriverConfig,
-            TwoPointSteeringConfig,
-        )
+        from myosuite_carla.driver_models import ReflexDriverConfig
 
         if "idm" in values:
             _validate_idm(values["idm"])
-            values["idm"] = IdmConfig(**values["idm"])
-        if "steering" in values:
-            values["steering"] = TwoPointSteeringConfig(**values["steering"])
-        return ReflexDriverConfig(**values)
+        return ReflexDriverConfig.from_dict(values)
 
     def fitted_provenance(self) -> list[dict[str, Any]]:
         """Return profile sources separately from module baseline citations."""
@@ -203,7 +198,9 @@ def resolve_profile(
         raise ValueError("unsupported fitted driving module")
     parameters = _parameters(profile.get("parameters"), "parameters")
     overrides = _parameters(
-        profile.get("parameter_overrides", parameters), "parameter_overrides"
+        profile.get("parameter_overrides", parameters),
+        "parameter_overrides",
+        allow_empty=True,
     )
     if any(
         name not in parameters or parameters[name] != value
