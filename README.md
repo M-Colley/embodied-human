@@ -463,6 +463,31 @@ These comparisons provide research context. The included third party code is the
 - **Next benchmarks:**
   - Occlusion distance on highways: mean 15.5 m (Kujala et al., 2016).
 
+## Empirical driving data
+
+The empirical campaign imports six driving datasets and records their measurement coverage. Participant partitions precede fitting and aggregation. Calibration uses training participants. Validation participants select the candidate. Fresh simulation seeds evaluate the selected candidate on the locked test participants. Reports retain source checksums, configurations, missing observations, and paired source bootstrap intervals.
+
+| Dataset | Scientific role |
+| --- | --- |
+| [Lehtonen 2018](https://doi.org/10.6084/m9.figshare.5572636) | Fixed target gaze comparison with the actual attentive driver. The in vehicle conditions support a contextual attention fit. |
+| [RightGazeUrban](https://doi.org/10.5281/zenodo.20717040) | Coded gaze allocation during test track turns. The existing SEEV model supplies contextual area probabilities. |
+| [ExpertDrivingDataset](https://doi.org/10.6084/m9.figshare.29664056) | Urban telemetry and gaze references. Clock alignment, actuator calibration, and scene geometry remain required for a matched control comparison. |
+| [NGSIM](https://catalog.data.gov/dataset/next-generation-simulation-ngsim-vehicle-trajectories-and-supporting-data) | IDM acceleration comparison against recorded states, followed by an independent closed loop replay through the MyoSuite body. Groups identify vehicle tracks. |
+| [DriveDNA Controlled](https://huggingface.co/datasets/HenryYHW/DriveDNA-Controlled) | Participant grouped vehicle telemetry. Access requires the provider's approval and applicable research licence. |
+| [MPDB](https://doi.org/10.6084/m9.figshare.22192831.v3) | Event relative simulator EMG references. Units, anatomical correspondence, and amplitude normalization require verification before muscle force comparison. |
+
+Install the optional dependencies and enter local dataset paths in a copy of [the input registry](examples/driving_data_inputs.json). Paths are resolved relative to the registry file. The physical following evaluation requires MyoSuite from its development branch and the current source checkout of `myosuite-carla`. Install both before running the campaign. The bridge must provide `myosuite_carla.empirical_following`.
+
+```shell
+python -m pip install -e ".[empirical,driving]"
+python -m pip install -e ../myosuite-dev -e ../myosuite-carla
+python examples/evaluate_driving_data.py --inputs examples/driving_data_inputs.json --out artifacts/empirical-driving --fit --samples 64 --seconds 30 --max-following-groups 96 --closed-loop-trials 6
+```
+
+The command attempts every dataset and saves a separate report for each source. Missing access leaves the campaign partial and returns exit code 2. Processing failures return exit code 1. An evaluated report records computational completion. Its errors and coverage determine empirical adequacy. Candidate profiles retain their test regressions and remain separate from the package defaults.
+
+Profiles preserve the human, attentive driver, and reflex settings together. `driving_profiles.resolve_profile(report, context=...)` restores the selected parameters for an explicitly matching task context. Its resolved object provides `build_human`, `make_driver_parameters`, and `make_reflex_config`. The profile retains its fitted provenance alongside the original baseline source labels. [VALIDATION.md](VALIDATION.md) records the measured campaign outcomes.
+
 ## Development
 
 ```bash

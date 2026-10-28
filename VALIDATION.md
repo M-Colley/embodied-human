@@ -1,5 +1,44 @@
 # Validation
 
+## Empirical driving campaign on 2026-10-28
+
+Five public datasets completed processing. DriveDNA Controlled remains access pending after the provider returned HTTP 403 with `GatedRepo`. The owner confirmed that access is pending. All six adapters are implemented. The campaign exits with code 2 while access is pending. No dataset processing failure remains in the retained campaign.
+
+All three contextual fits were rejected after evaluation. Package defaults and their cited source labels remain unchanged. The rejection rule is a conservative post hoc release review. Test observations were never used to retune a candidate. A subsequent fit requires a new evaluation design because these test results have now been inspected.
+
+| Source | Coverage | Outcome |
+| --- | --- | --- |
+| Lehtonen 2018 | 14 participants after the authors' exclusions; 12 eligible for the in vehicle fixation protocol; partitions 7, 2, and 3 | Test mean glance duration MAE increased from 0.498 to 0.966 seconds. All three test metrics regressed. |
+| RightGazeUrban | 34 participants, 539 trials, and 1,109,163 aligned samples; partitions 20, 7, and 7 | Road allocation MAE decreased from 0.0603 to 0.0200. Rear mirror and right shoulder errors increased. The SEEV candidate was rejected. |
+| ExpertDrivingDataset | 20 participants, 280 CAN trials, and 609,597 vehicle samples; eye records from 8 participants | Telemetry and gaze references were computed. Clock alignment, actuator calibration, and matched scene geometry remain required for control comparison. |
+| NGSIM | 4,346 source tracks and 8,878 following windows; 96 seeded tracks selected before partitions of 58, 19, and 19 | Mean trial acceleration RMSE decreased from 2.823 to 1.348 m/s² against recorded states. Closed loop speed and gap errors increased. |
+| DriveDNA Controlled | Provider approval pending | Evaluation remains pending. |
+| MPDB | All 35 participants, 6,953 processed epochs, four channels, and 27,812 channel epochs | There were 10,457 detected, 649 left censored, and 16,706 right censored onsets. Anatomical channel correspondence and source units remain unverified. |
+
+The NGSIM physical comparison ran six paired 20 second held out leader replays through `AttentiveDriver`, one cached MyoSuite body with 114 muscles, and the fitted CARLA 0.10 Nissan Patrol surrogate. All 12 episodes completed without a collision or road departure. Speed RMSE increased from 0.8803 to 1.0177 m/s. Gap RMSE increased from 3.6497 to 4.5717 m. The paired source mean increase in speed RMSE was 0.1374 m/s (95% bootstrap interval [0.0133, 0.2789]). These runs used the offline surrogate. UE5.8 live validation remains pending.
+
+The fixation fit uses a fixed visual target task in the actual attentive driver. Target geometry is estimated from training participants. Its two degree area extent is an assumption. RightGaze fits the existing SEEV allocation component. Its coded areas retain the source ambiguity around zero event identifiers. MPDB reports event relative EMG onset with a trailing 50 ms RMS window, a baseline from −0.40 to −0.05 seconds, a median plus three scaled MAD threshold, and 50 ms sustained detection. Competing events and censoring are retained. Activation onset has no established mapping to reaction time or absolute muscle force.
+
+Original source groups remain intact through splitting, aggregation, paired comparison, and bootstrap resampling. Seeds are averaged within trials. Trials are averaged within source groups. Sources receive equal weights. The source groups in NGSIM identify vehicle tracks. Participant identifiers are unavailable there. Reports preserve the original observations, selected configurations, assumptions, checksums, and provenance. Profiles require an explicitly matching context. The original SuRT default trace remains identical over 3,000 seeded steps.
+
+The [evidence summary](evidence/empirical-driving-2026-10-28/summary.json) lists outcomes and retained file hashes. The [report archive](evidence/empirical-driving-2026-10-28/reports.zip) contains all six reports, the acquisition manifest, and the campaign manifest. It contains derived observations and configuration records. Bulk dataset files remain in the local artifact cache. The [paired replay figure](evidence/empirical-driving-2026-10-28/closed-loop-comparison.png) shows every physical trial. Dataset attribution and licences remain in the source reports.
+
+The environment used Python 3.12.13, NumPy 2.5.4, SciPy 1.17.1, pandas 3.0.6, and MuJoCo 3.17.0. MyoSuite used development base `230f198458b501c423a0892b78da60419ffc49a3` with fatigue correction `37c8b863fe448f8fff2b29eb62a53a269b79d16f`. The campaign records actual import paths and source hashes separately from installed distribution metadata. This distinguishes the `PYTHONPATH` development checkout from the installed MyoSuite checkout.
+
+The complete human suite passed 512 tests and skipped 24 optional tests in 116.49 seconds. The subsequent campaign provenance checks passed all 16 focused tests. The bridge suite passed 434 tests and skipped four live tests. Ruff, mypy, wheel builds, and source builds passed for both packages. The source distributions include the input registry, campaign examples, and retained evidence. The new task and empirical support preserve lazy optional imports.
+
+Commands ran from `myosuite-carla` with the local human and MyoSuite development sources:
+
+```powershell
+$env:PYTHONPATH = (Resolve-Path '../embodied-human/src').Path + [IO.Path]::PathSeparator + (Resolve-Path '../myosuite-dev-review').Path
+.venv/Scripts/python.exe ../embodied-human/examples/evaluate_driving_data.py --inputs artifacts/empirical-driving-2026-10-28/inputs.json --out artifacts/empirical-driving-2026-10-28/final --fit --samples 64 --seconds 30 --max-following-groups 96 --closed-loop-trials 6
+.venv/Scripts/python.exe -m pytest ../embodied-human/tests -q
+.venv/Scripts/python.exe -m pytest tests -q
+.venv/Scripts/python.exe ../embodied-human/examples/plot_driving_comparison.py artifacts/empirical-driving-2026-10-28/release/campaign-datasets/ngsim.json --out artifacts/empirical-driving-2026-10-28/closed-loop-comparison.png
+```
+
+The release evidence adds actual runtime import provenance. It reuses the completed fixation evaluation from the fresh campaign after checking its observations, contexts, source fingerprint, numerical dependencies, partitions, settings, and sample count. It reruns every other source and all 12 physical episodes. The evidence archive retains both the fresh fixation evaluation and the exact release command. No fitting data or parameter changed between these runs.
+
 ## 2026-10-28, local rotating frame head sensing snapshot
 
 The local driving source composes head acceleration with vehicle rotation at the head centre of mass. Six analytic tests cover centripetal acceleration, the seat offset, Coriolis acceleration, relative acceleration, a rotating head centre of mass, and head orientation. The driving dependency requires myosuite-carla 0.1.1. This source was used for the live CARLA 0.10.0 recordings documented in [myosuite-carla](https://github.com/M-Colley/myosuite-carla/blob/70457a8b83041fd1d48ba04a14a00582d5179d3f/VALIDATION.md).
