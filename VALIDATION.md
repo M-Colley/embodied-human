@@ -1,5 +1,21 @@
 # Validation
 
+## 2026-10-28, local rotating frame head sensing snapshot
+
+The local driving source composes head acceleration with vehicle rotation at the head centre of mass. Six analytic tests cover centripetal acceleration, the seat offset, Coriolis acceleration, relative acceleration, a rotating head centre of mass, and head orientation. The driving dependency requires myosuite-carla 0.1.1. This source was used for the live CARLA 0.10.0 recordings documented in [myosuite-carla](https://github.com/M-Colley/myosuite-carla/blob/70457a8b83041fd1d48ba04a14a00582d5179d3f/VALIDATION.md).
+
+The complete suite passed 452 tests and skipped 24 optional tests in 88.85 seconds ([output](evidence/rotating-head-local-2026-10-28-suite.txt), [JUnit](evidence/rotating-head-local-2026-10-28-suite.xml)). Tests loaded the source from the original local embodied-human checkout. The environment used Python 3.12.13, MuJoCo 3.17.0, NumPy 2.5.4, and MyoSuite development base `230f198458b501c423a0892b78da60419ffc49a3` with the fatigue correction in `37c8b863fe448f8fff2b29eb62a53a269b79d16f`. Ruff passed. Mypy passed all 60 source files. Wheel and source builds passed. The existing [head sensing PR](https://github.com/M-Colley/embodied-human/pull/1) contains the same model correction and its seeded benchmark comparison.
+
+Commands ran from the embodied-human repository:
+
+```powershell
+$env:PYTHONPATH = (Resolve-Path 'src').Path + [IO.Path]::PathSeparator + (Resolve-Path '../myosuite-dev-review').Path
+../myosuite-carla/.venv/Scripts/python.exe -m pytest tests -q --junitxml=../myosuite-carla/artifacts/embodied-human-live/human-final-snapshot-tests.xml
+../myosuite-carla/.venv/Scripts/python.exe -m ruff check src tests
+../myosuite-carla/.venv/Scripts/python.exe -m mypy src/embodied_human --ignore-missing-imports
+../myosuite-carla/.venv/Scripts/python.exe -m build
+```
+
 ## 2026-10-27, Linux contact geometry CI correction
 
 The hosted test workflow for `d4eaf21` failed in all five jobs on the capsule and cylinder contact map cases. MuJoCo 3.17.0 enum equality is asymmetric with NumPy integer scalars on Linux. `scalar == enum` returns true, while `enum == scalar` returns false. Tuple membership uses the latter comparison and therefore skipped both supported geometry types. Windows bindings accept both operand orders. Geometry dispatch now converts the model type and enum constants to Python integer codes. Two regression cases reproduce the Linux equality behavior on either platform. No module defaults or human reference ranges changed.
