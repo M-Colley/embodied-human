@@ -1,5 +1,28 @@
 # Validation
 
+## Physical closed loop calibration on 2026-10-28
+
+The calibration objective now runs the complete attentive driver, MyoSuite body, and fitted vehicle surrogate for every parameter candidate. Recorded leader motion drives the scene. Recorded follower speed and gap initialize the episode. Subsequent follower motion comes from the model. The physical protocol reuses one body and caches exact parameter, source, trial, and simulation seed combinations.
+
+The experiment excludes all 96 tracks inspected in the previous empirical campaign and one additional track used for a runtime measurement. A seeded selection supplies 15 fresh tracks. Six train the candidate, three select it, and six evaluate it. These assignments, priors, normalization constants, and acceptance criteria are written before physical execution. Each source contributes one complete 20 second window. The fit seed is 17. The evaluation seed is 117. Source specific seeds derive from the source identity and trial index.
+
+Sixteen Sobol draws explore four IDM parameters. The assumed search ranges are 0.6 to 2.6 seconds for time headway, 0.5 to 4 m for minimum gap, 0.5 to 2 m/s² for maximum acceleration, and 0.8 to 3 m/s² for comfortable deceleration. Desired speed remains 16 m/s. The baseline competes with the four accepted draws on validation data. This finite search supplies a contextual calibration pilot. Accepted draw intervals describe the search. Human parameter uncertainty remains unevaluated.
+
+The primary objective averages squared normalized RMSE across speed, bumper gap, and acceleration. The fixed scales are 1 m/s, 5 m, and 1 m/s². These scales are assumed normalization constants. Trial RMSE is averaged within each source before normalization and squaring. Sources receive equal weights. A collision, road departure, numerical failure, or incomplete episode makes a candidate infeasible. Contextual acceptance requires complete safe test pairs and a paired source bootstrap upper 95% error change below zero. The bootstrap uses 2,000 resamples. All component errors remain visible. Global defaults retain their original values and citations.
+
+The physical experiment uses the fitted CARLA 0.10 Nissan Patrol surrogate. Recorded NGSIM vehicles have heterogeneous dynamics. Fitted controller values can absorb vehicle and actuator mismatch. The experiment uses one training seed and one distinct evaluation seed. Additional independent tracks and repeated simulation seeds are required to assess generalization. Live CARLA validation remains a separate requirement.
+
+The complete human suite passed 541 tests and skipped 24 optional tests in 87.13 seconds. The complete bridge suite passed 454 tests and skipped four live tests in 118.06 seconds. Ruff and mypy passed for both packages. Mypy checked 67 human source files and 24 bridge source files. Focused tests cover source exclusions, seed and cache identities, infeasible episodes, matched scoring, fixed partitions, single source acceptance guards, and preservation of existing evidence.
+
+Commands ran from `myosuite-carla`:
+
+```powershell
+$env:PYTHONPATH = (Resolve-Path '../embodied-human/src').Path + [IO.Path]::PathSeparator + (Resolve-Path '../myosuite-dev-review').Path
+.venv/Scripts/python.exe ../embodied-human/examples/calibrate_closed_loop_following.py --source artifacts/ngsim/ngsim-i80-cars.csv --out artifacts/closed-loop-calibration-2026-10-28/run --exclude-report evidence/empirical-driving-2026-10-28/ngsim.json --exclude-report artifacts/closed-loop-benchmark.json --samples 16 --train-sources 6 --validation-sources 3 --test-sources 6 --seconds 20 --trials-per-source 1 --seed 20261028 --fit-seed 17 --evaluation-seed 117 --accept 0.25 --bootstrap 2000 --desired-speed 16
+.venv/Scripts/python.exe -m pytest ../embodied-human/tests -q
+.venv/Scripts/python.exe -m pytest tests -q
+```
+
 ## Empirical driving campaign on 2026-10-28
 
 Five public datasets completed processing. DriveDNA Controlled remains access pending after the provider returned HTTP 403 with `GatedRepo`. The owner confirmed that access is pending. All six adapters are implemented. The campaign exits with code 2 while access is pending. No dataset processing failure remains in the retained campaign.

@@ -11,6 +11,8 @@ from types import ModuleType, SimpleNamespace
 import numpy as np
 import pytest
 
+from embodied_human import reporting
+
 
 @pytest.fixture
 def campaign(monkeypatch):
@@ -56,7 +58,7 @@ def test_runtime_sources_record_import_origin_without_importing_optional_package
             return b"actual-runtime-checkout\n"
         return b""
 
-    monkeypatch.setattr(campaign.subprocess, "check_output", git)
+    monkeypatch.setattr(reporting.subprocess, "check_output", git)
     sources = campaign._runtime_sources()
     actual = sources["myosuite"]
     assert actual["origin"] == str(origin.resolve())
@@ -94,7 +96,7 @@ def test_runtime_sources_use_find_spec_and_tolerate_missing_git(
     def unavailable_git(*args, **kwargs):
         raise FileNotFoundError("git")
 
-    monkeypatch.setattr(campaign.subprocess, "check_output", unavailable_git)
+    monkeypatch.setattr(reporting.subprocess, "check_output", unavailable_git)
     sources = campaign._runtime_sources()
     assert sources["myosuite"]["status"] == "resolved"
     assert sources["myosuite"]["git_revision"] is None
