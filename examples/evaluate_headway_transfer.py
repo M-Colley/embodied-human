@@ -236,6 +236,8 @@ def run_summary(
 def test_decision(
     records: dict[str, dict[tuple[str, int], dict[str, Any]]],
     inputs: dict[str, Any],
+    *,
+    all_attempts_recorded: bool,
 ) -> dict[str, Any]:
     design = inputs["design"]
     groups = inputs["track_groups"]
@@ -254,6 +256,7 @@ def test_decision(
         )
     ]
     guards = {
+        "all_attempts_recorded": all_attempts_recorded,
         "protocol_coverage": inputs.get("protocol_eligible", True),
         "candidate_complete": len(selected) == len(groups) * len(seeds),
         "complete_track_count": len(pairs) >= design["test_minimum_complete_tracks"],
@@ -381,7 +384,17 @@ def evaluate(design: dict[str, Any], stage: str, out: Path) -> None:
             selected_headway_s=-min(valid)[1] if valid else None,
         )
     else:
-        report.update(test_decision(rows, inputs))
+        report.update(
+            test_decision(
+                rows,
+                inputs,
+                all_attempts_recorded=all(
+                    len(result["episodes"]) == len(expected)
+                    and result["status"] != "failed"
+                    for result in results.values()
+                ),
+            )
+        )
     write(destination, report)
     print(f"Saved {destination}", flush=True)
 

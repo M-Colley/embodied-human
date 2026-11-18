@@ -47,7 +47,11 @@ def test_runs_receive_equal_weight_despite_unequal_track_counts():
     inputs = _inputs()
     reference = _rows(inputs, [1, 1, 1, 5], 0.5)
     candidate = _rows(inputs, [1, 1, 1, 4], 0.4)
-    report = _example()({"reference": reference, "candidate": candidate}, inputs)
+    report = _example()(
+        {"reference": reference, "candidate": candidate},
+        inputs,
+        all_attempts_recorded=True,
+    )
     assert report["conditional_metrics"]["reference"]["gap_rmse_m"] == 3.0
     assert report["conditional_metrics"]["candidate"]["gap_rmse_m"] == 2.5
     assert report["paired_gap_rmse_change_m"]["mean"] == -0.5
@@ -58,7 +62,11 @@ def test_candidate_incomplete_episode_prevents_adoption():
     reference = _rows(inputs, [5, 5, 5, 5], 1.0)
     candidate = _rows(inputs, [3, 3, 3, 3], 0.5)
     del candidate["a", 721]
-    report = _example()({"reference": reference, "candidate": candidate}, inputs)
+    report = _example()(
+        {"reference": reference, "candidate": candidate},
+        inputs,
+        all_attempts_recorded=True,
+    )
     assert report["guards"]["paired_gap_rmse_reduction"]
     assert report["guards"]["complete_track_count"]
     assert not report["guards"]["candidate_complete"]
@@ -69,8 +77,28 @@ def test_pilot_coverage_cannot_pass_even_with_positive_performance():
     inputs = {**_inputs(), "protocol_eligible": False}
     reference = _rows(inputs, [5, 5, 5, 5], 1.0)
     candidate = _rows(inputs, [3, 3, 3, 3], 0.5)
-    report = _example()({"reference": reference, "candidate": candidate}, inputs)
+    report = _example()(
+        {"reference": reference, "candidate": candidate},
+        inputs,
+        all_attempts_recorded=True,
+    )
     assert report["guards"]["candidate_complete"]
     assert report["guards"]["paired_gap_rmse_reduction"]
     assert not report["guards"]["protocol_coverage"]
     assert report["decision"] == "descriptive_pilot"
+
+
+def test_reference_worker_missing_an_attempt_prevents_adoption():
+    inputs = _inputs()
+    reference = _rows(inputs, [5, 5, 5, 5], 1.0)
+    candidate = _rows(inputs, [3, 3, 3, 3], 0.5)
+    del reference["a", 721]
+    report = _example()(
+        {"reference": reference, "candidate": candidate},
+        inputs,
+        all_attempts_recorded=False,
+    )
+    assert report["guards"]["paired_gap_rmse_reduction"]
+    assert report["guards"]["complete_track_count"]
+    assert not report["guards"]["all_attempts_recorded"]
+    assert report["decision"] == "rejected"
