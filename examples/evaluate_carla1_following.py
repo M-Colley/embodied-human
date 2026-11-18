@@ -63,8 +63,11 @@ def runtime_identity() -> dict[str, Any]:
 
 def prepare(design: dict[str, Any], data: Path, manifest: Path, out: Path) -> None:
     source_manifest = read(manifest)
-    if source_manifest.get("location") != "us-101":
-        raise ValueError("The source provenance must identify NGSIM US 101")
+    if (
+        source_manifest.get("location") != design["site"]
+        or source_manifest.get("vehicle_class") != design["vehicle_class"]
+    ):
+        raise ValueError("The source provenance must identify the US 101 car cohort")
     digest = file_sha256(data)
     if source_manifest.get("file_sha256") != digest:
         raise ValueError("The source CSV differs from its provenance")
