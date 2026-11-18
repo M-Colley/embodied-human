@@ -1,0 +1,927 @@
+{
+  "frozen_utc": "2026-11-18T19:04:45.524639+00:00",
+  "stage": "development",
+  "design": {
+    "schema_version": 1,
+    "intervention": "desired time headway only",
+    "vehicle": "CARLA 1.0 Nissan Patrol C3",
+    "actuation": "same acceleration inverse and measured pedal feedback in every arm",
+    "control_dt_s": 0.02,
+    "configured_reflex_delay_s": 0.04,
+    "realized_history_lag_s": 0.02,
+    "desired_speed_mps": 16,
+    "seconds": 20,
+    "maximum_speed_rmse_increase_mps": 0.05,
+    "reference_headway_s": 1.6,
+    "development_candidates_s": [
+      1.2,
+      1.4
+    ],
+    "development_dataset": "ngsim-us101-development",
+    "development_original_fixture_sha256": "45fd812aa6786ecf46d69b89a1e877d72cdc8bf24491069bb5ff546acd9cd769",
+    "development_sources": 12,
+    "development_seed": 715,
+    "source_selection_seed": 20261119,
+    "selection": "minimum mean gap RMSE among shorter candidates with complete safe episodes and speed RMSE within the margin; ties choose the larger time headway",
+    "test_dataset": "tgsim-i294-l1",
+    "test_sources": 24,
+    "test_minimum_run_groups": 6,
+    "test_minimum_complete_tracks": 22,
+    "test_seeds": [
+      721,
+      722
+    ],
+    "bootstrap_seed": 20261119,
+    "bootstrap_resamples": 5000,
+    "primary_test_metric": "gap RMSE, mean over seeds within track, then tracks within acquisition run, then equal acquisition runs",
+    "safety": "all candidate episodes complete safely; retain and report every outcome in both arms",
+    "adoption": "upper paired 95 percent run bootstrap interval below zero, complete pairs in every selected run, at least 22 complete tracks, all candidate episodes complete safely, speed RMSE within the margin, and absolute mean signed gap bias no worse",
+    "scope": "independent site transfer with fixed C3 and inverse; existing US 101 observations are development data"
+  },
+  "dataset_id": "ngsim-us101-development",
+  "source_fixture_sha256": "45fd812aa6786ecf46d69b89a1e877d72cdc8bf24491069bb5ff546acd9cd769",
+  "fixture_sha256": "29b11f0c6e6839738759d38ed6f0ea7dda53db4a16d8654fd9890fcb91d5c943",
+  "source_manifest_sha256": null,
+  "development_selection_sha256": null,
+  "track_groups": [
+    "ngsim-us101-development:1107:3",
+    "ngsim-us101-development:1216:3",
+    "ngsim-us101-development:1285:3",
+    "ngsim-us101-development:1581:1",
+    "ngsim-us101-development:1761:1",
+    "ngsim-us101-development:1804:2",
+    "ngsim-us101-development:2189:1",
+    "ngsim-us101-development:22:3",
+    "ngsim-us101-development:308:2",
+    "ngsim-us101-development:401:2",
+    "ngsim-us101-development:468:1",
+    "ngsim-us101-development:960:1"
+  ],
+  "run_by_group": {},
+  "base_seeds": [
+    715
+  ],
+  "headways": {
+    "reference": 1.6,
+    "headway-1.2": 1.2,
+    "headway-1.4": 1.4
+  },
+  "runtime": {
+    "versions": {
+      "myosuite": "3.1.0",
+      "myo-sim": "0.2.5",
+      "mujoco": "3.17.0",
+      "numpy": "2.5.5",
+      "scipy": "1.18.1"
+    },
+    "sources": {
+      "embodied_human": "b6f2955a1a7a48efbde93d94bbd08af1bee6303eb2053136713eae06cc3db936",
+      "myosuite_carla": "7696a3bf463738503bb5e1a3b55d5a239f1cd925f9ea0421427632f83e9df0e4",
+      "myosuite": "75e8284ece5f691ebd40868c83e8ecee1fd15d85fbdf6e79f29f3eb4c6b1847a",
+      "embodied_ui": "520e267e8e057551f473764c1f99daa6e2d98ff3ca8b87ca8d6545fe9b00af37"
+    },
+    "body": {
+      "timestep": 0.002,
+      "control_dt": 0.02,
+      "clearance": 0.0015,
+      "wheel_offset": 0.12,
+      "steering_angle_limit": 0.6,
+      "button_travel": 0.006,
+      "button_lead": 0.008,
+      "press_excitation": 0.08,
+      "release_tone": 0.02,
+      "finger_release_tone": 0.15,
+      "finger_intrinsic_ratio": 1.0,
+      "elbow_gains": [
+        4.0,
+        8.0,
+        0.2
+      ],
+      "elbow_tone": 0.02,
+      "max_gear": 3,
+      "settle_seconds": 3.0,
+      "prune_locked_muscles": true,
+      "vehicle_loads": true,
+      "seat_offset": [
+        -0.1,
+        -0.37,
+        0.6
+      ],
+      "steering_feel": 0.25,
+      "switch_hold": 0.2,
+      "paddle_hold": 0.1,
+      "reverse_requires_brake": true,
+      "strength": 1.0,
+      "muscle_strength": [],
+      "fatigue": false,
+      "fatigue_sex": null,
+      "initial_fatigue": 0.0,
+      "motor_noise_signal": 0.0,
+      "motor_noise_constant": 0.0,
+      "posture": [],
+      "interfaces": []
+    },
+    "script_sha256": "bcc97285b36d9799d9f4eb16e4a0c34649576bb517d2d03b5859fe64fd8608eb"
+  },
+  "vehicle_parameters": {
+    "wheelbase": 3.075,
+    "speed_knots": [
+      0.0,
+      1.0,
+      2.5,
+      4.0,
+      6.0,
+      8.0,
+      11.0,
+      15.0,
+      20.0
+    ],
+    "throttle_knots": [
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "drive": [
+      [
+        0.09438937178635569,
+        0.18972057876624326,
+        0.2872408750890336,
+        0.44887350978271595,
+        0.6479181505607112,
+        0.8265217131993938,
+        0.9762416438859721,
+        1.1391112734223507,
+        1.3082501929412893
+      ],
+      [
+        0.7178910874277288,
+        0.9948369067314335,
+        1.3679749306245537,
+        1.8798598952296186,
+        2.330714731295173,
+        2.573044713355567,
+        2.614337006088568,
+        2.6101046721356096,
+        2.5938530842218124
+      ],
+      [
+        1.3736384093849798,
+        1.9069108770651846,
+        2.577018878942993,
+        3.409364992626544,
+        4.1094913089618395,
+        4.4265530534659305,
+        4.3485670643766525,
+        4.117314503209102,
+        3.8756718194521143
+      ],
+      [
+        2.07186980080167,
+        2.882621167444341,
+        3.8362738050383114,
+        5.0224692474053985,
+        5.997739170415901,
+        6.377329514267615,
+        6.156334250811415,
+        5.659461971757522,
+        5.158978627924107
+      ]
+    ],
+    "reverse_drive": [
+      0.3309311094990647,
+      0.9706306035520047,
+      1.6105574485331298,
+      2.250484293514255
+    ],
+    "steer_gain": [
+      0.9671183493924813,
+      0.9671183493924813,
+      0.9347382582806371,
+      0.909348419806357,
+      0.8907760548444505,
+      0.8746871156620434,
+      0.8599122033968012,
+      0.8469827713089422,
+      0.8469827713089422
+    ],
+    "steer_exponent": 0.9710941521174783,
+    "steer_rise_rate": 2.5,
+    "steer_fall_rate": 5.0,
+    "rolling": 0.26151369907707717,
+    "linear_drag": 0.0,
+    "quadratic_drag": 0.005088590406164401,
+    "brake_decel": 6.4933400436739435,
+    "hand_brake_decel": 4.875545383891894,
+    "throttle_lag": 0.075,
+    "steer_lag": 4.03431560642913e-23,
+    "steer_lag_slope": 0.01
+  },
+  "reflex_configurations": {
+    "reference": {
+      "perception_delay": 0.04,
+      "takeover_time": 2.72,
+      "steering": {
+        "k_far": 6.0,
+        "k_near": 2.0,
+        "k_integral": 1.0
+      },
+      "idm": {
+        "max_acceleration": 1.0,
+        "comfortable_deceleration": 1.5,
+        "time_headway": 1.6,
+        "min_gap": 2.0,
+        "exponent": 4.0
+      },
+      "throttle_bias": 0.3,
+      "throttle_per_mps2": 0.25,
+      "brake_per_mps2": 0.15,
+      "coast_band": 0.4,
+      "throttle_map": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.258,
+          0.004
+        ],
+        [
+          0.287,
+          0.006
+        ],
+        [
+          0.348,
+          0.008
+        ],
+        [
+          0.405,
+          0.01
+        ],
+        [
+          0.461,
+          0.012
+        ],
+        [
+          0.553,
+          0.016
+        ],
+        [
+          0.625,
+          0.02
+        ],
+        [
+          0.765,
+          0.03
+        ],
+        [
+          0.941,
+          0.05
+        ],
+        [
+          1.0,
+          0.08
+        ]
+      ],
+      "brake_map": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.387,
+          0.02
+        ],
+        [
+          0.568,
+          0.04
+        ],
+        [
+          0.701,
+          0.06
+        ],
+        [
+          0.798,
+          0.08
+        ],
+        [
+          0.871,
+          0.1
+        ],
+        [
+          1.0,
+          0.15
+        ]
+      ],
+      "steer_map": [
+        [
+          -0.877,
+          -0.3
+        ],
+        [
+          -0.533,
+          -0.2
+        ],
+        [
+          -0.253,
+          -0.1
+        ],
+        [
+          -0.1,
+          -0.05
+        ],
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.105,
+          0.05
+        ],
+        [
+          0.262,
+          0.1
+        ],
+        [
+          0.641,
+          0.2
+        ],
+        [
+          0.801,
+          0.3
+        ]
+      ],
+      "steer_integral": 0.3,
+      "pedal_integral": 0.05,
+      "max_steer_rate": 0.8,
+      "acceleration_control": {
+        "vehicle": {
+          "wheelbase": 3.075,
+          "speed_knots": [
+            0.0,
+            1.0,
+            2.5,
+            4.0,
+            6.0,
+            8.0,
+            11.0,
+            15.0,
+            20.0
+          ],
+          "throttle_knots": [
+            0.25,
+            0.5,
+            0.75,
+            1.0
+          ],
+          "drive": [
+            [
+              0.09438937178635569,
+              0.18972057876624326,
+              0.2872408750890336,
+              0.44887350978271595,
+              0.6479181505607112,
+              0.8265217131993938,
+              0.9762416438859721,
+              1.1391112734223507,
+              1.3082501929412893
+            ],
+            [
+              0.7178910874277288,
+              0.9948369067314335,
+              1.3679749306245537,
+              1.8798598952296186,
+              2.330714731295173,
+              2.573044713355567,
+              2.614337006088568,
+              2.6101046721356096,
+              2.5938530842218124
+            ],
+            [
+              1.3736384093849798,
+              1.9069108770651846,
+              2.577018878942993,
+              3.409364992626544,
+              4.1094913089618395,
+              4.4265530534659305,
+              4.3485670643766525,
+              4.117314503209102,
+              3.8756718194521143
+            ],
+            [
+              2.07186980080167,
+              2.882621167444341,
+              3.8362738050383114,
+              5.0224692474053985,
+              5.997739170415901,
+              6.377329514267615,
+              6.156334250811415,
+              5.659461971757522,
+              5.158978627924107
+            ]
+          ],
+          "reverse_drive": [
+            0.3309311094990647,
+            0.9706306035520047,
+            1.6105574485331298,
+            2.250484293514255
+          ],
+          "steer_gain": [
+            0.9671183493924813,
+            0.9671183493924813,
+            0.9347382582806371,
+            0.909348419806357,
+            0.8907760548444505,
+            0.8746871156620434,
+            0.8599122033968012,
+            0.8469827713089422,
+            0.8469827713089422
+          ],
+          "steer_exponent": 0.9710941521174783,
+          "steer_rise_rate": 2.5,
+          "steer_fall_rate": 5.0,
+          "rolling": 0.26151369907707717,
+          "linear_drag": 0.0,
+          "quadratic_drag": 0.005088590406164401,
+          "brake_decel": 6.4933400436739435,
+          "hand_brake_decel": 4.875545383891894,
+          "throttle_lag": 0.075,
+          "steer_lag": 4.03431560642913e-23,
+          "steer_lag_slope": 0.01
+        },
+        "pedal_integral": 0.05,
+        "integral_limit": 0.02
+      }
+    },
+    "headway-1.2": {
+      "perception_delay": 0.04,
+      "takeover_time": 2.72,
+      "steering": {
+        "k_far": 6.0,
+        "k_near": 2.0,
+        "k_integral": 1.0
+      },
+      "idm": {
+        "max_acceleration": 1.0,
+        "comfortable_deceleration": 1.5,
+        "time_headway": 1.2,
+        "min_gap": 2.0,
+        "exponent": 4.0
+      },
+      "throttle_bias": 0.3,
+      "throttle_per_mps2": 0.25,
+      "brake_per_mps2": 0.15,
+      "coast_band": 0.4,
+      "throttle_map": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.258,
+          0.004
+        ],
+        [
+          0.287,
+          0.006
+        ],
+        [
+          0.348,
+          0.008
+        ],
+        [
+          0.405,
+          0.01
+        ],
+        [
+          0.461,
+          0.012
+        ],
+        [
+          0.553,
+          0.016
+        ],
+        [
+          0.625,
+          0.02
+        ],
+        [
+          0.765,
+          0.03
+        ],
+        [
+          0.941,
+          0.05
+        ],
+        [
+          1.0,
+          0.08
+        ]
+      ],
+      "brake_map": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.387,
+          0.02
+        ],
+        [
+          0.568,
+          0.04
+        ],
+        [
+          0.701,
+          0.06
+        ],
+        [
+          0.798,
+          0.08
+        ],
+        [
+          0.871,
+          0.1
+        ],
+        [
+          1.0,
+          0.15
+        ]
+      ],
+      "steer_map": [
+        [
+          -0.877,
+          -0.3
+        ],
+        [
+          -0.533,
+          -0.2
+        ],
+        [
+          -0.253,
+          -0.1
+        ],
+        [
+          -0.1,
+          -0.05
+        ],
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.105,
+          0.05
+        ],
+        [
+          0.262,
+          0.1
+        ],
+        [
+          0.641,
+          0.2
+        ],
+        [
+          0.801,
+          0.3
+        ]
+      ],
+      "steer_integral": 0.3,
+      "pedal_integral": 0.05,
+      "max_steer_rate": 0.8,
+      "acceleration_control": {
+        "vehicle": {
+          "wheelbase": 3.075,
+          "speed_knots": [
+            0.0,
+            1.0,
+            2.5,
+            4.0,
+            6.0,
+            8.0,
+            11.0,
+            15.0,
+            20.0
+          ],
+          "throttle_knots": [
+            0.25,
+            0.5,
+            0.75,
+            1.0
+          ],
+          "drive": [
+            [
+              0.09438937178635569,
+              0.18972057876624326,
+              0.2872408750890336,
+              0.44887350978271595,
+              0.6479181505607112,
+              0.8265217131993938,
+              0.9762416438859721,
+              1.1391112734223507,
+              1.3082501929412893
+            ],
+            [
+              0.7178910874277288,
+              0.9948369067314335,
+              1.3679749306245537,
+              1.8798598952296186,
+              2.330714731295173,
+              2.573044713355567,
+              2.614337006088568,
+              2.6101046721356096,
+              2.5938530842218124
+            ],
+            [
+              1.3736384093849798,
+              1.9069108770651846,
+              2.577018878942993,
+              3.409364992626544,
+              4.1094913089618395,
+              4.4265530534659305,
+              4.3485670643766525,
+              4.117314503209102,
+              3.8756718194521143
+            ],
+            [
+              2.07186980080167,
+              2.882621167444341,
+              3.8362738050383114,
+              5.0224692474053985,
+              5.997739170415901,
+              6.377329514267615,
+              6.156334250811415,
+              5.659461971757522,
+              5.158978627924107
+            ]
+          ],
+          "reverse_drive": [
+            0.3309311094990647,
+            0.9706306035520047,
+            1.6105574485331298,
+            2.250484293514255
+          ],
+          "steer_gain": [
+            0.9671183493924813,
+            0.9671183493924813,
+            0.9347382582806371,
+            0.909348419806357,
+            0.8907760548444505,
+            0.8746871156620434,
+            0.8599122033968012,
+            0.8469827713089422,
+            0.8469827713089422
+          ],
+          "steer_exponent": 0.9710941521174783,
+          "steer_rise_rate": 2.5,
+          "steer_fall_rate": 5.0,
+          "rolling": 0.26151369907707717,
+          "linear_drag": 0.0,
+          "quadratic_drag": 0.005088590406164401,
+          "brake_decel": 6.4933400436739435,
+          "hand_brake_decel": 4.875545383891894,
+          "throttle_lag": 0.075,
+          "steer_lag": 4.03431560642913e-23,
+          "steer_lag_slope": 0.01
+        },
+        "pedal_integral": 0.05,
+        "integral_limit": 0.02
+      }
+    },
+    "headway-1.4": {
+      "perception_delay": 0.04,
+      "takeover_time": 2.72,
+      "steering": {
+        "k_far": 6.0,
+        "k_near": 2.0,
+        "k_integral": 1.0
+      },
+      "idm": {
+        "max_acceleration": 1.0,
+        "comfortable_deceleration": 1.5,
+        "time_headway": 1.4,
+        "min_gap": 2.0,
+        "exponent": 4.0
+      },
+      "throttle_bias": 0.3,
+      "throttle_per_mps2": 0.25,
+      "brake_per_mps2": 0.15,
+      "coast_band": 0.4,
+      "throttle_map": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.258,
+          0.004
+        ],
+        [
+          0.287,
+          0.006
+        ],
+        [
+          0.348,
+          0.008
+        ],
+        [
+          0.405,
+          0.01
+        ],
+        [
+          0.461,
+          0.012
+        ],
+        [
+          0.553,
+          0.016
+        ],
+        [
+          0.625,
+          0.02
+        ],
+        [
+          0.765,
+          0.03
+        ],
+        [
+          0.941,
+          0.05
+        ],
+        [
+          1.0,
+          0.08
+        ]
+      ],
+      "brake_map": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.387,
+          0.02
+        ],
+        [
+          0.568,
+          0.04
+        ],
+        [
+          0.701,
+          0.06
+        ],
+        [
+          0.798,
+          0.08
+        ],
+        [
+          0.871,
+          0.1
+        ],
+        [
+          1.0,
+          0.15
+        ]
+      ],
+      "steer_map": [
+        [
+          -0.877,
+          -0.3
+        ],
+        [
+          -0.533,
+          -0.2
+        ],
+        [
+          -0.253,
+          -0.1
+        ],
+        [
+          -0.1,
+          -0.05
+        ],
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.105,
+          0.05
+        ],
+        [
+          0.262,
+          0.1
+        ],
+        [
+          0.641,
+          0.2
+        ],
+        [
+          0.801,
+          0.3
+        ]
+      ],
+      "steer_integral": 0.3,
+      "pedal_integral": 0.05,
+      "max_steer_rate": 0.8,
+      "acceleration_control": {
+        "vehicle": {
+          "wheelbase": 3.075,
+          "speed_knots": [
+            0.0,
+            1.0,
+            2.5,
+            4.0,
+            6.0,
+            8.0,
+            11.0,
+            15.0,
+            20.0
+          ],
+          "throttle_knots": [
+            0.25,
+            0.5,
+            0.75,
+            1.0
+          ],
+          "drive": [
+            [
+              0.09438937178635569,
+              0.18972057876624326,
+              0.2872408750890336,
+              0.44887350978271595,
+              0.6479181505607112,
+              0.8265217131993938,
+              0.9762416438859721,
+              1.1391112734223507,
+              1.3082501929412893
+            ],
+            [
+              0.7178910874277288,
+              0.9948369067314335,
+              1.3679749306245537,
+              1.8798598952296186,
+              2.330714731295173,
+              2.573044713355567,
+              2.614337006088568,
+              2.6101046721356096,
+              2.5938530842218124
+            ],
+            [
+              1.3736384093849798,
+              1.9069108770651846,
+              2.577018878942993,
+              3.409364992626544,
+              4.1094913089618395,
+              4.4265530534659305,
+              4.3485670643766525,
+              4.117314503209102,
+              3.8756718194521143
+            ],
+            [
+              2.07186980080167,
+              2.882621167444341,
+              3.8362738050383114,
+              5.0224692474053985,
+              5.997739170415901,
+              6.377329514267615,
+              6.156334250811415,
+              5.659461971757522,
+              5.158978627924107
+            ]
+          ],
+          "reverse_drive": [
+            0.3309311094990647,
+            0.9706306035520047,
+            1.6105574485331298,
+            2.250484293514255
+          ],
+          "steer_gain": [
+            0.9671183493924813,
+            0.9671183493924813,
+            0.9347382582806371,
+            0.909348419806357,
+            0.8907760548444505,
+            0.8746871156620434,
+            0.8599122033968012,
+            0.8469827713089422,
+            0.8469827713089422
+          ],
+          "steer_exponent": 0.9710941521174783,
+          "steer_rise_rate": 2.5,
+          "steer_fall_rate": 5.0,
+          "rolling": 0.26151369907707717,
+          "linear_drag": 0.0,
+          "quadratic_drag": 0.005088590406164401,
+          "brake_decel": 6.4933400436739435,
+          "hand_brake_decel": 4.875545383891894,
+          "throttle_lag": 0.075,
+          "steer_lag": 4.03431560642913e-23,
+          "steer_lag_slope": 0.01
+        },
+        "pedal_integral": 0.05,
+        "integral_limit": 0.02
+      }
+    }
+  }
+}
