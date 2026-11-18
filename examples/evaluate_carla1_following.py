@@ -8,6 +8,7 @@ import multiprocessing
 from concurrent.futures import ProcessPoolExecutor
 from dataclasses import asdict
 from datetime import datetime, timezone
+from importlib.metadata import version
 from pathlib import Path
 from statistics import mean
 from typing import Any
@@ -18,6 +19,7 @@ from myosuite_carla.driver_models import (
     ReflexDriverConfig,
 )
 from myosuite_carla.empirical_following import FollowingProtocol
+from myosuite_carla.fullbody import FullBodyDriverConfig
 from myosuite_carla.ngsim import following_trials, load_tracks, save_trials
 from myosuite_carla.vehicle_model import carla_1_0_nissan_patrol
 
@@ -27,7 +29,13 @@ from embodied_human.actuation_evaluation import (
     review_actuation,
     run_arm,
 )
-from embodied_human.closed_loop_calibration import METRICS, SCALES, file_sha256
+from embodied_human.closed_loop_calibration import (
+    METRICS,
+    SCALES,
+    _complete_episode,
+    file_sha256,
+)
+from embodied_human.reporting import runtime_sources
 
 
 def read(path: Path) -> dict[str, Any]:
@@ -40,10 +48,26 @@ def write(path: Path, value: Any) -> None:
         stream.write("\n")
 
 
+def runtime_identity() -> dict[str, Any]:
+    names = ("myosuite", "myo-sim", "mujoco", "numpy", "scipy")
+    return {
+        "sources": {
+            name: item.get("python_source_sha256")
+            for name, item in runtime_sources().items()
+        },
+        "versions": {name: version(name) for name in names},
+        "body": json.loads(json.dumps(asdict(FullBodyDriverConfig.fast()))),
+        "analysis_source_sha256": file_sha256(Path(__file__)),
+    }
+
+
 def prepare(design: dict[str, Any], data: Path, manifest: Path, out: Path) -> None:
     source_manifest = read(manifest)
     if source_manifest.get("location") != "us-101":
         raise ValueError("The source provenance must identify NGSIM US 101")
+    digest = file_sha256(data)
+    if source_manifest.get("file_sha256") != digest:
+        raise ValueError("The source CSV differs from its provenance")
     vehicle = carla_1_0_nissan_patrol()
     delay = design["configured_reflex_delay_s"]
     baseline = ReflexDriverConfig(perception_delay=delay)
@@ -76,7 +100,8 @@ def prepare(design: dict[str, Any], data: Path, manifest: Path, out: Path) -> No
         out / "frozen-inputs.json",
         {
             "frozen_utc": datetime.now(timezone.utc).isoformat(),
-            "source_sha256": file_sha256(data),
+            "runtime_identity": runtime_identity(),
+            "source_sha256": digest,
             "source_manifest_sha256": file_sha256(manifest),
             "fixture_sha256": file_sha256(fixture),
             "design": design,
@@ -96,6 +121,17 @@ def evaluate(design: dict[str, Any], out: Path) -> None:
         raise ValueError("The test requires the frozen design and trial fixture")
     if inputs["vehicle_parameters"] != carla_1_0_nissan_patrol().as_dict():
         raise ValueError("The CARLA 1.0 preset differs from the frozen parameters")
+    if inputs["runtime_identity"] != runtime_identity():
+        raise ValueError("The runtime differs from the frozen configuration")
+    for name in (
+        "baseline.json",
+        "baseline.jsonl",
+        "inverse.json",
+        "inverse.jsonl",
+        "report.json",
+    ):
+        if (out / name).exists():
+            raise FileExistsError(f"Preserve the existing result file: {name}")
     seeds = tuple(design["test_seeds"])
     groups = tuple(inputs["source_groups"])
     metrics_config = ActuationEvaluationConfig(
@@ -128,6 +164,8 @@ def evaluate(design: dict[str, Any], out: Path) -> None:
     report = review_actuation(
         results["baseline"], results["inverse"], groups, metrics_config
     )
+    report["source_selection_sha256"] = file_sha256(out / "frozen-inputs.json")
+    report["arm_status"] = {arm: result["status"] for arm, result in results.items()}
     report["expected_episodes_per_profile"] = len(groups) * len(seeds)
     report["failed_episodes"] = {
         arm: result["diagnostics"]["failed_episodes"] for arm, result in results.items()
@@ -135,6 +173,8 @@ def evaluate(design: dict[str, Any], out: Path) -> None:
     report["failure_counts"] = {
         arm: len(episodes) for arm, episodes in report["failed_episodes"].items()
     }
+    if inputs["runtime_identity"] != runtime_identity():
+        report["decision"] = "rejected_runtime_drift"
     if "source_metric_errors" in report:
         means = {
             arm: {
@@ -152,6 +192,40 @@ def evaluate(design: dict[str, Any], out: Path) -> None:
             guards.values()
         ):
             report["decision"] = "rejected_metric_regression"
+    else:
+        # Descriptive estimates for tracks with all seeds completed in both arms.
+        paired: dict[str, dict[tuple[str, int], Any]] = {
+            arm: {
+                (row["source_group"], row["base_seed"]): row
+                for row in result["episodes"]
+                if _complete_episode(row)
+            }
+            for arm, result in results.items()
+        }
+        complete_groups = [
+            group
+            for group in groups
+            if all(
+                (group, seed) in paired["baseline"]
+                and (group, seed) in paired["inverse"]
+                and paired["baseline"][group, seed]["seed"]
+                == paired["inverse"][group, seed]["seed"]
+                for seed in seeds
+            )
+        ]
+        report["descriptive_complete_groups"] = complete_groups
+        if complete_groups:
+            report["descriptive_complete_group_metric_means"] = {
+                arm: {
+                    metric: mean(
+                        rows[group, seed][metric]
+                        for group in complete_groups
+                        for seed in seeds
+                    )
+                    for metric in METRICS
+                }
+                for arm, rows in paired.items()
+            }
     write(out / "report.json", report)
     print(report["decision"], flush=True)
 
