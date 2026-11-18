@@ -1,0 +1,12 @@
+{
+  "scope": "external data feasibility only",
+  "development_selection_sha256": "677c478ae3ac2c70284481558c72e5796126763b6f8869bf353186cb0bdeb4ff",
+  "source_manifest_sha256": "f2cb521534bb8b0eeea0c1e9c9e7b11704b0f89555b6faf2351e91e02d0c94b5",
+  "dataset_id": "tgsim-i294-i90",
+  "allow_descriptive_pilot": false,
+  "reason": "I 294 L1 and L2 could not provide the required runs at the fixed speed and geometry settings. The published additions supply 24 tracks across six capture-qualified runs. The frozen headway, vehicle, profiles, seeds, metrics, and adoption rules apply.",
+  "design_amendments": [
+    "external-coverage-plan.json",
+    "stationary-coverage-addition.json"
+  ]
+}

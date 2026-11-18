@@ -1,0 +1,316 @@
+{
+  "status": "insufficient_independent_runs",
+  "required_runs": 6,
+  "eligible_runs": [
+    "i294-l1:run8"
+  ],
+  "run_reports": [
+    {
+      "run": "i294-l1:run1",
+      "source_run_index": 1,
+      "capture": "i294-l1",
+      "direction": "northbound",
+      "raw_rows": 74601,
+      "raw_tracks": 87,
+      "status": "no_complete_low_speed_track",
+      "rejections": {},
+      "geometry": [],
+      "duplicate_rows_removed": 0,
+      "flagged_or_nonpassenger_tracks": 14,
+      "necessary_speed_tracks": 0,
+      "eligible_tracks": 0
+    },
+    {
+      "run": "i294-l1:run3",
+      "source_run_index": 3,
+      "capture": "i294-l1",
+      "direction": "northbound",
+      "raw_rows": 61541,
+      "raw_tracks": 94,
+      "status": "no_complete_low_speed_track",
+      "rejections": {},
+      "geometry": [],
+      "duplicate_rows_removed": 0,
+      "flagged_or_nonpassenger_tracks": 16,
+      "necessary_speed_tracks": 0,
+      "eligible_tracks": 0
+    },
+    {
+      "run": "i294-l1:run7",
+      "source_run_index": 7,
+      "capture": "i294-l1",
+      "direction": "northbound",
+      "raw_rows": 60960,
+      "raw_tracks": 87,
+      "status": "no_complete_low_speed_track",
+      "rejections": {},
+      "geometry": [],
+      "duplicate_rows_removed": 0,
+      "flagged_or_nonpassenger_tracks": 19,
+      "necessary_speed_tracks": 0,
+      "eligible_tracks": 0
+    },
+    {
+      "run": "i294-l1:run8",
+      "source_run_index": 8,
+      "capture": "i294-l1",
+      "direction": "southbound",
+      "raw_rows": 435208,
+      "raw_tracks": 328,
+      "status": "evaluated",
+      "rejections": {
+        "derived_speed_outside_envelope": 79
+      },
+      "geometry": [
+        {
+          "lane": -5,
+          "original_vertices": 15714,
+          "arc_length_m": 4787.111956067227,
+          "orientation": 1,
+          "orientation_observations": 68976,
+          "orientation_agreement": 1.0,
+          "rows": 73975,
+          "valid_geometry_rows": 71615,
+          "mainline_rows": 48425,
+          "distance_quantiles_m": [
+            0.2782556146035156,
+            1.134113029025467,
+            1.9604951096552143,
+            10.625583579998091
+          ]
+        },
+        {
+          "lane": -4,
+          "original_vertices": 15714,
+          "arc_length_m": 4787.324684839629,
+          "orientation": 1,
+          "orientation_observations": 89823,
+          "orientation_agreement": 1.0,
+          "rows": 96451,
+          "valid_geometry_rows": 95997,
+          "mainline_rows": 71186,
+          "distance_quantiles_m": [
+            0.2255730960329383,
+            0.9940778975277449,
+            1.837867192232642,
+            22.042539349193085
+          ]
+        },
+        {
+          "lane": -3,
+          "original_vertices": 15714,
+          "arc_length_m": 4786.909383594991,
+          "orientation": 1,
+          "orientation_observations": 109300,
+          "orientation_agreement": 1.0,
+          "rows": 124576,
+          "valid_geometry_rows": 123518,
+          "mainline_rows": 89276,
+          "distance_quantiles_m": [
+            0.21795692515696302,
+            0.9646129467002065,
+            2.386676666953723,
+            43.79297422056942
+          ]
+        },
+        {
+          "lane": -2,
+          "original_vertices": 15714,
+          "arc_length_m": 4786.77817396006,
+          "orientation": 1,
+          "orientation_observations": 134977,
+          "orientation_agreement": 1.0,
+          "rows": 140206,
+          "valid_geometry_rows": 139381,
+          "mainline_rows": 104117,
+          "distance_quantiles_m": [
+            0.2047795310078206,
+            0.8010933819722906,
+            2.0380547673948075,
+            40.386238377086684
+          ]
+        }
+      ],
+      "duplicate_rows_removed": 0,
+      "flagged_or_nonpassenger_tracks": 77,
+      "necessary_speed_tracks": 213,
+      "geometry_file": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\tgsim-i294-2026-11-18\\raw\\81caf227-98c7-4fc1-a512-baf7f4bc9170-I-294-L1-Run_8-geometry-with-ramps.csv",
+      "geometry_sha256": "6e093ad64756eb7f356cf243119b069e2b0325ed69722b6e4eee135e1460f96e",
+      "ambiguous_same_lane_frame_rows": 83224,
+      "valid_pair_rows": 118121,
+      "complete_pair_blocks": 165,
+      "eligible_windows": 302,
+      "eligible_tracks": 98
+    },
+    {
+      "run": "i294-l1:run9",
+      "source_run_index": 9,
+      "capture": "i294-l1",
+      "direction": "northbound",
+      "raw_rows": 45560,
+      "raw_tracks": 74,
+      "status": "no_complete_low_speed_track",
+      "rejections": {},
+      "geometry": [],
+      "duplicate_rows_removed": 0,
+      "flagged_or_nonpassenger_tracks": 22,
+      "necessary_speed_tracks": 0,
+      "eligible_tracks": 0
+    },
+    {
+      "run": "i294-l1:run11",
+      "source_run_index": 11,
+      "capture": "i294-l1",
+      "direction": "northbound",
+      "raw_rows": 72647,
+      "raw_tracks": 122,
+      "status": "evaluated",
+      "rejections": {},
+      "geometry": [
+        {
+          "lane": 2,
+          "original_vertices": 15517,
+          "arc_length_m": 4723.632500589959,
+          "orientation": 1,
+          "orientation_observations": 1683,
+          "orientation_agreement": 1.0,
+          "rows": 16625,
+          "valid_geometry_rows": 1699,
+          "mainline_rows": 140,
+          "distance_quantiles_m": [
+            7.080352922505824,
+            10.674620630149322,
+            13.142403662489157,
+            13.864406388436866
+          ]
+        },
+        {
+          "lane": 3,
+          "original_vertices": 15517,
+          "arc_length_m": 4723.632500589959,
+          "orientation": 1,
+          "orientation_observations": 1699,
+          "orientation_agreement": 1.0,
+          "rows": 15718,
+          "valid_geometry_rows": 1705,
+          "mainline_rows": 319,
+          "distance_quantiles_m": [
+            7.371362862629496,
+            12.381523965981055,
+            14.231530652384786,
+            44.67370422082888
+          ]
+        },
+        {
+          "lane": 4,
+          "original_vertices": 15517,
+          "arc_length_m": 4723.632500589959,
+          "orientation": 1,
+          "orientation_observations": 1891,
+          "orientation_agreement": 1.0,
+          "rows": 19802,
+          "valid_geometry_rows": 1891,
+          "mainline_rows": 369,
+          "distance_quantiles_m": [
+            7.578556077925764,
+            12.442049562243435,
+            20.832776325393905,
+            200.7081799556509
+          ]
+        },
+        {
+          "lane": 5,
+          "original_vertices": 15517,
+          "arc_length_m": 4723.632500589959,
+          "orientation": 1,
+          "orientation_observations": 1716,
+          "orientation_agreement": 1.0,
+          "rows": 20502,
+          "valid_geometry_rows": 1717,
+          "mainline_rows": 298,
+          "distance_quantiles_m": [
+            7.554445941251636,
+            11.021396060073332,
+            14.083334239876134,
+            71.07575434583903
+          ]
+        }
+      ],
+      "duplicate_rows_removed": 0,
+      "flagged_or_nonpassenger_tracks": 26,
+      "necessary_speed_tracks": 11,
+      "geometry_file": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\tgsim-i294-2026-11-18\\raw\\dc56579a-c383-4dca-b2ac-c7c25e7d8b05-I-294-L1-Run_11-geometry-with-ramps.csv",
+      "geometry_sha256": "de80b57ac2e532a26b2b08679bf76b1f1fa320d1de13636f701020331a0072f1",
+      "ambiguous_same_lane_frame_rows": 71854,
+      "valid_pair_rows": 0,
+      "complete_pair_blocks": 0,
+      "eligible_windows": 0,
+      "eligible_tracks": 0
+    },
+    {
+      "run": "i294-l1:run18",
+      "source_run_index": 18,
+      "capture": "i294-l1",
+      "direction": "southbound",
+      "raw_rows": 99655,
+      "raw_tracks": 118,
+      "status": "projection_validation_failed",
+      "rejections": {},
+      "geometry": [],
+      "duplicate_rows_removed": 0,
+      "flagged_or_nonpassenger_tracks": 22,
+      "necessary_speed_tracks": 54,
+      "geometry_file": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\tgsim-i294-2026-11-18\\raw\\6c89bb7f-7b62-44a7-90d2-f3e2819ea00c-I-294-L1-Run_18-geometry-with-ramps.csv",
+      "geometry_sha256": "6e093ad64756eb7f356cf243119b069e2b0325ed69722b6e4eee135e1460f96e",
+      "error": "No moving observations establish lane orientation",
+      "eligible_tracks": 0
+    },
+    {
+      "run": "i294-l1:run19",
+      "source_run_index": 19,
+      "capture": "i294-l1",
+      "direction": "northbound",
+      "raw_rows": 67835,
+      "raw_tracks": 87,
+      "status": "no_complete_low_speed_track",
+      "rejections": {},
+      "geometry": [],
+      "duplicate_rows_removed": 0,
+      "flagged_or_nonpassenger_tracks": 14,
+      "necessary_speed_tracks": 0,
+      "eligible_tracks": 0
+    },
+    {
+      "run": "i294-l1:run20",
+      "source_run_index": 20,
+      "capture": "i294-l1",
+      "direction": "southbound",
+      "raw_rows": 38850,
+      "raw_tracks": 66,
+      "status": "no_complete_low_speed_track",
+      "rejections": {},
+      "geometry": [],
+      "duplicate_rows_removed": 0,
+      "flagged_or_nonpassenger_tracks": 9,
+      "necessary_speed_tracks": 0,
+      "eligible_tracks": 0
+    },
+    {
+      "run": "i294-l1:run21",
+      "source_run_index": 21,
+      "capture": "i294-l1",
+      "direction": "northbound",
+      "raw_rows": 67424,
+      "raw_tracks": 102,
+      "status": "no_complete_low_speed_track",
+      "rejections": {},
+      "geometry": [],
+      "duplicate_rows_removed": 0,
+      "flagged_or_nonpassenger_tracks": 16,
+      "necessary_speed_tracks": 0,
+      "eligible_tracks": 0
+    }
+  ],
+  "speed_envelope_unchanged": true,
+  "model_outcomes_inspected": false
+}
