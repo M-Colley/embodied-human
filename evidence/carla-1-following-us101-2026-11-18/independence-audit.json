@@ -1,0 +1,36 @@
+{
+  "reviewed_utc": "2026-11-18T13:24:05.394921+00:00",
+  "prior_source_manifest": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\ngsim\\ngsim-i80-cars.json",
+  "prior_source_manifest_sha256": "44ec5317380bee71e57ef914d68f442ee8b6bb792f50589262e961fc10626ae3",
+  "prior_source_where": "location='i-80' AND v_class=2",
+  "prior_source_sha256": "bc3cff7ccc9c9fa5425f3424d5bee341dea2a35ea955328b3b221ee64c3931dc",
+  "prior_campaign_input_registry": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\empirical-driving-2026-10-28\\inputs.json",
+  "prior_campaign_input_registry_sha256": "5ce0db7779e15955edd7335f4bb47cfaefddbc7571c4e9e66eba0dfb52314660",
+  "prior_campaign_ngsim_input": {
+    "path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\ngsim\\ngsim-i80-cars.csv",
+    "status": "available",
+    "sha256": "bc3cff7ccc9c9fa5425f3424d5bee341dea2a35ea955328b3b221ee64c3931dc",
+    "licence": "CC BY-SA 3.0"
+  },
+  "new_source_where": "location='us-101' AND v_class=2",
+  "tracked_source_search_command": [
+    "git",
+    "grep",
+    "-n",
+    "-i",
+    "--extended-regexp",
+    "us[ _-]?101",
+    "--",
+    "evidence",
+    "examples",
+    "src",
+    "VALIDATION.md",
+    "README.md"
+  ],
+  "tracked_source_search_head": "f22d110dac3f7b3e74c37125a0bfe664306c8045",
+  "tracked_source_search_matches": [],
+  "site_independence": "The retained NGSIM calibration input is I-80 in Emeryville. The acquired input is US 101 in Los Angeles. These are distinct recorded road sites.",
+  "identifier_requirement": "Use the dataset namespace ngsim-us101. Vehicle identifiers recur across sites and recording periods.",
+  "participant_identity": "Persistent human participant identity is unavailable. Site and source track independence do not establish distinct human identities.",
+  "dataset_relationship": "The provider, public dataset identifier, vehicle class filter and subsequent existing loader pipeline are shared."
+}
