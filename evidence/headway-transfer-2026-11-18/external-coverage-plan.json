@@ -1,0 +1,24 @@
+{
+  "scope": "external data feasibility only",
+  "candidate": "1.2 s desired time headway, selected on US 101",
+  "baseline": "1.6 s desired time headway",
+  "coverage_failure": {
+    "i294_l1": "Only runs 8, 11 and 18 can supply a continuous 20 s small vehicle track at or below 16 m/s after excluding flagged automation. Three runs cannot meet the six run rule even before screening the lead vehicle and lane.",
+    "i294_l2": "The necessary low speed vehicle filter returns 30 samples in one track. It cannot supply a 20 s window."
+  },
+  "external_sources": [
+    {
+      "site": "TGSIM I 294 L1",
+      "capture_date": "2021-10-18",
+      "doi": "10.21949/1404217"
+    },
+    {
+      "site": "TGSIM I 90/I 94 Moving",
+      "capture_date": "2022-05-27",
+      "doi": "10.21949/1404212"
+    }
+  ],
+  "external_selection": "Use at most 24 reproducibly selected ordinary vehicle tracks across eligible acquisition runs. Balance the number of tracks across available runs where the cohort permits. Require one 20 s window per track, the same lane and leader throughout, 16 m/s maximum, valid lane projection and no flagged automation in either vehicle. Keep road and capture run identities separate.",
+  "decision_constraints": "Vehicle, controller settings, headway, two common test seeds, metrics, run weighting and acceptance rules remain as published. A cohort with fewer than 24 tracks or six acquisition runs can be evaluated descriptively and cannot be accepted.",
+  "test_outcomes_seen": false
+}
