@@ -1,0 +1,14 @@
+{
+  "scope": "external data feasibility only",
+  "previous_eligible_capture_runs": 5,
+  "previous_screening": "I 294 L1 run 8 and four I 90/I 94 Moving runs met the full data eligibility criteria. The other I 294 L1 runs failed lane and window checks.",
+  "additional_source": {
+    "site": "TGSIM I 90/I 94 Stationary",
+    "source_id": "9uas-hf8b",
+    "capture_date": "2021-10-06",
+    "doi": "10.21949/1404218"
+  },
+  "rule": "Use the lowest numbered eligible stationary run with at least four qualifying tracks. Admit one stationary run. If six runs qualify, select four tracks per run using the fixed seed. Otherwise report the five run test as descriptive.",
+  "analysis": "The eligibility criteria, selected 1.2 s headway, outcome measures, paired seeds and adoption rules remain fixed.",
+  "test_outcomes_seen": false
+}

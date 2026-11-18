@@ -1,0 +1,1069 @@
+{
+  "id" : "tpsq-zrwa",
+  "name" : "Third Generation Simulation Data (TGSIM) I-294 L2 Trajectories",
+  "assetType" : "dataset",
+  "attribution" : "U.S. Department of Transportation Intelligent Transportation Systems Joint Program Office (JPO) -- Recommended citation: \"U.S. Department of Transportation Federal Highway Administration. (2024). Third Generation Simulation Data (TGSIM) I-294 L2 Trajectories. [Dataset]. Provided by ITS DataHub through Data.transportation.gov. Accessed YYYY-MM-DD from https://doi.org/10.21949/1404224\"",
+  "averageRating" : 0,
+  "category" : "Automobiles",
+  "createdAt" : 1730732437,
+  "description" : "The main dataset is a 9 MB file of trajectory data (I294_L2_final.csv) that contains position, speed, and acceleration data for small and large automated (L2) and non-automated vehicles on a highway in a suburban environment. Supporting files include aerial reference images for twelve distinct data collection “Runs” (I294_L2_Run_X_ref_image_with_lanes.png, where X equals 5, 28, 30, 36, 38, and 42 for southbound runs and 23, 29, 31, 33, 35, and 41 for northbound runs). Associated centerline files are also provided for each “Run” (I-294-L2-Run_X-geometry-with-ramps.csv). In each centerline file, x and y coordinates (in meters) marking each lane centerline are provided. The origin point of the reference image is located at the top left corner. Additionally, in each centerline file, an indicator variable is used for each lane to define the following types of road sections: 0=no ramp, 1=on-ramps, 2=off-ramps, and 3=weaving segments. The number attached to each column header is the numerical ID assigned for the specific lane (see “TGSIM – Centerline Data Dictionary – I294 L2.csv” for more details).  The dataset defines eight lanes (four lanes in each direction) using these centerline files. Images that map the lanes of interest to the numerical lane IDs referenced in the trajectory dataset are stored in the folder titled “Annotation on Regions.zip”. The southbound lanes are shown visually in I294_L2_lane-2.png through I294_L2_lane-5.png and the northbound lanes are shown visually in I294_L2_lane2.png through I294_L2_lane5.png.\n\nThis dataset was collected as part of the Third Generation Simulation Data (TGSIM): A Closer Look at the Impacts of Automated Driving Systems on Human Behavior project. During the project, six trajectory datasets capable of characterizing human-automated vehicle interactions under a diverse set of scenarios in highway and city environments were collected and processed. For more information, see the project report found here: https://rosap.ntl.bts.gov/view/dot/74647. This dataset, which is one of the six collected as part of the TGSIM project, contains data collected using one high-resolution 8K camera mounted on a helicopter that followed two SAE Level 2 ADAS-equipped vehicles through automated lane change maneuvers and as part of a string once the desired lane was achieved and ACC was enabled. The helicopter then followed the string of vehicles (which sometimes broke from the sting due to large following distances) northbound through the 4.8 km section of highway at an altitude of 300 meters. The goal of the data collection effort was to collect data related to human drivers' responses to automated lane changes and as part of a string. The road segment has four lanes in each direction and covers a major on-ramp and one off-ramp in the southbound direction and one on-ramp as well as two off-ramps in the northbound direction. The segment of highway is operated by Illinois Tollway and contains a high percentage of heavy vehicles. The camera captured footage during the evening rush hour (3:00 PM-5:00 PM CT) on a cloudy day.\n\nAs part of this dataset, the following files were provided:\n<ul><li>I294_L2_final.csv contains the numerical data to be used for analysis that includes vehicle level trajectory data at every 0.1 second. Vehicle size (small or large), width, length, and whether the vehicle was one of the L2 test vehicles (\"yes\" or \"no\") are provided with instantaneous location, speed, and acceleration data. All distance measurements (width, length, location) were converted from pixels to meters using the following conversion factor: 1 pixel = 0.3-meter conversion.</li>\n<li>I294_L2_Run_X_ref_image_with_lanes.png are the aerial reference images that define the geographic region and associated roadway segments of interest (see bounding boxes on northbound and southbound lanes) for each run X.</li>\n<li>I294_L2_Run_X-geometry-with-ramps.csv contain the coordinates that define the lane centerlines for each Run X. The \"x\" and \"y\" columns represent the horizontal and vertical locations (in meters) in the reference image, respectively. The \"ramp\" columns define the type of roadway segment (0=no ramp, 1=on-ramps, 2=off-ramps, and 3=weaving segments). In total, the centerline files define eight lanes (four in each direction).</li>\n<li>Annotation on Regions.zip, which includes images that visually map four northbound lanes (I294_L2_lane2.png through I294_L2_lane5.png) and four southbound lanes (I294_L2_lane-2.png through I294_L2_lane-5.png) to their associated numerical lane IDs.</li>",
+  "diciBackend" : false,
+  "displayType" : "table",
+  "domainCName" : "data.transportation.gov",
+  "downloadCount" : 2542,
+  "hideFromCatalog" : false,
+  "hideFromDataJson" : false,
+  "locked" : false,
+  "newBackend" : true,
+  "numberOfComments" : 0,
+  "oid" : 40937199,
+  "provenance" : "official",
+  "publicationAppendEnabled" : false,
+  "publicationDate" : 1730759855,
+  "publicationGroup" : 19680037,
+  "publicationStage" : "published",
+  "rowsUpdatedAt" : 1730760284,
+  "tableId" : 19680037,
+  "totalTimesRated" : 0,
+  "viewCount" : 1618,
+  "viewLastModified" : 1791297039,
+  "viewType" : "tabular",
+  "approvals" : [ {
+    "reviewedAt" : 1732136557,
+    "reviewedAutomatically" : false,
+    "state" : "approved",
+    "submissionId" : 6620094,
+    "submissionObject" : "public_audience_request",
+    "submissionOutcome" : "change_audience",
+    "submittedAt" : 1732124698,
+    "targetAudience" : "public",
+    "workflowId" : 568,
+    "reviewer" : {
+      "id" : "a95h-dqad",
+      "displayName" : "DOT DataHub (DoNotDelete)"
+    },
+    "submissionDetails" : {
+      "permissionType" : "read"
+    },
+    "submissionOutcomeApplication" : {
+      "endedAt" : 1732136557,
+      "failureCount" : 0,
+      "startedAt" : 1732136557,
+      "status" : "success"
+    },
+    "submitter" : {
+      "id" : "vvef-p4qd",
+      "displayName" : "Elina Zlotchenko"
+    }
+  }, {
+    "message" : "The `strict_permissions` flag must be on to enable internal approvals.",
+    "state" : "unsubmittable",
+    "targetAudience" : "internal",
+    "workflowId" : 5258
+  } ],
+  "clientContext" : {
+    "clientContextVariables" : [ ],
+    "inheritedVariables" : { }
+  },
+  "columns" : [ {
+    "id" : 601225005,
+    "name" : "id",
+    "dataTypeName" : "number",
+    "description" : "Unique numerical ID given to each detected vehicle",
+    "fieldName" : "id",
+    "position" : 1,
+    "renderTypeName" : "number",
+    "tableColumnId" : 155383032,
+    "cachedContents" : {
+      "non_null" : "137928",
+      "largest" : "673",
+      "null" : "0",
+      "top" : [ {
+        "item" : "98",
+        "count" : "1436"
+      }, {
+        "item" : "156",
+        "count" : "1249"
+      }, {
+        "item" : "78",
+        "count" : "1233"
+      }, {
+        "item" : "118",
+        "count" : "1175"
+      }, {
+        "item" : "189",
+        "count" : "1128"
+      }, {
+        "item" : "273",
+        "count" : "1092"
+      }, {
+        "item" : "90",
+        "count" : "1051"
+      }, {
+        "item" : "103",
+        "count" : "1041"
+      }, {
+        "item" : "292",
+        "count" : "1024"
+      }, {
+        "item" : "204",
+        "count" : "1008"
+      }, {
+        "item" : "299",
+        "count" : "978"
+      }, {
+        "item" : "307",
+        "count" : "958"
+      }, {
+        "item" : "234",
+        "count" : "954"
+      }, {
+        "item" : "111",
+        "count" : "917"
+      }, {
+        "item" : "366",
+        "count" : "912"
+      }, {
+        "item" : "190",
+        "count" : "903"
+      }, {
+        "item" : "88",
+        "count" : "883"
+      }, {
+        "item" : "231",
+        "count" : "880"
+      }, {
+        "item" : "177",
+        "count" : "874"
+      }, {
+        "item" : "164",
+        "count" : "841"
+      } ],
+      "smallest" : "0",
+      "count" : "137928",
+      "cardinality" : "137928"
+    },
+    "format" : { }
+  }, {
+    "id" : 601225006,
+    "name" : "time",
+    "dataTypeName" : "number",
+    "description" : "Time at which current vehicle information are measured relative to start of run (seconds)",
+    "fieldName" : "time",
+    "position" : 2,
+    "renderTypeName" : "number",
+    "tableColumnId" : 155383033,
+    "cachedContents" : {
+      "non_null" : "137928",
+      "largest" : "58.9",
+      "null" : "0",
+      "top" : [ {
+        "item" : "27.2",
+        "count" : "382"
+      }, {
+        "item" : "27.1",
+        "count" : "382"
+      }, {
+        "item" : "28.8",
+        "count" : "382"
+      }, {
+        "item" : "28.9",
+        "count" : "381"
+      }, {
+        "item" : "27.0",
+        "count" : "381"
+      }, {
+        "item" : "30.0",
+        "count" : "381"
+      }, {
+        "item" : "26.5",
+        "count" : "380"
+      }, {
+        "item" : "29.7",
+        "count" : "380"
+      }, {
+        "item" : "30.1",
+        "count" : "380"
+      }, {
+        "item" : "27.8",
+        "count" : "380"
+      }, {
+        "item" : "26.7",
+        "count" : "380"
+      }, {
+        "item" : "30.2",
+        "count" : "380"
+      }, {
+        "item" : "29.8",
+        "count" : "380"
+      }, {
+        "item" : "27.9",
+        "count" : "380"
+      }, {
+        "item" : "28.0",
+        "count" : "379"
+      }, {
+        "item" : "26.6",
+        "count" : "379"
+      }, {
+        "item" : "29.9",
+        "count" : "379"
+      }, {
+        "item" : "27.3",
+        "count" : "379"
+      }, {
+        "item" : "28.1",
+        "count" : "379"
+      }, {
+        "item" : "26.8",
+        "count" : "379"
+      } ],
+      "smallest" : "5.0",
+      "count" : "137928",
+      "cardinality" : "137928"
+    },
+    "format" : { }
+  }, {
+    "id" : 601225007,
+    "name" : "xloc_kf",
+    "dataTypeName" : "number",
+    "description" : "x-coordinate of vehicle relative to global coordinates1 of the reference image after Kalman Filtering (m)",
+    "fieldName" : "xloc_kf",
+    "position" : 3,
+    "renderTypeName" : "number",
+    "tableColumnId" : 155383034,
+    "cachedContents" : {
+      "non_null" : "137928",
+      "largest" : "2194.08",
+      "null" : "0",
+      "top" : [ {
+        "item" : "876.665",
+        "count" : "7"
+      }, {
+        "item" : "992.045",
+        "count" : "7"
+      }, {
+        "item" : "984.59",
+        "count" : "6"
+      }, {
+        "item" : "984.865",
+        "count" : "6"
+      }, {
+        "item" : "985.435",
+        "count" : "6"
+      }, {
+        "item" : "1094.36",
+        "count" : "6"
+      }, {
+        "item" : "918.4",
+        "count" : "6"
+      }, {
+        "item" : "980.155",
+        "count" : "6"
+      }, {
+        "item" : "913.49",
+        "count" : "6"
+      }, {
+        "item" : "1196.48",
+        "count" : "6"
+      }, {
+        "item" : "1197.425",
+        "count" : "6"
+      }, {
+        "item" : "1303.965",
+        "count" : "5"
+      }, {
+        "item" : "1056.72",
+        "count" : "5"
+      }, {
+        "item" : "1177.975",
+        "count" : "5"
+      }, {
+        "item" : "864.49",
+        "count" : "5"
+      }, {
+        "item" : "754.71",
+        "count" : "5"
+      }, {
+        "item" : "788.055",
+        "count" : "5"
+      }, {
+        "item" : "1490.46",
+        "count" : "5"
+      }, {
+        "item" : "1198.97",
+        "count" : "5"
+      }, {
+        "item" : "1324.93",
+        "count" : "5"
+      } ],
+      "smallest" : "373.14",
+      "count" : "137928",
+      "cardinality" : "137928"
+    },
+    "format" : { }
+  }, {
+    "id" : 601225008,
+    "name" : "yloc_kf",
+    "dataTypeName" : "number",
+    "description" : "y-coordinate of vehicle relative to global coordinates1 of the reference image after Kalman Filtering (m)",
+    "fieldName" : "yloc_kf",
+    "position" : 4,
+    "renderTypeName" : "number",
+    "tableColumnId" : 155383035,
+    "cachedContents" : {
+      "non_null" : "137928",
+      "largest" : "261.63",
+      "null" : "0",
+      "top" : [ {
+        "item" : "145.33",
+        "count" : "35"
+      }, {
+        "item" : "144.2",
+        "count" : "33"
+      }, {
+        "item" : "143.88",
+        "count" : "32"
+      }, {
+        "item" : "146.83",
+        "count" : "31"
+      }, {
+        "item" : "139.36",
+        "count" : "31"
+      }, {
+        "item" : "172.1",
+        "count" : "31"
+      }, {
+        "item" : "148.92",
+        "count" : "31"
+      }, {
+        "item" : "143.92",
+        "count" : "30"
+      }, {
+        "item" : "146.07",
+        "count" : "30"
+      }, {
+        "item" : "146.72",
+        "count" : "30"
+      }, {
+        "item" : "144.65",
+        "count" : "30"
+      }, {
+        "item" : "132.07",
+        "count" : "30"
+      }, {
+        "item" : "140.48",
+        "count" : "30"
+      }, {
+        "item" : "165.71",
+        "count" : "29"
+      }, {
+        "item" : "144.6",
+        "count" : "29"
+      }, {
+        "item" : "144.5",
+        "count" : "29"
+      }, {
+        "item" : "141.02",
+        "count" : "29"
+      }, {
+        "item" : "144.7",
+        "count" : "29"
+      }, {
+        "item" : "166.13",
+        "count" : "29"
+      }, {
+        "item" : "144.84",
+        "count" : "28"
+      } ],
+      "smallest" : "92.7",
+      "count" : "137928",
+      "cardinality" : "137928"
+    },
+    "format" : { }
+  }, {
+    "id" : 601225009,
+    "name" : "lane_kf",
+    "dataTypeName" : "number",
+    "description" : "Lane ID as defined on the reference image after Kalman Filtering (Values = -5, -4, -4, -2 (southbound lanes) and 2, 3, 4, 5 (northbound lanes). The locations of Lane IDs in the legend correspond to their actual locations on the reference image. Lane -5 is the leftmost lane in the southbound direction based on the reference image. Lane 5 is the rightmost lane in the northbound direction based on the reference image.",
+    "fieldName" : "lane_kf",
+    "position" : 5,
+    "renderTypeName" : "number",
+    "tableColumnId" : 155383036,
+    "cachedContents" : {
+      "non_null" : "137928",
+      "largest" : "5",
+      "null" : "0",
+      "top" : [ {
+        "item" : "-5",
+        "count" : "21389"
+      }, {
+        "item" : "-2",
+        "count" : "20576"
+      }, {
+        "item" : "-3",
+        "count" : "20181"
+      }, {
+        "item" : "-4",
+        "count" : "20022"
+      }, {
+        "item" : "2",
+        "count" : "15860"
+      }, {
+        "item" : "3",
+        "count" : "13766"
+      }, {
+        "item" : "4",
+        "count" : "13322"
+      }, {
+        "item" : "5",
+        "count" : "12812"
+      } ],
+      "smallest" : "-5",
+      "count" : "137928",
+      "cardinality" : "137928"
+    },
+    "format" : { }
+  }, {
+    "id" : 601225010,
+    "name" : "speed_kf",
+    "dataTypeName" : "number",
+    "description" : "Measured speed after Kalman Filtering (m/s)",
+    "fieldName" : "speed_kf",
+    "position" : 6,
+    "renderTypeName" : "number",
+    "tableColumnId" : 155383037,
+    "cachedContents" : {
+      "non_null" : "137928",
+      "largest" : "41.35",
+      "null" : "0",
+      "top" : [ {
+        "item" : "27.9",
+        "count" : "815"
+      }, {
+        "item" : "27.7",
+        "count" : "809"
+      }, {
+        "item" : "28.1",
+        "count" : "809"
+      }, {
+        "item" : "27.2",
+        "count" : "787"
+      }, {
+        "item" : "27.6",
+        "count" : "786"
+      }, {
+        "item" : "26.6",
+        "count" : "782"
+      }, {
+        "item" : "27.5",
+        "count" : "779"
+      }, {
+        "item" : "27.1",
+        "count" : "772"
+      }, {
+        "item" : "28.0",
+        "count" : "769"
+      }, {
+        "item" : "27.0",
+        "count" : "767"
+      }, {
+        "item" : "27.25",
+        "count" : "755"
+      }, {
+        "item" : "28.2",
+        "count" : "755"
+      }, {
+        "item" : "27.65",
+        "count" : "755"
+      }, {
+        "item" : "26.7",
+        "count" : "755"
+      }, {
+        "item" : "26.3",
+        "count" : "754"
+      }, {
+        "item" : "28.05",
+        "count" : "751"
+      }, {
+        "item" : "27.85",
+        "count" : "751"
+      }, {
+        "item" : "26.9",
+        "count" : "746"
+      }, {
+        "item" : "28.15",
+        "count" : "737"
+      }, {
+        "item" : "26.8",
+        "count" : "728"
+      } ],
+      "smallest" : "14.75",
+      "count" : "137928",
+      "cardinality" : "137928"
+    },
+    "format" : { }
+  }, {
+    "id" : 601225011,
+    "name" : "acceleration_kf",
+    "dataTypeName" : "number",
+    "description" : "Measured acceleration after Kalman Filtering (m/s2)",
+    "fieldName" : "acceleration_kf",
+    "position" : 7,
+    "renderTypeName" : "number",
+    "tableColumnId" : 155383038,
+    "cachedContents" : {
+      "non_null" : "137928",
+      "largest" : "20.0",
+      "null" : "0",
+      "top" : [ {
+        "item" : "0.0",
+        "count" : "31661"
+      }, {
+        "item" : "0.5",
+        "count" : "26840"
+      }, {
+        "item" : "-0.5",
+        "count" : "24881"
+      }, {
+        "item" : "1.0",
+        "count" : "14729"
+      }, {
+        "item" : "-1.0",
+        "count" : "12841"
+      }, {
+        "item" : "1.5",
+        "count" : "5701"
+      }, {
+        "item" : "-1.5",
+        "count" : "4980"
+      }, {
+        "item" : "2.0",
+        "count" : "2663"
+      }, {
+        "item" : "-2.0",
+        "count" : "2494"
+      }, {
+        "item" : "2.5",
+        "count" : "1557"
+      }, {
+        "item" : "-2.5",
+        "count" : "1413"
+      }, {
+        "item" : "3.0",
+        "count" : "1038"
+      }, {
+        "item" : "-3.0",
+        "count" : "961"
+      }, {
+        "item" : "3.5",
+        "count" : "734"
+      }, {
+        "item" : "-3.5",
+        "count" : "684"
+      }, {
+        "item" : "4.0",
+        "count" : "569"
+      }, {
+        "item" : "-4.0",
+        "count" : "527"
+      }, {
+        "item" : "4.5",
+        "count" : "403"
+      }, {
+        "item" : "-4.5",
+        "count" : "353"
+      }, {
+        "item" : "-5.0",
+        "count" : "323"
+      } ],
+      "smallest" : "-22.0",
+      "count" : "137928",
+      "cardinality" : "137928"
+    },
+    "format" : { }
+  }, {
+    "id" : 601225012,
+    "name" : "length_smoothed",
+    "dataTypeName" : "number",
+    "description" : "Smoothed length of the bounding box corresponding to the detected vehicle (m) (proxy for vehicle length)",
+    "fieldName" : "length_smoothed",
+    "position" : 8,
+    "renderTypeName" : "number",
+    "tableColumnId" : 155383039,
+    "cachedContents" : {
+      "non_null" : "137928",
+      "largest" : "20.0",
+      "null" : "0",
+      "top" : [ {
+        "item" : "6.0",
+        "count" : "60402"
+      }, {
+        "item" : "20.0",
+        "count" : "17907"
+      }, {
+        "item" : "5.71",
+        "count" : "2224"
+      }, {
+        "item" : "5.81",
+        "count" : "2147"
+      }, {
+        "item" : "5.74",
+        "count" : "1902"
+      }, {
+        "item" : "5.77",
+        "count" : "1617"
+      }, {
+        "item" : "5.66",
+        "count" : "1553"
+      }, {
+        "item" : "5.75",
+        "count" : "1523"
+      }, {
+        "item" : "5.53",
+        "count" : "1502"
+      }, {
+        "item" : "5.86",
+        "count" : "1485"
+      }, {
+        "item" : "5.85",
+        "count" : "1483"
+      }, {
+        "item" : "5.97",
+        "count" : "1433"
+      }, {
+        "item" : "5.69",
+        "count" : "1395"
+      }, {
+        "item" : "5.79",
+        "count" : "1232"
+      }, {
+        "item" : "5.83",
+        "count" : "1219"
+      }, {
+        "item" : "5.56",
+        "count" : "1206"
+      }, {
+        "item" : "5.67",
+        "count" : "1178"
+      }, {
+        "item" : "5.76",
+        "count" : "1143"
+      }, {
+        "item" : "5.96",
+        "count" : "1030"
+      }, {
+        "item" : "5.88",
+        "count" : "1022"
+      } ],
+      "smallest" : "4.94",
+      "count" : "137928",
+      "cardinality" : "137928"
+    },
+    "format" : { }
+  }, {
+    "id" : 601225013,
+    "name" : "width_smoothed",
+    "dataTypeName" : "number",
+    "description" : "Smoothed width of the bounding box corresponding to the detected vehicle (m) (proxy for vehicle width)",
+    "fieldName" : "width_smoothed",
+    "position" : 9,
+    "renderTypeName" : "number",
+    "tableColumnId" : 155383040,
+    "cachedContents" : {
+      "non_null" : "137928",
+      "largest" : "3.0",
+      "null" : "0",
+      "top" : [ {
+        "item" : "2.67",
+        "count" : "114141"
+      }, {
+        "item" : "3.0",
+        "count" : "23787"
+      } ],
+      "smallest" : "2.67",
+      "count" : "137928",
+      "cardinality" : "137928"
+    },
+    "format" : { }
+  }, {
+    "id" : 601225014,
+    "name" : "type_most_common",
+    "dataTypeName" : "text",
+    "description" : "Type of vehicle detected (e.g., small vehicle, large vehicle)",
+    "fieldName" : "type_most_common",
+    "position" : 10,
+    "renderTypeName" : "text",
+    "tableColumnId" : 155383041,
+    "cachedContents" : {
+      "non_null" : "137928",
+      "largest" : "small-vehicle",
+      "null" : "0",
+      "top" : [ {
+        "item" : "small-vehicle",
+        "count" : "114141"
+      }, {
+        "item" : "large-vehicle",
+        "count" : "23787"
+      } ],
+      "smallest" : "large-vehicle",
+      "count" : "137928",
+      "cardinality" : "137928"
+    },
+    "format" : { }
+  }, {
+    "id" : 601225015,
+    "name" : "acc",
+    "dataTypeName" : "text",
+    "description" : "Labeled 'Yes' if current vehicle detected is an ACC vehicle, and 'No' otherwise.",
+    "fieldName" : "acc",
+    "position" : 11,
+    "renderTypeName" : "text",
+    "tableColumnId" : 155383042,
+    "cachedContents" : {
+      "non_null" : "137928",
+      "largest" : "yes",
+      "null" : "0",
+      "top" : [ {
+        "item" : "no",
+        "count" : "133809"
+      }, {
+        "item" : "yes",
+        "count" : "4119"
+      } ],
+      "smallest" : "no",
+      "count" : "137928",
+      "cardinality" : "137928"
+    },
+    "format" : { }
+  }, {
+    "id" : 601225016,
+    "name" : "run_index",
+    "dataTypeName" : "number",
+    "description" : "The index assigned to each distinct data collection process",
+    "fieldName" : "run_index",
+    "position" : 12,
+    "renderTypeName" : "number",
+    "tableColumnId" : 155383043,
+    "cachedContents" : {
+      "non_null" : "137928",
+      "largest" : "42",
+      "null" : "0",
+      "top" : [ {
+        "item" : "42",
+        "count" : "18901"
+      }, {
+        "item" : "30",
+        "count" : "17221"
+      }, {
+        "item" : "5",
+        "count" : "14759"
+      }, {
+        "item" : "33",
+        "count" : "12754"
+      }, {
+        "item" : "36",
+        "count" : "12624"
+      }, {
+        "item" : "41",
+        "count" : "10406"
+      }, {
+        "item" : "28",
+        "count" : "9901"
+      }, {
+        "item" : "38",
+        "count" : "8762"
+      }, {
+        "item" : "35",
+        "count" : "8535"
+      }, {
+        "item" : "31",
+        "count" : "8391"
+      }, {
+        "item" : "29",
+        "count" : "8237"
+      }, {
+        "item" : "23",
+        "count" : "7437"
+      } ],
+      "smallest" : "5",
+      "count" : "137928",
+      "cardinality" : "137928"
+    },
+    "format" : { }
+  } ],
+  "grants" : [ {
+    "inherited" : false,
+    "type" : "viewer",
+    "flags" : [ "public" ]
+  } ],
+  "metadata" : {
+    "attachments" : [ {
+      "filename" : "I294_L2_Run_5-geometry-with-ramps.csv",
+      "assetId" : "22b21e7d-ac80-4d58-8352-41a152ce7d34",
+      "name" : "I294_L2_Run_5-geometry-with-ramps.csv"
+    }, {
+      "filename" : "I294_L2_Run_23-geometry-with-ramps.csv",
+      "assetId" : "dc1de320-7240-4d00-96c9-57effe543e85",
+      "name" : "I294_L2_Run_23-geometry-with-ramps.csv"
+    }, {
+      "filename" : "I294_L2_Run_28-geometry-with-ramps.csv",
+      "assetId" : "f8340fbd-0af9-4972-a9ed-0284dcf97346",
+      "name" : "I294_L2_Run_28-geometry-with-ramps.csv"
+    }, {
+      "filename" : "I294_L2_Run_29-geometry-with-ramps.csv",
+      "assetId" : "c433c1fa-c06d-431f-bf6c-f477c0f5cd94",
+      "name" : "I294_L2_Run_29-geometry-with-ramps.csv"
+    }, {
+      "filename" : "I294_L2_Run_30-geometry-with-ramps.csv",
+      "assetId" : "663fa1da-8763-4e99-8b19-2a36216a8098",
+      "name" : "I294_L2_Run_30-geometry-with-ramps.csv"
+    }, {
+      "filename" : "I294_L2_Run_31-geometry-with-ramps.csv",
+      "assetId" : "442ff94a-6af4-461b-adb7-bc8a938fac20",
+      "name" : "I294_L2_Run_31-geometry-with-ramps.csv"
+    }, {
+      "filename" : "I294_L2_Run_33-geometry-with-ramps.csv",
+      "assetId" : "1aa7f09e-b156-4efa-9258-02d0d4368a77",
+      "name" : "I294_L2_Run_33-geometry-with-ramps.csv"
+    }, {
+      "filename" : "I294_L2_Run_35-geometry-with-ramps.csv",
+      "assetId" : "7a577e74-f5ac-4cf9-b16f-ead1cfc599d5",
+      "name" : "I294_L2_Run_35-geometry-with-ramps.csv"
+    }, {
+      "filename" : "I294_L2_Run_36-geometry-with-ramps.csv",
+      "assetId" : "5e2f1dcc-8683-4d93-8633-8c18d0a3a639",
+      "name" : "I294_L2_Run_36-geometry-with-ramps.csv"
+    }, {
+      "filename" : "I294_L2_Run_38-geometry-with-ramps.csv",
+      "assetId" : "9f760b36-3b20-496d-8cdb-91f70d355d11",
+      "name" : "I294_L2_Run_38-geometry-with-ramps.csv"
+    }, {
+      "filename" : "I294_L2_Run_41-geometry-with-ramps.csv",
+      "assetId" : "714ed4c3-81b1-4bcb-b815-9dd7f377a9c1",
+      "name" : "I294_L2_Run_41-geometry-with-ramps.csv"
+    }, {
+      "filename" : "I294_L2_Run_42-geometry-with-ramps.csv",
+      "assetId" : "d10165ab-c778-4237-adfc-bb0b6c9e3dc9",
+      "name" : "I294_L2_Run_42-geometry-with-ramps.csv"
+    }, {
+      "filename" : "TGSIM - Centerline Data Dictionary - I294 L2.xlsx",
+      "assetId" : "d5f8327e-f886-460f-af4d-f13396a4e436",
+      "name" : "TGSIM - Centerline Data Dictionary - I294 L2.xlsx"
+    }, {
+      "filename" : "I294_L2_Run_5_ref_image_with_lanes.png",
+      "assetId" : "cbdaa30d-479f-4842-b934-92cdd7fb41dc",
+      "name" : "I294_L2_Run_5_ref_image_with_lanes.png"
+    }, {
+      "filename" : "I294_L2_Run_23_ref_image_with_lanes.png",
+      "assetId" : "9c96a338-9aa7-4b8e-a8d4-9fd768476b2d",
+      "name" : "I294_L2_Run_23_ref_image_with_lanes.png"
+    }, {
+      "filename" : "I294_L2_Run_28_ref_image_with_lanes.png",
+      "assetId" : "0098a4db-861b-42bc-94fa-5e020cf49e13",
+      "name" : "I294_L2_Run_28_ref_image_with_lanes.png"
+    }, {
+      "filename" : "I294_L2_Run_29_ref_image_with_lanes.png",
+      "assetId" : "8905628b-781a-404d-a467-322f727af4c3",
+      "name" : "I294_L2_Run_29_ref_image_with_lanes.png"
+    }, {
+      "filename" : "I294_L2_Run_30_ref_image_with_lanes.png",
+      "assetId" : "707b8dbe-a04f-4059-869e-5c7f9ce20417",
+      "name" : "I294_L2_Run_30_ref_image_with_lanes.png"
+    }, {
+      "filename" : "I294_L2_Run_31_ref_image_with_lanes.png",
+      "assetId" : "02d0430a-c6c0-4863-90ea-78d3f81d5779",
+      "name" : "I294_L2_Run_31_ref_image_with_lanes.png"
+    }, {
+      "filename" : "I294_L2_Run_33_ref_image_with_lanes.png",
+      "assetId" : "00c62d65-e809-4d41-9cbf-2e5c2b710f8d",
+      "name" : "I294_L2_Run_33_ref_image_with_lanes.png"
+    }, {
+      "filename" : "I294_L2_Run_35_ref_image_with_lanes.png",
+      "assetId" : "7702c47d-4fb5-4197-872a-589aaa05ee35",
+      "name" : "I294_L2_Run_35_ref_image_with_lanes.png"
+    }, {
+      "filename" : "I294_L2_Run_36_ref_image_with_lanes.png",
+      "assetId" : "955e9b23-4342-47be-92f1-e5e2d87d8140",
+      "name" : "I294_L2_Run_36_ref_image_with_lanes.png"
+    }, {
+      "filename" : "I294_L2_Run_38_ref_image_with_lanes.png",
+      "assetId" : "9eeeedce-41c9-4866-8d21-35cff305fcda",
+      "name" : "I294_L2_Run_38_ref_image_with_lanes.png"
+    }, {
+      "filename" : "I294_L2_Run_41_ref_image_with_lanes.png",
+      "assetId" : "849e1769-10b9-4ce5-b2a7-35c8d6f74e83",
+      "name" : "I294_L2_Run_41_ref_image_with_lanes.png"
+    }, {
+      "filename" : "I294_L2_Run_42_ref_image_with_lanes.png",
+      "assetId" : "81162ecb-24ed-431a-bd3d-bab3b8321dbf",
+      "name" : "I294_L2_Run_42_ref_image_with_lanes.png"
+    }, {
+      "filename" : "TGSIM - Data Dictionary - I294 L2.xlsx",
+      "assetId" : "3e3016c2-19f1-427f-95c3-7ce5562b193c",
+      "name" : "TGSIM - Data Dictionary - I294 L2.xlsx"
+    }, {
+      "filename" : "I294_L2_Annotation on Regions.zip",
+      "assetId" : "4bffc2bc-a4b1-41a6-9665-55da663a7091",
+      "name" : "I294_L2_Annotation on Regions.zip"
+    } ],
+    "custom_fields" : {
+      "Common Core 3" : {
+        "Contact Email" : "data.itsjpo@dot.gov",
+        "Rights" : "public",
+        "Geographic Name" : "I-90/I94 in Chicago, IL; I-294 near Hinsdale, IL; I-395 in Washington DC; George Washington University Campus, Washington DC (Foggy Bottom)",
+        "Contact Name" : "ITS JPO",
+        "Program Code" : "021:042",
+        "Publisher" : "Federal Highway Administration",
+        "Bureau Code" : "021:15"
+      }
+    },
+    "availableDisplayTypes" : [ "table", "fatrow", "page" ]
+  },
+  "owner" : {
+    "id" : "xnuk-kw6c",
+    "createdAt" : 1721413802,
+    "displayName" : "ITS-JPO",
+    "screenName" : "ITS-JPO",
+    "type" : "team",
+    "members" : [ {
+      "id" : "m6ay-wk9k",
+      "createdAt" : 1632161888,
+      "displayName" : "Amy O'Hara",
+      "screenName" : "Amy O'Hara",
+      "teamId" : 1634236,
+      "teamRole" : "member",
+      "type" : "interactive",
+      "flags" : [ "siteMember" ]
+    }, {
+      "id" : "xqf5-7ccs",
+      "createdAt" : 1705435051,
+      "displayName" : "cadenyoungnoblis",
+      "screenName" : "cadenyoungnoblis",
+      "teamId" : 1634236,
+      "teamRole" : "member",
+      "type" : "interactive",
+      "flags" : [ "siteMember" ]
+    }, {
+      "id" : "vvef-p4qd",
+      "createdAt" : 1722885643,
+      "displayName" : "Elina Zlotchenko",
+      "screenName" : "Elina Zlotchenko",
+      "teamId" : 1634236,
+      "teamRole" : "owner",
+      "type" : "interactive",
+      "flags" : [ "siteMember" ]
+    }, {
+      "id" : "tq57-4b3n",
+      "createdAt" : 1496235516,
+      "displayName" : "Jim Larkin",
+      "screenName" : "Jim Larkin",
+      "teamId" : 1634236,
+      "teamRole" : "member",
+      "type" : "interactive",
+      "flags" : [ "siteMember" ]
+    }, {
+      "id" : "vv6k-eawi",
+      "createdAt" : 1721415400,
+      "displayName" : "Kate Hartman",
+      "screenName" : "Kate Hartman",
+      "teamId" : 1634236,
+      "teamRole" : "owner",
+      "type" : "interactive",
+      "flags" : [ "siteMember" ]
+    }, {
+      "id" : "i2uy-f3ed",
+      "createdAt" : 1705380467,
+      "displayName" : "Ryan Won",
+      "screenName" : "Ryan Won",
+      "teamId" : 1634236,
+      "teamRole" : "member",
+      "type" : "interactive",
+      "flags" : [ "siteMember" ]
+    }, {
+      "id" : "hz2a-m9mv",
+      "createdAt" : 1785333594,
+      "displayName" : "ShannonMcHugh",
+      "screenName" : "ShannonMcHugh",
+      "teamId" : 1634236,
+      "teamRole" : "member",
+      "type" : "interactive",
+      "flags" : [ "siteMember" ]
+    } ]
+  },
+  "query" : { },
+  "rights" : [ "read" ],
+  "tableAuthor" : {
+    "id" : "xnuk-kw6c",
+    "createdAt" : 1721413802,
+    "displayName" : "ITS-JPO",
+    "screenName" : "ITS-JPO",
+    "type" : "team",
+    "members" : [ {
+      "id" : "m6ay-wk9k",
+      "createdAt" : 1632161888,
+      "displayName" : "Amy O'Hara",
+      "screenName" : "Amy O'Hara",
+      "teamId" : 1634236,
+      "teamRole" : "member",
+      "type" : "interactive",
+      "flags" : [ "siteMember" ]
+    }, {
+      "id" : "xqf5-7ccs",
+      "createdAt" : 1705435051,
+      "displayName" : "cadenyoungnoblis",
+      "screenName" : "cadenyoungnoblis",
+      "teamId" : 1634236,
+      "teamRole" : "member",
+      "type" : "interactive",
+      "flags" : [ "siteMember" ]
+    }, {
+      "id" : "vvef-p4qd",
+      "createdAt" : 1722885643,
+      "displayName" : "Elina Zlotchenko",
+      "screenName" : "Elina Zlotchenko",
+      "teamId" : 1634236,
+      "teamRole" : "owner",
+      "type" : "interactive",
+      "flags" : [ "siteMember" ]
+    }, {
+      "id" : "tq57-4b3n",
+      "createdAt" : 1496235516,
+      "displayName" : "Jim Larkin",
+      "screenName" : "Jim Larkin",
+      "teamId" : 1634236,
+      "teamRole" : "member",
+      "type" : "interactive",
+      "flags" : [ "siteMember" ]
+    }, {
+      "id" : "vv6k-eawi",
+      "createdAt" : 1721415400,
+      "displayName" : "Kate Hartman",
+      "screenName" : "Kate Hartman",
+      "teamId" : 1634236,
+      "teamRole" : "owner",
+      "type" : "interactive",
+      "flags" : [ "siteMember" ]
+    }, {
+      "id" : "i2uy-f3ed",
+      "createdAt" : 1705380467,
+      "displayName" : "Ryan Won",
+      "screenName" : "Ryan Won",
+      "teamId" : 1634236,
+      "teamRole" : "member",
+      "type" : "interactive",
+      "flags" : [ "siteMember" ]
+    }, {
+      "id" : "hz2a-m9mv",
+      "createdAt" : 1785333594,
+      "displayName" : "ShannonMcHugh",
+      "screenName" : "ShannonMcHugh",
+      "teamId" : 1634236,
+      "teamRole" : "member",
+      "type" : "interactive",
+      "flags" : [ "siteMember" ]
+    } ]
+  },
+  "tags" : [ "infrastructure-based videography", "subcategory: autonomous vehicle safety systems", "multi-modal trajectories", "vehicle trajectory data", "category: vehicle safety", "its joint program office (jpo)", "human-automated vehicle interactions", "automated vehicles", "aerial videography", "tgsim", "third generation simulation", "intelligent transportation systems (its)" ],
+  "flags" : [ "default", "federated", "internalToPublicFederatedView", "restorable", "restorePossibleForType" ]
+}

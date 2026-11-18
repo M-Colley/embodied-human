@@ -1,0 +1,9 @@
+{
+  "archive_sha256": "925521b3756dec19ef318ceadd6cb6302aa175cff7e807c8652939b5725ca118",
+  "members_sha256": {
+    "reference.json": "77eb1ee01746b57e4f788d2e177b1c8ada38cf9aef1facc4e26a3f9c83e3a8b8",
+    "reference.jsonl": "4c13bcb506b49b8c7b824bc68447c1dd9ec83713a15c9bff1d4deda7a15d9fa8",
+    "headway-1.2.json": "348cd5cae53d769ecf47060a44caf814876ca7ab5fd6bab5961d9c56e618a933",
+    "headway-1.2.jsonl": "19646d4913488ceebbf28fc056e667fc108188e649cd75d2da7bc9f398c2bf02"
+  }
+}

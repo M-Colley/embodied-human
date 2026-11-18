@@ -1,0 +1,39 @@
+{
+  "working_directory": "Repository root with the preserved artifact directory tree",
+  "python": "3.12.13",
+  "dependencies": {
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "scipy": "1.17.1",
+    "shapely": "2.2.0"
+  },
+  "commands": [
+    "python -m pip install -e .",
+    "python -m pip install -r artifacts/tgsim-i294-2026-11-18/prepared-final/preparation-code/requirements.txt",
+    "python artifacts/tgsim-i294-2026-11-18/acquire.py",
+    "python artifacts/tgsim-i294-2026-11-18/acquire_dataset.py --dataset 6a6e-vfvi --metadata artifacts/tgsim-i294-2026-11-18/alternate-probes/i90-moving-metadata.json --counts artifacts/tgsim-i294-2026-11-18/alternate-probes/i90-moving-run_counts.json --out artifacts/tgsim-i294-2026-11-18/i90-moving",
+    "python artifacts/tgsim-i294-2026-11-18/acquire_dataset.py --dataset 9uas-hf8b --metadata artifacts/tgsim-i294-2026-11-18/alternate-probes/i90-stationary-metadata.json --counts artifacts/tgsim-i294-2026-11-18/alternate-probes/i90-stationary-next-run_counts.json --out artifacts/tgsim-i294-2026-11-18/i90-stationary-next",
+    "python artifacts/tgsim-i294-2026-11-18/prepare.py"
+  ],
+  "reexecution": "Run in a fresh copy preserving metadata snapshots, source raw files, and historical feasibility manifests. prepare.py refuses to overwrite prepared-final/manifest.json. Execute the root copy of prepare.py because input directories are relative to that script.",
+  "code": {
+    "prepared-final\\preparation-code\\acquire.py": "72bc78faebaf64923b76208de0ce4a3ca538c4ae7dca7e4dda012eec2dfa8ca0",
+    "prepared-final\\preparation-code\\acquire_dataset.py": "6cb71670a93a3cd482843b3833712f834c75e13c3469c4f5d601299a05965378",
+    "prepared-final\\preparation-code\\prepare.py": "b87ff7c686dd1dcb0ffdca5807aa628e81d3d362be266ee93904d1a311a2c679",
+    "prepared-final\\preparation-code\\requirements.txt": "16a373f92ec3811e9f33ce42f412c3f81b28cab07d8b0fb6812648713e235042"
+  },
+  "final_manifest": {
+    "file": "prepared-final/manifest.json",
+    "sha256": "f2cb521534bb8b0eeea0c1e9c9e7b11704b0f89555b6faf2351e91e02d0c94b5"
+  },
+  "final_fixture": {
+    "file": "prepared-final/selected-trials.npz",
+    "sha256": "d3b97b2daee01ab6a19955e0ebcd3ced5dd3410418cf08f7feaa28242b6ef777"
+  },
+  "historical_evidence": {
+    "five-cluster-preparation\\manifest.json": "ed6a98914245b82355175b95d8d5ece163005b69ad0d9952ae2f3ded94d0aeb4",
+    "stationary-run1-feasibility\\manifest.json": "b0314b560b02c50d848b66931b88625ffee2689ce93e2ebfe659441d3d54153a",
+    "l2-probe\\metadata.json": "6ee4c0d07978f555902baa2cc995949051b682333a82923b07566bda9165f9b1"
+  },
+  "model_outcomes_inspected": false
+}

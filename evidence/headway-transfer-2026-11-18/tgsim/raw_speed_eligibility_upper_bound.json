@@ -1,0 +1,52 @@
+[
+  {
+    "run": 1,
+    "necessary_condition_tracks": 0,
+    "necessary_condition_blocks": 0
+  },
+  {
+    "run": 3,
+    "necessary_condition_tracks": 0,
+    "necessary_condition_blocks": 0
+  },
+  {
+    "run": 7,
+    "necessary_condition_tracks": 0,
+    "necessary_condition_blocks": 0
+  },
+  {
+    "run": 8,
+    "necessary_condition_tracks": 213,
+    "necessary_condition_blocks": 306
+  },
+  {
+    "run": 9,
+    "necessary_condition_tracks": 0,
+    "necessary_condition_blocks": 0
+  },
+  {
+    "run": 11,
+    "necessary_condition_tracks": 11,
+    "necessary_condition_blocks": 11
+  },
+  {
+    "run": 18,
+    "necessary_condition_tracks": 54,
+    "necessary_condition_blocks": 69
+  },
+  {
+    "run": 19,
+    "necessary_condition_tracks": 0,
+    "necessary_condition_blocks": 0
+  },
+  {
+    "run": 20,
+    "necessary_condition_tracks": 0,
+    "necessary_condition_blocks": 0
+  },
+  {
+    "run": 21,
+    "necessary_condition_tracks": 0,
+    "necessary_condition_blocks": 0
+  }
+]

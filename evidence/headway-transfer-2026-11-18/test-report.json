@@ -1,0 +1,154 @@
+{
+  "input_sha256": "be117df85ebf2980f5a4788d1aa97ccde38e35be743eabd8a1ea71ca0d502e6a",
+  "expected_per_arm": 48,
+  "arms": {
+    "reference": {
+      "attempted": 48,
+      "completed": 45,
+      "failures": {
+        "road_departure": 3
+      }
+    },
+    "headway-1.2": {
+      "attempted": 48,
+      "completed": 43,
+      "failures": {
+        "road_departure": 5
+      }
+    }
+  },
+  "complete_tracks": [
+    "tgsim-i294-i90:i294-l1:run8:track1414",
+    "tgsim-i294-i90:i294-l1:run8:track2017",
+    "tgsim-i294-i90:i90-moving:run1:track11386",
+    "tgsim-i294-i90:i90-moving:run1:track7684",
+    "tgsim-i294-i90:i90-moving:run1:track9058",
+    "tgsim-i294-i90:i90-moving:run1:track9413",
+    "tgsim-i294-i90:i90-moving:run2:track1001",
+    "tgsim-i294-i90:i90-moving:run2:track168",
+    "tgsim-i294-i90:i90-moving:run2:track2499",
+    "tgsim-i294-i90:i90-moving:run2:track2707",
+    "tgsim-i294-i90:i90-moving:run3:track194",
+    "tgsim-i294-i90:i90-moving:run3:track214",
+    "tgsim-i294-i90:i90-moving:run3:track247",
+    "tgsim-i294-i90:i90-moving:run4:track5587",
+    "tgsim-i294-i90:i90-moving:run4:track7074",
+    "tgsim-i294-i90:i90-moving:run4:track7488",
+    "tgsim-i294-i90:i90-moving:run4:track7605",
+    "tgsim-i294-i90:i90-stationary:run2:track11190",
+    "tgsim-i294-i90:i90-stationary:run2:track3085",
+    "tgsim-i294-i90:i90-stationary:run2:track335",
+    "tgsim-i294-i90:i90-stationary:run2:track7618"
+  ],
+  "guards": {
+    "all_attempts_recorded": true,
+    "protocol_coverage": true,
+    "candidate_complete": false,
+    "complete_track_count": false,
+    "all_runs_represented": true,
+    "speed_rmse": true,
+    "absolute_signed_gap_bias": false,
+    "paired_gap_rmse_reduction": false
+  },
+  "conditional_metrics": {
+    "reference": {
+      "speed_rmse_mps": 0.6364279889572428,
+      "gap_rmse_m": 3.298867681768135,
+      "acceleration_rmse_mps2": 0.38589349743854706,
+      "signed_gap_error_m": -0.9316911998215154
+    },
+    "candidate": {
+      "speed_rmse_mps": 0.6565471943328441,
+      "gap_rmse_m": 3.753678921173068,
+      "acceleration_rmse_mps2": 0.39827486214706836,
+      "signed_gap_error_m": -2.308190705758921
+    }
+  },
+  "paired_run_means": {
+    "reference": {
+      "i294-l1:run8": {
+        "speed_rmse_mps": 0.4806530438574287,
+        "gap_rmse_m": 1.854613763802515,
+        "acceleration_rmse_mps2": 0.2585584288177958,
+        "signed_gap_error_m": -1.0764130279109638
+      },
+      "i90-moving:run1": {
+        "speed_rmse_mps": 0.7584078923833837,
+        "gap_rmse_m": 3.815084463799673,
+        "acceleration_rmse_mps2": 0.49163538678781676,
+        "signed_gap_error_m": -0.9285171497500061
+      },
+      "i90-moving:run2": {
+        "speed_rmse_mps": 0.6349709060200639,
+        "gap_rmse_m": 2.632419889123649,
+        "acceleration_rmse_mps2": 0.4556370492138202,
+        "signed_gap_error_m": 2.0108181634273654
+      },
+      "i90-moving:run3": {
+        "speed_rmse_mps": 0.8864212003510497,
+        "gap_rmse_m": 4.304507395341902,
+        "acceleration_rmse_mps2": 0.46293392494371416,
+        "signed_gap_error_m": -0.7414731139971723
+      },
+      "i90-moving:run4": {
+        "speed_rmse_mps": 0.3807163706261711,
+        "gap_rmse_m": 1.1374795786367988,
+        "acceleration_rmse_mps2": 0.34918202926967423,
+        "signed_gap_error_m": -0.8838291858620895
+      },
+      "i90-stationary:run2": {
+        "speed_rmse_mps": 0.6773985205053599,
+        "gap_rmse_m": 6.0491009999042715,
+        "acceleration_rmse_mps2": 0.2974141655984612,
+        "signed_gap_error_m": -3.970732884836226
+      }
+    },
+    "candidate": {
+      "i294-l1:run8": {
+        "speed_rmse_mps": 0.5291525869862956,
+        "gap_rmse_m": 3.512147277326114,
+        "acceleration_rmse_mps2": 0.2622137062207038,
+        "signed_gap_error_m": -2.9612101329174942
+      },
+      "i90-moving:run1": {
+        "speed_rmse_mps": 0.7884552743261294,
+        "gap_rmse_m": 4.666673012789404,
+        "acceleration_rmse_mps2": 0.49264808604205523,
+        "signed_gap_error_m": -2.540878844280335
+      },
+      "i90-moving:run2": {
+        "speed_rmse_mps": 0.5094862344989811,
+        "gap_rmse_m": 1.2638416161881003,
+        "acceleration_rmse_mps2": 0.440129927786496,
+        "signed_gap_error_m": 0.181708164482912
+      },
+      "i90-moving:run3": {
+        "speed_rmse_mps": 0.9946482184047891,
+        "gap_rmse_m": 4.9166762592361675,
+        "acceleration_rmse_mps2": 0.5033283107809593,
+        "signed_gap_error_m": -1.700210270567181
+      },
+      "i90-moving:run4": {
+        "speed_rmse_mps": 0.4304739770498544,
+        "gap_rmse_m": 1.6494007067951129,
+        "acceleration_rmse_mps2": 0.3712059040764241,
+        "signed_gap_error_m": -1.4540672415170903
+      },
+      "i90-stationary:run2": {
+        "speed_rmse_mps": 0.6870668747310151,
+        "gap_rmse_m": 6.51333465470351,
+        "acceleration_rmse_mps2": 0.32012323797577186,
+        "signed_gap_error_m": -5.374485909754336
+      }
+    }
+  },
+  "paired_gap_rmse_change_m": {
+    "mean": 0.45481123940493307,
+    "interval": [
+      -0.35500937962738943,
+      1.1101953205264274
+    ],
+    "unit": "collection run"
+  },
+  "decision": "rejected"
+}

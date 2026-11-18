@@ -1,0 +1,675 @@
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - setuptools>=77
+  - wheel
+* Getting build dependencies for sdist...
+running egg_info
+writing src\embodied_human.egg-info\PKG-INFO
+writing dependency_links to src\embodied_human.egg-info\dependency_links.txt
+writing entry points to src\embodied_human.egg-info\entry_points.txt
+writing requirements to src\embodied_human.egg-info\requires.txt
+writing top-level names to src\embodied_human.egg-info\top_level.txt
+reading manifest file 'src\embodied_human.egg-info\SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+adding license file 'LICENSE'
+adding license file 'src/embodied_human/_vendor/MIMO_LICENSE.txt'
+writing manifest file 'src\embodied_human.egg-info\SOURCES.txt'
+* Installed build dependency versions:
+  - setuptools==84.2.1
+  - wheel==0.48.0
+* Building sdist...
+running sdist
+running egg_info
+writing src\embodied_human.egg-info\PKG-INFO
+writing dependency_links to src\embodied_human.egg-info\dependency_links.txt
+writing entry points to src\embodied_human.egg-info\entry_points.txt
+writing requirements to src\embodied_human.egg-info\requires.txt
+writing top-level names to src\embodied_human.egg-info\top_level.txt
+reading manifest file 'src\embodied_human.egg-info\SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+adding license file 'LICENSE'
+adding license file 'src/embodied_human/_vendor/MIMO_LICENSE.txt'
+writing manifest file 'src\embodied_human.egg-info\SOURCES.txt'
+running check
+creating embodied_human-0.1.1
+creating embodied_human-0.1.1\.github
+creating embodied_human-0.1.1\.github\workflows
+creating embodied_human-0.1.1\docs
+creating embodied_human-0.1.1\evidence
+creating embodied_human-0.1.1\evidence\actuation-improvement-2026-10-28
+creating embodied_human-0.1.1\evidence\carla-1-following-us101-2026-11-18
+creating embodied_human-0.1.1\evidence\ci-audit-core
+creating embodied_human-0.1.1\evidence\closed-loop-calibration-2026-10-28
+creating embodied_human-0.1.1\evidence\empirical-driving-2026-10-28
+creating embodied_human-0.1.1\evidence\experiments
+creating embodied_human-0.1.1\evidence\headway-transfer-2026-11-18
+creating embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\checks
+creating embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\tgsim
+creating embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\tgsim\alternate-probes
+creating embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\tgsim\five-cluster-preparation
+creating embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\tgsim\l2-probe
+creating embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\tgsim\stationary-run1-feasibility
+creating embodied_human-0.1.1\evidence\steering-following-us101-2026-11-18
+creating embodied_human-0.1.1\examples
+creating embodied_human-0.1.1\examples\experiments
+creating embodied_human-0.1.1\src\embodied_human\_vendor
+creating embodied_human-0.1.1\src\embodied_human.egg-info
+creating embodied_human-0.1.1\src\embodied_human\agents
+creating embodied_human-0.1.1\src\embodied_human\bench
+creating embodied_human-0.1.1\src\embodied_human\builder
+creating embodied_human-0.1.1\src\embodied_human\tasks
+creating embodied_human-0.1.1\src\embodied_human\vision
+creating embodied_human-0.1.1\tests
+copying files to embodied_human-0.1.1...
+copying AGENTS.md -> embodied_human-0.1.1
+copying CITATION.cff -> embodied_human-0.1.1
+copying CONTRIBUTING.md -> embodied_human-0.1.1
+copying LICENSE -> embodied_human-0.1.1
+copying MANIFEST.in -> embodied_human-0.1.1
+copying README.md -> embodied_human-0.1.1
+copying VALIDATION.md -> embodied_human-0.1.1
+copying pyproject.toml -> embodied_human-0.1.1
+copying requirements-touchsim.txt -> embodied_human-0.1.1
+copying .github\requirements-benchmarks-full.txt -> embodied_human-0.1.1\.github
+copying .github\requirements-benchmarks.txt -> embodied_human-0.1.1\.github
+copying .github\workflows\benchmarks.yml -> embodied_human-0.1.1\.github\workflows
+copying .github\workflows\tests.yml -> embodied_human-0.1.1\.github\workflows
+copying docs\benchmark-failure-audit.md -> embodied_human-0.1.1\docs
+copying docs\builder.md -> embodied_human-0.1.1\docs
+copying docs\contact-sensing.md -> embodied_human-0.1.1\docs
+copying docs\experiments.md -> embodied_human-0.1.1\docs
+copying docs\memory-models.md -> embodied_human-0.1.1\docs
+copying docs\model-integrations.md -> embodied_human-0.1.1\docs
+copying docs\parameters.md -> embodied_human-0.1.1\docs
+copying docs\proprioception-data.md -> embodied_human-0.1.1\docs
+copying docs\repository-review.md -> embodied_human-0.1.1\docs
+copying docs\seminar-requirements.md -> embodied_human-0.1.1\docs
+copying docs\sensitivity.md -> embodied_human-0.1.1\docs
+copying docs\touchsim.md -> embodied_human-0.1.1\docs
+copying evidence\affect-module-review.json -> embodied_human-0.1.1\evidence
+copying evidence\benchmark-automation-core.json -> embodied_human-0.1.1\evidence
+copying evidence\benchmark-automation-environment.json -> embodied_human-0.1.1\evidence
+copying evidence\benchmark-automation.json -> embodied_human-0.1.1\evidence
+copying evidence\benchmark-automation.md -> embodied_human-0.1.1\evidence
+copying evidence\benchmark-baseline.json -> embodied_human-0.1.1\evidence
+copying evidence\benchmark-before-failure-audit.json -> embodied_human-0.1.1\evidence
+copying evidence\benchmark-failure-audit.md -> embodied_human-0.1.1\evidence
+copying evidence\benchmark-return-sd-0.8.json -> embodied_human-0.1.1\evidence
+copying evidence\benchmark-vestibular-audit.json -> embodied_human-0.1.1\evidence
+copying evidence\benchmark-vestibular-bos-bles.json -> embodied_human-0.1.1\evidence
+copying evidence\benchmark-vestibular-iso2631.json -> embodied_human-0.1.1\evidence
+copying evidence\cooper-drt-aggregates.json -> embodied_human-0.1.1\evidence
+copying evidence\drt-load-fit.json -> embodied_human-0.1.1\evidence
+copying evidence\experiment-environment.json -> embodied_human-0.1.1\evidence
+copying evidence\foveated-driver-view.png -> embodied_human-0.1.1\evidence
+copying evidence\glance-calibration.json -> embodied_human-0.1.1\evidence
+copying evidence\monitoring-fit.json -> embodied_human-0.1.1\evidence
+copying evidence\motion-sickness-fit.json -> embodied_human-0.1.1\evidence
+copying evidence\rotating-head-2026-10-27-benchmark.json -> embodied_human-0.1.1\evidence
+copying evidence\rotating-head-2026-10-27-environment.json -> embodied_human-0.1.1\evidence
+copying evidence\rotating-head-2026-10-27-suite.txt -> embodied_human-0.1.1\evidence
+copying evidence\rotating-head-2026-10-27-suite.xml -> embodied_human-0.1.1\evidence
+copying evidence\rotating-head-local-2026-10-28-suite.txt -> embodied_human-0.1.1\evidence
+copying evidence\rotating-head-local-2026-10-28-suite.xml -> embodied_human-0.1.1\evidence
+copying evidence\takeover-fit.json -> embodied_human-0.1.1\evidence
+copying evidence\tests-failure-audit.xml -> embodied_human-0.1.1\evidence
+copying evidence\tests-python310-automation.xml -> embodied_human-0.1.1\evidence
+copying evidence\tests-python310-final.xml -> embodied_human-0.1.1\evidence
+copying evidence\tests-python310.xml -> embodied_human-0.1.1\evidence
+copying evidence\tests.xml -> embodied_human-0.1.1\evidence
+copying evidence\actuation-improvement-2026-10-28\data-attribution.json -> embodied_human-0.1.1\evidence\actuation-improvement-2026-10-28
+copying evidence\actuation-improvement-2026-10-28\design.json -> embodied_human-0.1.1\evidence\actuation-improvement-2026-10-28
+copying evidence\actuation-improvement-2026-10-28\experimental-profile.json -> embodied_human-0.1.1\evidence\actuation-improvement-2026-10-28
+copying evidence\actuation-improvement-2026-10-28\paired-source-errors.png -> embodied_human-0.1.1\evidence\actuation-improvement-2026-10-28
+copying evidence\actuation-improvement-2026-10-28\provenance-before-test.json -> embodied_human-0.1.1\evidence\actuation-improvement-2026-10-28
+copying evidence\actuation-improvement-2026-10-28\study-evidence.zip -> embodied_human-0.1.1\evidence\actuation-improvement-2026-10-28
+copying evidence\actuation-improvement-2026-10-28\summary.json -> embodied_human-0.1.1\evidence\actuation-improvement-2026-10-28
+copying evidence\actuation-improvement-2026-10-28\trial-contact-sheet.png -> embodied_human-0.1.1\evidence\actuation-improvement-2026-10-28
+copying evidence\actuation-improvement-2026-10-28\video-manifest.json -> embodied_human-0.1.1\evidence\actuation-improvement-2026-10-28
+copying evidence\actuation-improvement-2026-10-28\video-verification.json -> embodied_human-0.1.1\evidence\actuation-improvement-2026-10-28
+copying evidence\carla-1-following-us101-2026-11-18\README.md -> embodied_human-0.1.1\evidence\carla-1-following-us101-2026-11-18
+copying evidence\carla-1-following-us101-2026-11-18\design.json -> embodied_human-0.1.1\evidence\carla-1-following-us101-2026-11-18
+copying evidence\carla-1-following-us101-2026-11-18\duplicate-audit.json -> embodied_human-0.1.1\evidence\carla-1-following-us101-2026-11-18
+copying evidence\carla-1-following-us101-2026-11-18\episode-archive.json -> embodied_human-0.1.1\evidence\carla-1-following-us101-2026-11-18
+copying evidence\carla-1-following-us101-2026-11-18\frozen-inputs.json -> embodied_human-0.1.1\evidence\carla-1-following-us101-2026-11-18
+copying evidence\carla-1-following-us101-2026-11-18\independence-audit.json -> embodied_human-0.1.1\evidence\carla-1-following-us101-2026-11-18
+copying evidence\carla-1-following-us101-2026-11-18\physical-episodes.zip -> embodied_human-0.1.1\evidence\carla-1-following-us101-2026-11-18
+copying evidence\carla-1-following-us101-2026-11-18\report.json -> embodied_human-0.1.1\evidence\carla-1-following-us101-2026-11-18
+copying evidence\carla-1-following-us101-2026-11-18\run.txt -> embodied_human-0.1.1\evidence\carla-1-following-us101-2026-11-18
+copying evidence\carla-1-following-us101-2026-11-18\schema-validation.json -> embodied_human-0.1.1\evidence\carla-1-following-us101-2026-11-18
+copying evidence\carla-1-following-us101-2026-11-18\study-source.json -> embodied_human-0.1.1\evidence\carla-1-following-us101-2026-11-18
+copying evidence\ci-audit-core\base.json -> embodied_human-0.1.1\evidence\ci-audit-core
+copying evidence\ci-audit-core\comparison-context.json -> embodied_human-0.1.1\evidence\ci-audit-core
+copying evidence\ci-audit-core\dependencies-base.txt -> embodied_human-0.1.1\evidence\ci-audit-core
+copying evidence\ci-audit-core\dependencies-head.txt -> embodied_human-0.1.1\evidence\ci-audit-core
+copying evidence\ci-audit-core\head.json -> embodied_human-0.1.1\evidence\ci-audit-core
+copying evidence\ci-audit-core\summary.md -> embodied_human-0.1.1\evidence\ci-audit-core
+copying evidence\closed-loop-calibration-2026-10-28\bridge-tests.txt -> embodied_human-0.1.1\evidence\closed-loop-calibration-2026-10-28
+copying evidence\closed-loop-calibration-2026-10-28\bridge-tests.xml -> embodied_human-0.1.1\evidence\closed-loop-calibration-2026-10-28
+copying evidence\closed-loop-calibration-2026-10-28\calibration.txt -> embodied_human-0.1.1\evidence\closed-loop-calibration-2026-10-28
+copying evidence\closed-loop-calibration-2026-10-28\closed-loop-comparison.png -> embodied_human-0.1.1\evidence\closed-loop-calibration-2026-10-28
+copying evidence\closed-loop-calibration-2026-10-28\command.txt -> embodied_human-0.1.1\evidence\closed-loop-calibration-2026-10-28
+copying evidence\closed-loop-calibration-2026-10-28\design.json -> embodied_human-0.1.1\evidence\closed-loop-calibration-2026-10-28
+copying evidence\closed-loop-calibration-2026-10-28\human-tests.txt -> embodied_human-0.1.1\evidence\closed-loop-calibration-2026-10-28
+copying evidence\closed-loop-calibration-2026-10-28\human-tests.xml -> embodied_human-0.1.1\evidence\closed-loop-calibration-2026-10-28
+copying evidence\closed-loop-calibration-2026-10-28\provenance-before-evaluation.json -> embodied_human-0.1.1\evidence\closed-loop-calibration-2026-10-28
+copying evidence\closed-loop-calibration-2026-10-28\provenance.json -> embodied_human-0.1.1\evidence\closed-loop-calibration-2026-10-28
+copying evidence\closed-loop-calibration-2026-10-28\reports.zip -> embodied_human-0.1.1\evidence\closed-loop-calibration-2026-10-28
+copying evidence\closed-loop-calibration-2026-10-28\summary.json -> embodied_human-0.1.1\evidence\closed-loop-calibration-2026-10-28
+copying evidence\empirical-driving-2026-10-28\bridge-tests.txt -> embodied_human-0.1.1\evidence\empirical-driving-2026-10-28
+copying evidence\empirical-driving-2026-10-28\bridge-tests.xml -> embodied_human-0.1.1\evidence\empirical-driving-2026-10-28
+copying evidence\empirical-driving-2026-10-28\campaign-tests.txt -> embodied_human-0.1.1\evidence\empirical-driving-2026-10-28
+copying evidence\empirical-driving-2026-10-28\campaign-tests.xml -> embodied_human-0.1.1\evidence\empirical-driving-2026-10-28
+copying evidence\empirical-driving-2026-10-28\campaign.json -> embodied_human-0.1.1\evidence\empirical-driving-2026-10-28
+copying evidence\empirical-driving-2026-10-28\closed-loop-comparison.png -> embodied_human-0.1.1\evidence\empirical-driving-2026-10-28
+copying evidence\empirical-driving-2026-10-28\human-tests.txt -> embodied_human-0.1.1\evidence\empirical-driving-2026-10-28
+copying evidence\empirical-driving-2026-10-28\human-tests.xml -> embodied_human-0.1.1\evidence\empirical-driving-2026-10-28
+copying evidence\empirical-driving-2026-10-28\release-campaign.txt -> embodied_human-0.1.1\evidence\empirical-driving-2026-10-28
+copying evidence\empirical-driving-2026-10-28\reports.zip -> embodied_human-0.1.1\evidence\empirical-driving-2026-10-28
+copying evidence\empirical-driving-2026-10-28\summary.json -> embodied_human-0.1.1\evidence\empirical-driving-2026-10-28
+copying evidence\experiments\choice.json -> embodied_human-0.1.1\evidence\experiments
+copying evidence\experiments\drt-morris.json -> embodied_human-0.1.1\evidence\experiments
+copying evidence\experiments\eyes-sobol.json -> embodied_human-0.1.1\evidence\experiments
+copying evidence\experiments\serial-recall.json -> embodied_human-0.1.1\evidence\experiments
+copying evidence\headway-transfer-2026-11-18\README.md -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18
+copying evidence\headway-transfer-2026-11-18\design.json -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18
+copying evidence\headway-transfer-2026-11-18\development-archive.json -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18
+copying evidence\headway-transfer-2026-11-18\development-episodes.zip -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18
+copying evidence\headway-transfer-2026-11-18\development-inputs.json -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18
+copying evidence\headway-transfer-2026-11-18\development-selection.json -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18
+copying evidence\headway-transfer-2026-11-18\development-trials.npz -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18
+copying evidence\headway-transfer-2026-11-18\external-coverage-plan.json -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18
+copying evidence\headway-transfer-2026-11-18\external-input-amendment.json -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18
+copying evidence\headway-transfer-2026-11-18\stationary-coverage-addition.json -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18
+copying evidence\headway-transfer-2026-11-18\test-archive.json -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18
+copying evidence\headway-transfer-2026-11-18\test-episodes.zip -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18
+copying evidence\headway-transfer-2026-11-18\test-inputs.json -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18
+copying evidence\headway-transfer-2026-11-18\test-report.json -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18
+copying evidence\headway-transfer-2026-11-18\test-trials.npz -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18
+copying evidence\headway-transfer-2026-11-18\checks\build.txt -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\checks
+copying evidence\headway-transfer-2026-11-18\checks\dev-runtime.txt -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\checks
+copying evidence\headway-transfer-2026-11-18\checks\dev-tests.txt -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\checks
+copying evidence\headway-transfer-2026-11-18\checks\dev.xml -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\checks
+copying evidence\headway-transfer-2026-11-18\checks\headway-prepare-test.txt -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\checks
+copying evidence\headway-transfer-2026-11-18\checks\headway-test.txt -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\checks
+copying evidence\headway-transfer-2026-11-18\checks\release-runtime.txt -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\checks
+copying evidence\headway-transfer-2026-11-18\checks\release-tests.txt -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\checks
+copying evidence\headway-transfer-2026-11-18\checks\release.xml -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\checks
+copying evidence\headway-transfer-2026-11-18\tgsim\README.md -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\tgsim
+copying evidence\headway-transfer-2026-11-18\tgsim\acquire.py -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\tgsim
+copying evidence\headway-transfer-2026-11-18\tgsim\acquire_dataset.py -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\tgsim
+copying evidence\headway-transfer-2026-11-18\tgsim\eligibility-design.json -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\tgsim
+copying evidence\headway-transfer-2026-11-18\tgsim\l1-feasibility.json -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\tgsim
+copying evidence\headway-transfer-2026-11-18\tgsim\metadata.json -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\tgsim
+copying evidence\headway-transfer-2026-11-18\tgsim\preparation-final.log -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\tgsim
+copying evidence\headway-transfer-2026-11-18\tgsim\prepare.py -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\tgsim
+copying evidence\headway-transfer-2026-11-18\tgsim\raw_speed_eligibility_upper_bound.json -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\tgsim
+copying evidence\headway-transfer-2026-11-18\tgsim\reproduction-record.json -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\tgsim
+copying evidence\headway-transfer-2026-11-18\tgsim\requirements.txt -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\tgsim
+copying evidence\headway-transfer-2026-11-18\tgsim\run_counts.json -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\tgsim
+copying evidence\headway-transfer-2026-11-18\tgsim\selected-trials.npz -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\tgsim
+copying evidence\headway-transfer-2026-11-18\tgsim\source-manifest.json -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\tgsim
+copying evidence\headway-transfer-2026-11-18\tgsim\stationary-run1-feasibility.log -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\tgsim
+copying evidence\headway-transfer-2026-11-18\tgsim\alternate-probes\1404212.json -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\tgsim\alternate-probes
+copying evidence\headway-transfer-2026-11-18\tgsim\alternate-probes\1404217.json -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\tgsim\alternate-probes
+copying evidence\headway-transfer-2026-11-18\tgsim\alternate-probes\1404218.json -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\tgsim\alternate-probes
+copying evidence\headway-transfer-2026-11-18\tgsim\alternate-probes\i90-moving-metadata.json -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\tgsim\alternate-probes
+copying evidence\headway-transfer-2026-11-18\tgsim\alternate-probes\i90-moving-run_counts.json -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\tgsim\alternate-probes
+copying evidence\headway-transfer-2026-11-18\tgsim\alternate-probes\i90-stationary-metadata.json -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\tgsim\alternate-probes
+copying evidence\headway-transfer-2026-11-18\tgsim\alternate-probes\i90-stationary-next-run_counts.json -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\tgsim\alternate-probes
+copying evidence\headway-transfer-2026-11-18\tgsim\alternate-probes\i90-stationary-selected-run_counts.json -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\tgsim\alternate-probes
+copying evidence\headway-transfer-2026-11-18\tgsim\five-cluster-preparation\manifest.json -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\tgsim\five-cluster-preparation
+copying evidence\headway-transfer-2026-11-18\tgsim\l2-probe\low_speed_counts.json -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\tgsim\l2-probe
+copying evidence\headway-transfer-2026-11-18\tgsim\l2-probe\metadata.json -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\tgsim\l2-probe
+copying evidence\headway-transfer-2026-11-18\tgsim\stationary-run1-feasibility\manifest.json -> embodied_human-0.1.1\evidence\headway-transfer-2026-11-18\tgsim\stationary-run1-feasibility
+copying evidence\steering-following-us101-2026-11-18\README.md -> embodied_human-0.1.1\evidence\steering-following-us101-2026-11-18
+copying evidence\steering-following-us101-2026-11-18\derived-metrics.json -> embodied_human-0.1.1\evidence\steering-following-us101-2026-11-18
+copying evidence\steering-following-us101-2026-11-18\diagnostic-source.zip -> embodied_human-0.1.1\evidence\steering-following-us101-2026-11-18
+copying evidence\steering-following-us101-2026-11-18\signed-following-errors.json -> embodied_human-0.1.1\evidence\steering-following-us101-2026-11-18
+copying evidence\steering-following-us101-2026-11-18\summary.json -> embodied_human-0.1.1\evidence\steering-following-us101-2026-11-18
+copying examples\calibrate_closed_loop_following.py -> embodied_human-0.1.1\examples
+copying examples\calibrate_glances.py -> embodied_human-0.1.1\examples
+copying examples\cooper_drt_aggregates.py -> embodied_human-0.1.1\examples
+copying examples\diagnose_following_steering.py -> embodied_human-0.1.1\examples
+copying examples\driving_data_inputs.json -> embodied_human-0.1.1\examples
+copying examples\evaluate_actuation_improvement.py -> embodied_human-0.1.1\examples
+copying examples\evaluate_carla1_following.py -> embodied_human-0.1.1\examples
+copying examples\evaluate_driving_data.py -> embodied_human-0.1.1\examples
+copying examples\evaluate_headway_transfer.py -> embodied_human-0.1.1\examples
+copying examples\fit_drt_load.py -> embodied_human-0.1.1\examples
+copying examples\fit_monitoring.py -> embodied_human-0.1.1\examples
+copying examples\fit_motion_sickness.py -> embodied_human-0.1.1\examples
+copying examples\fit_takeover.py -> embodied_human-0.1.1\examples
+copying examples\foveated_view.py -> embodied_human-0.1.1\examples
+copying examples\parameter_table.py -> embodied_human-0.1.1\examples
+copying examples\plot_driving_comparison.py -> embodied_human-0.1.1\examples
+copying examples\tutorial_modules.ipynb -> embodied_human-0.1.1\examples
+copying examples\validate_head_kinematics.py -> embodied_human-0.1.1\examples
+copying examples\experiments\choice.json -> embodied_human-0.1.1\examples\experiments
+copying examples\experiments\drt-morris.json -> embodied_human-0.1.1\examples\experiments
+copying examples\experiments\eyes-sobol.json -> embodied_human-0.1.1\examples\experiments
+copying examples\experiments\serial-recall.json -> embodied_human-0.1.1\examples\experiments
+copying src/embodied_human/_vendor\MIMO_LICENSE.txt -> embodied_human-0.1.1\src/embodied_human/_vendor
+copying src\embodied_human\__init__.py -> embodied_human-0.1.1\src\embodied_human
+copying src\embodied_human\actuation_evaluation.py -> embodied_human-0.1.1\src\embodied_human
+copying src\embodied_human\affect.py -> embodied_human-0.1.1\src\embodied_human
+copying src\embodied_human\attention.py -> embodied_human-0.1.1\src\embodied_human
+copying src\embodied_human\closed_loop_calibration.py -> embodied_human-0.1.1\src\embodied_human
+copying src\embodied_human\core.py -> embodied_human-0.1.1\src\embodied_human
+copying src\embodied_human\decision.py -> embodied_human-0.1.1\src\embodied_human
+copying src\embodied_human\driving_configuration.py -> embodied_human-0.1.1\src\embodied_human
+copying src\embodied_human\driving_data.py -> embodied_human-0.1.1\src\embodied_human
+copying src\embodied_human\driving_evaluation.py -> embodied_human-0.1.1\src\embodied_human
+copying src\embodied_human\driving_profiles.py -> embodied_human-0.1.1\src\embodied_human
+copying src\embodied_human\driving_protocols.py -> embodied_human-0.1.1\src\embodied_human
+copying src\embodied_human\estimation.py -> embodied_human-0.1.1\src\embodied_human
+copying src\embodied_human\experiment_protocols.py -> embodied_human-0.1.1\src\embodied_human
+copying src\embodied_human\experiments.py -> embodied_human-0.1.1\src\embodied_human
+copying src\embodied_human\fatigue.py -> embodied_human-0.1.1\src\embodied_human
+copying src\embodied_human\fixation_protocol.py -> embodied_human-0.1.1\src\embodied_human
+copying src\embodied_human\hearing.py -> embodied_human-0.1.1\src\embodied_human
+copying src\embodied_human\inference.py -> embodied_human-0.1.1\src\embodied_human
+copying src\embodied_human\memory.py -> embodied_human-0.1.1\src\embodied_human
+copying src\embodied_human\memory_pyactup.py -> embodied_human-0.1.1\src\embodied_human
+copying src\embodied_human\motor.py -> embodied_human-0.1.1\src\embodied_human
+copying src\embodied_human\population.py -> embodied_human-0.1.1\src\embodied_human
+copying src\embodied_human\proprioception.py -> embodied_human-0.1.1\src\embodied_human
+copying src\embodied_human\py.typed -> embodied_human-0.1.1\src\embodied_human
+copying src\embodied_human\reporting.py -> embodied_human-0.1.1\src\embodied_human
+copying src\embodied_human\response.py -> embodied_human-0.1.1\src\embodied_human
+copying src\embodied_human\risk.py -> embodied_human-0.1.1\src\embodied_human
+copying src\embodied_human\sensitivity.py -> embodied_human-0.1.1\src\embodied_human
+copying src\embodied_human\steering_diagnostics.py -> embodied_human-0.1.1\src\embodied_human
+copying src\embodied_human\touch.py -> embodied_human-0.1.1\src\embodied_human
+copying src\embodied_human\touch_contact.py -> embodied_human-0.1.1\src\embodied_human
+copying src\embodied_human\trust.py -> embodied_human-0.1.1\src\embodied_human
+copying src\embodied_human\vestibular.py -> embodied_human-0.1.1\src\embodied_human
+copying src\embodied_human.egg-info\PKG-INFO -> embodied_human-0.1.1\src\embodied_human.egg-info
+copying src\embodied_human.egg-info\SOURCES.txt -> embodied_human-0.1.1\src\embodied_human.egg-info
+copying src\embodied_human.egg-info\dependency_links.txt -> embodied_human-0.1.1\src\embodied_human.egg-info
+copying src\embodied_human.egg-info\entry_points.txt -> embodied_human-0.1.1\src\embodied_human.egg-info
+copying src\embodied_human.egg-info\requires.txt -> embodied_human-0.1.1\src\embodied_human.egg-info
+copying src\embodied_human.egg-info\top_level.txt -> embodied_human-0.1.1\src\embodied_human.egg-info
+copying src\embodied_human\_vendor\__init__.py -> embodied_human-0.1.1\src\embodied_human\_vendor
+copying src\embodied_human\_vendor\mimo_touch.py -> embodied_human-0.1.1\src\embodied_human\_vendor
+copying src\embodied_human\agents\__init__.py -> embodied_human-0.1.1\src\embodied_human\agents
+copying src\embodied_human\agents\body.py -> embodied_human-0.1.1\src\embodied_human\agents
+copying src\embodied_human\agents\driver.py -> embodied_human-0.1.1\src\embodied_human\agents
+copying src\embodied_human\agents\pointer.py -> embodied_human-0.1.1\src\embodied_human\agents
+copying src\embodied_human\agents\road.py -> embodied_human-0.1.1\src\embodied_human\agents
+copying src\embodied_human\bench\__init__.py -> embodied_human-0.1.1\src\embodied_human\bench
+copying src\embodied_human\bench\__main__.py -> embodied_human-0.1.1\src\embodied_human\bench
+copying src\embodied_human\bench\benchmarks.py -> embodied_human-0.1.1\src\embodied_human\bench
+copying src\embodied_human\bench\catalog.py -> embodied_human-0.1.1\src\embodied_human\bench
+copying src\embodied_human\bench\comparison.py -> embodied_human-0.1.1\src\embodied_human\bench
+copying src\embodied_human\bench\integrated.py -> embodied_human-0.1.1\src\embodied_human\bench
+copying src\embodied_human\bench\load.py -> embodied_human-0.1.1\src\embodied_human\bench
+copying src\embodied_human\bench\metrics.py -> embodied_human-0.1.1\src\embodied_human\bench
+copying src\embodied_human\bench\motivation.py -> embodied_human-0.1.1\src\embodied_human\bench
+copying src\embodied_human\bench\protocol.py -> embodied_human-0.1.1\src\embodied_human\bench
+copying src\embodied_human\bench\protocols.json -> embodied_human-0.1.1\src\embodied_human\bench
+copying src\embodied_human\bench\references.py -> embodied_human-0.1.1\src\embodied_human\bench
+copying src\embodied_human\bench\senses.py -> embodied_human-0.1.1\src\embodied_human\bench
+copying src\embodied_human\bench\studies.py -> embodied_human-0.1.1\src\embodied_human\bench
+copying src\embodied_human\bench\validation.py -> embodied_human-0.1.1\src\embodied_human\bench
+copying src\embodied_human\builder\__init__.py -> embodied_human-0.1.1\src\embodied_human\builder
+copying src\embodied_human\builder\__main__.py -> embodied_human-0.1.1\src\embodied_human\builder
+copying src\embodied_human\builder\builder.css -> embodied_human-0.1.1\src\embodied_human\builder
+copying src\embodied_human\builder\builder.js -> embodied_human-0.1.1\src\embodied_human\builder
+copying src\embodied_human\builder\index.html -> embodied_human-0.1.1\src\embodied_human\builder
+copying src\embodied_human\builder\jobs.py -> embodied_human-0.1.1\src\embodied_human\builder
+copying src\embodied_human\tasks\__init__.py -> embodied_human-0.1.1\src\embodied_human\tasks
+copying src\embodied_human\tasks\choice.py -> embodied_human-0.1.1\src\embodied_human\tasks
+copying src\embodied_human\tasks\drt.py -> embodied_human-0.1.1\src\embodied_human\tasks
+copying src\embodied_human\tasks\fixation.py -> embodied_human-0.1.1\src\embodied_human\tasks
+copying src\embodied_human\tasks\load.py -> embodied_human-0.1.1\src\embodied_human\tasks
+copying src\embodied_human\tasks\nback.py -> embodied_human-0.1.1\src\embodied_human\tasks
+copying src\embodied_human\tasks\recall.py -> embodied_human-0.1.1\src\embodied_human\tasks
+copying src\embodied_human\tasks\surt.py -> embodied_human-0.1.1\src\embodied_human\tasks
+copying src\embodied_human\tasks\tapping.py -> embodied_human-0.1.1\src\embodied_human\tasks
+copying src\embodied_human\vision\__init__.py -> embodied_human-0.1.1\src\embodied_human\vision
+copying src\embodied_human\vision\eyes.py -> embodied_human-0.1.1\src\embodied_human\vision
+copying src\embodied_human\vision\foveation.py -> embodied_human-0.1.1\src\embodied_human\vision
+copying src\embodied_human\vision\objects.py -> embodied_human-0.1.1\src\embodied_human\vision
+copying tests\test_actuation_evaluation.py -> embodied_human-0.1.1\tests
+copying tests\test_affect_regressions.py -> embodied_human-0.1.1\tests
+copying tests\test_benchmark_cli.py -> embodied_human-0.1.1\tests
+copying tests\test_benchmark_comparison.py -> embodied_human-0.1.1\tests
+copying tests\test_body_sensing.py -> embodied_human-0.1.1\tests
+copying tests\test_builder.py -> embodied_human-0.1.1\tests
+copying tests\test_builder_jobs.py -> embodied_human-0.1.1\tests
+copying tests\test_closed_loop_calibration.py -> embodied_human-0.1.1\tests
+copying tests\test_decision.py -> embodied_human-0.1.1\tests
+copying tests\test_driver_timing.py -> embodied_human-0.1.1\tests
+copying tests\test_driving.py -> embodied_human-0.1.1\tests
+copying tests\test_driving_campaign.py -> embodied_human-0.1.1\tests
+copying tests\test_driving_configuration.py -> embodied_human-0.1.1\tests
+copying tests\test_driving_data.py -> embodied_human-0.1.1\tests
+copying tests\test_driving_evaluation.py -> embodied_human-0.1.1\tests
+copying tests\test_driving_profiles.py -> embodied_human-0.1.1\tests
+copying tests\test_driving_protocols.py -> embodied_human-0.1.1\tests
+copying tests\test_drt_measurement.py -> embodied_human-0.1.1\tests
+copying tests\test_experience.py -> embodied_human-0.1.1\tests
+copying tests\test_experiment_protocols.py -> embodied_human-0.1.1\tests
+copying tests\test_experiments.py -> embodied_human-0.1.1\tests
+copying tests\test_fixation_protocol.py -> embodied_human-0.1.1\tests
+copying tests\test_fixation_task.py -> embodied_human-0.1.1\tests
+copying tests\test_headway_transfer_analysis.py -> embodied_human-0.1.1\tests
+copying tests\test_memory_pyactup.py -> embodied_human-0.1.1\tests
+copying tests\test_memory_robustness.py -> embodied_human-0.1.1\tests
+copying tests\test_modules.py -> embodied_human-0.1.1\tests
+copying tests\test_regressions.py -> embodied_human-0.1.1\tests
+copying tests\test_report_json.py -> embodied_human-0.1.1\tests
+copying tests\test_reporting.py -> embodied_human-0.1.1\tests
+copying tests\test_response_validation.py -> embodied_human-0.1.1\tests
+copying tests\test_risk_benchmark.py -> embodied_human-0.1.1\tests
+copying tests\test_sensitivity.py -> embodied_human-0.1.1\tests
+copying tests\test_steering_diagnostics.py -> embodied_human-0.1.1\tests
+copying tests\test_studies.py -> embodied_human-0.1.1\tests
+copying tests\test_tapping_robustness.py -> embodied_human-0.1.1\tests
+copying tests\test_tasks_bench.py -> embodied_human-0.1.1\tests
+copying tests\test_touch_contact.py -> embodied_human-0.1.1\tests
+copying tests\test_touchsim.py -> embodied_human-0.1.1\tests
+copying tests\test_trust_benchmark.py -> embodied_human-0.1.1\tests
+copying tests\test_tutorial.py -> embodied_human-0.1.1\tests
+copying tests\test_validation_protocols.py -> embodied_human-0.1.1\tests
+copying tests\test_vestibular_timestamps.py -> embodied_human-0.1.1\tests
+copying tests\test_vision_benchmark.py -> embodied_human-0.1.1\tests
+Writing embodied_human-0.1.1\setup.cfg
+Creating tar archive
+removing 'embodied_human-0.1.1' (and everything under it)
+* Building wheel from sdist
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - setuptools>=77
+  - wheel
+* Getting build dependencies for wheel...
+running egg_info
+writing src\embodied_human.egg-info\PKG-INFO
+writing dependency_links to src\embodied_human.egg-info\dependency_links.txt
+writing entry points to src\embodied_human.egg-info\entry_points.txt
+writing requirements to src\embodied_human.egg-info\requires.txt
+writing top-level names to src\embodied_human.egg-info\top_level.txt
+reading manifest file 'src\embodied_human.egg-info\SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+adding license file 'LICENSE'
+adding license file 'src/embodied_human/_vendor/MIMO_LICENSE.txt'
+writing manifest file 'src\embodied_human.egg-info\SOURCES.txt'
+* Installed build dependency versions:
+  - setuptools==84.2.1
+  - wheel==0.48.0
+* Building wheel...
+running bdist_wheel
+running build
+running build_py
+creating build\lib\embodied_human
+copying src\embodied_human\actuation_evaluation.py -> build\lib\embodied_human
+copying src\embodied_human\affect.py -> build\lib\embodied_human
+copying src\embodied_human\attention.py -> build\lib\embodied_human
+copying src\embodied_human\closed_loop_calibration.py -> build\lib\embodied_human
+copying src\embodied_human\core.py -> build\lib\embodied_human
+copying src\embodied_human\decision.py -> build\lib\embodied_human
+copying src\embodied_human\driving_configuration.py -> build\lib\embodied_human
+copying src\embodied_human\driving_data.py -> build\lib\embodied_human
+copying src\embodied_human\driving_evaluation.py -> build\lib\embodied_human
+copying src\embodied_human\driving_profiles.py -> build\lib\embodied_human
+copying src\embodied_human\driving_protocols.py -> build\lib\embodied_human
+copying src\embodied_human\estimation.py -> build\lib\embodied_human
+copying src\embodied_human\experiments.py -> build\lib\embodied_human
+copying src\embodied_human\experiment_protocols.py -> build\lib\embodied_human
+copying src\embodied_human\fatigue.py -> build\lib\embodied_human
+copying src\embodied_human\fixation_protocol.py -> build\lib\embodied_human
+copying src\embodied_human\hearing.py -> build\lib\embodied_human
+copying src\embodied_human\inference.py -> build\lib\embodied_human
+copying src\embodied_human\memory.py -> build\lib\embodied_human
+copying src\embodied_human\memory_pyactup.py -> build\lib\embodied_human
+copying src\embodied_human\motor.py -> build\lib\embodied_human
+copying src\embodied_human\population.py -> build\lib\embodied_human
+copying src\embodied_human\proprioception.py -> build\lib\embodied_human
+copying src\embodied_human\reporting.py -> build\lib\embodied_human
+copying src\embodied_human\response.py -> build\lib\embodied_human
+copying src\embodied_human\risk.py -> build\lib\embodied_human
+copying src\embodied_human\sensitivity.py -> build\lib\embodied_human
+copying src\embodied_human\steering_diagnostics.py -> build\lib\embodied_human
+copying src\embodied_human\touch.py -> build\lib\embodied_human
+copying src\embodied_human\touch_contact.py -> build\lib\embodied_human
+copying src\embodied_human\trust.py -> build\lib\embodied_human
+copying src\embodied_human\vestibular.py -> build\lib\embodied_human
+copying src\embodied_human\__init__.py -> build\lib\embodied_human
+creating build\lib\embodied_human\agents
+copying src\embodied_human\agents\body.py -> build\lib\embodied_human\agents
+copying src\embodied_human\agents\driver.py -> build\lib\embodied_human\agents
+copying src\embodied_human\agents\pointer.py -> build\lib\embodied_human\agents
+copying src\embodied_human\agents\road.py -> build\lib\embodied_human\agents
+copying src\embodied_human\agents\__init__.py -> build\lib\embodied_human\agents
+creating build\lib\embodied_human\bench
+copying src\embodied_human\bench\benchmarks.py -> build\lib\embodied_human\bench
+copying src\embodied_human\bench\catalog.py -> build\lib\embodied_human\bench
+copying src\embodied_human\bench\comparison.py -> build\lib\embodied_human\bench
+copying src\embodied_human\bench\integrated.py -> build\lib\embodied_human\bench
+copying src\embodied_human\bench\load.py -> build\lib\embodied_human\bench
+copying src\embodied_human\bench\metrics.py -> build\lib\embodied_human\bench
+copying src\embodied_human\bench\motivation.py -> build\lib\embodied_human\bench
+copying src\embodied_human\bench\protocol.py -> build\lib\embodied_human\bench
+copying src\embodied_human\bench\references.py -> build\lib\embodied_human\bench
+copying src\embodied_human\bench\senses.py -> build\lib\embodied_human\bench
+copying src\embodied_human\bench\studies.py -> build\lib\embodied_human\bench
+copying src\embodied_human\bench\validation.py -> build\lib\embodied_human\bench
+copying src\embodied_human\bench\__init__.py -> build\lib\embodied_human\bench
+copying src\embodied_human\bench\__main__.py -> build\lib\embodied_human\bench
+creating build\lib\embodied_human\builder
+copying src\embodied_human\builder\jobs.py -> build\lib\embodied_human\builder
+copying src\embodied_human\builder\__init__.py -> build\lib\embodied_human\builder
+copying src\embodied_human\builder\__main__.py -> build\lib\embodied_human\builder
+creating build\lib\embodied_human\tasks
+copying src\embodied_human\tasks\choice.py -> build\lib\embodied_human\tasks
+copying src\embodied_human\tasks\drt.py -> build\lib\embodied_human\tasks
+copying src\embodied_human\tasks\fixation.py -> build\lib\embodied_human\tasks
+copying src\embodied_human\tasks\load.py -> build\lib\embodied_human\tasks
+copying src\embodied_human\tasks\nback.py -> build\lib\embodied_human\tasks
+copying src\embodied_human\tasks\recall.py -> build\lib\embodied_human\tasks
+copying src\embodied_human\tasks\surt.py -> build\lib\embodied_human\tasks
+copying src\embodied_human\tasks\tapping.py -> build\lib\embodied_human\tasks
+copying src\embodied_human\tasks\__init__.py -> build\lib\embodied_human\tasks
+creating build\lib\embodied_human\vision
+copying src\embodied_human\vision\eyes.py -> build\lib\embodied_human\vision
+copying src\embodied_human\vision\foveation.py -> build\lib\embodied_human\vision
+copying src\embodied_human\vision\objects.py -> build\lib\embodied_human\vision
+copying src\embodied_human\vision\__init__.py -> build\lib\embodied_human\vision
+creating build\lib\embodied_human\_vendor
+copying src\embodied_human\_vendor\mimo_touch.py -> build\lib\embodied_human\_vendor
+copying src\embodied_human\_vendor\__init__.py -> build\lib\embodied_human\_vendor
+running egg_info
+writing src\embodied_human.egg-info\PKG-INFO
+writing dependency_links to src\embodied_human.egg-info\dependency_links.txt
+writing entry points to src\embodied_human.egg-info\entry_points.txt
+writing requirements to src\embodied_human.egg-info\requires.txt
+writing top-level names to src\embodied_human.egg-info\top_level.txt
+reading manifest file 'src\embodied_human.egg-info\SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+adding license file 'LICENSE'
+adding license file 'src/embodied_human/_vendor/MIMO_LICENSE.txt'
+writing manifest file 'src\embodied_human.egg-info\SOURCES.txt'
+copying src\embodied_human\py.typed -> build\lib\embodied_human
+copying src\embodied_human\builder\index.html -> build\lib\embodied_human\builder
+copying src\embodied_human\builder\builder.js -> build\lib\embodied_human\builder
+copying src\embodied_human\builder\builder.css -> build\lib\embodied_human\builder
+copying src\embodied_human\bench\protocols.json -> build\lib\embodied_human\bench
+copying src\embodied_human\_vendor\MIMO_LICENSE.txt -> build\lib\embodied_human\_vendor
+installing to build\bdist.win-amd64\wheel
+running install
+running install_lib
+creating build\bdist.win-amd64\wheel
+creating build\bdist.win-amd64\wheel\embodied_human
+copying build\lib\embodied_human\actuation_evaluation.py -> build\bdist.win-amd64\wheel\.\embodied_human
+copying build\lib\embodied_human\affect.py -> build\bdist.win-amd64\wheel\.\embodied_human
+creating build\bdist.win-amd64\wheel\embodied_human\agents
+copying build\lib\embodied_human\agents\body.py -> build\bdist.win-amd64\wheel\.\embodied_human\agents
+copying build\lib\embodied_human\agents\driver.py -> build\bdist.win-amd64\wheel\.\embodied_human\agents
+copying build\lib\embodied_human\agents\pointer.py -> build\bdist.win-amd64\wheel\.\embodied_human\agents
+copying build\lib\embodied_human\agents\road.py -> build\bdist.win-amd64\wheel\.\embodied_human\agents
+copying build\lib\embodied_human\agents\__init__.py -> build\bdist.win-amd64\wheel\.\embodied_human\agents
+copying build\lib\embodied_human\attention.py -> build\bdist.win-amd64\wheel\.\embodied_human
+creating build\bdist.win-amd64\wheel\embodied_human\bench
+copying build\lib\embodied_human\bench\benchmarks.py -> build\bdist.win-amd64\wheel\.\embodied_human\bench
+copying build\lib\embodied_human\bench\catalog.py -> build\bdist.win-amd64\wheel\.\embodied_human\bench
+copying build\lib\embodied_human\bench\comparison.py -> build\bdist.win-amd64\wheel\.\embodied_human\bench
+copying build\lib\embodied_human\bench\integrated.py -> build\bdist.win-amd64\wheel\.\embodied_human\bench
+copying build\lib\embodied_human\bench\load.py -> build\bdist.win-amd64\wheel\.\embodied_human\bench
+copying build\lib\embodied_human\bench\metrics.py -> build\bdist.win-amd64\wheel\.\embodied_human\bench
+copying build\lib\embodied_human\bench\motivation.py -> build\bdist.win-amd64\wheel\.\embodied_human\bench
+copying build\lib\embodied_human\bench\protocol.py -> build\bdist.win-amd64\wheel\.\embodied_human\bench
+copying build\lib\embodied_human\bench\protocols.json -> build\bdist.win-amd64\wheel\.\embodied_human\bench
+copying build\lib\embodied_human\bench\references.py -> build\bdist.win-amd64\wheel\.\embodied_human\bench
+copying build\lib\embodied_human\bench\senses.py -> build\bdist.win-amd64\wheel\.\embodied_human\bench
+copying build\lib\embodied_human\bench\studies.py -> build\bdist.win-amd64\wheel\.\embodied_human\bench
+copying build\lib\embodied_human\bench\validation.py -> build\bdist.win-amd64\wheel\.\embodied_human\bench
+copying build\lib\embodied_human\bench\__init__.py -> build\bdist.win-amd64\wheel\.\embodied_human\bench
+copying build\lib\embodied_human\bench\__main__.py -> build\bdist.win-amd64\wheel\.\embodied_human\bench
+creating build\bdist.win-amd64\wheel\embodied_human\builder
+copying build\lib\embodied_human\builder\builder.css -> build\bdist.win-amd64\wheel\.\embodied_human\builder
+copying build\lib\embodied_human\builder\builder.js -> build\bdist.win-amd64\wheel\.\embodied_human\builder
+copying build\lib\embodied_human\builder\index.html -> build\bdist.win-amd64\wheel\.\embodied_human\builder
+copying build\lib\embodied_human\builder\jobs.py -> build\bdist.win-amd64\wheel\.\embodied_human\builder
+copying build\lib\embodied_human\builder\__init__.py -> build\bdist.win-amd64\wheel\.\embodied_human\builder
+copying build\lib\embodied_human\builder\__main__.py -> build\bdist.win-amd64\wheel\.\embodied_human\builder
+copying build\lib\embodied_human\closed_loop_calibration.py -> build\bdist.win-amd64\wheel\.\embodied_human
+copying build\lib\embodied_human\core.py -> build\bdist.win-amd64\wheel\.\embodied_human
+copying build\lib\embodied_human\decision.py -> build\bdist.win-amd64\wheel\.\embodied_human
+copying build\lib\embodied_human\driving_configuration.py -> build\bdist.win-amd64\wheel\.\embodied_human
+copying build\lib\embodied_human\driving_data.py -> build\bdist.win-amd64\wheel\.\embodied_human
+copying build\lib\embodied_human\driving_evaluation.py -> build\bdist.win-amd64\wheel\.\embodied_human
+copying build\lib\embodied_human\driving_profiles.py -> build\bdist.win-amd64\wheel\.\embodied_human
+copying build\lib\embodied_human\driving_protocols.py -> build\bdist.win-amd64\wheel\.\embodied_human
+copying build\lib\embodied_human\estimation.py -> build\bdist.win-amd64\wheel\.\embodied_human
+copying build\lib\embodied_human\experiments.py -> build\bdist.win-amd64\wheel\.\embodied_human
+copying build\lib\embodied_human\experiment_protocols.py -> build\bdist.win-amd64\wheel\.\embodied_human
+copying build\lib\embodied_human\fatigue.py -> build\bdist.win-amd64\wheel\.\embodied_human
+copying build\lib\embodied_human\fixation_protocol.py -> build\bdist.win-amd64\wheel\.\embodied_human
+copying build\lib\embodied_human\hearing.py -> build\bdist.win-amd64\wheel\.\embodied_human
+copying build\lib\embodied_human\inference.py -> build\bdist.win-amd64\wheel\.\embodied_human
+copying build\lib\embodied_human\memory.py -> build\bdist.win-amd64\wheel\.\embodied_human
+copying build\lib\embodied_human\memory_pyactup.py -> build\bdist.win-amd64\wheel\.\embodied_human
+copying build\lib\embodied_human\motor.py -> build\bdist.win-amd64\wheel\.\embodied_human
+copying build\lib\embodied_human\population.py -> build\bdist.win-amd64\wheel\.\embodied_human
+copying build\lib\embodied_human\proprioception.py -> build\bdist.win-amd64\wheel\.\embodied_human
+copying build\lib\embodied_human\py.typed -> build\bdist.win-amd64\wheel\.\embodied_human
+copying build\lib\embodied_human\reporting.py -> build\bdist.win-amd64\wheel\.\embodied_human
+copying build\lib\embodied_human\response.py -> build\bdist.win-amd64\wheel\.\embodied_human
+copying build\lib\embodied_human\risk.py -> build\bdist.win-amd64\wheel\.\embodied_human
+copying build\lib\embodied_human\sensitivity.py -> build\bdist.win-amd64\wheel\.\embodied_human
+copying build\lib\embodied_human\steering_diagnostics.py -> build\bdist.win-amd64\wheel\.\embodied_human
+creating build\bdist.win-amd64\wheel\embodied_human\tasks
+copying build\lib\embodied_human\tasks\choice.py -> build\bdist.win-amd64\wheel\.\embodied_human\tasks
+copying build\lib\embodied_human\tasks\drt.py -> build\bdist.win-amd64\wheel\.\embodied_human\tasks
+copying build\lib\embodied_human\tasks\fixation.py -> build\bdist.win-amd64\wheel\.\embodied_human\tasks
+copying build\lib\embodied_human\tasks\load.py -> build\bdist.win-amd64\wheel\.\embodied_human\tasks
+copying build\lib\embodied_human\tasks\nback.py -> build\bdist.win-amd64\wheel\.\embodied_human\tasks
+copying build\lib\embodied_human\tasks\recall.py -> build\bdist.win-amd64\wheel\.\embodied_human\tasks
+copying build\lib\embodied_human\tasks\surt.py -> build\bdist.win-amd64\wheel\.\embodied_human\tasks
+copying build\lib\embodied_human\tasks\tapping.py -> build\bdist.win-amd64\wheel\.\embodied_human\tasks
+copying build\lib\embodied_human\tasks\__init__.py -> build\bdist.win-amd64\wheel\.\embodied_human\tasks
+copying build\lib\embodied_human\touch.py -> build\bdist.win-amd64\wheel\.\embodied_human
+copying build\lib\embodied_human\touch_contact.py -> build\bdist.win-amd64\wheel\.\embodied_human
+copying build\lib\embodied_human\trust.py -> build\bdist.win-amd64\wheel\.\embodied_human
+copying build\lib\embodied_human\vestibular.py -> build\bdist.win-amd64\wheel\.\embodied_human
+creating build\bdist.win-amd64\wheel\embodied_human\vision
+copying build\lib\embodied_human\vision\eyes.py -> build\bdist.win-amd64\wheel\.\embodied_human\vision
+copying build\lib\embodied_human\vision\foveation.py -> build\bdist.win-amd64\wheel\.\embodied_human\vision
+copying build\lib\embodied_human\vision\objects.py -> build\bdist.win-amd64\wheel\.\embodied_human\vision
+copying build\lib\embodied_human\vision\__init__.py -> build\bdist.win-amd64\wheel\.\embodied_human\vision
+creating build\bdist.win-amd64\wheel\embodied_human\_vendor
+copying build\lib\embodied_human\_vendor\MIMO_LICENSE.txt -> build\bdist.win-amd64\wheel\.\embodied_human\_vendor
+copying build\lib\embodied_human\_vendor\mimo_touch.py -> build\bdist.win-amd64\wheel\.\embodied_human\_vendor
+copying build\lib\embodied_human\_vendor\__init__.py -> build\bdist.win-amd64\wheel\.\embodied_human\_vendor
+copying build\lib\embodied_human\__init__.py -> build\bdist.win-amd64\wheel\.\embodied_human
+running install_egg_info
+Copying src\embodied_human.egg-info to build\bdist.win-amd64\wheel\.\embodied_human-0.1.1-py3.12.egg-info
+running install_scripts
+creating build\bdist.win-amd64\wheel\embodied_human-0.1.1.dist-info\WHEEL
+creating 'C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\following-transfer-2026-11-18\\human-checks\\published-build\\.tmp-6i_j0sl3\\embodied_human-0.1.1-py3-none-any.whl' and adding 'build\\bdist.win-amd64\\wheel' to it
+adding 'embodied_human/__init__.py'
+adding 'embodied_human/actuation_evaluation.py'
+adding 'embodied_human/affect.py'
+adding 'embodied_human/attention.py'
+adding 'embodied_human/closed_loop_calibration.py'
+adding 'embodied_human/core.py'
+adding 'embodied_human/decision.py'
+adding 'embodied_human/driving_configuration.py'
+adding 'embodied_human/driving_data.py'
+adding 'embodied_human/driving_evaluation.py'
+adding 'embodied_human/driving_profiles.py'
+adding 'embodied_human/driving_protocols.py'
+adding 'embodied_human/estimation.py'
+adding 'embodied_human/experiment_protocols.py'
+adding 'embodied_human/experiments.py'
+adding 'embodied_human/fatigue.py'
+adding 'embodied_human/fixation_protocol.py'
+adding 'embodied_human/hearing.py'
+adding 'embodied_human/inference.py'
+adding 'embodied_human/memory.py'
+adding 'embodied_human/memory_pyactup.py'
+adding 'embodied_human/motor.py'
+adding 'embodied_human/population.py'
+adding 'embodied_human/proprioception.py'
+adding 'embodied_human/py.typed'
+adding 'embodied_human/reporting.py'
+adding 'embodied_human/response.py'
+adding 'embodied_human/risk.py'
+adding 'embodied_human/sensitivity.py'
+adding 'embodied_human/steering_diagnostics.py'
+adding 'embodied_human/touch.py'
+adding 'embodied_human/touch_contact.py'
+adding 'embodied_human/trust.py'
+adding 'embodied_human/vestibular.py'
+adding 'embodied_human/_vendor/MIMO_LICENSE.txt'
+adding 'embodied_human/_vendor/__init__.py'
+adding 'embodied_human/_vendor/mimo_touch.py'
+adding 'embodied_human/agents/__init__.py'
+adding 'embodied_human/agents/body.py'
+adding 'embodied_human/agents/driver.py'
+adding 'embodied_human/agents/pointer.py'
+adding 'embodied_human/agents/road.py'
+adding 'embodied_human/bench/__init__.py'
+adding 'embodied_human/bench/__main__.py'
+adding 'embodied_human/bench/benchmarks.py'
+adding 'embodied_human/bench/catalog.py'
+adding 'embodied_human/bench/comparison.py'
+adding 'embodied_human/bench/integrated.py'
+adding 'embodied_human/bench/load.py'
+adding 'embodied_human/bench/metrics.py'
+adding 'embodied_human/bench/motivation.py'
+adding 'embodied_human/bench/protocol.py'
+adding 'embodied_human/bench/protocols.json'
+adding 'embodied_human/bench/references.py'
+adding 'embodied_human/bench/senses.py'
+adding 'embodied_human/bench/studies.py'
+adding 'embodied_human/bench/validation.py'
+adding 'embodied_human/builder/__init__.py'
+adding 'embodied_human/builder/__main__.py'
+adding 'embodied_human/builder/builder.css'
+adding 'embodied_human/builder/builder.js'
+adding 'embodied_human/builder/index.html'
+adding 'embodied_human/builder/jobs.py'
+adding 'embodied_human/tasks/__init__.py'
+adding 'embodied_human/tasks/choice.py'
+adding 'embodied_human/tasks/drt.py'
+adding 'embodied_human/tasks/fixation.py'
+adding 'embodied_human/tasks/load.py'
+adding 'embodied_human/tasks/nback.py'
+adding 'embodied_human/tasks/recall.py'
+adding 'embodied_human/tasks/surt.py'
+adding 'embodied_human/tasks/tapping.py'
+adding 'embodied_human/vision/__init__.py'
+adding 'embodied_human/vision/eyes.py'
+adding 'embodied_human/vision/foveation.py'
+adding 'embodied_human/vision/objects.py'
+adding 'embodied_human-0.1.1.dist-info/licenses/LICENSE'
+adding 'embodied_human-0.1.1.dist-info/licenses/src/embodied_human/_vendor/MIMO_LICENSE.txt'
+adding 'embodied_human-0.1.1.dist-info/METADATA'
+adding 'embodied_human-0.1.1.dist-info/WHEEL'
+adding 'embodied_human-0.1.1.dist-info/entry_points.txt'
+adding 'embodied_human-0.1.1.dist-info/top_level.txt'
+adding 'embodied_human-0.1.1.dist-info/RECORD'
+removing build\bdist.win-amd64\wheel
+Successfully built embodied_human-0.1.1.tar.gz and embodied_human-0.1.1-py3-none-any.whl
