@@ -1,0 +1,826 @@
+{
+  "baseline": {
+    "sources": {
+      "ngsim-us101:1100:1": {
+        "speed": {
+          "mean_signed_error": -0.17189111690291528,
+          "end_signed_error": 0.20273555086206674,
+          "fraction_positive": 0.4925373134328358
+        },
+        "gap": {
+          "mean_signed_error": 2.920213262702096,
+          "end_signed_error": 3.403547754202748,
+          "fraction_positive": 0.9950248756218906
+        },
+        "acceleration": {
+          "mean_signed_error": 0.008057943079705551,
+          "end_signed_error": -0.16227249869326413,
+          "fraction_positive": 0.5074626865671642
+        }
+      },
+      "ngsim-us101:1107:3": {
+        "speed": {
+          "mean_signed_error": 0.0681940360938013,
+          "end_signed_error": -0.5654088101893342,
+          "fraction_positive": 0.5671641791044776
+        },
+        "gap": {
+          "mean_signed_error": -0.9226485932317651,
+          "end_signed_error": -1.4194384546071106,
+          "fraction_positive": 0.04477611940298507
+        },
+        "acceleration": {
+          "mean_signed_error": -0.02749337948184869,
+          "end_signed_error": -1.3679889198047204,
+          "fraction_positive": 0.4427860696517413
+        }
+      },
+      "ngsim-us101:1183:3": {
+        "speed": {
+          "mean_signed_error": 0.2420390618811953,
+          "end_signed_error": -1.2392505285683568,
+          "fraction_positive": 0.4651741293532338
+        },
+        "gap": {
+          "mean_signed_error": 0.5955032566293921,
+          "end_signed_error": -4.953979220607735,
+          "fraction_positive": 0.736318407960199
+        },
+        "acceleration": {
+          "mean_signed_error": -0.08162011207721762,
+          "end_signed_error": -2.157779125594922,
+          "fraction_positive": 0.39054726368159204
+        }
+      },
+      "ngsim-us101:1216:3": {
+        "speed": {
+          "mean_signed_error": 0.00590702184913117,
+          "end_signed_error": -0.5838410538197372,
+          "fraction_positive": 0.5074626865671642
+        },
+        "gap": {
+          "mean_signed_error": 1.9672760452649485,
+          "end_signed_error": -0.18700283996246014,
+          "fraction_positive": 0.8482587064676617
+        },
+        "acceleration": {
+          "mean_signed_error": -0.05718260871529959,
+          "end_signed_error": -0.48122389290252965,
+          "fraction_positive": 0.42786069651741293
+        }
+      },
+      "ngsim-us101:1285:3": {
+        "speed": {
+          "mean_signed_error": 0.37773856451411214,
+          "end_signed_error": 0.7525869936549956,
+          "fraction_positive": 0.7164179104477612
+        },
+        "gap": {
+          "mean_signed_error": -4.725196650831592,
+          "end_signed_error": -7.594803441436518,
+          "fraction_positive": 0.014925373134328358
+        },
+        "acceleration": {
+          "mean_signed_error": 0.072927388076508,
+          "end_signed_error": 1.5048930712492847,
+          "fraction_positive": 0.4552238805970149
+        }
+      },
+      "ngsim-us101:1581:1": {
+        "speed": {
+          "mean_signed_error": 0.7492012900610396,
+          "end_signed_error": -2.119707519998552,
+          "fraction_positive": 0.7761194029850746
+        },
+        "gap": {
+          "mean_signed_error": -12.116857672380554,
+          "end_signed_error": -15.224478666828531,
+          "fraction_positive": 0.029850746268656716
+        },
+        "acceleration": {
+          "mean_signed_error": -0.06327420985278323,
+          "end_signed_error": 0.7066547565775485,
+          "fraction_positive": 0.48756218905472637
+        }
+      },
+      "ngsim-us101:1804:2": {
+        "speed": {
+          "mean_signed_error": 0.1581381555721858,
+          "end_signed_error": -0.31057767916937973,
+          "fraction_positive": 0.5895522388059702
+        },
+        "gap": {
+          "mean_signed_error": 0.6548728149519644,
+          "end_signed_error": -3.2043101596981813,
+          "fraction_positive": 0.8009950248756219
+        },
+        "acceleration": {
+          "mean_signed_error": -0.02954361185151207,
+          "end_signed_error": -1.6303913446562506,
+          "fraction_positive": 0.46019900497512434
+        }
+      },
+      "ngsim-us101:1826:2": {
+        "speed": {
+          "mean_signed_error": -0.15366066058411748,
+          "end_signed_error": -0.9333696923352468,
+          "fraction_positive": 0.48756218905472637
+        },
+        "gap": {
+          "mean_signed_error": -1.5202413992019657,
+          "end_signed_error": 3.014245021794409,
+          "fraction_positive": 0.4104477611940298
+        },
+        "acceleration": {
+          "mean_signed_error": -0.02938739177242357,
+          "end_signed_error": 0.4294397353146265,
+          "fraction_positive": 0.472636815920398
+        }
+      },
+      "ngsim-us101:1836:3": {
+        "speed": {
+          "mean_signed_error": -0.3878848249568038,
+          "end_signed_error": 0.2394485376863269,
+          "fraction_positive": 0.39303482587064675
+        },
+        "gap": {
+          "mean_signed_error": 6.612214304841169,
+          "end_signed_error": 7.74331505477025,
+          "fraction_positive": 0.9925373134328359
+        },
+        "acceleration": {
+          "mean_signed_error": 0.01908339874878079,
+          "end_signed_error": 0.5223513019780802,
+          "fraction_positive": 0.5348258706467661
+        }
+      },
+      "ngsim-us101:2189:1": {
+        "speed": {
+          "mean_signed_error": 0.28704309114746746,
+          "end_signed_error": 0.942080577431657,
+          "fraction_positive": 0.8233830845771144
+        },
+        "gap": {
+          "mean_signed_error": -2.467877302392984,
+          "end_signed_error": -5.707438011166005,
+          "fraction_positive": 0.009950248756218905
+        },
+        "acceleration": {
+          "mean_signed_error": 0.04754697602801966,
+          "end_signed_error": 0.3636958511366565,
+          "fraction_positive": 0.5298507462686568
+        }
+      },
+      "ngsim-us101:2258:1": {
+        "speed": {
+          "mean_signed_error": -0.5649742404095639,
+          "end_signed_error": -0.2487943553953631,
+          "fraction_positive": 0.22885572139303484
+        },
+        "gap": {
+          "mean_signed_error": 3.9929843610414824,
+          "end_signed_error": 11.313918221177964,
+          "fraction_positive": 0.9950248756218906
+        },
+        "acceleration": {
+          "mean_signed_error": -0.014252980718933713,
+          "end_signed_error": -0.059653419453169654,
+          "fraction_positive": 0.4577114427860697
+        }
+      },
+      "ngsim-us101:22:3": {
+        "speed": {
+          "mean_signed_error": 0.33965153515734986,
+          "end_signed_error": 0.5190485939661844,
+          "fraction_positive": 0.6915422885572139
+        },
+        "gap": {
+          "mean_signed_error": -0.25465606338877844,
+          "end_signed_error": -6.852874763257972,
+          "fraction_positive": 0.6666666666666666
+        },
+        "acceleration": {
+          "mean_signed_error": 0.06106065312998883,
+          "end_signed_error": 1.1449788749288068,
+          "fraction_positive": 0.5298507462686568
+        }
+      },
+      "ngsim-us101:2303:1": {
+        "speed": {
+          "mean_signed_error": 0.007573347543051967,
+          "end_signed_error": 2.5981377301552806,
+          "fraction_positive": 0.4577114427860697
+        },
+        "gap": {
+          "mean_signed_error": 2.0638560812443587,
+          "end_signed_error": -0.03062517406998211,
+          "fraction_positive": 0.8706467661691543
+        },
+        "acceleration": {
+          "mean_signed_error": 0.09340148422361533,
+          "end_signed_error": -0.6136877983656278,
+          "fraction_positive": 0.5696517412935322
+        }
+      },
+      "ngsim-us101:2641:1": {
+        "speed": {
+          "mean_signed_error": 0.12806773857794135,
+          "end_signed_error": 1.1891966910318104,
+          "fraction_positive": 0.6592039800995024
+        },
+        "gap": {
+          "mean_signed_error": -1.5735398472866144,
+          "end_signed_error": -2.549849985001984,
+          "fraction_positive": 0.26865671641791045
+        },
+        "acceleration": {
+          "mean_signed_error": 0.11213308457276575,
+          "end_signed_error": 1.739400824295621,
+          "fraction_positive": 0.4527363184079602
+        }
+      },
+      "ngsim-us101:2669:1": {
+        "speed": {
+          "mean_signed_error": 0.2353238592253678,
+          "end_signed_error": -0.60955548390708,
+          "fraction_positive": 0.7388059701492538
+        },
+        "gap": {
+          "mean_signed_error": -1.698631802111366,
+          "end_signed_error": -4.756354760007177,
+          "fraction_positive": 0.03980099502487562
+        },
+        "acceleration": {
+          "mean_signed_error": -0.05946326009313008,
+          "end_signed_error": -2.399598710280461,
+          "fraction_positive": 0.44527363184079605
+        }
+      },
+      "ngsim-us101:2804:1": {
+        "speed": {
+          "mean_signed_error": -0.24982267875738218,
+          "end_signed_error": 0.80303402858027,
+          "fraction_positive": 0.5
+        },
+        "gap": {
+          "mean_signed_error": 5.767166794236205,
+          "end_signed_error": 4.991543628933655,
+          "fraction_positive": 0.9900497512437811
+        },
+        "acceleration": {
+          "mean_signed_error": 0.05165912346354017,
+          "end_signed_error": 2.1598810031171474,
+          "fraction_positive": 0.5472636815920398
+        }
+      },
+      "ngsim-us101:308:2": {
+        "speed": {
+          "mean_signed_error": -0.27148440525990986,
+          "end_signed_error": 1.1012154066396356,
+          "fraction_positive": 0.37064676616915426
+        },
+        "gap": {
+          "mean_signed_error": 2.198097535339044,
+          "end_signed_error": 5.5032665978380635,
+          "fraction_positive": 0.8805970149253731
+        },
+        "acceleration": {
+          "mean_signed_error": 0.07448839184702827,
+          "end_signed_error": 3.5452195059560827,
+          "fraction_positive": 0.6169154228855721
+        }
+      },
+      "ngsim-us101:401:2": {
+        "speed": {
+          "mean_signed_error": 0.01968703197328777,
+          "end_signed_error": -1.4722243394683172,
+          "fraction_positive": 0.4552238805970149
+        },
+        "gap": {
+          "mean_signed_error": -1.39861278036416,
+          "end_signed_error": -0.433571331227796,
+          "fraction_positive": 0.3781094527363184
+        },
+        "acceleration": {
+          "mean_signed_error": -0.0821440598634239,
+          "end_signed_error": 0.657682758527691,
+          "fraction_positive": 0.472636815920398
+        }
+      },
+      "ngsim-us101:468:1": {
+        "speed": {
+          "mean_signed_error": -0.1288391345241836,
+          "end_signed_error": 0.18694893325224582,
+          "fraction_positive": 0.5323383084577115
+        },
+        "gap": {
+          "mean_signed_error": 3.0045141131725326,
+          "end_signed_error": 2.551606847373179,
+          "fraction_positive": 0.9950248756218906
+        },
+        "acceleration": {
+          "mean_signed_error": -0.04028470905573075,
+          "end_signed_error": 0.011498514825926662,
+          "fraction_positive": 0.4925373134328358
+        }
+      },
+      "ngsim-us101:481:2": {
+        "speed": {
+          "mean_signed_error": 0.2057789390691143,
+          "end_signed_error": 0.7169885533758236,
+          "fraction_positive": 0.5472636815920398
+        },
+        "gap": {
+          "mean_signed_error": -2.5478751927644305,
+          "end_signed_error": -4.112744535063186,
+          "fraction_positive": 0.22885572139303484
+        },
+        "acceleration": {
+          "mean_signed_error": 0.030713339649975246,
+          "end_signed_error": -0.4087932451219086,
+          "fraction_positive": 0.572139303482587
+        }
+      },
+      "ngsim-us101:828:1": {
+        "speed": {
+          "mean_signed_error": -0.03149495536174364,
+          "end_signed_error": -1.4413469961403993,
+          "fraction_positive": 0.5323383084577115
+        },
+        "gap": {
+          "mean_signed_error": -2.289817033899765,
+          "end_signed_error": 0.5291841474908097,
+          "fraction_positive": 0.04477611940298507
+        },
+        "acceleration": {
+          "mean_signed_error": -0.046450616826667415,
+          "end_signed_error": -0.15309876482039195,
+          "fraction_positive": 0.49502487562189057
+        }
+      },
+      "ngsim-us101:960:1": {
+        "speed": {
+          "mean_signed_error": 0.37569256697437925,
+          "end_signed_error": 1.3273967248498098,
+          "fraction_positive": 0.6293532338308458
+        },
+        "gap": {
+          "mean_signed_error": -6.191192957150911,
+          "end_signed_error": -7.573821536062141,
+          "fraction_positive": 0.09203980099502487
+        },
+        "acceleration": {
+          "mean_signed_error": 0.08532785299005811,
+          "end_signed_error": 0.3395785298532954,
+          "fraction_positive": 0.5
+        }
+      },
+      "ngsim-us101:977:3": {
+        "speed": {
+          "mean_signed_error": -0.0026942950254708,
+          "end_signed_error": 0.831096142175026,
+          "fraction_positive": 0.4203980099502488
+        },
+        "gap": {
+          "mean_signed_error": -0.8865989150638476,
+          "end_signed_error": 0.029990474599841832,
+          "fraction_positive": 0.23880597014925375
+        },
+        "acceleration": {
+          "mean_signed_error": 0.08270922271614999,
+          "end_signed_error": 1.369318380549521,
+          "fraction_positive": 0.4502487562189055
+        }
+      }
+    },
+    "mean": {
+      "speed": {
+        "mean_signed_error": 0.05379521425466673,
+        "end_signed_error": 0.08199295672475505,
+        "fraction_positive": 0.5470473718364699
+      },
+      "gap": {
+        "mean_signed_error": -0.3833498974193713,
+        "end_signed_error": -1.1095945709050374,
+        "fraction_positive": 0.5031364914557647
+      },
+      "acceleration": {
+        "mean_signed_error": 0.009043996444224569,
+        "end_signed_error": 0.22000458211378446,
+        "fraction_positive": 0.4917802292883409
+      }
+    }
+  },
+  "inverse": {
+    "sources": {
+      "ngsim-us101:1100:1": {
+        "speed": {
+          "mean_signed_error": -0.28168396231613946,
+          "end_signed_error": 0.22736740613873696,
+          "fraction_positive": 0.47512437810945274
+        },
+        "gap": {
+          "mean_signed_error": 4.532812626322077,
+          "end_signed_error": 5.61500091534549,
+          "fraction_positive": 0.9950248756218906
+        },
+        "acceleration": {
+          "mean_signed_error": 0.01292380904774796,
+          "end_signed_error": 0.20283152695734014,
+          "fraction_positive": 0.5597014925373134
+        }
+      },
+      "ngsim-us101:1107:3": {
+        "speed": {
+          "mean_signed_error": 0.03384583244667942,
+          "end_signed_error": -0.19050026467992565,
+          "fraction_positive": 0.46766169154228854
+        },
+        "gap": {
+          "mean_signed_error": -0.4874249477891763,
+          "end_signed_error": -0.7033958148250932,
+          "fraction_positive": 0.15920398009950248
+        },
+        "acceleration": {
+          "mean_signed_error": -0.010115999647963935,
+          "end_signed_error": -0.4975026095132081,
+          "fraction_positive": 0.44527363184079605
+        }
+      },
+      "ngsim-us101:1183:3": {
+        "speed": {
+          "mean_signed_error": 0.17744488858126428,
+          "end_signed_error": -0.4712970150239273,
+          "fraction_positive": 0.48756218905472637
+        },
+        "gap": {
+          "mean_signed_error": 1.783113986081351,
+          "end_signed_error": -3.6400915257940056,
+          "fraction_positive": 0.7860696517412935
+        },
+        "acceleration": {
+          "mean_signed_error": -0.029801223152502332,
+          "end_signed_error": -1.5474601826425807,
+          "fraction_positive": 0.4701492537313433
+        }
+      },
+      "ngsim-us101:1216:3": {
+        "speed": {
+          "mean_signed_error": -0.18289090592234886,
+          "end_signed_error": 0.7215776275513672,
+          "fraction_positive": 0.48756218905472637
+        },
+        "gap": {
+          "mean_signed_error": 3.4776282590525853,
+          "end_signed_error": 3.663551769555724,
+          "fraction_positive": 0.9950248756218906
+        },
+        "acceleration": {
+          "mean_signed_error": 0.013652016534393336,
+          "end_signed_error": -0.34226700522378695,
+          "fraction_positive": 0.5049751243781095
+        }
+      },
+      "ngsim-us101:1285:3": {
+        "speed": {
+          "mean_signed_error": 0.34461407527256455,
+          "end_signed_error": 0.7827461775190128,
+          "fraction_positive": 0.7064676616915423
+        },
+        "gap": {
+          "mean_signed_error": -4.029174789416544,
+          "end_signed_error": -6.917621734277333,
+          "fraction_positive": 0.01990049751243781
+        },
+        "acceleration": {
+          "mean_signed_error": 0.056695120618475814,
+          "end_signed_error": 0.9020931834089054,
+          "fraction_positive": 0.4975124378109453
+        }
+      },
+      "ngsim-us101:1581:1": {
+        "speed": {
+          "mean_signed_error": 0.5024771585195325,
+          "end_signed_error": -0.9055634195000968,
+          "fraction_positive": 0.6691542288557214
+        },
+        "gap": {
+          "mean_signed_error": -6.306218716054989,
+          "end_signed_error": -10.177201078777287,
+          "fraction_positive": 0.23383084577114427
+        },
+        "acceleration": {
+          "mean_signed_error": -0.026112045331733676,
+          "end_signed_error": -0.07111343399543513,
+          "fraction_positive": 0.4552238805970149
+        }
+      },
+      "ngsim-us101:1804:2": {
+        "speed": {
+          "mean_signed_error": 0.03070583799675191,
+          "end_signed_error": -0.31391845542302566,
+          "fraction_positive": 0.48258706467661694
+        },
+        "gap": {
+          "mean_signed_error": 2.686200721476548,
+          "end_signed_error": -0.6524562751770162,
+          "fraction_positive": 0.9203980099502488
+        },
+        "acceleration": {
+          "mean_signed_error": -0.022608004567451018,
+          "end_signed_error": -1.7966310676924973,
+          "fraction_positive": 0.5497512437810945
+        }
+      },
+      "ngsim-us101:1826:2": {
+        "speed": {
+          "mean_signed_error": -0.18943064353820255,
+          "end_signed_error": -0.8329807165936165,
+          "fraction_positive": 0.4701492537313433
+        },
+        "gap": {
+          "mean_signed_error": 0.1519592452991093,
+          "end_signed_error": 3.7648138111099456,
+          "fraction_positive": 0.6169154228855721
+        },
+        "acceleration": {
+          "mean_signed_error": -0.0450593153620808,
+          "end_signed_error": 0.2877302272763015,
+          "fraction_positive": 0.4975124378109453
+        }
+      },
+      "ngsim-us101:1836:3": {
+        "speed": {
+          "mean_signed_error": -0.4878468157203478,
+          "end_signed_error": 0.3080592478463693,
+          "fraction_positive": 0.36318407960199006
+        },
+        "gap": {
+          "mean_signed_error": 8.061133567791316,
+          "end_signed_error": 9.758922364098282,
+          "fraction_positive": 0.9950248756218906
+        },
+        "acceleration": {
+          "mean_signed_error": 0.023220647837521396,
+          "end_signed_error": 0.10914407706347157,
+          "fraction_positive": 0.5646766169154229
+        }
+      },
+      "ngsim-us101:2189:1": {
+        "speed": {
+          "mean_signed_error": 0.10585337332773899,
+          "end_signed_error": 0.30808900248192117,
+          "fraction_positive": 0.7587064676616915
+        },
+        "gap": {
+          "mean_signed_error": -1.617166180957448,
+          "end_signed_error": -2.093806385941278,
+          "fraction_positive": 0.0024875621890547263
+        },
+        "acceleration": {
+          "mean_signed_error": 0.023565122058453986,
+          "end_signed_error": 0.2464892120433877,
+          "fraction_positive": 0.5149253731343284
+        }
+      },
+      "ngsim-us101:2258:1": {
+        "speed": {
+          "mean_signed_error": -1.1058333242566678,
+          "end_signed_error": -1.8963804267526951,
+          "fraction_positive": 0.22388059701492538
+        },
+        "gap": {
+          "mean_signed_error": 5.904582800527227,
+          "end_signed_error": 22.109609973733207,
+          "fraction_positive": 0.9950248756218906
+        },
+        "acceleration": {
+          "mean_signed_error": -0.10127579715409993,
+          "end_signed_error": 0.01058567796329729,
+          "fraction_positive": 0.42786069651741293
+        }
+      },
+      "ngsim-us101:22:3": {
+        "speed": {
+          "mean_signed_error": 0.03073061165645846,
+          "end_signed_error": 0.30277906632261953,
+          "fraction_positive": 0.5671641791044776
+        },
+        "gap": {
+          "mean_signed_error": 1.5658757880977958,
+          "end_signed_error": -0.6323659956708525,
+          "fraction_positive": 0.8706467661691543
+        },
+        "acceleration": {
+          "mean_signed_error": 0.030829762776390268,
+          "end_signed_error": 0.9402530944382068,
+          "fraction_positive": 0.47263681592039797
+        }
+      },
+      "ngsim-us101:2303:1": {
+        "speed": {
+          "mean_signed_error": -0.14187943950964627,
+          "end_signed_error": 2.2521313772474967,
+          "fraction_positive": 0.39054726368159204
+        },
+        "gap": {
+          "mean_signed_error": 5.49572616727029,
+          "end_signed_error": 2.938495876536223,
+          "fraction_positive": 0.9900497512437811
+        },
+        "acceleration": {
+          "mean_signed_error": 0.09122373549385143,
+          "end_signed_error": -0.5842850343278037,
+          "fraction_positive": 0.5348258706467661
+        }
+      },
+      "ngsim-us101:2641:1": {
+        "speed": {
+          "mean_signed_error": 0.054556696321505734,
+          "end_signed_error": 0.5189082587796987,
+          "fraction_positive": 0.6218905472636815
+        },
+        "gap": {
+          "mean_signed_error": 0.09842163529000192,
+          "end_signed_error": -1.0858501701607253,
+          "fraction_positive": 0.40796019900497515
+        },
+        "acceleration": {
+          "mean_signed_error": 0.06032324381095651,
+          "end_signed_error": 1.4213288235785322,
+          "fraction_positive": 0.4527363184079602
+        }
+      },
+      "ngsim-us101:2669:1": {
+        "speed": {
+          "mean_signed_error": -0.27150994945903073,
+          "end_signed_error": -2.144775972256494,
+          "fraction_positive": 0.5
+        },
+        "gap": {
+          "mean_signed_error": -0.37561118621788664,
+          "end_signed_error": 5.356898836477143,
+          "fraction_positive": 0.19402985074626866
+        },
+        "acceleration": {
+          "mean_signed_error": -0.1338173381529373,
+          "end_signed_error": -1.5949989082817524,
+          "fraction_positive": 0.4079601990049751
+        }
+      },
+      "ngsim-us101:2804:1": {
+        "speed": {
+          "mean_signed_error": -0.45370553912966494,
+          "end_signed_error": -0.2508532821579674,
+          "fraction_positive": 0.39054726368159204
+        },
+        "gap": {
+          "mean_signed_error": 7.151516954550965,
+          "end_signed_error": 9.020543055642833,
+          "fraction_positive": 0.9950248756218906
+        },
+        "acceleration": {
+          "mean_signed_error": 0.012957203497216949,
+          "end_signed_error": 2.524692998524598,
+          "fraction_positive": 0.5646766169154229
+        }
+      },
+      "ngsim-us101:308:2": {
+        "speed": {
+          "mean_signed_error": -0.36117622629481444,
+          "end_signed_error": 1.4652629840866984,
+          "fraction_positive": 0.4427860696517413
+        },
+        "gap": {
+          "mean_signed_error": 4.222833055923784,
+          "end_signed_error": 7.343263178943644,
+          "fraction_positive": 1.0
+        },
+        "acceleration": {
+          "mean_signed_error": 0.07884787597951923,
+          "end_signed_error": 2.868126304331695,
+          "fraction_positive": 0.5771144278606966
+        }
+      },
+      "ngsim-us101:401:2": {
+        "speed": {
+          "mean_signed_error": -0.46581109999828846,
+          "end_signed_error": -1.2053192106889234,
+          "fraction_positive": 0.3781094527363184
+        },
+        "gap": {
+          "mean_signed_error": 0.6312231694398847,
+          "end_signed_error": 9.315908852835506,
+          "fraction_positive": 0.6716417910447762
+        },
+        "acceleration": {
+          "mean_signed_error": -0.05725919356813419,
+          "end_signed_error": 1.806015520022464,
+          "fraction_positive": 0.5248756218905473
+        }
+      },
+      "ngsim-us101:468:1": {
+        "speed": {
+          "mean_signed_error": -0.11048674432544876,
+          "end_signed_error": 0.10106948642987734,
+          "fraction_positive": 0.5099502487562189
+        },
+        "gap": {
+          "mean_signed_error": 4.536918436201425,
+          "end_signed_error": 2.1738071753338915,
+          "fraction_positive": 0.9950248756218906
+        },
+        "acceleration": {
+          "mean_signed_error": -0.03780227266659079,
+          "end_signed_error": -0.09960509389201769,
+          "fraction_positive": 0.5248756218905473
+        }
+      },
+      "ngsim-us101:481:2": {
+        "speed": {
+          "mean_signed_error": 0.09640321659019649,
+          "end_signed_error": 0.23284329069821252,
+          "fraction_positive": 0.4975124378109453
+        },
+        "gap": {
+          "mean_signed_error": -1.6753258602161747,
+          "end_signed_error": -1.9345261653794736,
+          "fraction_positive": 0.2512437810945274
+        },
+        "acceleration": {
+          "mean_signed_error": 0.0019946760265465695,
+          "end_signed_error": -0.9890909680603355,
+          "fraction_positive": 0.5422885572139303
+        }
+      },
+      "ngsim-us101:828:1": {
+        "speed": {
+          "mean_signed_error": -0.026019210512420614,
+          "end_signed_error": -1.3518377170271918,
+          "fraction_positive": 0.572139303482587
+        },
+        "gap": {
+          "mean_signed_error": -1.704264224039379,
+          "end_signed_error": 0.4397395121895471,
+          "fraction_positive": 0.0945273631840796
+        },
+        "acceleration": {
+          "mean_signed_error": -0.06119189835130823,
+          "end_signed_error": -0.4453899770807882,
+          "fraction_positive": 0.4104477611940298
+        }
+      },
+      "ngsim-us101:960:1": {
+        "speed": {
+          "mean_signed_error": 0.17295728094106466,
+          "end_signed_error": 0.47479185507972677,
+          "fraction_positive": 0.5199004975124377
+        },
+        "gap": {
+          "mean_signed_error": -3.708529600929359,
+          "end_signed_error": -3.5180539379535105,
+          "fraction_positive": 0.21393034825870647
+        },
+        "acceleration": {
+          "mean_signed_error": 0.0337356468701407,
+          "end_signed_error": 0.648659756135092,
+          "fraction_positive": 0.48756218905472637
+        }
+      },
+      "ngsim-us101:977:3": {
+        "speed": {
+          "mean_signed_error": -0.3269028082434298,
+          "end_signed_error": -0.05647503108575336,
+          "fraction_positive": 0.18656716417910446
+        },
+        "gap": {
+          "mean_signed_error": 2.7196790315762684,
+          "end_signed_error": 6.538289052916255,
+          "fraction_positive": 0.8756218905472637
+        },
+        "acceleration": {
+          "mean_signed_error": 0.006413235220880133,
+          "end_signed_error": 0.2195120897418656,
+          "fraction_positive": 0.5398009950248757
+        }
+      }
+    },
+    "mean": {
+      "speed": {
+        "mean_signed_error": -0.12415598685098668,
+        "end_signed_error": -0.0836641622177339,
+        "fraction_positive": 0.48561540125459657
+      },
+      "gap": {
+        "mean_signed_error": 1.4398221712730292,
+        "end_signed_error": 2.464498925685266,
+        "fraction_positive": 0.6208089984858316
+      },
+      "acceleration": {
+        "mean_signed_error": -0.0034200431383786052,
+        "end_signed_error": 0.18343992220760658,
+        "fraction_positive": 0.501189703655635
+      }
+    }
+  }
+}

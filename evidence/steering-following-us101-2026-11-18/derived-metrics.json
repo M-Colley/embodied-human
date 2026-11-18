@@ -1,0 +1,59 @@
+{
+  "role": "descriptive_inspected_case_diagnostic",
+  "source_files_sha256": {
+    "reference.json.gz": "dcfd4c0cd2fbd31f02c6af1ec50b910a5b41d462d45e4d593a4e3602792ab898",
+    "muscle_replay.json.gz": "1e2c7e2a2a777f6760f1022ff79eb7feb63bfc70893b782af1937ff707f34be1",
+    "ideal_steering.json.gz": "d5e4ec2ec7eb86dc2262f4f8fe8a1e9ef5537343814b43412441bdb776eca6c3"
+  },
+  "maximum_absolute_speed_difference_reference_ideal_mps": 3.552713678800501e-15,
+  "modes": {
+    "reference": {
+      "rms_lane_belief_error_m": 0.026139444952099637,
+      "maximum_absolute_wheel_tracking_error": 1.0149648431659437,
+      "phase_wheel_tracking_rmse": {
+        "0": 0.058594394337072815,
+        "5": 0.07369937695279094,
+        "10": 0.07649064497370561,
+        "15": 0.30989445631251133
+      },
+      "requested_realized_acceleration_rmse_mps2": 0.809501098337788,
+      "maximum_absolute_body_vehicle_clock_difference_s": 2.263078613395919e-12,
+      "terminal_requested_steer": 0.42941724016181293,
+      "terminal_measured_wheel": -0.06677309867658951,
+      "terminal_true_lane_offset_m": -3.5416380340229816,
+      "terminal_true_heading_rad": -0.3480550313796806
+    },
+    "muscle_replay": {
+      "rms_lane_belief_error_m": 0.026139444952099637,
+      "maximum_absolute_wheel_tracking_error": 1.0149648431659437,
+      "phase_wheel_tracking_rmse": {
+        "0": 0.058594394337072815,
+        "5": 0.07369937695279094,
+        "10": 0.07649064497370561,
+        "15": 0.30989445631251133
+      },
+      "requested_realized_acceleration_rmse_mps2": 0.809501098337788,
+      "maximum_absolute_body_vehicle_clock_difference_s": 2.263078613395919e-12,
+      "terminal_requested_steer": 0.42941724016181293,
+      "terminal_measured_wheel": -0.06677309867658951,
+      "terminal_true_lane_offset_m": -3.5416380340229816,
+      "terminal_true_heading_rad": -0.3480550313796806
+    },
+    "ideal_steering": {
+      "rms_lane_belief_error_m": 0.025903650103160265,
+      "maximum_absolute_wheel_tracking_error": 0.05619288894480082,
+      "phase_wheel_tracking_rmse": {
+        "0": 0.017720458757969595,
+        "5": 0.017900873767630207,
+        "10": 0.018153124595255858,
+        "15": 0.014098373669208838
+      },
+      "requested_realized_acceleration_rmse_mps2": 0.8226622200388248,
+      "maximum_absolute_body_vehicle_clock_difference_s": 2.263078613395919e-12,
+      "terminal_requested_steer": 0.02198830483156798,
+      "terminal_measured_wheel": 0.0,
+      "terminal_true_lane_offset_m": -0.04703900829240028,
+      "terminal_true_heading_rad": -0.005963441472040372
+    }
+  }
+}
