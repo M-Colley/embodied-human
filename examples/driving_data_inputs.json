@@ -1,0 +1,33 @@
+{
+  "lehtonen2018": {
+    "path": "../data/lehtonen/DataAndAnalysis.zip",
+    "source": "https://doi.org/10.6084/m9.figshare.5572636",
+    "licence": "CC BY 4.0"
+  },
+  "rightgaze2022": {
+    "path": "../data/rightgaze",
+    "source": "https://doi.org/10.5281/zenodo.20717040",
+    "licence": "CC BY 4.0"
+  },
+  "expert_driving": {
+    "path": "../data/expert-driving",
+    "source": "https://doi.org/10.6084/m9.figshare.29664056",
+    "licence": "CC BY 4.0"
+  },
+  "ngsim": {
+    "path": "../data/ngsim/ngsim-i80-cars.csv",
+    "source": "https://data.transportation.gov/d/8ect-6jqj",
+    "licence": "CC BY-SA 3.0"
+  },
+  "drivedna_controlled": {
+    "path": null,
+    "status": "access_pending",
+    "url": "https://huggingface.co/datasets/HenryYHW/DriveDNA-Controlled",
+    "licence": "DriveDNA research licence"
+  },
+  "mpdb": {
+    "path": "../data/mpdb/sets",
+    "source": "https://doi.org/10.6084/m9.figshare.22192831.v3",
+    "licence": "CC BY 4.0"
+  }
+}

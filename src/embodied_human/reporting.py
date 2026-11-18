@@ -5,10 +5,12 @@ from __future__ import annotations
 import dataclasses
 import hashlib
 import importlib.metadata
+import importlib.util
 import json
 import os
 import platform
 import subprocess
+import sys
 import time
 import zipfile
 from collections import Counter
@@ -148,6 +150,59 @@ def _file_sha256(path: Path) -> str:
         for chunk in iter(lambda: stream.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def runtime_sources() -> dict[str, dict[str, Any]]:
+    """Identify import sources independently of installed distribution metadata."""
+    sources: dict[str, dict[str, Any]] = {}
+    for name in ("embodied_human", "myosuite_carla", "myosuite", "embodied_ui"):
+        try:
+            loaded = sys.modules.get(name)
+            origin = getattr(loaded, "__file__", None)
+            if origin is None:
+                spec = importlib.util.find_spec(name)
+                origin = spec.origin if spec is not None else None
+            if origin is None or not Path(origin).is_file():
+                sources[name] = {"status": "unavailable"}
+                continue
+            path = Path(origin).resolve()
+            package = path.parent
+            files = {
+                item.relative_to(package).as_posix(): hashlib.sha256(
+                    item.read_bytes().replace(b"\r\n", b"\n")
+                ).hexdigest()
+                for item in sorted(package.rglob("*.py"))
+                if "__pycache__" not in item.parts
+            }
+            record: dict[str, Any] = {
+                "status": "resolved",
+                "origin": str(path),
+                "origin_sha256": _file_sha256(path),
+                "python_files": files,
+                "python_source_sha256": hashlib.sha256(
+                    json.dumps(files, sort_keys=True, separators=(",", ":")).encode()
+                ).hexdigest(),
+            }
+            sources[name] = record
+
+            def git(*args: str) -> bytes:
+                return subprocess.check_output(
+                    ["git", "-C", str(package), *args],
+                    stderr=subprocess.DEVNULL,
+                    timeout=10,
+                )
+
+            try:
+                record["git_revision"] = git("rev-parse", "HEAD").decode().strip()
+                record["git_dirty"] = bool(git("status", "--porcelain").strip())
+                record["git_diff_sha256"] = hashlib.sha256(
+                    git("diff", "--binary", "--no-ext-diff", "HEAD")
+                ).hexdigest()
+            except (OSError, subprocess.SubprocessError):
+                record["git_revision"] = None
+        except (OSError, ValueError, ImportError, AttributeError) as error:
+            sources[name] = {"status": "unavailable", "reason": type(error).__name__}
+    return sources
 
 
 def _source_file(path: Path) -> bool:
