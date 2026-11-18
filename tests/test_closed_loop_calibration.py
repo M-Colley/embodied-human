@@ -220,8 +220,9 @@ def test_invalid_experiment_settings_are_rejected(settings):
         calibration.ClosedLoopCalibrationConfig(**settings)
 
 
+@pytest.mark.parametrize("preset", ["legacy", "carla-1.0"])
 def test_orchestration_freezes_fresh_sources_before_fitting_and_locks_test(
-    tmp_path, monkeypatch
+    tmp_path, monkeypatch, preset
 ):
     old = tmp_path / "old.json"
     old.write_text(json.dumps({"requested_source_groups": ["ngsim:old"]}))
@@ -232,6 +233,14 @@ def test_orchestration_freezes_fresh_sources_before_fitting_and_locks_test(
     @dataclass
     class Reflex:
         perception_delay: float = 0.02
+        acceleration_control: dict | None = None
+
+    @dataclass
+    class Vehicle:
+        preset: str = "legacy"
+
+        def as_dict(self):
+            return asdict(self)
 
     @dataclass
     class PhysicalConfig:
@@ -239,11 +248,15 @@ def test_orchestration_freezes_fresh_sources_before_fitting_and_locks_test(
         trials_per_source: int = 1
 
     class Physical:
-        def __init__(self, source, *, config):
+        def __init__(self, source, *, config, reflex_config, vehicle_parameters):
             assert log[0]["event"] == "design_frozen"
             self.groups = source.groups
             self.config = config
             self.closed = False
+            assert reflex_config.perception_delay == 0.04
+            assert vehicle_parameters == (
+                Vehicle(preset) if preset != "legacy" else None
+            )
 
         def __enter__(self):
             return self
@@ -319,7 +332,31 @@ def test_orchestration_freezes_fresh_sources_before_fitting_and_locks_test(
     monkeypatch.setitem(sys.modules, "myosuite_carla", package)
     monkeypatch.setitem(sys.modules, bridge.__name__, bridge)
     monkeypatch.setitem(sys.modules, models.__name__, models)
-    config = calibration.ClosedLoopCalibrationConfig(bootstrap=200)
+    monkeypatch.setattr(calibration, "resolve_vehicle_parameters", Vehicle)
+    monkeypatch.setattr(
+        calibration,
+        "resolve_reflex_configuration",
+        lambda vehicle, *, perception_delay, acceleration_control: Reflex(
+            perception_delay,
+            {"vehicle": vehicle.as_dict()} if acceleration_control else None,
+        ),
+    )
+    monkeypatch.setattr(
+        calibration,
+        "physical_configuration",
+        lambda preset, vehicle, reflex: {
+            "vehicle_preset": preset,
+            "vehicle_parameters": vehicle.as_dict(),
+            "reflex_config": asdict(reflex),
+            "reflex_timing": {"realized_history_lag_s": 0.02},
+        },
+    )
+    config = calibration.ClosedLoopCalibrationConfig(
+        bootstrap=200,
+        vehicle_preset=preset,
+        reflex_perception_delay=0.04,
+        acceleration_control=True,
+    )
     report = calibration.calibrate_closed_loop_following(
         tmp_path / "unused.csv",
         config=config,
@@ -349,6 +386,8 @@ def test_orchestration_freezes_fresh_sources_before_fitting_and_locks_test(
     assert report["model_update"]["decision"] == "accepted_contextual_candidate"
     assert report["profile"]["module"] == "reflex.idm"
     assert report["defaults_updated"] is False
+    assert report["design"]["physical_configuration"]["vehicle_preset"] == preset
+    assert report["closed_loop"]["reflex_timing"]["realized_history_lag_s"] == 0.02
     assert log[-1]["event"] == "objective_completed"
 
 

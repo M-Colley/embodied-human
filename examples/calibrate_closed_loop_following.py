@@ -24,9 +24,13 @@ def main(argv: list[str] | None = None) -> int:
     defaults = ClosedLoopCalibrationConfig()
     for field in fields(defaults):
         value = getattr(defaults, field.name)
-        parser.add_argument(
-            "--" + field.name.replace("_", "-"), type=type(value), default=value
-        )
+        name = "--" + field.name.replace("_", "-")
+        if isinstance(value, bool):
+            parser.add_argument(name, action="store_true", default=value)
+        elif field.name == "vehicle_preset":
+            parser.add_argument(name, choices=("legacy", "carla-1.0"), default=value)
+        else:
+            parser.add_argument(name, type=type(value), default=value)
     args = parser.parse_args(argv)
     try:
         configuration = ClosedLoopCalibrationConfig(

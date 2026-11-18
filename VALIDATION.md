@@ -1,5 +1,13 @@
 # Validation
 
+## Explicit CARLA 1.0 physical configuration on 2026-11-18
+
+The isolated integration combines rotating head sensing revision `770b358e38b8e4eae966d1f106b3e071e58fce1a` and empirical driving revision `3a19652a2fab5aa4c5556c0ddd844782dc65d981`. Physical calibration and evaluation can select the CARLA 1.0 vehicle explicitly. The legacy vehicle and controller settings remain the defaults. Worker jobs preserve complete supplied vehicle parameters and independent dataset namespaces. Reports retain the controller history length and its realized lag.
+
+The focused configuration, calibration, actuation and campaign checks passed 72 tests with MyoSuite 3.1.0 and 72 tests with development revision `c93329ec64bc8b544d0b3427bba6766377c3528e`. Both environments used Python 3.12.13, MuJoCo 3.17.0 and myo-sim 0.2.5. The tests used the isolated source through `PYTHONPATH`. The native worker regression executed a synthetic one second episode with the accepted CARLA 1.0 parameters and a baseline controller without an inverse. It verified the explicit vehicle, custom dataset identity, controller timing and vehicle cleanup. Three upstream MuJoCo prefix warnings occurred in each environment. No live CARLA or empirical evaluation data were used for these checks.
+
+Ruff passed for source, tests and the three changed command line examples. Mypy passed the three changed source modules. The controller timing regression measures the history used by actual `ReflexDriver.act` calls. A 0.04 s configuration at a 0.02 s control period produced a 0.02 s history lag. These checks preserve the existing timing behavior.
+
 ## Actuator correction and independent evaluation on 2026-10-28
 
 The corrected actuator interface reduced mean test normalized trajectory MSE from 0.7686406859 to 0.6987135337 (9.10%). The paired change was −0.0699271523 (95% source bootstrap interval [−0.1654942475, 0.02120664355]). The interval includes zero. The result is `inconclusive_contextual_candidate`. Global defaults remain unchanged.

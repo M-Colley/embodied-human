@@ -20,6 +20,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from embodied_human.driving_configuration import (
+    reflex_timing,
+    resolve_vehicle_parameters,
+    validate_vehicle_settings,
+)
 from embodied_human.driving_data import load_dataset
 from embodied_human.reporting import environment_record, write_json
 from embodied_human.reporting import runtime_sources as _runtime_sources
@@ -399,6 +404,7 @@ def _following(
     seed: int,
     max_groups: int,
     closed_loop_trials: int,
+    vehicle_preset: str = "legacy",
 ) -> dict[str, Any]:
     from myosuite_carla.driver_models import ReflexDriverConfig
     from myosuite_carla.empirical_following import (
@@ -446,6 +452,11 @@ def _following(
     report["profile"]["module"] = "reflex.idm"
     report["profile"]["context"] = "NGSIM car following at desired speed 16 m/s"
     report["protocol"] = protocol.metadata
+    vehicle_options = (
+        {"vehicle_parameters": resolve_vehicle_parameters(vehicle_preset)}
+        if vehicle_preset != "legacy"
+        else {}
+    )
     report["closed_loop"] = closed_loop_following(
         protocol,
         baseline,
@@ -453,6 +464,12 @@ def _following(
         groups=report["partitions"]["test"],
         max_trials=closed_loop_trials,
         seed=seed,
+        **vehicle_options,
+    )
+    report["closed_loop"]["vehicle_preset"] = vehicle_preset
+    report["closed_loop"]["reflex_timing"] = reflex_timing(
+        ReflexDriverConfig(perception_delay=0.02),
+        report["closed_loop"].get("driver_config", {}).get("control_dt", 0.02),
     )
     return report
 
@@ -481,8 +498,10 @@ def run_campaign(
     max_following_groups: int = 96,
     closed_loop_trials: int = 6,
     fixation_report: Path | None = None,
+    vehicle_preset: str = "legacy",
 ) -> dict[str, Any]:
     """Attempt all six datasets and save independent dataset reports."""
+    validate_vehicle_settings(vehicle_preset, 0.02)
     for name, value in (
         ("samples", samples),
         ("max_following_groups", max_following_groups),
@@ -518,6 +537,7 @@ def run_campaign(
             "seed": seed,
             "max_following_groups": max_following_groups,
             "closed_loop_trials": closed_loop_trials,
+            "vehicle_preset": vehicle_preset,
         },
         "script_sha256": _sha256(Path(__file__)),
         "environment": environment_record(),
@@ -586,6 +606,7 @@ def run_campaign(
                         seed=seed,
                         max_groups=max_following_groups,
                         closed_loop_trials=closed_loop_trials,
+                        vehicle_preset=vehicle_preset,
                     )
                 elif dataset == "mpdb":
                     evaluation = protocols.emg_reference(bundle)
@@ -659,6 +680,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--closed-loop-trials", type=_positive, default=6)
     parser.add_argument("--fixation-report", type=Path)
     parser.add_argument("--allow-incomplete", action="store_true")
+    parser.add_argument(
+        "--vehicle-preset", choices=("legacy", "carla-1.0"), default="legacy"
+    )
     args = parser.parse_args(argv)
     if not math.isfinite(args.seconds) or args.seconds < 0.4 or args.seed < 0:
         parser.error(
@@ -677,6 +701,7 @@ def main(argv: list[str] | None = None) -> int:
             max_following_groups=args.max_following_groups,
             closed_loop_trials=args.closed_loop_trials,
             fixation_report=args.fixation_report,
+            vehicle_preset=args.vehicle_preset,
         )
     except (OSError, ValueError) as error:
         print(f"Campaign configuration error: {error}", file=sys.stderr)

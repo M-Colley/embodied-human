@@ -23,6 +23,12 @@ from .closed_loop_calibration import (
     source_exclusions,
 )
 from .core import HumanConfig
+from .driving_configuration import (
+    physical_configuration,
+    reflex_timing,
+    resolve_vehicle_parameters,
+    validate_vehicle_settings,
+)
 from .driving_evaluation import compare_prediction_change
 from .reporting import write_json
 
@@ -42,8 +48,11 @@ class ActuationEvaluationConfig:
     desired_speed: float = 16.0
     bootstrap: int = 5000
     workers: int = 3
+    vehicle_preset: str = "legacy"
+    reflex_perception_delay: float = 0.02
 
     def __post_init__(self) -> None:
+        validate_vehicle_settings(self.vehicle_preset, self.reflex_perception_delay)
         for name in ("development_sources", "test_sources", "bootstrap", "workers"):
             value = getattr(self, name)
             if isinstance(value, bool) or not isinstance(value, int) or value < 1:
@@ -90,6 +99,8 @@ class ArmJob:
     output: str
     seconds: float
     desired_speed: float
+    vehicle_parameters: dict[str, Any] | None = None
+    dataset_id: str = "ngsim"
 
 
 def run_arm(job: ArmJob) -> dict[str, Any]:
@@ -107,15 +118,26 @@ def run_arm(job: ArmJob) -> dict[str, Any]:
     if output.exists() or progress_path.exists():
         raise ValueError(f"worker output already exists: {output}")
     source = load_following_protocol(
-        job.fixture, max_groups=None, desired_speed=job.desired_speed
+        job.fixture,
+        max_groups=None,
+        desired_speed=job.desired_speed,
+        dataset_id=job.dataset_id,
     )
     if set(source.groups) != set(job.groups) or len(set(job.groups)) != len(job.groups):
         raise ValueError("worker fixture differs from its fixed source partition")
     reflex = ReflexDriverConfig.from_dict(job.reflex)
+    vehicle_options = {}
+    if job.vehicle_parameters is not None:
+        from myosuite_carla.vehicle_model import VehicleModelParams
+
+        vehicle_options["vehicle_parameters"] = VehicleModelParams.from_dict(
+            job.vehicle_parameters
+        )
     physical = ClosedLoopFollowingProtocol(
         source,
         config=ClosedLoopConfig(seconds=job.seconds, trials_per_source=1),
         reflex_config=reflex,
+        **vehicle_options,
     )
     records: list[dict[str, Any]] = []
     result: dict[str, Any] = {
@@ -123,6 +145,8 @@ def run_arm(job: ArmJob) -> dict[str, Any]:
         "groups": list(job.groups),
         "base_seeds": list(job.seeds),
         "reflex_configuration": job.reflex,
+        "dataset_id": job.dataset_id,
+        "vehicle_parameters": job.vehicle_parameters,
         "fixture_sha256": file_sha256(Path(job.fixture)),
         "status": "completed",
         "episodes": records,
@@ -174,6 +198,11 @@ def run_arm(job: ArmJob) -> dict[str, Any]:
             diagnostics=physical.diagnostics,
             elapsed_seconds=time.perf_counter() - started,
         )
+        if hasattr(reflex, "perception_delay"):
+            result["reflex_timing"] = reflex_timing(
+                reflex,
+                result["metadata"].get("driver_config", {}).get("control_dt", 0.02),
+            )
         write_json(output, result)
     return result
 
@@ -404,8 +433,12 @@ def evaluate_actuation_improvement(
     component = component_record.get("evaluation", component_record)["profile"][
         "parameters"
     ]
-    base = ReflexDriverConfig(perception_delay=0.02)
-    corrected = replace(base, acceleration_control=AccelerationControlConfig())
+    vehicle = resolve_vehicle_parameters(config.vehicle_preset)
+    base = ReflexDriverConfig(perception_delay=config.reflex_perception_delay)
+    corrected = replace(
+        base, acceleration_control=AccelerationControlConfig(vehicle=vehicle)
+    )
+    resolved = physical_configuration(config.vehicle_preset, vehicle, base)
     fixed_component = replace(corrected, idm=IdmConfig(**component))
     arms = {
         name: asdict(values)
@@ -419,6 +452,7 @@ def evaluate_actuation_improvement(
     design = {
         "schema_version": 1,
         "configuration": asdict(config),
+        "physical_configuration": resolved,
         "partitions": {"development": list(development), "test": list(test)},
         "previously_inspected_sources": list(known),
         "population_sources": len(recorded.groups),
@@ -466,6 +500,7 @@ def evaluate_actuation_improvement(
             str(output / "development" / (name + ".json")),
             config.seconds,
             config.desired_speed,
+            vehicle.as_dict() if config.vehicle_preset != "legacy" else None,
         )
         for name, values in arms.items()
     ]
@@ -516,6 +551,7 @@ def evaluate_actuation_improvement(
                 str(output / "test" / (name + ".json")),
                 config.seconds,
                 config.desired_speed,
+                vehicle.as_dict() if config.vehicle_preset != "legacy" else None,
             )
             for name in ("A", selected)
         ]
@@ -539,7 +575,14 @@ def evaluate_actuation_improvement(
             "base_seeds": list(config.test_seeds),
             "secondary_task": None,
             "controller": "embodied_human.agents.driver.AttentiveDriver",
-            "vehicle": "offline fitted CARLA 0.10.0 Nissan Patrol surrogate",
+            "vehicle": (
+                "offline fitted CARLA 0.10.0 Nissan Patrol surrogate"
+                if config.vehicle_preset == "legacy"
+                else "offline fitted CARLA 1.0 Nissan Patrol surrogate"
+            ),
+            "vehicle_preset": config.vehicle_preset,
+            "vehicle_parameters": vehicle.as_dict(),
+            "reflex_timing": resolved["reflex_timing"],
             "desired_speed_mps": config.desired_speed,
             "profiles": {"baseline": arms["A"]["idm"], "fitted": arms[selected]["idm"]},
             "reflex_configurations": {"baseline": arms["A"], "fitted": arms[selected]},
@@ -565,7 +608,9 @@ def evaluate_actuation_improvement(
         "schema_version": 1,
         "module": "reflex.idm",
         "context": (
-            "NGSIM following through the MyoSuite body and CARLA 0.10 Nissan Patrol "
+            "NGSIM following through the MyoSuite body and "
+            + ("CARLA 0.10" if config.vehicle_preset == "legacy" else "CARLA 1.0")
+            + " Nissan Patrol "
             f"surrogate at desired speed {config.desired_speed:g} m/s"
         ),
         "role": "retained_baseline" if selected == "A" else "fitted_candidate",

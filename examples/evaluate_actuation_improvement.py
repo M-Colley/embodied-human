@@ -33,6 +33,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--desired-speed", type=float, default=16)
     parser.add_argument("--bootstrap", type=int, default=5000)
     parser.add_argument("--workers", type=int, default=3)
+    parser.add_argument(
+        "--vehicle-preset", choices=("legacy", "carla-1.0"), default="legacy"
+    )
+    parser.add_argument("--reflex-perception-delay", type=float, default=0.02)
     args = parser.parse_args(argv)
     try:
         configuration = ActuationEvaluationConfig(

@@ -14,6 +14,12 @@ from typing import Any
 import numpy as np
 
 from .core import HumanConfig
+from .driving_configuration import (
+    physical_configuration,
+    resolve_reflex_configuration,
+    resolve_vehicle_parameters,
+    validate_vehicle_settings,
+)
 from .driving_evaluation import GroupSplit, calibrate_grouped, compare_prediction_change
 from .inference import Prior
 
@@ -45,8 +51,14 @@ class ClosedLoopCalibrationConfig:
     accept: float = 0.25
     bootstrap: int = 2000
     desired_speed: float = 16.0
+    vehicle_preset: str = "legacy"
+    reflex_perception_delay: float = 0.02
+    acceleration_control: bool = False
 
     def __post_init__(self) -> None:
+        validate_vehicle_settings(self.vehicle_preset, self.reflex_perception_delay)
+        if not isinstance(self.acceleration_control, bool):
+            raise ValueError("acceleration_control must be boolean")
         for name in (
             "samples",
             "train_sources",
@@ -290,7 +302,6 @@ def calibrate_closed_loop_following(
     progress: Progress | None = None,
 ) -> dict[str, Any]:
     """Fit physical trajectory errors using a fresh fixed source partition."""
-    from myosuite_carla.driver_models import ReflexDriverConfig
     from myosuite_carla.empirical_following import (
         ClosedLoopConfig,
         ClosedLoopFollowingProtocol,
@@ -326,9 +337,17 @@ def calibrate_closed_loop_following(
         seconds=config.seconds,
         trials_per_source=config.trials_per_source,
     )
+    vehicle = resolve_vehicle_parameters(config.vehicle_preset)
+    reflex = resolve_reflex_configuration(
+        vehicle,
+        perception_delay=config.reflex_perception_delay,
+        acceleration_control=config.acceleration_control,
+    )
+    resolved = physical_configuration(config.vehicle_preset, vehicle, reflex)
     design = {
         "schema_version": 1,
         "configuration": asdict(config),
+        "physical_configuration": resolved,
         "partitions": asdict(split),
         "trial_counts": {
             group: min(config.trials_per_source, len(recorded.trials_for(group)))
@@ -357,7 +376,12 @@ def calibrate_closed_loop_following(
         progress({"event": "design_frozen", "design": design})
     calls = 0
     baseline = idm_parameters()
-    physical = ClosedLoopFollowingProtocol(recorded, config=physical_config)
+    physical = ClosedLoopFollowingProtocol(
+        recorded,
+        config=physical_config,
+        reflex_config=reflex,
+        vehicle_parameters=vehicle if config.vehicle_preset != "legacy" else None,
+    )
     with physical:
 
         def simulate(
@@ -397,7 +421,7 @@ def calibrate_closed_loop_following(
             configuration={
                 "human": HumanConfig().as_dict(),
                 "driver": asdict(DriverAgentParameters()),
-                "reflex": asdict(ReflexDriverConfig(perception_delay=0.02)),
+                "reflex": asdict(reflex),
             },
             provenance=physical.metadata,
             samples=config.samples,
@@ -409,7 +433,9 @@ def calibrate_closed_loop_following(
         )
         report["profile"]["module"] = "reflex.idm"
         report["profile"]["context"] = (
-            "NGSIM following through the MyoSuite body and CARLA 0.10 Nissan Patrol "
+            "NGSIM following through the MyoSuite body and "
+            + ("CARLA 0.10" if config.vehicle_preset == "legacy" else "CARLA 1.0")
+            + " Nissan Patrol "
             f"surrogate at desired speed {config.desired_speed:g} m/s"
         )
         report["closed_loop"] = physical.report_pair(
@@ -419,6 +445,11 @@ def calibrate_closed_loop_following(
             seed=config.evaluation_seed,
         )
         report["protocol"] = physical.metadata
+        report["physical_configuration"] = resolved
+        report["closed_loop"].update(
+            vehicle_preset=config.vehicle_preset,
+            reflex_timing=resolved["reflex_timing"],
+        )
         report["episodes"] = physical.episodes
     report["diagnostics"] = physical.diagnostics
     report["design"] = design

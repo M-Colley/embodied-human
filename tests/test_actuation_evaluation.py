@@ -122,6 +122,13 @@ def test_invalid_design_settings_are_rejected(settings):
 
 def _fake_bridge(monkeypatch):
     @dataclass
+    class Vehicle:
+        parameter: float = 1.0
+
+        def as_dict(self):
+            return {"parameter": self.parameter}
+
+    @dataclass
     class Idm:
         max_acceleration: float = 1.0
         comfortable_deceleration: float = 1.5
@@ -131,6 +138,7 @@ def _fake_bridge(monkeypatch):
 
     @dataclass
     class Acceleration:
+        vehicle: Vehicle = field(default_factory=Vehicle)
         gain: float = 1.0
 
     @dataclass
@@ -154,11 +162,27 @@ def _fake_bridge(monkeypatch):
     )
     ngsim = ModuleType("myosuite_carla.ngsim")
     ngsim.save_trials = lambda trials, path: Path(path).write_text(json.dumps(trials))
+    vehicles = ModuleType("myosuite_carla.vehicle_model")
+    vehicles.carla_nissan_patrol = Vehicle
+    vehicles.carla_1_0_nissan_patrol = lambda: Vehicle(2.0)
+    fullbody = ModuleType("myosuite_carla.fullbody")
+
+    @dataclass
+    class BodyConfig:
+        control_dt: float = 0.02
+
+        @classmethod
+        def fast(cls):
+            return cls()
+
+    fullbody.FullBodyDriverConfig = BodyConfig
     for name, value in (
         ("myosuite_carla", package),
         (models.__name__, models),
         (following.__name__, following),
         (ngsim.__name__, ngsim),
+        (vehicles.__name__, vehicles),
+        (fullbody.__name__, fullbody),
     ):
         monkeypatch.setitem(sys.modules, name, value)
 
@@ -226,9 +250,12 @@ def test_orchestration_freezes_selection_before_any_fresh_test_job(
             ]
             is None
         )
-        assert result["closed_loop"]["reflex_configurations"]["fitted"][
-            "acceleration_control"
-        ] == {"gain": 1.0}
+        assert (
+            result["closed_loop"]["reflex_configurations"]["fitted"][
+                "acceleration_control"
+            ]["vehicle"]
+            == result["design"]["physical_configuration"]["vehicle_parameters"]
+        )
     else:
         assert result["model_update"]["fresh_test_unopened"]
 
@@ -361,6 +388,56 @@ def test_worker_retains_infeasible_episode_and_completes_other_sources(
     assert result["diagnostics"]["closed"]
     assert len(path.with_suffix(".jsonl").read_text().splitlines()) == 4
     assert len(json.loads(path.read_text())["episodes"]) == 4
+
+
+def test_native_worker_binds_explicit_vehicle_for_baseline_without_inverse(tmp_path):
+    from dataclasses import asdict
+
+    import numpy as np
+
+    pytest.importorskip("myosuite.core.model_builder")
+    models = pytest.importorskip("myosuite_carla.driver_models")
+    vehicles = pytest.importorskip("myosuite_carla.vehicle_model")
+    from myosuite_carla.ngsim import FollowingTrial, save_trials
+
+    time = np.arange(11) / 10
+    fixture = tmp_path / "scripted.npz"
+    save_trials(
+        [
+            FollowingTrial(
+                driver="source",
+                time=time,
+                position=5 * time,
+                speed=np.full_like(time, 5),
+                acceleration=np.zeros_like(time),
+                gap=np.full_like(time, 20),
+                leader_speed=np.full_like(time, 5),
+            )
+        ],
+        fixture,
+    )
+    params = vehicles.carla_1_0_nissan_patrol()
+    reflex = models.ReflexDriverConfig(perception_delay=0.04)
+    result = study.run_arm(
+        study.ArmJob(
+            arm="baseline",
+            reflex=asdict(reflex),
+            fixture=str(fixture),
+            groups=("scripted:source",),
+            seeds=(42,),
+            output=str(tmp_path / "baseline.json"),
+            seconds=1,
+            desired_speed=10,
+            vehicle_parameters=params.as_dict(),
+            dataset_id="scripted",
+        )
+    )
+    assert result["status"] == "completed"
+    assert result["dataset_id"] == "scripted"
+    assert result["metadata"]["vehicle_parameters"] == params.as_dict()
+    assert result["reflex_timing"]["realized_history_lag_s"] == 0.02
+    assert result["episodes"][0]["vehicle_parameters"] == params.as_dict()
+    assert result["episodes"][0]["surrogate_closed"]
 
 
 def test_cli_marks_changed_source_report_invalid(tmp_path, monkeypatch):
