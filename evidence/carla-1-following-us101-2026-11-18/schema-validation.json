@@ -1,0 +1,40 @@
+{
+  "location": "us-101",
+  "vehicle_class": 2,
+  "rows": 4679934,
+  "recording_epoch_definition": "global_time - 100 * frame_id",
+  "periods": {
+    "1118846978900": {
+      "rows": 1139015,
+      "vehicle_ids": 2086,
+      "min_global_time": 1118846979700,
+      "max_global_time": 1118847932500,
+      "min_frame": 8,
+      "max_frame": 9536,
+      "official_period": "0750am-0805am"
+    },
+    "1118847842000": {
+      "rows": 2059791,
+      "vehicle_ids": 1963,
+      "min_global_time": 1118847843000,
+      "max_global_time": 1118848842000,
+      "min_frame": 10,
+      "max_frame": 10000,
+      "official_period": "0805am-0820am"
+    },
+    "1118848757000": {
+      "rows": 1481128,
+      "vehicle_ids": 1870,
+      "min_global_time": 1118848757500,
+      "max_global_time": 1118849752200,
+      "min_frame": 5,
+      "max_frame": 9952,
+      "official_period": "0820am-0835am"
+    }
+  },
+  "reviewed_fields": [
+    "frame_id",
+    "global_time",
+    "vehicle_id"
+  ]
+}

@@ -1,5 +1,11 @@
 # Validation
 
+## CARLA 1.0 following on NGSIM US 101
+
+The external site comparison fixed the CARLA 1.0 Nissan Patrol vehicle and compared two following interfaces on 24 US 101 vehicle tracks. Both profiles used the same IDM and two common simulation seeds. The acceleration inverse completed 48 of 48 episodes. The baseline completed 47. The remaining baseline episode left the road at 19.48 s. The fixed rule required all complete safe pairs and therefore rejected adoption. [Design, code and results](evidence/carla-1-following-us101-2026-11-18/README.md)
+
+Among the 23 complete tracks, speed RMSE was 0.888 and 0.887 m/s for the baseline and inverse, respectively. Bumper gap RMSE rose from 3.841 to 4.116 m. Acceleration RMSE fell from 0.788 to 0.695 m/s². The archive retains the incomplete episode and all other outcomes.
+
 ## Explicit CARLA 1.0 physical configuration on 2026-11-18
 
 The isolated integration combines rotating head sensing revision `770b358e38b8e4eae966d1f106b3e071e58fce1a` and empirical driving revision `3a19652a2fab5aa4c5556c0ddd844782dc65d981`. Physical calibration and evaluation can select the CARLA 1.0 vehicle explicitly. The legacy vehicle and controller settings remain the defaults. Worker jobs preserve complete supplied vehicle parameters and independent dataset namespaces. Reports retain the controller history length and its realized lag.
