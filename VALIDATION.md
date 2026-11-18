@@ -1,5 +1,15 @@
 # Validation
 
+## External following headway comparison on 2026-11-18
+
+The 1.2 s desired time headway failed transfer from the US 101 development tracks to the 24 TGSIM tracks. Each profile used the same CARLA 1.0 C3 surrogate, acceleration inverse and 114 muscle MyoSuite body. The 1.6 s reference completed 45 of 48 episodes. The candidate completed 43. Road departure accounted for all eight incomplete episodes. Across the 21 fully paired tracks, gap RMSE increased from 3.299 to 3.754 m. The mean paired change was +0.455 m (95% acquisition run percentile interval [−0.355, 1.110]). The candidate failed the completion, coverage, gap accuracy and directional error checks. [Protocol, commands and recordings](evidence/headway-transfer-2026-11-18/README.md)
+
+MyoSuite 3.1.0 and development revision `c93329e` each passed 576 tests with 25 skips. Ruff, mypy and both distribution builds passed. [Release tests](evidence/headway-transfer-2026-11-18/checks/release-tests.txt) [Development tests](evidence/headway-transfer-2026-11-18/checks/dev-tests.txt)
+
+## Matched steering replay on 2026-11-18
+
+Ideal steering prevented the vehicle departure observed in the original muscle steering episode. Both replays used the same US 101 leader trajectory, initial state, seed and 974 recorded longitudinal commands. The muscle replay reproduced the original departure at 19.48 s. Maximum absolute lane error fell from 3.542 m to 0.075 m with ideal steering. Lane perception error was similar between replays (RMSE 0.026 m in each). The muscle replay tracked the requested steering poorly near departure. The intervention localizes the failure to the steering actuation or control loop for this episode. [Protocol, traces and results](evidence/steering-following-us101-2026-11-18/README.md)
+
 ## CARLA 1.0 following on NGSIM US 101
 
 The external site comparison fixed the CARLA 1.0 Nissan Patrol vehicle and compared two following interfaces on 24 US 101 vehicle tracks. Both profiles used the same IDM and two common simulation seeds. The acceleration inverse completed 48 of 48 episodes. The baseline completed 47. The remaining baseline episode left the road at 19.48 s. The fixed rule required all complete safe pairs and therefore rejected adoption. [Design, code and results](evidence/carla-1-following-us101-2026-11-18/README.md)

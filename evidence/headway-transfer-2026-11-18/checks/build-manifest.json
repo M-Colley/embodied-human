@@ -1,0 +1,15 @@
+{
+  "command": "python -m build",
+  "files": [
+    {
+      "name": "embodied_human-0.1.1-py3-none-any.whl",
+      "size_bytes": 284502,
+      "sha256": "9f00a9ba31c1a765e80e3f7ac343f78fc3c1a6b4f40d4350019577b57f5d3f5d"
+    },
+    {
+      "name": "embodied_human-0.1.1.tar.gz",
+      "size_bytes": 20588546,
+      "sha256": "a00f2b422973fb688219fdaf52c77dc1dec769c2569c99f27a1fbb40e1168aed"
+    }
+  ]
+}

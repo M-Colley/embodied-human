@@ -1,0 +1,69 @@
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+C:\Users\localadmin\Desktop\myosuite-carla-following\src\myosuite_carla\fullbody.py:595: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+  model = spec.compile()
+C:\Users\localadmin\Desktop\myosuite-carla-following\src\myosuite_carla\fullbody.py:595: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+  model = spec.compile()
+C:\Users\localadmin\Desktop\myosuite-carla-following\src\myosuite_carla\fullbody.py:632: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+  model = spec.compile()
+C:\Users\localadmin\Desktop\myosuite-carla-following\src\myosuite_carla\fullbody.py:632: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+  model = spec.compile()
+C:\Users\localadmin\Desktop\myosuite-carla-following\src\myosuite_carla\fullbody.py:1457: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+  body = _body_spec(config).compile()
+C:\Users\localadmin\Desktop\myosuite-carla-following\src\myosuite_carla\fullbody.py:1457: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+  body = _body_spec(config).compile()
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNINGWARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+
+C:\Users\localadmin\Desktop\myosuite-carla-following\src\myosuite_carla\fullbody.py:595: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+  model = spec.compile()
+C:\Users\localadmin\Desktop\myosuite-carla-following\src\myosuite_carla\fullbody.py:595: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+  model = spec.compile()
+C:\Users\localadmin\Desktop\myosuite-carla-following\src\myosuite_carla\fullbody.py:632: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+  model = spec.compile()
+C:\Users\localadmin\Desktop\myosuite-carla-following\src\myosuite_carla\fullbody.py:632: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+  model = spec.compile()
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+Saved C:\Users\localadmin\Desktop\myosuite-carla\artifacts\following-transfer-2026-11-18\external-test\report.json
