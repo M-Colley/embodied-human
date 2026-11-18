@@ -63,3 +63,14 @@ def test_candidate_incomplete_episode_prevents_adoption():
     assert report["guards"]["complete_track_count"]
     assert not report["guards"]["candidate_complete"]
     assert report["decision"] == "rejected"
+
+
+def test_pilot_coverage_cannot_pass_even_with_positive_performance():
+    inputs = {**_inputs(), "protocol_eligible": False}
+    reference = _rows(inputs, [5, 5, 5, 5], 1.0)
+    candidate = _rows(inputs, [3, 3, 3, 3], 0.5)
+    report = _example()({"reference": reference, "candidate": candidate}, inputs)
+    assert report["guards"]["candidate_complete"]
+    assert report["guards"]["paired_gap_rmse_reduction"]
+    assert not report["guards"]["protocol_coverage"]
+    assert report["decision"] == "descriptive_pilot"

@@ -86,11 +86,14 @@ def prepare(
     out: Path,
     manifest: Path | None,
     selection: Path | None,
+    amendment: Path | None,
 ) -> None:
     digest = file_sha256(fixture)
     testing = stage == "test"
     dataset = design[f"{stage}_dataset"]
-    manifest_hash = selection_hash = None
+    manifest_hash = selection_hash = amendment_hash = None
+    protocol_eligible = True
+    allow_pilot = False
     runs: dict[str, str] = {}
     if testing:
         assert manifest is not None and selection is not None
@@ -100,8 +103,29 @@ def prepare(
         picked = read(selection)
         if picked["design"] != design or picked["selected_headway_s"] is None:
             raise ValueError("A frozen development selection is required")
+        selection_hash = file_sha256(selection)
+        manifest_hash = file_sha256(manifest)
+        expected_runtime = picked["runtime"]
+        runtime = runtime_identity()
+        if amendment is not None:
+            update = read(amendment)
+            if (
+                update["scope"] != "external data feasibility only"
+                or update["development_selection_sha256"] != selection_hash
+                or update["source_manifest_sha256"] != manifest_hash
+            ):
+                raise ValueError("The amendment must bind both published inputs")
+            dataset = update["dataset_id"]
+            allow_pilot = update["allow_descriptive_pilot"] is True
+            amendment_hash = file_sha256(amendment)
+            # Only the preparation script changed. All simulation modules, body
+            # settings and dependency versions still match the development run.
+            expected_runtime = {
+                **expected_runtime,
+                "script_sha256": runtime["script_sha256"],
+            }
         if (
-            picked["runtime"] != runtime_identity()
+            expected_runtime != runtime
             or picked["vehicle_parameters"] != carla_1_0_nissan_patrol().as_dict()
         ):
             raise ValueError("The test must use the development runtime and vehicle")
@@ -109,8 +133,6 @@ def prepare(
             f"{dataset}:{group}": str(run)
             for group, run in source["run_by_group"].items()
         }
-        manifest_hash = file_sha256(manifest)
-        selection_hash = file_sha256(selection)
         candidates = [picked["selected_headway_s"]]
         seeds = design["test_seeds"]
     else:
@@ -125,13 +147,15 @@ def prepare(
         max_groups=None if testing else design["development_sources"],
         seed=design["source_selection_seed"],
     )
-    if len(protocol.groups) != design[f"{stage}_sources"]:
-        raise ValueError("The fixture has the wrong number of eligible track groups")
-    if testing and (
-        set(runs) != set(protocol.groups)
-        or len(set(runs.values())) < design["test_minimum_run_groups"]
-    ):
-        raise ValueError("External tracks must match the fixture and span six runs")
+    protocol_eligible = len(protocol.groups) == design[f"{stage}_sources"]
+    if testing:
+        if set(runs) != set(protocol.groups):
+            raise ValueError("The site manifest and original track groups differ")
+        protocol_eligible = protocol_eligible and (
+            len(set(runs.values())) >= design["test_minimum_run_groups"]
+        )
+    if not protocol_eligible and not allow_pilot:
+        raise ValueError("Evaluation coverage differs from the frozen design")
     trials = []
     for group in protocol.groups:
         windows = protocol.trials_for(group)
@@ -158,6 +182,8 @@ def prepare(
             "fixture_sha256": file_sha256(prepared),
             "source_manifest_sha256": manifest_hash,
             "development_selection_sha256": selection_hash,
+            "amendment_sha256": amendment_hash,
+            "protocol_eligible": protocol_eligible,
             "track_groups": list(protocol.groups),
             "run_by_group": runs,
             "base_seeds": seeds,
@@ -228,6 +254,7 @@ def test_decision(
         )
     ]
     guards = {
+        "protocol_coverage": inputs.get("protocol_eligible", True),
         "candidate_complete": len(selected) == len(groups) * len(seeds),
         "complete_track_count": len(pairs) >= design["test_minimum_complete_tracks"],
         "all_runs_represented": {runs[g] for g in pairs} == set(runs.values()),
@@ -265,7 +292,12 @@ def test_decision(
             }
             guards["paired_gap_rmse_reduction"] = bool(ci.high < 0)
     guards.setdefault("paired_gap_rmse_reduction", False)
-    result["decision"] = "accepted_contextual" if all(guards.values()) else "rejected"
+    if not guards["protocol_coverage"]:
+        result["decision"] = "descriptive_pilot"
+    else:
+        result["decision"] = (
+            "accepted_contextual" if all(guards.values()) else "rejected"
+        )
     return result
 
 
@@ -362,6 +394,7 @@ def main() -> None:
     parser.add_argument("--prepare", type=Path, help="Prepare the supplied trial NPZ")
     parser.add_argument("--manifest", type=Path)
     parser.add_argument("--selection", type=Path)
+    parser.add_argument("--amendment", type=Path)
     args = parser.parse_args()
     design = read(args.design)
     if args.prepare:
@@ -370,7 +403,13 @@ def main() -> None:
                 "test preparation requires its manifest and development selection"
             )
         prepare(
-            design, args.stage, args.prepare, args.out, args.manifest, args.selection
+            design,
+            args.stage,
+            args.prepare,
+            args.out,
+            args.manifest,
+            args.selection,
+            args.amendment,
         )
     else:
         evaluate(design, args.stage, args.out)
