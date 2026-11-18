@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "site_role": "independent transfer test; prior I-80 development selected the acceleration inverse",
+  "dataset_id": "ngsim-us101",
+  "source": "https://data.transportation.gov/d/8ect-6jqj",
+  "site": "us-101",
+  "vehicle_class": 2,
+  "vehicle": "frozen CARLA 1.0 Nissan Patrol preset",
+  "fit_report_sha256": "1828ce53fcc28e28c8cd56a5d5881e54487ab679e22a0256776d63c82749756b",
+  "body": "fast full body",
+  "profiles": {
+    "baseline": "default IDM and legacy pedal map",
+    "inverse": "same IDM with matching C3 acceleration inverse and pedal feedback"
+  },
+  "configured_reflex_delay_s": 0.04,
+  "control_dt_s": 0.02,
+  "realized_history_lag_s": 0.02,
+  "desired_speed_mps": 16,
+  "maximum_observed_speed_mps": 16,
+  "test_sources": 24,
+  "seconds": 20,
+  "trials_per_source": 1,
+  "selection_seed": 20261118,
+  "test_seeds": [701, 702],
+  "bootstrap_resamples": 5000,
+  "weighting": "mean RMSE over common simulation seeds, normalize and square metric errors, equal weights by metric and original vehicle track",
+  "scales": {
+    "speed_rmse_mps": 1,
+    "gap_rmse_m": 5,
+    "acceleration_rmse_mps2": 1
+  },
+  "acceptance": "all episodes safe and complete, upper 95 percent paired original track bootstrap interval below zero, and every mean metric RMSE no worse",
+  "failure_rule": "preserve every episode; any unsafe or incomplete episode prevents acceptance",
+  "parameter_fitting": "none on US 101",
+  "uncertainty": "paired bootstrap across original vehicle tracks within the observed site"
+}

@@ -1,0 +1,54 @@
+{
+  "scope": "Input schema, keys and contradictory raw state values; no model scores.",
+  "canonical_rows": 4679934,
+  "canonical_dataframe_bytes": 154437954,
+  "canonical_unique_keys": 3990400,
+  "canonical_duplicate_rows_beyond_first": 689534,
+  "canonical_rows_in_duplicate_groups": 1379068,
+  "canonical_duplicate_key_groups": 689534,
+  "maximum_rows_per_duplicate_key": 2,
+  "contradictory_duplicate_key_groups": 0,
+  "contradictory_groups_by_field": {
+    "local_y": 0,
+    "lane_id": 0,
+    "preceding": 0,
+    "v_length": 0
+  },
+  "contradictory_key_examples": [],
+  "archive_periods": [
+    {
+      "file": "trajectories-0750am-0805am.csv",
+      "raw_rows": 1048575,
+      "car_rows": 1010338,
+      "unique_car_keys": 1010338,
+      "car_keys_present_in_api": 1010338,
+      "car_keys_absent_from_api": 0
+    },
+    {
+      "file": "trajectories-0805am-0820am.csv",
+      "raw_rows": 1048575,
+      "car_rows": 1026903,
+      "unique_car_keys": 1026903,
+      "car_keys_present_in_api": 1026903,
+      "car_keys_absent_from_api": 0
+    },
+    {
+      "file": "trajectories-0820am-0835am.csv",
+      "raw_rows": 1048575,
+      "car_rows": 1025621,
+      "unique_car_keys": 1025621,
+      "car_keys_present_in_api": 1025621,
+      "car_keys_absent_from_api": 0
+    }
+  ],
+  "archive_unique_car_keys": 3062862,
+  "canonical_rows_with_keys_present_in_archive": 3752396,
+  "canonical_rows_with_keys_absent_from_archive": 927538,
+  "archive_csv_data_rows_per_period": [
+    1048575,
+    1048575,
+    1048575
+  ],
+  "interpretation": "Each original CSV member has exactly 1,048,575 data rows plus a header. This matches the spreadsheet row limit. The API provides additional keys. The TXT counterparts require separate completeness verification.",
+  "process_peak_working_set_bytes": 554684416
+}

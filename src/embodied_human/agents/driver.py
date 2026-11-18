@@ -48,6 +48,7 @@ import numpy as np
 
 from ..attention import ROAD, AttenD
 from ..core import Human, Parameters, Source
+from ..tasks.fixation import FixationTask
 from ..tasks.surt import SuRTTask
 from ..vision.eyes import Gaze
 from ..vision.objects import Item
@@ -457,7 +458,7 @@ class AttentiveDriver:
         env: A myosuite-carla ``FullBodyDrivingEnv``, or any object with
             the same ``dt``, ``state`` and ``task`` (see
             :mod:`embodied_human.agents.road`).
-        task: SuRT task shown on the in-vehicle display, or ``None``.
+        task: SuRT search, a fixed visual target, or ``None``.
         params: Geometry and task parameters.
         reflex: Steering and speed controller; myosuite-carla's
             ``ReflexDriver`` with no perception delay by default, since
@@ -468,7 +469,7 @@ class AttentiveDriver:
         self,
         human: Human,
         env: Any,
-        task: SuRTTask | None = None,
+        task: SuRTTask | FixationTask | None = None,
         params: DriverAgentParameters = DriverAgentParameters(),
         reflex: Any = None,
     ) -> None:
@@ -524,6 +525,8 @@ class AttentiveDriver:
     def area(self, gaze: Gaze) -> str:
         """The area of interest a gaze direction falls in."""
         p = self.params
+        if isinstance(self.task, FixationTask) and self.task.contains(gaze):
+            return DISPLAY
         if (
             abs(gaze[0]) <= p.road_half_extent[0]
             and abs(gaze[1]) <= p.road_half_extent[1]
@@ -540,7 +543,7 @@ class AttentiveDriver:
 
     def _cell_gaze(self, x: float, y: float) -> Gaze:
         """Display pixel coordinates to gaze angles."""
-        assert self.task is not None
+        assert isinstance(self.task, SuRTTask)
         width, height = self.task.config.resolution
         p = self.params
         return (
@@ -550,6 +553,8 @@ class AttentiveDriver:
 
     def _new_search(self) -> _Search:
         assert self.task is not None
+        if isinstance(self.task, FixationTask):
+            return _Search([self.task.target])
         width, height = self.task.config.resolution
         # Scan a grid whose cells are about one inspection radius apart.
         p = self.params
@@ -787,7 +792,7 @@ class AttentiveDriver:
             signals.append(Signal("visual", 0.0, latency))
             details["visual"] = {"eccentricity_deg": eccentricity, "latency_s": latency}
         # An ongoing task holds the central stage the reaction needs.
-        load = [surt()] if self.task is not None else []
+        load = [surt()] if isinstance(self.task, SuRTTask) else []
         reaction = human.response.respond(signals, load)  # type: ignore[attr-defined]
         details["first"] = reaction.first
         details["integrated"] = reaction.integrated
@@ -863,6 +868,9 @@ class AttentiveDriver:
 
     def _resume_search(self, t: float) -> None:
         """Look back at the display, where memory says the search stopped."""
+        if isinstance(self.task, FixationTask):
+            self.human.eyes.command(self.task.target, t)  # type: ignore[attr-defined]
+            return
         search = self._search
         recalled = self.human.memory.retrieve("surt_progress", t)  # type: ignore[attr-defined]
         if recalled.success and recalled.value is not None:
@@ -875,6 +883,8 @@ class AttentiveDriver:
 
     def _task_step(self, t: float, looking: bool) -> None:
         assert self.task is not None
+        if isinstance(self.task, FixationTask):
+            return
         human, p, search = self.human, self.params, self._search
         if search.reach_end is not None:
             # The touch lands whether or not the eyes are still on the display.

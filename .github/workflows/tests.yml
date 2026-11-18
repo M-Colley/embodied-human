@@ -23,7 +23,7 @@ jobs:
           python -m pip install --upgrade pip
           # Touch tasks need embodied-ui; driving tests (myosuite-carla) are skipped.
           python -m pip install "embodied-ui @ git+https://github.com/M-Colley/embodied-ui"
-          python -m pip install -e ".[test,lint,experience]"
+          python -m pip install -e ".[test,lint,experience,empirical]"
       - name: Test
         run: python -m pytest tests -q
       - name: Lint

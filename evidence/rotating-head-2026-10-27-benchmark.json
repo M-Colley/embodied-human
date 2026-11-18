@@ -1,0 +1,446 @@
+{
+  "baseline_body_revision": "d4eaf219d453f5e2ea518414b4645a9807db1fac",
+  "seed": 0,
+  "duration_s": 60.0,
+  "results": {
+    "before": {
+      "name": "driving.surt_glances",
+      "categories": [
+        "eyes",
+        "objects",
+        "attention",
+        "estimator",
+        "memory",
+        "motor"
+      ],
+      "passed": false,
+      "score": 0.9805555555555556,
+      "skipped": null,
+      "metrics": {
+        "driving.mean_offroad_glance": 0.9302222222222789,
+        "driving.long_glance_share": 0.022222222222222223,
+        "driving.human_mean_glance": 0.9302222222222789,
+        "driving.human_long_glance_share": 0.022222222222222223
+      },
+      "scores": {
+        "driving.mean_offroad_glance": 1.0,
+        "driving.long_glance_share": 1.0,
+        "driving.human_mean_glance": 1.0,
+        "driving.human_long_glance_share": 0.9222222222222223
+      },
+      "validation": {
+        "driving.mean_offroad_glance": {
+          "role": "held_out",
+          "evaluation_data": [
+            "nhtsa2013.glance_criteria"
+          ],
+          "fitting_data": [
+            "kujala_saariluoma2011.mean_and_sd"
+          ],
+          "rationale": "Design criteria are separate from glance fitting statistics."
+        },
+        "driving.long_glance_share": {
+          "role": "held_out",
+          "evaluation_data": [
+            "nhtsa2013.glance_criteria"
+          ],
+          "fitting_data": [
+            "kujala_saariluoma2011.mean_and_sd"
+          ],
+          "rationale": "Design criteria are separate from glance fitting statistics."
+        },
+        "driving.human_mean_glance": {
+          "role": "calibration",
+          "evaluation_data": [
+            "kujala_saariluoma2011.mean_and_sd"
+          ],
+          "fitting_data": [
+            "kujala_saariluoma2011.mean_and_sd"
+          ],
+          "rationale": "ABC fitted return tolerance and spread to these statistics."
+        },
+        "driving.human_long_glance_share": {
+          "role": "held_out",
+          "evaluation_data": [
+            "kujala_saariluoma2011.long_glance_share"
+          ],
+          "fitting_data": [
+            "kujala_saariluoma2011.mean_and_sd"
+          ],
+          "rationale": "A held out statistic from the same study; participants are shared."
+        }
+      },
+      "references": {
+        "driving.mean_offroad_glance": {
+          "value": 2.0,
+          "range": [
+            0.0,
+            2.0
+          ],
+          "unit": "s",
+          "citation": "NHTSA (2013) guideline criterion (b)",
+          "doi": "https://www.federalregister.gov/documents/2013/04/26/2013-09883",
+          "conditions": "mean glance away from the road per task; a design criterion, not a human mean"
+        },
+        "driving.long_glance_share": {
+          "value": 0.15,
+          "range": [
+            0.0,
+            0.15
+          ],
+          "unit": "fraction",
+          "citation": "NHTSA (2013) guideline criterion (a)",
+          "doi": "https://www.federalregister.gov/documents/2013/04/26/2013-09883",
+          "conditions": "share of off-road glances longer than 2 s"
+        },
+        "driving.human_mean_glance": {
+          "value": 1.1,
+          "range": [
+            0.8,
+            1.2
+          ],
+          "unit": "s",
+          "citation": "Kujala & Saariluoma (2011), Table 2; Jokinen, Kujala & Oulasvirta (2021), Appendix B",
+          "doi": "https://doi.org/10.1080/00140139.2011.592601",
+          "conditions": "simulator, in-vehicle visual search; means 1.06-1.20 s over four interfaces (transitions included) and 1.0 +- 0.2 s by condition"
+        },
+        "driving.human_long_glance_share": {
+          "value": 0.08,
+          "range": [
+            0.03,
+            0.13
+          ],
+          "unit": "fraction",
+          "citation": "Kujala & Saariluoma (2011); Tivesten & Dozza (2014)",
+          "doi": "https://doi.org/10.1016/j.trf.2014.08.004",
+          "conditions": "glances over 2 s: 5.7-10% in simulator search tasks; naturalistic phone tasks median 3.4%, mean 12.8%"
+        }
+      },
+      "details": {
+        "glances": 45.0,
+        "right_censored_glances": 1,
+        "right_censored_observed_s": 1.0800000000001688,
+        "mean_offroad_glance_s": 0.9302222222222789,
+        "sd_offroad_glance_s": 0.4728179011805432,
+        "p85_offroad_glance_s": 1.2800000000000638,
+        "long_glance_share": 0.022222222222222223,
+        "mean_eyes_off_road_per_screen_s": 3.063076923077095,
+        "attend_minimum_s": 0.0,
+        "returns_by_reason": {
+          "uncertainty": 55
+        },
+        "lane_offset_sd_m": 0.18047484407230363,
+        "lane_offset_max_m": 0.4990917116492292,
+        "terminated": false,
+        "surt": {
+          "screens": 13.0,
+          "accuracy": 0.8461538461538461,
+          "mean_screen_time_s": 4.310769230769474
+        },
+        "simulated_seconds": 60.0,
+        "motion_sickness_pct": 0.004700732733718765,
+        "fatigued_fraction": {
+          "elbow_right": 0.012817696297216727,
+          "elbow_left": 0.013107218138556104,
+          "hand_right": 0.04315133171437508,
+          "hand_left": 0.02157566585718768,
+          "ankle_right": 0.0022427986888861632,
+          "ankle_left": 0.001732754309089617
+        }
+      }
+    },
+    "after": {
+      "name": "driving.surt_glances",
+      "categories": [
+        "eyes",
+        "objects",
+        "attention",
+        "estimator",
+        "memory",
+        "motor"
+      ],
+      "passed": false,
+      "score": 0.9805555555555556,
+      "skipped": null,
+      "metrics": {
+        "driving.mean_offroad_glance": 0.9302222222222789,
+        "driving.long_glance_share": 0.022222222222222223,
+        "driving.human_mean_glance": 0.9302222222222789,
+        "driving.human_long_glance_share": 0.022222222222222223
+      },
+      "scores": {
+        "driving.mean_offroad_glance": 1.0,
+        "driving.long_glance_share": 1.0,
+        "driving.human_mean_glance": 1.0,
+        "driving.human_long_glance_share": 0.9222222222222223
+      },
+      "validation": {
+        "driving.mean_offroad_glance": {
+          "role": "held_out",
+          "evaluation_data": [
+            "nhtsa2013.glance_criteria"
+          ],
+          "fitting_data": [
+            "kujala_saariluoma2011.mean_and_sd"
+          ],
+          "rationale": "Design criteria are separate from glance fitting statistics."
+        },
+        "driving.long_glance_share": {
+          "role": "held_out",
+          "evaluation_data": [
+            "nhtsa2013.glance_criteria"
+          ],
+          "fitting_data": [
+            "kujala_saariluoma2011.mean_and_sd"
+          ],
+          "rationale": "Design criteria are separate from glance fitting statistics."
+        },
+        "driving.human_mean_glance": {
+          "role": "calibration",
+          "evaluation_data": [
+            "kujala_saariluoma2011.mean_and_sd"
+          ],
+          "fitting_data": [
+            "kujala_saariluoma2011.mean_and_sd"
+          ],
+          "rationale": "ABC fitted return tolerance and spread to these statistics."
+        },
+        "driving.human_long_glance_share": {
+          "role": "held_out",
+          "evaluation_data": [
+            "kujala_saariluoma2011.long_glance_share"
+          ],
+          "fitting_data": [
+            "kujala_saariluoma2011.mean_and_sd"
+          ],
+          "rationale": "A held out statistic from the same study; participants are shared."
+        }
+      },
+      "references": {
+        "driving.mean_offroad_glance": {
+          "value": 2.0,
+          "range": [
+            0.0,
+            2.0
+          ],
+          "unit": "s",
+          "citation": "NHTSA (2013) guideline criterion (b)",
+          "doi": "https://www.federalregister.gov/documents/2013/04/26/2013-09883",
+          "conditions": "mean glance away from the road per task; a design criterion, not a human mean"
+        },
+        "driving.long_glance_share": {
+          "value": 0.15,
+          "range": [
+            0.0,
+            0.15
+          ],
+          "unit": "fraction",
+          "citation": "NHTSA (2013) guideline criterion (a)",
+          "doi": "https://www.federalregister.gov/documents/2013/04/26/2013-09883",
+          "conditions": "share of off-road glances longer than 2 s"
+        },
+        "driving.human_mean_glance": {
+          "value": 1.1,
+          "range": [
+            0.8,
+            1.2
+          ],
+          "unit": "s",
+          "citation": "Kujala & Saariluoma (2011), Table 2; Jokinen, Kujala & Oulasvirta (2021), Appendix B",
+          "doi": "https://doi.org/10.1080/00140139.2011.592601",
+          "conditions": "simulator, in-vehicle visual search; means 1.06-1.20 s over four interfaces (transitions included) and 1.0 +- 0.2 s by condition"
+        },
+        "driving.human_long_glance_share": {
+          "value": 0.08,
+          "range": [
+            0.03,
+            0.13
+          ],
+          "unit": "fraction",
+          "citation": "Kujala & Saariluoma (2011); Tivesten & Dozza (2014)",
+          "doi": "https://doi.org/10.1016/j.trf.2014.08.004",
+          "conditions": "glances over 2 s: 5.7-10% in simulator search tasks; naturalistic phone tasks median 3.4%, mean 12.8%"
+        }
+      },
+      "details": {
+        "glances": 45.0,
+        "right_censored_glances": 1,
+        "right_censored_observed_s": 1.0800000000001688,
+        "mean_offroad_glance_s": 0.9302222222222789,
+        "sd_offroad_glance_s": 0.4728179011805432,
+        "p85_offroad_glance_s": 1.2800000000000638,
+        "long_glance_share": 0.022222222222222223,
+        "mean_eyes_off_road_per_screen_s": 3.063076923077095,
+        "attend_minimum_s": 0.0,
+        "returns_by_reason": {
+          "uncertainty": 55
+        },
+        "lane_offset_sd_m": 0.18047484407230363,
+        "lane_offset_max_m": 0.4990917116492292,
+        "terminated": false,
+        "surt": {
+          "screens": 13.0,
+          "accuracy": 0.8461538461538461,
+          "mean_screen_time_s": 4.310769230769474
+        },
+        "simulated_seconds": 60.0,
+        "motion_sickness_pct": 0.004700891359970552,
+        "fatigued_fraction": {
+          "elbow_right": 0.012817696297216727,
+          "elbow_left": 0.013107218138556104,
+          "hand_right": 0.04315133171437508,
+          "hand_left": 0.02157566585718768,
+          "ankle_right": 0.0022427986888861632,
+          "ankle_left": 0.001732754309089617
+        }
+      }
+    },
+    "replay": {
+      "name": "driving.surt_glances",
+      "categories": [
+        "eyes",
+        "objects",
+        "attention",
+        "estimator",
+        "memory",
+        "motor"
+      ],
+      "passed": false,
+      "score": 0.9805555555555556,
+      "skipped": null,
+      "metrics": {
+        "driving.mean_offroad_glance": 0.9302222222222789,
+        "driving.long_glance_share": 0.022222222222222223,
+        "driving.human_mean_glance": 0.9302222222222789,
+        "driving.human_long_glance_share": 0.022222222222222223
+      },
+      "scores": {
+        "driving.mean_offroad_glance": 1.0,
+        "driving.long_glance_share": 1.0,
+        "driving.human_mean_glance": 1.0,
+        "driving.human_long_glance_share": 0.9222222222222223
+      },
+      "validation": {
+        "driving.mean_offroad_glance": {
+          "role": "held_out",
+          "evaluation_data": [
+            "nhtsa2013.glance_criteria"
+          ],
+          "fitting_data": [
+            "kujala_saariluoma2011.mean_and_sd"
+          ],
+          "rationale": "Design criteria are separate from glance fitting statistics."
+        },
+        "driving.long_glance_share": {
+          "role": "held_out",
+          "evaluation_data": [
+            "nhtsa2013.glance_criteria"
+          ],
+          "fitting_data": [
+            "kujala_saariluoma2011.mean_and_sd"
+          ],
+          "rationale": "Design criteria are separate from glance fitting statistics."
+        },
+        "driving.human_mean_glance": {
+          "role": "calibration",
+          "evaluation_data": [
+            "kujala_saariluoma2011.mean_and_sd"
+          ],
+          "fitting_data": [
+            "kujala_saariluoma2011.mean_and_sd"
+          ],
+          "rationale": "ABC fitted return tolerance and spread to these statistics."
+        },
+        "driving.human_long_glance_share": {
+          "role": "held_out",
+          "evaluation_data": [
+            "kujala_saariluoma2011.long_glance_share"
+          ],
+          "fitting_data": [
+            "kujala_saariluoma2011.mean_and_sd"
+          ],
+          "rationale": "A held out statistic from the same study; participants are shared."
+        }
+      },
+      "references": {
+        "driving.mean_offroad_glance": {
+          "value": 2.0,
+          "range": [
+            0.0,
+            2.0
+          ],
+          "unit": "s",
+          "citation": "NHTSA (2013) guideline criterion (b)",
+          "doi": "https://www.federalregister.gov/documents/2013/04/26/2013-09883",
+          "conditions": "mean glance away from the road per task; a design criterion, not a human mean"
+        },
+        "driving.long_glance_share": {
+          "value": 0.15,
+          "range": [
+            0.0,
+            0.15
+          ],
+          "unit": "fraction",
+          "citation": "NHTSA (2013) guideline criterion (a)",
+          "doi": "https://www.federalregister.gov/documents/2013/04/26/2013-09883",
+          "conditions": "share of off-road glances longer than 2 s"
+        },
+        "driving.human_mean_glance": {
+          "value": 1.1,
+          "range": [
+            0.8,
+            1.2
+          ],
+          "unit": "s",
+          "citation": "Kujala & Saariluoma (2011), Table 2; Jokinen, Kujala & Oulasvirta (2021), Appendix B",
+          "doi": "https://doi.org/10.1080/00140139.2011.592601",
+          "conditions": "simulator, in-vehicle visual search; means 1.06-1.20 s over four interfaces (transitions included) and 1.0 +- 0.2 s by condition"
+        },
+        "driving.human_long_glance_share": {
+          "value": 0.08,
+          "range": [
+            0.03,
+            0.13
+          ],
+          "unit": "fraction",
+          "citation": "Kujala & Saariluoma (2011); Tivesten & Dozza (2014)",
+          "doi": "https://doi.org/10.1016/j.trf.2014.08.004",
+          "conditions": "glances over 2 s: 5.7-10% in simulator search tasks; naturalistic phone tasks median 3.4%, mean 12.8%"
+        }
+      },
+      "details": {
+        "glances": 45.0,
+        "right_censored_glances": 1,
+        "right_censored_observed_s": 1.0800000000001688,
+        "mean_offroad_glance_s": 0.9302222222222789,
+        "sd_offroad_glance_s": 0.4728179011805432,
+        "p85_offroad_glance_s": 1.2800000000000638,
+        "long_glance_share": 0.022222222222222223,
+        "mean_eyes_off_road_per_screen_s": 3.063076923077095,
+        "attend_minimum_s": 0.0,
+        "returns_by_reason": {
+          "uncertainty": 55
+        },
+        "lane_offset_sd_m": 0.18047484407230363,
+        "lane_offset_max_m": 0.4990917116492292,
+        "terminated": false,
+        "surt": {
+          "screens": 13.0,
+          "accuracy": 0.8461538461538461,
+          "mean_screen_time_s": 4.310769230769474
+        },
+        "simulated_seconds": 60.0,
+        "motion_sickness_pct": 0.004700891359970552,
+        "fatigued_fraction": {
+          "elbow_right": 0.012817696297216727,
+          "elbow_left": 0.013107218138556104,
+          "hand_right": 0.04315133171437508,
+          "hand_left": 0.02157566585718768,
+          "ankle_right": 0.0022427986888861632,
+          "ankle_left": 0.001732754309089617
+        }
+      }
+    }
+  },
+  "corrected_replay_equal": true
+}

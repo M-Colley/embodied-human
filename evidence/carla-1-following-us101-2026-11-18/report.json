@@ -1,0 +1,82 @@
+{
+  "decision": "rejected_incomplete_physical_evaluation",
+  "defaults_updated": false,
+  "test_used_for_retuning": false,
+  "policy": "prespecified_paired_source_primary_error",
+  "primary_metric": "normalized_trajectory_mse",
+  "scales": {
+    "speed_rmse_mps": 1.0,
+    "gap_rmse_m": 5.0,
+    "acceleration_rmse_mps2": 1.0
+  },
+  "confidence_level": 0.95,
+  "weighting": "mean seeds per trial; one trial per source; equal sources",
+  "source_selection_sha256": "fb8430ef77d1e324c4aa3ffb250aca56e2d790a7ada4651ad622473b3c60a466",
+  "arm_status": {
+    "baseline": "infeasible",
+    "inverse": "completed"
+  },
+  "expected_episodes_per_profile": 48,
+  "failed_episodes": {
+    "baseline": [
+      {
+        "source_group": "ngsim-us101:1761:1",
+        "trial_index": 0,
+        "seed": 760246850,
+        "parameters": {
+          "max_acceleration": 1.0,
+          "comfortable_deceleration": 1.5,
+          "time_headway": 1.6,
+          "min_gap": 2.0,
+          "exponent": 4.0
+        },
+        "status": "terminated",
+        "failure_kind": "road_departure",
+        "error": null,
+        "coverage_fraction": 0.97
+      }
+    ],
+    "inverse": []
+  },
+  "failure_counts": {
+    "baseline": 1,
+    "inverse": 0
+  },
+  "descriptive_complete_groups": [
+    "ngsim-us101:1100:1",
+    "ngsim-us101:1107:3",
+    "ngsim-us101:1183:3",
+    "ngsim-us101:1216:3",
+    "ngsim-us101:1285:3",
+    "ngsim-us101:1581:1",
+    "ngsim-us101:1804:2",
+    "ngsim-us101:1826:2",
+    "ngsim-us101:1836:3",
+    "ngsim-us101:2189:1",
+    "ngsim-us101:2258:1",
+    "ngsim-us101:22:3",
+    "ngsim-us101:2303:1",
+    "ngsim-us101:2641:1",
+    "ngsim-us101:2669:1",
+    "ngsim-us101:2804:1",
+    "ngsim-us101:308:2",
+    "ngsim-us101:401:2",
+    "ngsim-us101:468:1",
+    "ngsim-us101:481:2",
+    "ngsim-us101:828:1",
+    "ngsim-us101:960:1",
+    "ngsim-us101:977:3"
+  ],
+  "descriptive_complete_group_metric_means": {
+    "baseline": {
+      "speed_rmse_mps": 0.8884388736985883,
+      "gap_rmse_m": 3.840803821102453,
+      "acceleration_rmse_mps2": 0.788442036072906
+    },
+    "inverse": {
+      "speed_rmse_mps": 0.8873645585734793,
+      "gap_rmse_m": 4.116207308338278,
+      "acceleration_rmse_mps2": 0.6947636146517888
+    }
+  }
+}

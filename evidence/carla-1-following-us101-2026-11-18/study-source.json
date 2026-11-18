@@ -1,0 +1,189 @@
+{
+  "status": "acquired",
+  "dataset_id": "ngsim-us101",
+  "site": "US 101, Los Angeles, California",
+  "source": "https://data.transportation.gov/d/8ect-6jqj",
+  "endpoint": "https://data.transportation.gov/resource/8ect-6jqj.csv",
+  "metadata_source": "https://data.transportation.gov/api/views/8ect-6jqj.json",
+  "metadata_sha256": "a10006bdb4ca3bb1ab487c5e478f79e934fd6eba8867410283b615ec73ddcc46",
+  "where": "location='us-101' AND v_class=2",
+  "columns": [
+    "vehicle_id",
+    "frame_id",
+    "global_time",
+    "local_x",
+    "local_y",
+    "v_length",
+    "v_vel",
+    "v_acc",
+    "lane_id",
+    "preceding",
+    "space_headway"
+  ],
+  "order": "global_time,vehicle_id,frame_id,:id",
+  "expected_rows_from_official_api": 4679934,
+  "rows": 4679934,
+  "output": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\us101-fresh-2026-11-18\\ngsim-us101-cars.csv",
+  "bytes": 404709862,
+  "sha256": "4506024db2f38d5d6aad80237f489882dc3086aa78a7764a429f4568156d1103",
+  "pages": [
+    {
+      "offset": 0,
+      "rows": 500000,
+      "path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\us101-fresh-2026-11-18\\raw\\us101-cars-offset-0000000.csv",
+      "bytes": 43246914,
+      "sha256": "fae6179b47a735322ed7d0c62de6bc074731c1c74d79a175d5689c284de4218b",
+      "url": "https://data.transportation.gov/resource/8ect-6jqj.csv?%24select=vehicle_id%2Cframe_id%2Cglobal_time%2Clocal_x%2Clocal_y%2Cv_length%2Cv_vel%2Cv_acc%2Clane_id%2Cpreceding%2Cspace_headway&%24where=location%3D%27us-101%27+AND+v_class%3D2&%24order=global_time%2Cvehicle_id%2Cframe_id%2C%3Aid&%24limit=500000&%24offset=0",
+      "query": {
+        "$select": "vehicle_id,frame_id,global_time,local_x,local_y,v_length,v_vel,v_acc,lane_id,preceding,space_headway",
+        "$where": "location='us-101' AND v_class=2",
+        "$order": "global_time,vehicle_id,frame_id,:id",
+        "$limit": "500000",
+        "$offset": "0"
+      }
+    },
+    {
+      "offset": 500000,
+      "rows": 500000,
+      "path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\us101-fresh-2026-11-18\\raw\\us101-cars-offset-0500000.csv",
+      "bytes": 43827919,
+      "sha256": "fc3957de125f92b4364798b42c06534d5655e4cca281c20984ddc1d0f4654f55",
+      "url": "https://data.transportation.gov/resource/8ect-6jqj.csv?%24select=vehicle_id%2Cframe_id%2Cglobal_time%2Clocal_x%2Clocal_y%2Cv_length%2Cv_vel%2Cv_acc%2Clane_id%2Cpreceding%2Cspace_headway&%24where=location%3D%27us-101%27+AND+v_class%3D2&%24order=global_time%2Cvehicle_id%2Cframe_id%2C%3Aid&%24limit=500000&%24offset=500000",
+      "query": {
+        "$select": "vehicle_id,frame_id,global_time,local_x,local_y,v_length,v_vel,v_acc,lane_id,preceding,space_headway",
+        "$where": "location='us-101' AND v_class=2",
+        "$order": "global_time,vehicle_id,frame_id,:id",
+        "$limit": "500000",
+        "$offset": "500000"
+      }
+    },
+    {
+      "offset": 1000000,
+      "rows": 500000,
+      "path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\us101-fresh-2026-11-18\\raw\\us101-cars-offset-1000000.csv",
+      "bytes": 42887046,
+      "sha256": "cd32a315db243b1b7e3b93618a96f9a3686453806dd369421716898de09a93be",
+      "url": "https://data.transportation.gov/resource/8ect-6jqj.csv?%24select=vehicle_id%2Cframe_id%2Cglobal_time%2Clocal_x%2Clocal_y%2Cv_length%2Cv_vel%2Cv_acc%2Clane_id%2Cpreceding%2Cspace_headway&%24where=location%3D%27us-101%27+AND+v_class%3D2&%24order=global_time%2Cvehicle_id%2Cframe_id%2C%3Aid&%24limit=500000&%24offset=1000000",
+      "query": {
+        "$select": "vehicle_id,frame_id,global_time,local_x,local_y,v_length,v_vel,v_acc,lane_id,preceding,space_headway",
+        "$where": "location='us-101' AND v_class=2",
+        "$order": "global_time,vehicle_id,frame_id,:id",
+        "$limit": "500000",
+        "$offset": "1000000"
+      }
+    },
+    {
+      "offset": 1500000,
+      "rows": 500000,
+      "path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\us101-fresh-2026-11-18\\raw\\us101-cars-offset-1500000.csv",
+      "bytes": 42522318,
+      "sha256": "f60574615cfc905ab1f3244bd4824b1f8a370bb50731f598ec2a973d1884156a",
+      "url": "https://data.transportation.gov/resource/8ect-6jqj.csv?%24select=vehicle_id%2Cframe_id%2Cglobal_time%2Clocal_x%2Clocal_y%2Cv_length%2Cv_vel%2Cv_acc%2Clane_id%2Cpreceding%2Cspace_headway&%24where=location%3D%27us-101%27+AND+v_class%3D2&%24order=global_time%2Cvehicle_id%2Cframe_id%2C%3Aid&%24limit=500000&%24offset=1500000",
+      "query": {
+        "$select": "vehicle_id,frame_id,global_time,local_x,local_y,v_length,v_vel,v_acc,lane_id,preceding,space_headway",
+        "$where": "location='us-101' AND v_class=2",
+        "$order": "global_time,vehicle_id,frame_id,:id",
+        "$limit": "500000",
+        "$offset": "1500000"
+      }
+    },
+    {
+      "offset": 2000000,
+      "rows": 500000,
+      "path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\us101-fresh-2026-11-18\\raw\\us101-cars-offset-2000000.csv",
+      "bytes": 43603460,
+      "sha256": "8fff4e0b849d1848845b7c06cbccb42d7adcd4e4d397b69c5b57ef85543e8ed5",
+      "url": "https://data.transportation.gov/resource/8ect-6jqj.csv?%24select=vehicle_id%2Cframe_id%2Cglobal_time%2Clocal_x%2Clocal_y%2Cv_length%2Cv_vel%2Cv_acc%2Clane_id%2Cpreceding%2Cspace_headway&%24where=location%3D%27us-101%27+AND+v_class%3D2&%24order=global_time%2Cvehicle_id%2Cframe_id%2C%3Aid&%24limit=500000&%24offset=2000000",
+      "query": {
+        "$select": "vehicle_id,frame_id,global_time,local_x,local_y,v_length,v_vel,v_acc,lane_id,preceding,space_headway",
+        "$where": "location='us-101' AND v_class=2",
+        "$order": "global_time,vehicle_id,frame_id,:id",
+        "$limit": "500000",
+        "$offset": "2000000"
+      }
+    },
+    {
+      "offset": 2500000,
+      "rows": 500000,
+      "path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\us101-fresh-2026-11-18\\raw\\us101-cars-offset-2500000.csv",
+      "bytes": 43654239,
+      "sha256": "29f0d4ebcf7d56b0086aec21ebea3b3914cbd3ca262a7567ceee32739eb441e0",
+      "url": "https://data.transportation.gov/resource/8ect-6jqj.csv?%24select=vehicle_id%2Cframe_id%2Cglobal_time%2Clocal_x%2Clocal_y%2Cv_length%2Cv_vel%2Cv_acc%2Clane_id%2Cpreceding%2Cspace_headway&%24where=location%3D%27us-101%27+AND+v_class%3D2&%24order=global_time%2Cvehicle_id%2Cframe_id%2C%3Aid&%24limit=500000&%24offset=2500000",
+      "query": {
+        "$select": "vehicle_id,frame_id,global_time,local_x,local_y,v_length,v_vel,v_acc,lane_id,preceding,space_headway",
+        "$where": "location='us-101' AND v_class=2",
+        "$order": "global_time,vehicle_id,frame_id,:id",
+        "$limit": "500000",
+        "$offset": "2500000"
+      }
+    },
+    {
+      "offset": 3000000,
+      "rows": 500000,
+      "path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\us101-fresh-2026-11-18\\raw\\us101-cars-offset-3000000.csv",
+      "bytes": 42853116,
+      "sha256": "c25426b47dce3bd1c340945e1cc6806622693abc04d906dae7570f8fa5ef19de",
+      "url": "https://data.transportation.gov/resource/8ect-6jqj.csv?%24select=vehicle_id%2Cframe_id%2Cglobal_time%2Clocal_x%2Clocal_y%2Cv_length%2Cv_vel%2Cv_acc%2Clane_id%2Cpreceding%2Cspace_headway&%24where=location%3D%27us-101%27+AND+v_class%3D2&%24order=global_time%2Cvehicle_id%2Cframe_id%2C%3Aid&%24limit=500000&%24offset=3000000",
+      "query": {
+        "$select": "vehicle_id,frame_id,global_time,local_x,local_y,v_length,v_vel,v_acc,lane_id,preceding,space_headway",
+        "$where": "location='us-101' AND v_class=2",
+        "$order": "global_time,vehicle_id,frame_id,:id",
+        "$limit": "500000",
+        "$offset": "3000000"
+      }
+    },
+    {
+      "offset": 3500000,
+      "rows": 500000,
+      "path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\us101-fresh-2026-11-18\\raw\\us101-cars-offset-3500000.csv",
+      "bytes": 42849416,
+      "sha256": "c236494ea92772ec2d4030cc33d0656058126d9f40ae22fe0d037a4d93e5ad23",
+      "url": "https://data.transportation.gov/resource/8ect-6jqj.csv?%24select=vehicle_id%2Cframe_id%2Cglobal_time%2Clocal_x%2Clocal_y%2Cv_length%2Cv_vel%2Cv_acc%2Clane_id%2Cpreceding%2Cspace_headway&%24where=location%3D%27us-101%27+AND+v_class%3D2&%24order=global_time%2Cvehicle_id%2Cframe_id%2C%3Aid&%24limit=500000&%24offset=3500000",
+      "query": {
+        "$select": "vehicle_id,frame_id,global_time,local_x,local_y,v_length,v_vel,v_acc,lane_id,preceding,space_headway",
+        "$where": "location='us-101' AND v_class=2",
+        "$order": "global_time,vehicle_id,frame_id,:id",
+        "$limit": "500000",
+        "$offset": "3500000"
+      }
+    },
+    {
+      "offset": 4000000,
+      "rows": 500000,
+      "path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\us101-fresh-2026-11-18\\raw\\us101-cars-offset-4000000.csv",
+      "bytes": 43524153,
+      "sha256": "8e02f5cf29553a1f539cea107109b3bf0f92683c0cdac60827393c30292f3e3c",
+      "url": "https://data.transportation.gov/resource/8ect-6jqj.csv?%24select=vehicle_id%2Cframe_id%2Cglobal_time%2Clocal_x%2Clocal_y%2Cv_length%2Cv_vel%2Cv_acc%2Clane_id%2Cpreceding%2Cspace_headway&%24where=location%3D%27us-101%27+AND+v_class%3D2&%24order=global_time%2Cvehicle_id%2Cframe_id%2C%3Aid&%24limit=500000&%24offset=4000000",
+      "query": {
+        "$select": "vehicle_id,frame_id,global_time,local_x,local_y,v_length,v_vel,v_acc,lane_id,preceding,space_headway",
+        "$where": "location='us-101' AND v_class=2",
+        "$order": "global_time,vehicle_id,frame_id,:id",
+        "$limit": "500000",
+        "$offset": "4000000"
+      }
+    },
+    {
+      "offset": 4500000,
+      "rows": 179934,
+      "path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\us101-fresh-2026-11-18\\raw\\us101-cars-offset-4500000.csv",
+      "bytes": 15742388,
+      "sha256": "c38eb24c7b5077f467a928a707eece5647425d25150289855dfe05e91810bb2d",
+      "url": "https://data.transportation.gov/resource/8ect-6jqj.csv?%24select=vehicle_id%2Cframe_id%2Cglobal_time%2Clocal_x%2Clocal_y%2Cv_length%2Cv_vel%2Cv_acc%2Clane_id%2Cpreceding%2Cspace_headway&%24where=location%3D%27us-101%27+AND+v_class%3D2&%24order=global_time%2Cvehicle_id%2Cframe_id%2C%3Aid&%24limit=500000&%24offset=4500000",
+      "query": {
+        "$select": "vehicle_id,frame_id,global_time,local_x,local_y,v_length,v_vel,v_acc,lane_id,preceding,space_headway",
+        "$where": "location='us-101' AND v_class=2",
+        "$order": "global_time,vehicle_id,frame_id,:id",
+        "$limit": "500000",
+        "$offset": "4500000"
+      }
+    }
+  ],
+  "licence": "CC BY-SA 3.0",
+  "license_url": "http://creativecommons.org/licenses/by-sa/3.0/legalcode",
+  "attribution": "U.S. Department of Transportation Intelligent Transportation Systems Joint Program Office (JPO) -- Recommended citation: \"U.S. Department of Transportation Federal Highway Administration. (2016). Next Generation Simulation (NGSIM) Vehicle Trajectories and Supporting Data. [Dataset]. Provided by ITS DataHub through Data.transportation.gov. Accessed YYYY-MM-DD from http://doi.org/10.21949/1504477\"",
+  "downloaded_utc": "2026-11-18T13:33:23.827699+00:00",
+  "processing": "Selected original numeric columns and car class through the official API. Concatenated ordered page responses with repeated headers removed. No smoothing, model predictions or outcome comparisons performed.",
+  "location": "us-101",
+  "vehicle_class": 2,
+  "file_sha256": "4506024db2f38d5d6aad80237f489882dc3086aa78a7764a429f4568156d1103"
+}
