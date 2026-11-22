@@ -35,6 +35,12 @@ from .core import Module, Parameters, Source, register
 GRAVITY = 9.81
 Array = NDArray[np.float64]
 
+#: Rotation from MuJoCo camera/ocular IMU axes (+X right, +Y up, +Z backward)
+#: to head-fixed forward-left-up (FLU) axes.
+RUB_TO_FLU: Array = np.array(
+    [[0.0, 0.0, -1.0], [-1.0, 0.0, 0.0], [0.0, 1.0, 0.0]], dtype=float
+)
+
 _KAMIJI_2007 = (
     "Kamiji, Kurata, Wada & Doi (2007), Table 1; Wada, Fujisawa & Doi (2018), Table 1",
     "https://doi.org/10.1109/SICE.2007.4421156",
@@ -316,3 +322,196 @@ class IsoDose(Vestibular):
         )
         dose = np.sqrt(np.cumsum(weighted**2, axis=-1) * dt)
         return self.params.incidence_constant * dose
+
+
+def _quat_wxyz_to_matrix(quat: Array) -> Array:
+    """Convert unit ``(..., 4)`` ``(w, x, y, z)`` quaternions to ``(..., 3, 3)``."""
+    q = np.asarray(quat, dtype=float)
+    norm = np.linalg.norm(q, axis=-1, keepdims=True)
+    if np.any(norm <= 0.0) or not np.all(np.isfinite(q)):
+        raise ValueError("orientation_wxyz must contain finite non-zero quaternions")
+    q = q / norm
+    w, x, y, z = q[..., 0], q[..., 1], q[..., 2], q[..., 3]
+    xx, yy, zz = x * x, y * y, z * z
+    xy, xz, yz = x * y, x * z, y * z
+    wx, wy, wz = w * x, w * y, w * z
+    flat = np.stack(
+        (
+            1.0 - 2.0 * (yy + zz),
+            2.0 * (xy - wz),
+            2.0 * (xz + wy),
+            2.0 * (xy + wz),
+            1.0 - 2.0 * (xx + zz),
+            2.0 * (yz - wx),
+            2.0 * (xz - wy),
+            2.0 * (yz + wx),
+            1.0 - 2.0 * (xx + yy),
+        ),
+        axis=-1,
+    )
+    return flat.reshape(q.shape[:-1] + (3, 3))
+
+
+def imu_to_head_kinematics(
+    specific_force: Array,
+    angular_velocity: Array | None = None,
+    orientation_wxyz: Array | None = None,
+    *,
+    sensor_to_head: Array | None = None,
+    world_up: Array | tuple[float, float, float] = (0.0, 0.0, GRAVITY),
+) -> tuple[Array, Array, Array]:
+    """Convert IMU readings into head FLU ``(acceleration, angular_velocity, gravity)``.
+
+    Args:
+        specific_force: Proper acceleration ``f_s = R_ws^T (a_w + g_up_w)`` in sensor
+            axes, ``(..., 3)`` m/s² (as reported by ``mjSENS_ACCELEROMETER``).
+        angular_velocity: Angular velocity in sensor axes, ``(..., 3)`` rad/s.
+        orientation_wxyz: Sensor-to-world unit quaternion ``(w, x, y, z)``, ``(..., 4)``
+            (as reported by ``mjSENS_FRAMEQUAT``). If ``None``, gravity is assumed
+            upright in the head frame.
+        sensor_to_head: 3x3 rotation from sensor axes to head FLU axes
+            (use :data:`RUB_TO_FLU` for MuJoCo camera/``head_imu`` sites).
+        world_up: Upward gravity vector in world coordinates, ``(3,)`` m/s².
+
+    Returns:
+        Tuple ``(acceleration, angular_velocity, gravity)`` in head FLU coordinates.
+    """
+    f_s = np.asarray(specific_force, dtype=float)
+    if f_s.shape[-1:] != (3,) or not np.all(np.isfinite(f_s)):
+        raise ValueError("specific_force must have trailing shape (3,) and be finite")
+    w_s = _shape(angular_velocity, f_s)
+    if w_s.shape != f_s.shape or not np.all(np.isfinite(w_s)):
+        raise ValueError(
+            "angular_velocity must match specific_force shape and be finite"
+        )
+    c_sh = (
+        np.eye(3) if sensor_to_head is None else np.asarray(sensor_to_head, dtype=float)
+    )
+    if c_sh.shape != (3, 3):
+        raise ValueError("sensor_to_head must have shape (3, 3)")
+    up_w = np.asarray(world_up, dtype=float)
+    if up_w.shape != (3,) or not np.all(np.isfinite(up_w)):
+        raise ValueError("world_up must be a finite 3-vector")
+
+    if orientation_wxyz is None:
+        g_head = np.broadcast_to(up_w, f_s.shape).copy()
+        f_head = np.einsum("ij,...j->...i", c_sh, f_s)
+        a_head = f_head - g_head
+    else:
+        r_ws = _quat_wxyz_to_matrix(orientation_wxyz)
+        g_s = np.einsum("...ji,j->...i", r_ws, up_w)
+        a_s = f_s - g_s
+        a_head = np.einsum("ij,...j->...i", c_sh, a_s)
+        g_head = np.einsum("ij,...j->...i", c_sh, g_s)
+
+    w_head = np.einsum("ij,...j->...i", c_sh, w_s)
+    return a_head, w_head, g_head
+
+
+class VestibularTracker:
+    """Online sample-by-sample RK4 integrator for :class:`SubjectiveVertical`.
+
+    Matches :meth:`SubjectiveVertical.simulate` and :meth:`SubjectiveVertical.conflict`
+    at every sample when fed the same ``(acceleration, angular_velocity, gravity)``
+    sequence sequentially.
+    """
+
+    def __init__(
+        self, model: SubjectiveVertical | None = None, **params: float
+    ) -> None:
+        if model is not None and params:
+            raise ValueError("pass either an existing SubjectiveVertical or **params")
+        self.model = model if model is not None else SubjectiveVertical(**params)
+        self._state: dict[str, Array] | None = None
+        self._prev: tuple[Array, Array, Array] | None = None
+        self._conflict: Array | None = None
+        self._msi: Array | None = None
+
+    def reset(self) -> None:
+        """Clear filter states; the next :meth:`step` anchors rest vertical."""
+        self._state = None
+        self._prev = None
+        self._conflict = None
+        self._msi = None
+
+    @property
+    def msi(self) -> Array:
+        """Latest motion sickness incidence (%) after at least one :meth:`step`."""
+        if self._msi is None:
+            raise RuntimeError("call step() at least once before reading msi")
+        return self._msi
+
+    @property
+    def conflict(self) -> Array:
+        """Latest vertical conflict magnitude (m/s²) after at least one :meth:`step`."""
+        if self._conflict is None:
+            raise RuntimeError("call step() at least once before reading conflict")
+        return self._conflict
+
+    def step(
+        self,
+        dt: float,
+        acceleration: Array,
+        angular_velocity: Array | None = None,
+        gravity: Array | None = None,
+    ) -> tuple[Array, Array]:
+        """Advance one sample and return ``(conflict, msi)``."""
+        if not math.isfinite(dt) or dt <= 0.0:
+            raise ValueError(f"dt must be finite and positive, got {dt}")
+        a = np.asarray(acceleration, dtype=float)
+        if a.shape[-1:] != (3,) or not np.all(np.isfinite(a)):
+            raise ValueError("acceleration must have trailing shape (3,) and be finite")
+        w = _shape(angular_velocity, a)
+        up = np.array([0.0, 0.0, GRAVITY])
+        g = (
+            np.broadcast_to(up, a.shape).copy()
+            if gravity is None
+            else np.asarray(gravity, dtype=float)
+        )
+        if w.shape != a.shape or g.shape != a.shape:
+            raise ValueError(
+                "angular_velocity and gravity must match acceleration shape"
+            )
+        if not (np.all(np.isfinite(w)) and np.all(np.isfinite(g))):
+            raise ValueError("angular_velocity and gravity must be finite")
+
+        batch = a.shape[:-1]
+        if self._state is None or self._prev is None:
+            self._state = self.model.initial(batch, g)
+            self._prev = (a.copy(), w.copy(), g.copy())
+            self._conflict = np.zeros(batch, dtype=float)
+            self._msi = np.zeros(batch, dtype=float)
+            return self._conflict.copy(), self._msi.copy()
+
+        a0, w0, g0 = self._prev
+        if a0.shape != a.shape:
+            raise ValueError(f"batch shape changed from {a0.shape[:-1]} to {batch}")
+        x = self._state
+        a_mid = 0.5 * (a0 + a)
+        w_mid = 0.5 * (w0 + w)
+        g_mid = 0.5 * (g0 + g)
+
+        def shifted(
+            s: dict[str, Array], d: dict[str, Array], h: float
+        ) -> dict[str, Array]:
+            return {k: s[k] + h * d[k] for k in s}
+
+        k1 = self.model._derivative(x, g0 + a0, a0, w0)
+        k2 = self.model._derivative(
+            shifted(x, k1, 0.5 * dt), g_mid + a_mid, a_mid, w_mid
+        )
+        k3 = self.model._derivative(
+            shifted(x, k2, 0.5 * dt), g_mid + a_mid, a_mid, w_mid
+        )
+        k4 = self.model._derivative(shifted(x, k3, dt), g + a, a, w)
+        x = {
+            k: x[k] + (dt / 6.0) * (k1[k] + 2.0 * k2[k] + 2.0 * k3[k] + k4[k])
+            for k in x
+        }
+        self._state = x
+        self._prev = (a.copy(), w.copy(), g.copy())
+        self._msi = np.asarray(x["msi"], dtype=float)
+        self._conflict = np.asarray(
+            np.linalg.norm(x["g_s"] - x["g_hat_s"], axis=-1), dtype=float
+        )
+        return self._conflict.copy(), self._msi.copy()
